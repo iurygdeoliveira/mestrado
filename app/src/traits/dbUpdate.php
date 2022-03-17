@@ -1,0 +1,47 @@
+<?php
+
+declare(strict_types=1);
+
+namespace src\traits;
+
+use PDOException;
+use PDO;
+use src\traits\dbConnection;
+use src\traits\dbError;
+use src\traits\Filter;
+
+trait dbUpdate
+{
+
+    use dbConnection, dbError, Filter;
+
+    protected function update(array $data, string $terms, string $params)
+    {
+        try {
+
+            $dataSet = [];
+            foreach ($data as $bind => $value) {
+                $dataSet[] = "{$bind} = :{$bind}";
+            }
+            $dataSet = implode(", ", $dataSet);
+
+            parse_str($params, $params); // Convertendo params para array
+
+            $update = "UPDATE " . static::$entity . " SET {$dataSet} WHERE {$terms}";
+
+            $conexion = $this->connectDB();
+            if ($conexion instanceof PDO) {
+                $stmt = $conexion->prepare($update);
+                $stmt->execute($this->filter(array_merge($data, $params)));
+                $this->fail = null;
+                return $stmt->rowCount();
+            }
+
+            $this->fail = "Conexão com Banco de Dados não estabelecida";
+            return false;
+        } catch (PDOException $exception) {
+            $this->fail = $exception;
+            return false;
+        }
+    }
+}

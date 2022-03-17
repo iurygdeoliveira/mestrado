@@ -1,0 +1,35 @@
+##########
+# DOCKER #
+##########
+
+- Remover todas as imagens
+sudo docker rmi $(sudo docker images -q) --force
+
+Verificar quais imagens estão presentes na máquina
+sudo docker images
+
+Remover uma imagem
+sudo docker rmi < id imagem > --force
+
+#########
+# MYSQL #
+#########
+
+ALTER USER 'root'@'localhost'IDENTIFIED WITH mysql_native_password BY 'colocar a senha';
+FLUSH PRIVILEGES;
+
+GRANT ALL PRIVILEGES ON mestrado.* TO 'root'@'%' WITH GRANT OPTION;
+
+select host, user from mysql.user;
+
+#######
+# GIT #
+#######
+
+Remover um arquivo grande a arvore do git
+git filter-branch -f --tree-filter 'rm -f /path/to/file' HEAD --all
+
+Resolvendo o erro “fatal: refusing to merge unrelated histories” no Git
+Para permitir que o Git faça o merge de dois projetos com históricos diferentes, é só passar o parâmetro --allow-unrelated-histories quando for fazer o pull, assim:
+
+git pull origin master --allow-unrelated-histories
