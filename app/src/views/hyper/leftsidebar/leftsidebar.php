@@ -19,8 +19,8 @@
             </li>
 
             <li class="side-nav-item">
-                <a href="<?= url('/carregar') ?>" class="side-nav-link">
-                    <span> 1 - Carregar Dados </span>
+                <a href="<?= url('/popular') ?>" class="side-nav-link">
+                    <span> 1 - Popular BD </span>
                 </a>
             </li>
 

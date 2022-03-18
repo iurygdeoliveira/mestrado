@@ -24,14 +24,4 @@ trait Url
             exit;
         }
     }
-
-    public function maintenance(ServerRequestInterface $request): void
-    {
-
-        if (CONF_MAINTENANCE_MOD && !Str::contains($request->getUri()->getPath(), 'manutencao')) {
-            $this->redirect('/manutencao');
-        } elseif ((CONF_MAINTENANCE_MOD == false) && (Str::contains($request->getUri()->getPath(), 'manutencao'))) {
-            $this->redirect('/');
-        }
-    }
 }
