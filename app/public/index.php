@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-ob_start();
+
 
 // Autoload do Composer
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -27,5 +27,3 @@ require_once __DIR__ . '/../src/routes/loadRoutes.php';
 
 // Enviar Resposta
 (new Response($router, $request));
-
-ob_end_flush();

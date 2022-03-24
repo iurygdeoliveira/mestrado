@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace src\controllers;
 
+use src\class\LoadRide;
 use src\core\View;
 use src\core\Controller;
-use src\traits\load_rider;
 use Laminas\Diactoros\Response;
 
 class loadController extends Controller
 {
-    use load_rider;
+
+    private $ride;
 
     public View $view; // Responsavel por renderizar a view home
 
@@ -26,7 +27,8 @@ class loadController extends Controller
         // Dados para renderização no template
         $this->view->addData($this->dataTheme('Carregar Dados'), 'theme');
 
-        $this->loadRider(CONF_RIDER1_DATASET1);
+        $this->ride = new LoadRide(CONF_RIDER1_DATASET1, '1');
+        $this->ride->loadRide();
 
         $response = new Response();
         $response->getBody()->write(

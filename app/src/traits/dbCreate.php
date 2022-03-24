@@ -34,6 +34,7 @@ trait dbCreate
             $this->fail = "Conexão com Banco de Dados não estabelecida";
             return false;
         } catch (PDOException $exception) {
+            dump($exception);
             $this->fail = $exception;
             return false;
         }
