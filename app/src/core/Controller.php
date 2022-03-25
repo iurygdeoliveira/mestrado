@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace src\core;
 
-use Laminas\Diactoros\Response;
+use Laminas\Diactoros\Response\JsonResponse;
 use src\traits\Serialize;
 use stdClass;
 
@@ -32,15 +32,16 @@ class Controller
         ];
     }
 
-    protected function response(): Response
+    protected function responseJson($data): JsonResponse
     {
 
-        $response = new Response();
-        $response->getBody()->write(
-            $this->serialize($this->result, 'json')
+        $response = new JsonResponse(
+            $data,
+            200,
+            ['Content-Type' => ['application/hal+json']],
+            JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
         );
 
-        return $response->withAddedHeader('content-type', 'application/json')
-            ->withStatus(200);
+        return $response;
     }
 }
