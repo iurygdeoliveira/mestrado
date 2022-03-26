@@ -27,20 +27,22 @@ trait dbUpdate
 
             parse_str($params, $params); // Convertendo params para array
 
-            $update = "UPDATE " . static::$entity . " SET {$dataSet} WHERE {$terms}";
+            $update = "UPDATE " . $this->table . " SET {$dataSet} WHERE {$terms}";
 
             $conexion = $this->connectDB();
             if ($conexion instanceof PDO) {
                 $stmt = $conexion->prepare($update);
                 $stmt->execute($this->filter(array_merge($data, $params)));
-                $this->fail = null;
+                $this->fail = false;
                 return $stmt->rowCount();
             }
 
-            $this->fail = "Conexão com Banco de Dados não estabelecida";
+            $this->message = "Conexão com Banco de Dados não estabelecida";
+            $this->fail = true;
             return false;
         } catch (PDOException $exception) {
-            $this->fail = $exception;
+            $this->fail = true;
+            $this->message = $exception->getMessage();
             return false;
         }
     }

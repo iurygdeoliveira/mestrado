@@ -25,16 +25,25 @@
                                         <td><?= $this->e($rider->atividade) ?></td>
                                         <td>
                                             <div class="progress">
-                                                <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                                <div class="progress-bar" id='<?= 'progress_bar_' . $this->e($rider->name) ?>' role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                                             </div>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-primary" onclick="saveData('<?= $this->e($rider->name) ?>', '<?= $this->e($rider->dataset) ?>', '<?= $this->e($rider->atividade) ?>','<?= $this->e($url) ?>')">Carregar Dados</button>
-                                            <!-- <button class="btn btn-primary" type="button" disabled>
-                                                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                                Loading...
-                                            </button> -->
-                                            <!-- <button type="button" class="btn btn-success">Success</button> -->
+                                            <div class="d-grid">
+                                                <button type="button" class="btn btn-primary" id='<?= 'button_carregar_' . $this->e($rider->name) ?>' onclick="saveData('<?= $this->e($rider->name) ?>', '<?= $this->e($rider->dataset) ?>', '<?= $this->e($rider->atividade) ?>','<?= $this->e($url) ?>')">Carregar Dados</button>
+                                            </div>
+                                            <div class="d-grid">
+                                                <button class="btn btn-primary" type="button" id='<?= 'button_loading_' . $this->e($rider->name) ?>' style="display: none;">
+                                                    <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                                    Loading...
+                                                </button>
+                                            </div>
+                                            <div class="d-grid">
+                                                <button type="button" id='<?= 'button_success_' . $this->e($rider->name) ?>' class="btn btn-success" style="display: none;">Sucesso</button>
+                                            </div>
+                                            <div class="d-grid">
+                                                <button type="button" id='<?= 'button_danger_' . $this->e($rider->name) ?>' class="btn btn-danger" style="display: none;">Erro</button>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -47,7 +56,3 @@
         </div> <!-- end card -->
     </div><!-- end col-->
 </div>
-
-<?php $this->insert("modal-processando") ?>
-<?php $this->insert("modal-success") ?>
-<?php $this->insert("modal-danger") ?>

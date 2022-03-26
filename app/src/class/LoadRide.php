@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace src\class;
 
+use src\traits\GetNames;
 use DirectoryIterator;
 use src\models\rideBD;
 use src\class\ExtractInfo;
@@ -17,99 +18,47 @@ class LoadRide
     private $info; // Estrutura para extrair as informações dos arquivos GPX ou TCX
     private $ride; // Estrutura para receber os dados da corrida e persistir no BD
 
+    use GetNames;
+
     public function __construct(string $dataset, string $riderID)
     {
 
         $this->dataset = $dataset;
         $this->riderID = $riderID;
         $this->ride = new rideBD();
+        $this->ride->bootstrap('ride' . $riderID);
     }
 
-    // Obtem o nome do arquivo a ser parseado
-    private function getName(string $datasetFileName)
+    public function loadRide(string $filename)
     {
 
-        $iterator = new DirectoryIterator($datasetFileName);
-
-        foreach ($iterator as $fileInfo) {
-
-            if ($fileInfo->isDot()) {
-                continue;
-            }
-            yield ($fileInfo->getFilename());
-        }
-    }
-
-    // Retorna um array contendo o nome dos arquivos de forma ordenada
-    public function getFileNames(string $datasetFileName): array
-    {
-
-
-        $fileNames = [];
-        foreach ($this->getName($datasetFileName) as $fileName) {
-            array_push($fileNames, $fileName);
+        if (file_exists($filename . ".gpx")) {
+            $this->parseGPX($filename . ".gpx");
+            return $this->ride;
         }
 
-        sort($fileNames, SORT_NATURAL); // Ordenando o nome dos arquivos
-        $total = ['Total de Arquivos' => count($fileNames)];
-        array_unshift($fileNames, $total);
-        return $fileNames;
-    }
-
-    // processa o arquivo que contem os dados
-    public function processFile()
-    {
-
-        $this->fileNames = $this->getFileNames($this->dataset);
-
-        foreach ($this->fileNames as $filename) {
-
-            if (is_array($filename)) {
-                continue;
-            }
-
-            $ride = match (pathinfo($filename, PATHINFO_EXTENSION)) {
-                "gpx" => $this->parseGPX($this->dataset . $filename),
-                "tcx" => $this->parseTCX($this->dataset, $filename),
-            };
-
-            yield $ride;
+        if (file_exists($filename . ".tcx")) {
+            $this->parseTCX($filename . ".tcx");
+            return $this->ride;
         }
+
+        $this->ride->setFail(true);
+        $this->ride->setMessage("Arquivo não encontrado");
+        return $this->ride;
     }
 
-
-    public function loadRide()
+    private function parseGPX(string $gpxfile)
     {
 
-        set_time_limit(300); // Aumentando o tempo limite de processamento
-
-        $riders = [];
-
-        for (; $this->processFile()->valid(); $this->processFile()->next()) {
-            dump($this->processFile()->current());
-        }
-        exit;
-        // foreach ($this->processFile() as $ride) {
-        //     array_push($riders, $ride);
-        // }
-
-        exit;
-        return true;
-    }
-
-    public function parseGPX(string $gpxfile): rideBD
-    {
-
-        $ride = new rideBD();
         $this->info = new ExtractInfo($gpxfile);
+
         // Extraindo informações do GPX file
-        $ride->rider_id = $this->riderID;
-        $ride->creator = $this->info->getCreatorGPX(); // Obtendo criador do arquivo gpx
-        $ride->type = $this->info->getTypeGPX();
-        $ride->datetime = $this->info->getDatetimeGPX();
+        $this->ride->creator = $this->info->getCreatorGPX(); // Obtendo criador do arquivo gpx
+        $this->ride->type = $this->info->getTypeGPX(); // Obtendo tipo de atividade
+        $this->ride->datetime = $this->info->getDatetimeGPX(); // Obtendo datatime de realização da atividade
 
         // Os dados devem possuir valores númericos ou então null
-        // $ride->datetime = $gpx->getStartTime("Y-m-d H:i:s");
+
         // $ride->totaltime = BigDecimal::of($gpx->getTotalDuration())->dividedBy('3600', 6, RoundingMode::HALF_DOWN)->toFloat(); // Duração da atividade em horas
         // $ride->distance = BigDecimal::of($gpx->getTotalDistance())->dividedBy('1000', 6, RoundingMode::HALF_DOWN)->toFloat(); // Distância total em kilometros
         // $ride->calories = BigDecimal::of($gpx->getTotalCalories())->toScale(6, RoundingMode::HALF_DOWN)->toFloat(); // Distância total em kilometros
@@ -147,42 +96,39 @@ class LoadRide
         // $ride_aux->lowest = $stats->minAltitude;
         // dump($ride_aux);
 
-        return $this->addNull($ride);
+        return $this->addNull();
     }
 
     // Adicionando null nos elementos vazios
-    private function addNull(rideBD $ride): rideBD
+    private function addNull(): void
     {
-        $ride->id = ($ride->id ? strval($ride->id) : null);
-        $ride->creator = ($ride->creator ? strval($ride->creator) : null);
-        $ride->type = ($ride->type ? strval($ride->type) : null);
-        $ride->datetime = ($ride->datetime ? strval($ride->datetime) : null);
-        $ride->totaltime = ($ride->totaltime ? strval($ride->totaltime) : null);
-        $ride->distance = ($ride->distance ? strval($ride->distance) : null);
-        $ride->calories = ($ride->calories ? strval($ride->calories) : null);
-        $ride->avgspeed = ($ride->avgspeed ? strval($ride->avgspeed) : null);
-        $ride->maxspeed = ($ride->maxspeed ? strval($ride->maxspeed) : null);
-        $ride->avgheart = ($ride->avgheart ? strval($ride->avgheart) : null);
-        $ride->maxheart = ($ride->maxheart ? strval($ride->maxheart) : null);
-        $ride->minheart = ($ride->minheart ? strval($ride->minheart) : null);
-        $ride->avgtemp = ($ride->avgtemp ? strval($ride->avgtemp) : null);
-        $ride->avgcadence = ($ride->avgcadence ? strval($ride->avgcadence) : null);
-        $ride->mincadence = ($ride->mincadence ? strval($ride->mincadence) : null);
-        $ride->maxcadence = ($ride->maxcadence ? strval($ride->maxcadence) : null);
-        $ride->latitude = ($ride->latitude ? strval($ride->latitude) : null);
-        $ride->longitude = ($ride->longitude ? strval($ride->longitude) : null);
-        $ride->highest = ($ride->highest ? strval($ride->highest) : null);
-        $ride->lowest = ($ride->lowest ? strval($ride->lowest) : null);
-        $ride->elevationGain = ($ride->elevationGain ? strval($ride->elevationGain) : null); // Ganho de elevação
-        $ride->elevationLoss = ($ride->elevationLoss ? strval($ride->elevationLoss) : null);; // Perda de elevação
-
-        return $ride;
+        $this->ride->id = ($this->ride->id ? strval($this->ride->id) : null);
+        $this->ride->creator = ($this->ride->creator ? strval($this->ride->creator) : null);
+        $this->ride->type = ($this->ride->type ? strval($this->ride->type) : null);
+        $this->ride->datetime = ($this->ride->datetime ? strval($this->ride->datetime) : null);
+        $this->ride->totaltime = ($this->ride->totaltime ? strval($this->ride->totaltime) : null);
+        $this->ride->distance = ($this->ride->distance ? strval($this->ride->distance) : null);
+        $this->ride->calories = ($this->ride->calories ? strval($this->ride->calories) : null);
+        $this->ride->avgspeed = ($this->ride->avgspeed ? strval($this->ride->avgspeed) : null);
+        $this->ride->maxspeed = ($this->ride->maxspeed ? strval($this->ride->maxspeed) : null);
+        $this->ride->avgheart = ($this->ride->avgheart ? strval($this->ride->avgheart) : null);
+        $this->ride->maxheart = ($this->ride->maxheart ? strval($this->ride->maxheart) : null);
+        $this->ride->minheart = ($this->ride->minheart ? strval($this->ride->minheart) : null);
+        $this->ride->avgtemp = ($this->ride->avgtemp ? strval($this->ride->avgtemp) : null);
+        $this->ride->avgcadence = ($this->ride->avgcadence ? strval($this->ride->avgcadence) : null);
+        $this->ride->mincadence = ($this->ride->mincadence ? strval($this->ride->mincadence) : null);
+        $this->ride->maxcadence = ($this->ride->maxcadence ? strval($this->ride->maxcadence) : null);
+        $this->ride->latitude = ($this->ride->latitude ? strval($this->ride->latitude) : null);
+        $this->ride->longitude = ($this->ride->longitude ? strval($this->ride->longitude) : null);
+        $this->ride->highest = ($this->ride->highest ? strval($this->ride->highest) : null);
+        $this->ride->lowest = ($this->ride->lowest ? strval($this->ride->lowest) : null);
+        $this->ride->elevationGain = ($this->ride->elevationGain ? strval($this->ride->elevationGain) : null); // Ganho de elevação
+        $this->ride->elevationLoss = ($this->ride->elevationLoss ? strval($this->ride->elevationLoss) : null);; // Perda de elevação
     }
 
-    public function parseTCX(string $dataset, array $fileNames)
+    public function parseTCX(string $tcxfile): void
     {
 
-        set_time_limit(20);
         // $xml = $this->gpx->parse($dataset . $fileNames[1]);
         // $xml_aux = $this->gpx_aux->load($dataset . $fileNames[1]);
         // dump("xml", $xml);
@@ -237,8 +183,6 @@ class LoadRide
         // dump("temperatura", $xml_aux->tracks[0]->segments[0]->getPoints()[0]->extensions->trackPointExtension->aTemp);
         // dump("frequencia cardiaca", $xml_aux->tracks[0]->segments[0]->getPoints()[0]->extensions->trackPointExtension->hr);
         // dump("cadencia", $xml_aux->tracks[0]->segments[0]->getPoints()[0]->extensions->trackPointExtension->cad);
-        exit;
 
-        return true;
     }
 }

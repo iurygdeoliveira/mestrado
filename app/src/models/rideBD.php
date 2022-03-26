@@ -14,14 +14,30 @@ use PDOException;
 class rideBD extends Model
 {
 
-    protected static $entity = "ride";
+    protected readonly string $table;
 
-    protected static $required = ['creator', 'rider_id'];
+    protected static $required = ['datetime'];
 
     protected static $preventChange = ['id'];
 
 
     use dbPreventChange;
+
+
+    public function bootstrap(string $table)
+    {
+        $this->table = $table;
+    }
+
+    public function setFail(bool $value)
+    {
+        $this->fail = $value;
+    }
+
+    public function setMessage(string $value)
+    {
+        $this->message = $value;
+    }
 
     public function save()
     {
@@ -57,17 +73,15 @@ class rideBD extends Model
     private function creating()
     {
 
-
         $userId = $this->create($this->preventChange(self::$preventChange));
 
         if ($this->fail()) {
-            $this->message = "Erro ao cadastrar, entre em contato com o suporte";
-            $this->fail = true;
+            $this->message = "{$this->message}. Erro ao Salvar";
             return false;
         }
 
         $this->message = "Cadastro realizado com sucesso";
-        $this->fail = null;
+        $this->fail = false;
         return $userId;
     }
 
@@ -76,8 +90,7 @@ class rideBD extends Model
 
         $this->update($this->preventChange(self::$preventChange), "id = :id", "id={$userId}");
         if ($this->fail()) {
-            $this->message = "Erro ao atualizar";
-            $this->fail = true;
+            $this->message = "{$this->message}. Erro ao Atualizar";
             return false;
         }
 
@@ -90,7 +103,7 @@ class rideBD extends Model
     {
         // Validando Campos obrigatórios
         if (!$this->required(self::$required)) {
-            $this->message = "Preencha todos os campos obrigatórios: dataset e rider_id";
+            $this->message = "Preencha todos os campos obrigatórios";
             $this->fail = true;
             return false;
         }

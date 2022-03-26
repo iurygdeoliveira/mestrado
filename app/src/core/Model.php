@@ -30,6 +30,7 @@ abstract class Model
     protected $offset;
     protected $limit;
 
+
     /**
      * Construir o parametro data com os valores retornados do banco
      */
@@ -117,12 +118,12 @@ abstract class Model
     public function find(?string $terms = null, ?string $params = null, string $columns = "*")
     {
         if ($terms) {
-            $this->query = "SELECT {$columns} FROM " . static::$entity . " WHERE {$terms}";
+            $this->query = "SELECT {$columns} FROM " . $this->table . " WHERE {$terms}";
             parse_str($params, $this->params);
             return $this;
         }
 
-        $this->query = "SELECT {$columns} FROM " . static::$entity;
+        $this->query = "SELECT {$columns} FROM " . $this->table;
         return $this;
     }
 

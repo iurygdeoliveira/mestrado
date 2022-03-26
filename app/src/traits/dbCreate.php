@@ -20,22 +20,23 @@ trait dbCreate
             $columns = implode(', ', array_keys($data));
             $values = ":" . implode(', :', array_keys($data));
 
-            $insert = "INSERT INTO " . static::$entity . " ({$columns}) VALUES ({$values})";
+            $insert = "INSERT INTO " . $this->table . " ({$columns}) VALUES ({$values})";
 
             $conexion = $this->connectDB();
             if ($conexion instanceof PDO) {
 
                 $stmt = $conexion->prepare($insert);
                 $stmt->execute($this->filter($data));
-                $this->fail = null;
+                $this->fail = false;
                 return $conexion->lastInsertId();
             }
 
-            $this->fail = "Conexão com Banco de Dados não estabelecida";
+            $this->fail = true;
+            $this->message = "Conexão com Banco de Dados não estabelecida.";
             return false;
         } catch (PDOException $exception) {
-            dump($exception);
             $this->fail = $exception;
+            $this->message = $exception->getMessage();
             return false;
         }
     }

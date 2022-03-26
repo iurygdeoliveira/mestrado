@@ -8,6 +8,7 @@ use src\traits\GetNames;
 use src\class\LoadRide;
 use src\core\View;
 use src\core\Controller;
+use src\models\rideBD;
 use Laminas\Diactoros\Response;
 use stdClass;
 
@@ -16,7 +17,7 @@ class loadController extends Controller
 
     use GetNames;
 
-    private $ride, $request;
+    private $ride;
 
     public View $view; // Responsavel por renderizar a view home
 
@@ -31,6 +32,7 @@ class loadController extends Controller
         // Dados para renderização no template
         $this->view->addData($this->dataTheme('Carregar Dados'), 'theme');
 
+        // Dados para renderização do dataTable
         $data = $this->datasets();
         $data += ['url' => url('saveData')];
         $this->view->addData($data, 'dataTable');
@@ -43,13 +45,30 @@ class loadController extends Controller
         return $response;
     }
 
+    //   "rider" => "6"
+    //   "dataset" => "/var/www/html/app/src/support/../datasets/dataset1/Rider6/"
+    //   "count" => "63"
+    //   "atividade" => "60"
     public function saveData(): Response
     {
-        $this->request = getRequest()->getParsedBody();
-        dump($this->request);
-        exit;
 
-        $response = ['status' => true, 'message' => "Dado salvo"];
+        $request = getRequest()->getParsedBody();
+        $this->ride = new LoadRide($request['dataset'], $request['rider']);
+        $result = $this->ride->loadRide($request['dataset'] . $request['atividade']);
+
+        // Arquivo não encontrado
+        if ($result->fail()) {
+            $response = ['status' => false, 'message' => $result->message()];
+            return $this->responseJson($response);
+        }
+
+        // Problema ao salvar no BD
+        if ($result->save() == false) {
+            $response = ['status' => false, 'message' => $result->message()];
+            return $this->responseJson($response);
+        }
+
+        $response = ['status' => true, 'message' => "Cadastro realizado com sucesso"];
         return $this->responseJson($response);
     }
 
