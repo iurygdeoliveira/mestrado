@@ -91,7 +91,7 @@ abstract class Model
 
                 $stmt = $conexion->prepare($this->query . $this->order . $this->limit . $this->offset);
                 $stmt->execute($this->params);
-                $this->fail = null;
+                $this->fail = false;
 
                 // Sem retorno de objetos 
                 if (!$stmt->rowCount()) {
@@ -107,10 +107,12 @@ abstract class Model
                 return $stmt->fetchObject(static::class);
             }
 
-            $this->fail = "Conexão com Banco de Dados não estabelecida";
+            $this->fail = true;
+            $this->message = "Conexão com Banco de Dados não estabelecida";
             return false;
         } catch (PDOException $exception) {
-            $this->fail = $this->errorDB($exception);
+            $this->fail = true;
+            $this->message = $exception->getMessage();
             return false;
         }
     }
@@ -120,6 +122,7 @@ abstract class Model
         if ($terms) {
             $this->query = "SELECT {$columns} FROM " . $this->table . " WHERE {$terms}";
             parse_str($params, $this->params);
+            dump($this->query);
             return $this;
         }
 
@@ -129,7 +132,7 @@ abstract class Model
 
     public function findById(int $id, string $columns = "*")
     {
-        $find = $this->find("id = :id", "id={$id}", $columns);
+        $find = $this->find("id=:id", "id={$id}", $columns);
         return $find->fetch();
     }
 

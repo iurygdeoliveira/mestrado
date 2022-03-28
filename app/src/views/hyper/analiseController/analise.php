@@ -6,3 +6,4 @@
 <!-- /End-bar -->
 
 <?php $this->insert("scripts") ?>
+<?php $this->insert("getDataTable") ?>

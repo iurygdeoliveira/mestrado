@@ -18,7 +18,6 @@
     <link href="<?= css('select.bootstrap5.css') ?>" rel="stylesheet" type="text/css" />
     <!-- third party css end -->
 
-
     <!-- App css -->
     <link href="<?= css('icons.min.css') ?>" rel="stylesheet" type="text/css" />
     <link href="<?= css('app.min.css') ?>" rel="stylesheet" type="text/css" id="light-style" />

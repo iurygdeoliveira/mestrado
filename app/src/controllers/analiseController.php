@@ -4,27 +4,40 @@ declare(strict_types=1);
 
 namespace src\controllers;
 
+use src\traits\Datasets;
 use src\core\View;
 use src\core\Controller;
+use src\models\rideBD;
 use Laminas\Diactoros\Response;
-use SimpleXMLElement;
+
 
 class analiseController extends Controller
 {
+    use Datasets;
+
+    private $riders; // Recebe os dados dos ciclistas
 
     public View $view; // Responsavel por renderizar a view home
 
     public function __construct()
     {
         $this->view = new View(__DIR__, get_class($this));
+        $this->riders = $this->datasets();
     }
 
     // Renderiza a view de dashboard
     public function analise(): Response
     {
         // Dados para renderização no template
-        $this->view->addData($this->dataTheme('Analise Exploratória'), 'theme'); //  
-        //$this->view->addData($this->getData(), 'dataTable'); //  
+        $this->view->addData($this->dataTheme('Analise Exploratória'), 'theme');
+
+        // dados para renderização em metaData 
+        $this->view->addData($this->metaData(), 'metaData');
+
+        // dados para renderização em begin 
+        $data = $this->beginData();
+        $data += ['url' => url('getDataTable')];
+        $this->view->addData($data, 'begin');
 
         $response = new Response();
         $response->getBody()->write(
@@ -34,20 +47,52 @@ class analiseController extends Controller
         return $response;
     }
 
-    private function getData(): array
+    private function metaData(): array
+    {
+        // Dados para renderização do dataTable
+        $ciclistas = $this->riders['riders'];
+
+        $totalAtividades = 0;
+        foreach ($ciclistas as $ciclista) {
+
+            $totalAtividades += $ciclista->atividade;
+        }
+
+        $data = [
+            'totalCiclistas' => 29,
+            'totalAtividades' => $totalAtividades,
+            'totalDatasets' => 4
+        ];
+
+        return $data;
+    }
+
+    private function beginData(): array
+    {
+        // Dados para renderização do dataTable       
+
+        $data = [
+            'riders' => $this->riders['riders']
+        ];
+
+        return $data;
+    }
+
+    public function getDataTable(): Response
     {
 
-        $xmlstr = file_get_contents(__DIR__ . '/../dataset/1.tcx');
-        $xml = new SimpleXMLElement($xmlstr);
-        dump('Arquivo Original', $xml);
-        dump($xml->Activities);
-        dump($xml->Activities->Activity);
-        dump($xml->Activities->Activity->attributes()['Sport']);
+        set_time_limit(60);
+        $request = getRequest()->getParsedBody();
+        $this->ride = new rideBD();
+        $this->ride->bootstrap('ride' . $request['rider']);
 
-        // $xmlstr = file_get_contents(__DIR__ . '/../dataset/f1.gpx');
-        // $xml = new SimpleXMLElement($xmlstr);
-        // dump($xml);
+        // Arquivo não encontrado
+        $result = $this->ride->findById(intval($request['atividade']));
+        dump($this->ride);
+        dump($result);
         exit;
-        return [];
+
+        $response = ['status' => true, 'message' => "Cadastro realizado com sucesso"];
+        return $this->responseJson($response);
     }
 }
