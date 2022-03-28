@@ -52,6 +52,7 @@ class loadController extends Controller
     public function saveData(): Response
     {
 
+        set_time_limit(60);
         $request = getRequest()->getParsedBody();
         $this->ride = new LoadRide($request['dataset'], $request['rider']);
         $result = $this->ride->loadRide($request['dataset'] . $request['atividade']);

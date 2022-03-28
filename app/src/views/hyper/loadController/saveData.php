@@ -6,12 +6,13 @@
         data.append('rider', rider);
         data.append('dataset', dataset);
         data.append('count', count);
+        data.append('atividade', 0);
 
         let index;
         for (index = 1; index <= parseInt(count); index++) {
 
             $('#button_loading_' + rider).show();
-            data.append('atividade', index);
+            data.set('atividade', index);
             await axios.post(url, data)
                 .then(function(response) {
 
