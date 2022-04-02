@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace src\class;
+namespace src\classes;
 
 use src\traits\GetNames;
 use DirectoryIterator;
 use src\models\rideBD;
-use src\class\ExtractInfoGPX;
-use src\class\ExtractInfoTCX;
+use src\classes\ExtractInfoGPX;
+use src\classes\ExtractInfoTCX;
 
 class LoadRide
 {

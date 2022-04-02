@@ -8,7 +8,7 @@
 
             <li class="side-nav-item">
                 <a href="<?= url() ?>" class="side-nav-link">
-                    <span> Dashboard </span>
+                    <span> 3 - Dashboard </span>
                 </a>
             </li>
 

@@ -2,8 +2,12 @@
 # DOCKER #
 ##########
 
+- Verificar quanto de espaço está sendo ocupado
+sudo docker system df
+sudo docker system df -v
+
 - Remover todas as imagens
-sudo docker rmi $(sudo docker images -q) --force
+sudo docker system prune -a
 
 Verificar quais imagens estão presentes na máquina
 sudo docker images

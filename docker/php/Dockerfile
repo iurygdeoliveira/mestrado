@@ -5,10 +5,8 @@ LABEL maintainer="Iury Gomes de Oliveira"
 RUN apt-get update && \
     apt-get -y --no-install-recommends install libcurl4-openssl-dev libmpdec-dev
 
-
-RUN docker-php-ext-install pdo pdo_mysql curl
+RUN docker-php-ext-install pdo pdo_mysql curl opcache
 RUN docker-php-ext-enable pdo_mysql
-RUN docker-php-ext-install opcache
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 

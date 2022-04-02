@@ -29,7 +29,9 @@ class analiseController extends Controller
     public function analise(): Response
     {
         // Dados para renderização no template
-        $this->view->addData($this->dataTheme('Analise Exploratória'), 'theme');
+        $data = $this->dataTheme('Analise Exploratória');
+        $this->view->addData($data, '../theme/theme');
+        $this->view->addData($data, '../scripts/scripts');
 
         // dados para renderização em metaData 
         $this->view->addData($this->metaData(), 'metaData');

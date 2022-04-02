@@ -30,7 +30,7 @@
         </div> <!-- end content -->
 
 
-        <?php $this->insert("footer") ?>
+        <?php $this->insert("../footer/footer") ?>
 
     </div>
 

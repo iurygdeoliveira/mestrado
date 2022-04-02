@@ -73,6 +73,7 @@ function js(string $path = null): string
     return CONF_URL_BASE . "/assets/js/";
 }
 
+
 function flash(): ?string
 {
     $session = new Session();

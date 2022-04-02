@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace src\controllers;
 
 use src\traits\Datasets;
-use src\class\LoadRide;
+use src\classes\LoadRide;
 use src\core\View;
 use src\core\Controller;
 use Laminas\Diactoros\Response;
@@ -28,7 +28,9 @@ class loadController extends Controller
     public function load(): Response
     {
         // Dados para renderização no template
-        $this->view->addData($this->dataTheme('Carregar Dados'), 'theme');
+        $data = $this->dataTheme('Popular BD');
+        $this->view->addData($data, '../theme/theme');
+        $this->view->addData($data, '../scripts/scripts');
 
         // Dados para renderização do dataTable
         $data = $this->datasets();

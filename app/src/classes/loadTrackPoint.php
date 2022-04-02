@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace src\class;
+namespace src\classes;
 
 use DirectoryIterator;
 use src\models\rideBD;

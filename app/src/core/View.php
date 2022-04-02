@@ -18,6 +18,7 @@ class View
     {
         $path = $this->viewPath($basePath, $controllerName);
         $this->engine = new Engine($path);
+        $this->engine->loadExtension(new Asset(CONF_VIEW_ASSETS), true);
         return $this;
     }
 

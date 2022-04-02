@@ -27,6 +27,7 @@
         "ext-decimal": "1.4.*",
         "ext-mbstring": "8.1.*",
         "ext-gd": "8.1.*",
+        "php-decimal/php-decimal": "v1.1.*",
         "illuminate/support": "^v8.62.0",
         "illuminate/filesystem": "^v8.62.0",
         "illuminate/http": "^v8.62.0",
