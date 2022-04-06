@@ -49,6 +49,27 @@ class analiseController extends Controller
         return $response;
     }
 
+    public function analiseAjax(): Response
+    {
+        // Dados para renderização no template
+        $data = ['title' => "Análise Exploratória | CycleVis"];
+
+        // dados para renderização em metaData 
+        $data += ['metaData' => $this->metaData()];
+
+        // dados para renderização em begin 
+        $data += ['beginData' => $this->beginData()];
+        $data += ['url' => url('getDataTable')];
+
+        return $this->responseJson(
+            [
+                'status' => true,
+                'message' => "Cadastro realizado com sucesso",
+                'response' => $data
+            ]
+        );
+    }
+
     private function metaData(): array
     {
         // Dados para renderização do dataTable

@@ -11,15 +11,12 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="<?= img('favicon.ico') ?>">
 
-    <?php if (in_array($title, $dontRender)) : ?>
-
-        <!-- third party css -->
-        <link defer href="<?= css('dataTables.bootstrap5.css') ?>" rel="stylesheet" type="text/css" />
-        <link defer href="<?= css('responsive.bootstrap5.css') ?>" rel="stylesheet" type="text/css" />
-        <link defer href="<?= css('buttons.bootstrap5.css') ?>" rel="stylesheet" type="text/css" />
-        <link defer href="<?= css('select.bootstrap5.css') ?>" rel="stylesheet" type="text/css" />
-        <!-- third party css end -->
-    <?php endif; ?>
+    <!-- third party css -->
+    <link defer href="<?= css('dataTables.bootstrap5.css') ?>" rel="stylesheet" type="text/css" />
+    <link defer href="<?= css('responsive.bootstrap5.css') ?>" rel="stylesheet" type="text/css" />
+    <link defer href="<?= css('buttons.bootstrap5.css') ?>" rel="stylesheet" type="text/css" />
+    <link defer href="<?= css('select.bootstrap5.css') ?>" rel="stylesheet" type="text/css" />
+    <!-- third party css end -->
 
     <!-- App css -->
     <link defer href="<?= css('icons.min.css') ?>" rel="stylesheet" type="text/css" />

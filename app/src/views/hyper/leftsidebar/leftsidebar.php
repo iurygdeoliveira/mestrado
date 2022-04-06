@@ -13,8 +13,8 @@
             </li>
 
             <li class="side-nav-item">
-                <a href="<?= url('/analise') ?>" class="side-nav-link">
-                    <span> 2 - Análise Exploratoria </span>
+                <a class="side-nav-link">
+                    <span onmouseover="getData('analiseAjax')" onclick="renderData('analiseAjax')"> 2 - Análise Exploratoria </span>
                 </a>
             </li>
 

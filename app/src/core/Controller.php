@@ -20,10 +20,9 @@ class Controller
 
     protected function dataTheme(string $page = ''): array
     {
-        $dontRenderAssets = ['Dashboard'];
+
         return [
-            'title' => "$page | CycleVis",
-            'dontRender' => $dontRenderAssets
+            'title' => "$page | CycleVis"
         ];
     }
 
