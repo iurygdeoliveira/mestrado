@@ -1,6 +1,32 @@
 {
-    "cars": [
-        { "id": 1, "brand": "opel", "model": "corsa" },
-        { "id": 2, "brand": "ford", "model": "fiesta" }
-    ]
+    "stats": {
+        "comment": "Para os dados speed, cadence, heartrate, elevation, temperature, calories os valores serão calculados em valores médios das atividades. Dados que aparecem como null são informações faltantes nos arquivos. Time2extract foi o tempo gasto para extrair os dados do arquivo.",
+        "total_time_extract": "",
+        "total_riders": "",
+        "total_activities": "",
+        "total_datasets": ""
+    },
+    "riders": {
+        "rider_id": "",
+        "activity": {
+            "activity_id": "",
+            "creator": "",
+            "nodes": "",
+            "datetime": "",
+            "latitude_inicial": "",
+            "longitude_inicial": "",
+            "latitude_final": "",
+            "longitude_final": "",
+            "duration": "",
+            "distance": "",
+            "speed": "",
+            "cadence": "",
+            "heartrate": "",
+            "elevation_gain": "",
+            "elevation_loss": "",
+            "temperature": "",
+            "calories": "",
+            "total trackpoints": ""
+        }
+    }
 }

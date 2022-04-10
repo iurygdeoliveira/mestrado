@@ -24,6 +24,7 @@ $router = new Router(); // Inicia o roteador
 require_once __DIR__ . '/../src/routes/dashboardRoutes.php';
 require_once __DIR__ . '/../src/routes/analiseRoutes.php';
 require_once __DIR__ . '/../src/routes/loadRoutes.php';
+require_once __DIR__ . '/../src/routes/readRoutes.php';
 
 // Enviar Resposta
 (new Response($router, $request));

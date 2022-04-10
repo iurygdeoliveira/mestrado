@@ -26,13 +26,6 @@ class Controller
         ];
     }
 
-    protected function dataBegin(string $page = ''): array
-    {
-        return [
-            'title' => $page
-        ];
-    }
-
     protected function responseJson($data): JsonResponse
     {
 

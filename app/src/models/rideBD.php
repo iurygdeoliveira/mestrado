@@ -16,7 +16,7 @@ class rideBD extends Model
 
     protected readonly string $table;
 
-    protected static $required = ['datetime'];
+    protected static $required = [];
 
     protected static $preventChange = ['id'];
 
@@ -24,9 +24,10 @@ class rideBD extends Model
     use dbPreventChange;
 
 
-    public function bootstrap(string $table)
+    public function bootstrap(string $riderID, string $activityID)
     {
-        $this->table = $table;
+        $this->rider_id = $riderID;
+        $this->activity_id = $activityID;
     }
 
     public function setFail(bool $value)
@@ -36,7 +37,13 @@ class rideBD extends Model
 
     public function setMessage(string $value)
     {
-        $this->message = $value;
+        if (empty($this->message)) {
+            $this->message = $value;
+            return $this->message;
+        }
+
+        $this->message = "{$this->message}. {$value}";
+        return $this->message;
     }
 
     public function save()
@@ -76,7 +83,7 @@ class rideBD extends Model
         $userId = $this->create($this->preventChange(self::$preventChange));
 
         if ($this->fail()) {
-            $this->message = "{$this->message}. Erro ao Salvar";
+            $this->message = $this->setMessage("Erro ao Salvar");
             return false;
         }
 
@@ -90,7 +97,7 @@ class rideBD extends Model
 
         $this->update($this->preventChange(self::$preventChange), "id = :id", "id={$userId}");
         if ($this->fail()) {
-            $this->message = "{$this->message}. Erro ao Atualizar";
+            $this->message = $this->setMessage("Erro ao Atualizar");
             return false;
         }
 

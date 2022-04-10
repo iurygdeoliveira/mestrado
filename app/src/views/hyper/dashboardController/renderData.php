@@ -7,9 +7,10 @@
             return;
         }
 
-        console.log('não existe' + content);
+        console.log('ainda não existe' + content);
         if (getData(content)) {
             // Chamar mesmo bloco de funções do if
+            return;
         }
         redirect('<?= url() ?>' + '/' + 'erro');
     }

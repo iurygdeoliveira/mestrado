@@ -103,6 +103,11 @@ function showErrors()
     $whoops->register();
 }
 
+function walkRecursive($item, $key)
+{
+    echo "$key -> $item<br>";
+}
+
 function telemetry()
 {
     dump("==== Telemetria ====");

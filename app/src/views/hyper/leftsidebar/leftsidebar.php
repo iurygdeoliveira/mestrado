@@ -13,14 +13,14 @@
             </li>
 
             <li class="side-nav-item">
-                <a class="side-nav-link">
-                    <span onmouseover="getData('analiseAjax')" onclick="renderData('analiseAjax')"> 2 - Análise Exploratoria </span>
+                <a href="<?= url('/analise') ?>" class="side-nav-link">
+                    <span> 2 - Tabular Dados </span>
                 </a>
             </li>
 
             <li class="side-nav-item">
-                <a href="<?= url('/popular') ?>" class="side-nav-link">
-                    <span> 1 - Popular BD </span>
+                <a href="<?= url('/read') ?>" class="side-nav-link">
+                    <span> 1 - Extrair Dados </span>
                 </a>
             </li>
 

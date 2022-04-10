@@ -35,7 +35,7 @@ trait dbCreate
             $this->message = "Conexão com Banco de Dados não estabelecida.";
             return false;
         } catch (PDOException $exception) {
-            $this->fail = $exception;
+            $this->fail = true;
             $this->message = $exception->getMessage();
             return false;
         }

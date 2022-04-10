@@ -6,5 +6,4 @@
 <!-- /End-bar -->
 
 <?php $this->insert("../scripts/scripts") ?>
-<?php $this->insert("../helpers/getData") ?>
-<?php $this->insert("renderData") ?>
+<?php $this->insert("extractData") ?>
