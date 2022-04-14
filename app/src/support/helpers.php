@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Laminas\Diactoros\ServerRequestFactory;
 use Illuminate\Support\Str;
 use src\core\Session;
+use Tracy\Debugger;
 
 
 function url(string $path = null): string
@@ -98,42 +99,18 @@ function getRequest()
 
 function showErrors()
 {
-    $whoops = new \Whoops\Run;
-    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-    $whoops->register();
+    Debugger::enable(Debugger::DEVELOPMENT, CONF_ERROR_LOG);
+    Debugger::timer();
+    Debugger::$strictMode = true; // display all errors
+    Debugger::$dumpTheme = 'dark';
+    Debugger::$maxDepth = 8; // default: 7
+    Debugger::$maxLength = 150; // default: 150
+    Debugger::$showLocation = true;
 }
 
-function walkRecursive($item, $key)
+
+
+function bardump($var, $title = '')
 {
-    echo "$key -> $item<br>";
-}
-
-function telemetry()
-{
-    dump("==== Telemetria ====");
-
-    // Tempo de execução da requisição
-    $time = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
-    dump("Processado em $time segundos");
-
-    // Memoria Utilizada
-    // Uma regra básica é utilizar 1/4 da memória do servidor para o php
-    $memory = memory_get_peak_usage();
-    $memory = number_format($memory / (1024 * 1024), 2);
-    dump("Memoria utilizada $memory M");
-
-    // Sessão
-    dump("==== SESSION: " . session_id() . " ====");
-    dump($_SESSION);
-    dump("=================");
-
-    // Cache necessário para aplicação
-    dump("==== Cache suficiente para aplicação ====");
-    dump(realpath_cache_size() . "K");
-    dump("=========================================");
-
-    // Opcache
-    dump("==== Configuração do Opcache ====");
-    dump(opcache_get_configuration());
-    dump("=================================");
+    Debugger::barDump($var, $title);
 }

@@ -38,8 +38,8 @@
         "league/container": "^4.2",
         "symfony/serializer": "^5.3",
         "symfony/property-access": "^5.3",
-        "spatie/regex": "^3.0",
         "symfony/filesystem": "^6.0",
+        "spatie/regex": "^3.0",
         "spatie/temporary-directory": "^2.0",
         "spatie/db-dumper": "^3.0",
         "laminas/laminas-diactoros": "^2.8",
@@ -49,8 +49,7 @@
         "rosell-dk/webp-convert": "^2.7"
     },
     "require-dev": {
-        "symfony/var-dumper": "^5.3",
-        "filp/whoops": "^2.14",
+        "tracy/tracy": "^2.9.1",
         "fakerphp/faker": "^v1.17.0",
         "phpmetrics/phpmetrics": "^2.7"
     },

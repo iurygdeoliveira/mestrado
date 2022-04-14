@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `mestrado` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `mestrado`;
 -- MySQL dump 10.13  Distrib 8.0.26, for Linux (x86_64)
 --
 -- Host: 127.0.0.1    Database: mestrado
@@ -16,1284 +18,1161 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `ride1`
+-- Table structure for table `rider1`
 --
 
-DROP TABLE IF EXISTS `ride1`;
+DROP TABLE IF EXISTS `rider1`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride1` (
+CREATE TABLE `rider1` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride1`
+-- Dumping data for table `rider1`
 --
 
-LOCK TABLES `ride1` WRITE;
-/*!40000 ALTER TABLE `ride1` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride1` ENABLE KEYS */;
+LOCK TABLES `rider1` WRITE;
+/*!40000 ALTER TABLE `rider1` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider1` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride10`
+-- Table structure for table `rider10`
 --
 
-DROP TABLE IF EXISTS `ride10`;
+DROP TABLE IF EXISTS `rider10`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride10` (
+CREATE TABLE `rider10` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride10`
+-- Dumping data for table `rider10`
 --
 
-LOCK TABLES `ride10` WRITE;
-/*!40000 ALTER TABLE `ride10` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride10` ENABLE KEYS */;
+LOCK TABLES `rider10` WRITE;
+/*!40000 ALTER TABLE `rider10` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider10` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride11`
+-- Table structure for table `rider11`
 --
 
-DROP TABLE IF EXISTS `ride11`;
+DROP TABLE IF EXISTS `rider11`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride11` (
+CREATE TABLE `rider11` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride11`
+-- Dumping data for table `rider11`
 --
 
-LOCK TABLES `ride11` WRITE;
-/*!40000 ALTER TABLE `ride11` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride11` ENABLE KEYS */;
+LOCK TABLES `rider11` WRITE;
+/*!40000 ALTER TABLE `rider11` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider11` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride12`
+-- Table structure for table `rider12`
 --
 
-DROP TABLE IF EXISTS `ride12`;
+DROP TABLE IF EXISTS `rider12`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride12` (
+CREATE TABLE `rider12` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride12`
+-- Dumping data for table `rider12`
 --
 
-LOCK TABLES `ride12` WRITE;
-/*!40000 ALTER TABLE `ride12` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride12` ENABLE KEYS */;
+LOCK TABLES `rider12` WRITE;
+/*!40000 ALTER TABLE `rider12` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider12` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride13`
+-- Table structure for table `rider13`
 --
 
-DROP TABLE IF EXISTS `ride13`;
+DROP TABLE IF EXISTS `rider13`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride13` (
+CREATE TABLE `rider13` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride13`
+-- Dumping data for table `rider13`
 --
 
-LOCK TABLES `ride13` WRITE;
-/*!40000 ALTER TABLE `ride13` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride13` ENABLE KEYS */;
+LOCK TABLES `rider13` WRITE;
+/*!40000 ALTER TABLE `rider13` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider13` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride14`
+-- Table structure for table `rider14`
 --
 
-DROP TABLE IF EXISTS `ride14`;
+DROP TABLE IF EXISTS `rider14`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride14` (
+CREATE TABLE `rider14` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride14`
+-- Dumping data for table `rider14`
 --
 
-LOCK TABLES `ride14` WRITE;
-/*!40000 ALTER TABLE `ride14` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride14` ENABLE KEYS */;
+LOCK TABLES `rider14` WRITE;
+/*!40000 ALTER TABLE `rider14` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider14` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride15`
+-- Table structure for table `rider15`
 --
 
-DROP TABLE IF EXISTS `ride15`;
+DROP TABLE IF EXISTS `rider15`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride15` (
+CREATE TABLE `rider15` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride15`
+-- Dumping data for table `rider15`
 --
 
-LOCK TABLES `ride15` WRITE;
-/*!40000 ALTER TABLE `ride15` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride15` ENABLE KEYS */;
+LOCK TABLES `rider15` WRITE;
+/*!40000 ALTER TABLE `rider15` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider15` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride16`
+-- Table structure for table `rider16`
 --
 
-DROP TABLE IF EXISTS `ride16`;
+DROP TABLE IF EXISTS `rider16`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride16` (
+CREATE TABLE `rider16` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride16`
+-- Dumping data for table `rider16`
 --
 
-LOCK TABLES `ride16` WRITE;
-/*!40000 ALTER TABLE `ride16` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride16` ENABLE KEYS */;
+LOCK TABLES `rider16` WRITE;
+/*!40000 ALTER TABLE `rider16` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider16` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride17`
+-- Table structure for table `rider17`
 --
 
-DROP TABLE IF EXISTS `ride17`;
+DROP TABLE IF EXISTS `rider17`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride17` (
+CREATE TABLE `rider17` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride17`
+-- Dumping data for table `rider17`
 --
 
-LOCK TABLES `ride17` WRITE;
-/*!40000 ALTER TABLE `ride17` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride17` ENABLE KEYS */;
+LOCK TABLES `rider17` WRITE;
+/*!40000 ALTER TABLE `rider17` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider17` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride18`
+-- Table structure for table `rider18`
 --
 
-DROP TABLE IF EXISTS `ride18`;
+DROP TABLE IF EXISTS `rider18`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride18` (
+CREATE TABLE `rider18` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride18`
+-- Dumping data for table `rider18`
 --
 
-LOCK TABLES `ride18` WRITE;
-/*!40000 ALTER TABLE `ride18` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride18` ENABLE KEYS */;
+LOCK TABLES `rider18` WRITE;
+/*!40000 ALTER TABLE `rider18` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider18` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride19`
+-- Table structure for table `rider19`
 --
 
-DROP TABLE IF EXISTS `ride19`;
+DROP TABLE IF EXISTS `rider19`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride19` (
+CREATE TABLE `rider19` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride19`
+-- Dumping data for table `rider19`
 --
 
-LOCK TABLES `ride19` WRITE;
-/*!40000 ALTER TABLE `ride19` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride19` ENABLE KEYS */;
+LOCK TABLES `rider19` WRITE;
+/*!40000 ALTER TABLE `rider19` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider19` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride2`
+-- Table structure for table `rider2`
 --
 
-DROP TABLE IF EXISTS `ride2`;
+DROP TABLE IF EXISTS `rider2`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride2` (
+CREATE TABLE `rider2` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride2`
+-- Dumping data for table `rider2`
 --
 
-LOCK TABLES `ride2` WRITE;
-/*!40000 ALTER TABLE `ride2` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride2` ENABLE KEYS */;
+LOCK TABLES `rider2` WRITE;
+/*!40000 ALTER TABLE `rider2` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider2` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride20`
+-- Table structure for table `rider20`
 --
 
-DROP TABLE IF EXISTS `ride20`;
+DROP TABLE IF EXISTS `rider20`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride20` (
+CREATE TABLE `rider20` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride20`
+-- Dumping data for table `rider20`
 --
 
-LOCK TABLES `ride20` WRITE;
-/*!40000 ALTER TABLE `ride20` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride20` ENABLE KEYS */;
+LOCK TABLES `rider20` WRITE;
+/*!40000 ALTER TABLE `rider20` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider20` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride21`
+-- Table structure for table `rider21`
 --
 
-DROP TABLE IF EXISTS `ride21`;
+DROP TABLE IF EXISTS `rider21`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride21` (
+CREATE TABLE `rider21` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride21`
+-- Dumping data for table `rider21`
 --
 
-LOCK TABLES `ride21` WRITE;
-/*!40000 ALTER TABLE `ride21` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride21` ENABLE KEYS */;
+LOCK TABLES `rider21` WRITE;
+/*!40000 ALTER TABLE `rider21` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider21` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride22`
+-- Table structure for table `rider22`
 --
 
-DROP TABLE IF EXISTS `ride22`;
+DROP TABLE IF EXISTS `rider22`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride22` (
+CREATE TABLE `rider22` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride22`
+-- Dumping data for table `rider22`
 --
 
-LOCK TABLES `ride22` WRITE;
-/*!40000 ALTER TABLE `ride22` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride22` ENABLE KEYS */;
+LOCK TABLES `rider22` WRITE;
+/*!40000 ALTER TABLE `rider22` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider22` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride23`
+-- Table structure for table `rider23`
 --
 
-DROP TABLE IF EXISTS `ride23`;
+DROP TABLE IF EXISTS `rider23`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride23` (
+CREATE TABLE `rider23` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride23`
+-- Dumping data for table `rider23`
 --
 
-LOCK TABLES `ride23` WRITE;
-/*!40000 ALTER TABLE `ride23` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride23` ENABLE KEYS */;
+LOCK TABLES `rider23` WRITE;
+/*!40000 ALTER TABLE `rider23` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider23` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride24`
+-- Table structure for table `rider24`
 --
 
-DROP TABLE IF EXISTS `ride24`;
+DROP TABLE IF EXISTS `rider24`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride24` (
+CREATE TABLE `rider24` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride24`
+-- Dumping data for table `rider24`
 --
 
-LOCK TABLES `ride24` WRITE;
-/*!40000 ALTER TABLE `ride24` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride24` ENABLE KEYS */;
+LOCK TABLES `rider24` WRITE;
+/*!40000 ALTER TABLE `rider24` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider24` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride25`
+-- Table structure for table `rider25`
 --
 
-DROP TABLE IF EXISTS `ride25`;
+DROP TABLE IF EXISTS `rider25`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride25` (
+CREATE TABLE `rider25` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride25`
+-- Dumping data for table `rider25`
 --
 
-LOCK TABLES `ride25` WRITE;
-/*!40000 ALTER TABLE `ride25` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride25` ENABLE KEYS */;
+LOCK TABLES `rider25` WRITE;
+/*!40000 ALTER TABLE `rider25` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider25` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride26`
+-- Table structure for table `rider26`
 --
 
-DROP TABLE IF EXISTS `ride26`;
+DROP TABLE IF EXISTS `rider26`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride26` (
+CREATE TABLE `rider26` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride26`
+-- Dumping data for table `rider26`
 --
 
-LOCK TABLES `ride26` WRITE;
-/*!40000 ALTER TABLE `ride26` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride26` ENABLE KEYS */;
+LOCK TABLES `rider26` WRITE;
+/*!40000 ALTER TABLE `rider26` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider26` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride27`
+-- Table structure for table `rider27`
 --
 
-DROP TABLE IF EXISTS `ride27`;
+DROP TABLE IF EXISTS `rider27`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride27` (
+CREATE TABLE `rider27` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride27`
+-- Dumping data for table `rider27`
 --
 
-LOCK TABLES `ride27` WRITE;
-/*!40000 ALTER TABLE `ride27` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride27` ENABLE KEYS */;
+LOCK TABLES `rider27` WRITE;
+/*!40000 ALTER TABLE `rider27` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider27` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride28`
+-- Table structure for table `rider28`
 --
 
-DROP TABLE IF EXISTS `ride28`;
+DROP TABLE IF EXISTS `rider28`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride28` (
+CREATE TABLE `rider28` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride28`
+-- Dumping data for table `rider28`
 --
 
-LOCK TABLES `ride28` WRITE;
-/*!40000 ALTER TABLE `ride28` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride28` ENABLE KEYS */;
+LOCK TABLES `rider28` WRITE;
+/*!40000 ALTER TABLE `rider28` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider28` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride29`
+-- Table structure for table `rider29`
 --
 
-DROP TABLE IF EXISTS `ride29`;
+DROP TABLE IF EXISTS `rider29`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride29` (
+CREATE TABLE `rider29` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride29`
+-- Dumping data for table `rider29`
 --
 
-LOCK TABLES `ride29` WRITE;
-/*!40000 ALTER TABLE `ride29` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride29` ENABLE KEYS */;
+LOCK TABLES `rider29` WRITE;
+/*!40000 ALTER TABLE `rider29` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider29` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride3`
+-- Table structure for table `rider3`
 --
 
-DROP TABLE IF EXISTS `ride3`;
+DROP TABLE IF EXISTS `rider3`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride3` (
+CREATE TABLE `rider3` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride3`
+-- Dumping data for table `rider3`
 --
 
-LOCK TABLES `ride3` WRITE;
-/*!40000 ALTER TABLE `ride3` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride3` ENABLE KEYS */;
+LOCK TABLES `rider3` WRITE;
+/*!40000 ALTER TABLE `rider3` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider3` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride4`
+-- Table structure for table `rider4`
 --
 
-DROP TABLE IF EXISTS `ride4`;
+DROP TABLE IF EXISTS `rider4`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride4` (
+CREATE TABLE `rider4` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride4`
+-- Dumping data for table `rider4`
 --
 
-LOCK TABLES `ride4` WRITE;
-/*!40000 ALTER TABLE `ride4` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride4` ENABLE KEYS */;
+LOCK TABLES `rider4` WRITE;
+/*!40000 ALTER TABLE `rider4` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider4` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride5`
+-- Table structure for table `rider5`
 --
 
-DROP TABLE IF EXISTS `ride5`;
+DROP TABLE IF EXISTS `rider5`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride5` (
+CREATE TABLE `rider5` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride5`
+-- Dumping data for table `rider5`
 --
 
-LOCK TABLES `ride5` WRITE;
-/*!40000 ALTER TABLE `ride5` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride5` ENABLE KEYS */;
+LOCK TABLES `rider5` WRITE;
+/*!40000 ALTER TABLE `rider5` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider5` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride6`
+-- Table structure for table `rider6`
 --
 
-DROP TABLE IF EXISTS `ride6`;
+DROP TABLE IF EXISTS `rider6`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride6` (
+CREATE TABLE `rider6` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride6`
+-- Dumping data for table `rider6`
 --
 
-LOCK TABLES `ride6` WRITE;
-/*!40000 ALTER TABLE `ride6` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride6` ENABLE KEYS */;
+LOCK TABLES `rider6` WRITE;
+/*!40000 ALTER TABLE `rider6` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider6` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride7`
+-- Table structure for table `rider7`
 --
 
-DROP TABLE IF EXISTS `ride7`;
+DROP TABLE IF EXISTS `rider7`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride7` (
+CREATE TABLE `rider7` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride7`
+-- Dumping data for table `rider7`
 --
 
-LOCK TABLES `ride7` WRITE;
-/*!40000 ALTER TABLE `ride7` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride7` ENABLE KEYS */;
+LOCK TABLES `rider7` WRITE;
+/*!40000 ALTER TABLE `rider7` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider7` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride8`
+-- Table structure for table `rider8`
 --
 
-DROP TABLE IF EXISTS `ride8`;
+DROP TABLE IF EXISTS `rider8`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride8` (
+CREATE TABLE `rider8` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride8`
+-- Dumping data for table `rider8`
 --
 
-LOCK TABLES `ride8` WRITE;
-/*!40000 ALTER TABLE `ride8` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride8` ENABLE KEYS */;
+LOCK TABLES `rider8` WRITE;
+/*!40000 ALTER TABLE `rider8` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider8` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ride9`
+-- Table structure for table `rider9`
 --
 
-DROP TABLE IF EXISTS `ride9`;
+DROP TABLE IF EXISTS `rider9`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ride9` (
+CREATE TABLE `rider9` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creator` varchar(45) DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `totaltime` varchar(45) DEFAULT NULL,
+  `nodes` text,
+  `datetime` varchar(45) DEFAULT NULL,
+  `latitude_inicial` varchar(45) DEFAULT NULL,
+  `longitude_inicial` varchar(45) DEFAULT NULL,
+  `latitude_final` varchar(45) DEFAULT NULL,
+  `longitude_final` varchar(45) DEFAULT NULL,
+  `duration` varchar(45) DEFAULT NULL,
   `distance` varchar(45) DEFAULT NULL,
-  `avgspeed` varchar(45) DEFAULT NULL,
-  `maxspeed` varchar(45) DEFAULT NULL,
+  `speed` varchar(45) DEFAULT NULL,
+  `cadence` varchar(45) DEFAULT NULL,
+  `heartrate` varchar(45) DEFAULT NULL,
+  `elevation_gain` varchar(45) DEFAULT NULL,
+  `elevation_loss` varchar(45) DEFAULT NULL,
+  `temperature` varchar(45) DEFAULT NULL,
   `calories` varchar(45) DEFAULT NULL,
-  `avgheart` varchar(45) DEFAULT NULL,
-  `minheart` varchar(45) DEFAULT NULL,
-  `maxheart` varchar(45) DEFAULT NULL,
-  `avgtemp` varchar(45) DEFAULT NULL,
-  `avgcadence` varchar(45) DEFAULT NULL,
-  `mincadence` varchar(45) DEFAULT NULL,
-  `maxcadence` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `latitude` varchar(45) DEFAULT NULL,
-  `longitude` varchar(45) DEFAULT NULL,
-  `highest` varchar(45) DEFAULT NULL,
-  `lowest` varchar(45) DEFAULT NULL,
-  `elevationGain` varchar(45) DEFAULT NULL,
-  `elevationLoss` varchar(45) DEFAULT NULL,
+  `total_trackpoints` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ride9`
+-- Dumping data for table `rider9`
 --
 
-LOCK TABLES `ride9` WRITE;
-/*!40000 ALTER TABLE `ride9` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ride9` ENABLE KEYS */;
+LOCK TABLES `rider9` WRITE;
+/*!40000 ALTER TABLE `rider9` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rider9` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `trackpoint`
+-- Table structure for table `stats`
 --
 
-DROP TABLE IF EXISTS `trackpoint`;
+DROP TABLE IF EXISTS `stats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `trackpoint` (
+CREATE TABLE `stats` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `datetime` datetime DEFAULT NULL,
-  `altitude` varchar(255) DEFAULT NULL,
-  `distance` varchar(255) DEFAULT NULL,
-  `heartrate` varchar(255) DEFAULT NULL,
-  `cadence` varchar(255) DEFAULT NULL,
-  `latitude` varchar(255) DEFAULT NULL,
-  `longitude` varchar(255) DEFAULT NULL,
-  `elevation` varchar(255) DEFAULT NULL,
-  `speed` varchar(255) DEFAULT NULL,
-  `ride_id` int unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_segment_biking1_idx` (`ride_id`),
-  CONSTRAINT `fk_trackpoint_ride` FOREIGN KEY (`ride_id`) REFERENCES `ride6` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `total_riders` varchar(45) NOT NULL,
+  `total_activities` varchar(45) NOT NULL,
+  `total_datasets` varchar(45) NOT NULL,
+  `time_extract` varchar(45) NOT NULL,
+  `created_at` timestamp NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `trackpoint`
+-- Dumping data for table `stats`
 --
 
-LOCK TABLES `trackpoint` WRITE;
-/*!40000 ALTER TABLE `trackpoint` DISABLE KEYS */;
-/*!40000 ALTER TABLE `trackpoint` ENABLE KEYS */;
+LOCK TABLES `stats` WRITE;
+/*!40000 ALTER TABLE `stats` DISABLE KEYS */;
+/*!40000 ALTER TABLE `stats` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -1305,4 +1184,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-26  9:26:05
+-- Dump completed on 2022-04-14 13:23:44

@@ -24,10 +24,9 @@ class rideBD extends Model
     use dbPreventChange;
 
 
-    public function bootstrap(string $riderID, string $activityID)
+    public function bootstrap(string $riderID)
     {
-        $this->rider_id = $riderID;
-        $this->activity_id = $activityID;
+        $this->table = "rider" . $riderID;
     }
 
     public function setFail(bool $value)

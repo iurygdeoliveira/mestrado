@@ -122,7 +122,6 @@ abstract class Model
         if ($terms) {
             $this->query = "SELECT {$columns} FROM " . $this->table . " WHERE {$terms}";
             parse_str($params, $this->params);
-            dump($this->query);
             return $this;
         }
 

@@ -17,44 +17,52 @@ class ExtractInfoTCX
 
     private $xml; // Armazena os dados durante o parseamento de arquivos tcx
 
-    public function __construct(SimpleXMLElement $xml)
+    public function __construct(string $xml)
     {
         $this->xml = $xml;
-    }
-
-    public function getCreator()
-    {
-        dump($this->xml);
-        exit;
-        return $this->xml->attributes()->creator[0]->__toString();
     }
 
 
     public function getNodes()
     {
 
-        $nodes = new stdClass();
-        $aux = $this->xml2array_parse($this->xml);
-        dump($aux);
+        $nodes = array();
 
-        $nodes->creator = ($this->multi_array_key_exists('Name', $aux) ? true : null);
-        $nodes->datetime = ($this->multi_array_key_exists('Id', $aux) ? true : null);
-        $nodes->latitude_final = ($this->multi_array_key_exists('LatitudeDegrees', $aux) ? true : null);
-        $nodes->longitude_final = ($this->multi_array_key_exists('LongitudeDegrees', $aux) ? true : null);
-        $nodes->latitude_inicial = ($nodes->latitude_final == true ? true : null);
-        $nodes->longitude_inicial = ($nodes->longitude_final == true ? true : null);
-        $nodes->duration = ($this->multi_array_key_exists('TotalTimeSeconds', $aux) ? true : null);
-        $nodes->distance = ($this->multi_array_key_exists('DistanceMeters', $aux) ? true : null);
-        $nodes->speed = (($nodes->distance == true) && ($nodes->duration == true) ? true : null);
-        $nodes->cadence = ($this->multi_array_key_exists('Cadence', $aux) ? true : null);
-        $nodes->heartrate = ($this->multi_array_key_exists('HeartRateBpm', $aux) ? true : null);
-        $nodes->temperature = ($this->multi_array_key_exists('temperature', $aux) ? true : null);
-        $nodes->calories = ($this->multi_array_key_exists('Calories', $aux) ? true : null);
-        $nodes->elevation_gain = ($this->multi_array_key_exists('AltitudeMeters', $aux) ? true : null);
-        $nodes->elevation_loss = (($nodes->elevation_gain == true) ? true : null);
-        $nodes->total_trackpoints = ($this->multi_array_key_exists('Trackpoint', $aux) ? true : null);
+        preg_match_all("/<([a-z]|[0-9]|[A-Z]|:)+/mius", $this->xml, $nodes);
+        $nodes = array_unique($nodes[0], SORT_REGULAR);
 
+        $replace = function ($valor) {
+            return str_ireplace('<', '', $valor);
+        };
+        $nodes = array_map($replace, $nodes);
+
+        $reduce = function ($carry, $item) {
+            $carry .= $item . '-';
+            return $carry;
+        };
+
+        $nodes = array_reduce($nodes, $reduce);
         return $nodes;
+        // $aux = $this->xml2array_parse($this->xml);
+        // dump($aux);
+
+        // $nodes->creator = ($this->multi_array_key_exists('Name', $aux) ? true : null);
+        // $nodes->datetime = ($this->multi_array_key_exists('Id', $aux) ? true : null);
+        // $nodes->latitude_final = ($this->multi_array_key_exists('LatitudeDegrees', $aux) ? true : null);
+        // $nodes->longitude_final = ($this->multi_array_key_exists('LongitudeDegrees', $aux) ? true : null);
+        // $nodes->latitude_inicial = ($nodes->latitude_final == true ? true : null);
+        // $nodes->longitude_inicial = ($nodes->longitude_final == true ? true : null);
+        // $nodes->duration = ($this->multi_array_key_exists('TotalTimeSeconds', $aux) ? true : null);
+        // $nodes->distance = ($this->multi_array_key_exists('DistanceMeters', $aux) ? true : null);
+        // $nodes->speed = (($nodes->distance == true) && ($nodes->duration == true) ? true : null);
+        // $nodes->cadence = ($this->multi_array_key_exists('Cadence', $aux) ? true : null);
+        // $nodes->heartrate = ($this->multi_array_key_exists('HeartRateBpm', $aux) ? true : null);
+        // $nodes->temperature = ($this->multi_array_key_exists('temperature', $aux) ? true : null);
+        // $nodes->calories = ($this->multi_array_key_exists('Calories', $aux) ? true : null);
+        // $nodes->elevation_gain = ($this->multi_array_key_exists('AltitudeMeters', $aux) ? true : null);
+        // $nodes->elevation_loss = (($nodes->elevation_gain == true) ? true : null);
+        // $nodes->total_trackpoints = ($this->multi_array_key_exists('Trackpoint', $aux) ? true : null);
+
     }
 
     // public function getTypeTCX()

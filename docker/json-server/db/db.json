@@ -8,6 +8,7 @@
     },
     "riders": {
         "rider_id": "",
+        "schema": "",
         "activity": {
             "activity_id": "",
             "creator": "",
@@ -27,6 +28,29 @@
             "temperature": "",
             "calories": "",
             "total trackpoints": ""
+        }
+    },
+    "schema": {
+        "rider_id": true,
+        "activity": {
+            "activity_id": true,
+            "creator": true,
+            "nodes": true,
+            "datetime": true,
+            "latitude_inicial": true,
+            "longitude_inicial": true,
+            "latitude_final": true,
+            "longitude_final": true,
+            "duration": true,
+            "distance": true,
+            "speed": true,
+            "cadence": true,
+            "heartrate": true,
+            "elevation_gain": true,
+            "elevation_loss": true,
+            "temperature": true,
+            "calories": true,
+            "total trackpoints": true
         }
     }
 }

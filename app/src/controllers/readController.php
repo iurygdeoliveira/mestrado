@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace src\controllers;
 
 use src\traits\Datasets;
+use src\traits\responseJson;
 use src\core\View;
 use src\core\Controller;
 use src\classes\LoadRide;
 use Laminas\Diactoros\Response;
 
-
 class readController extends Controller
 {
-    use Datasets;
+    use Datasets, responseJson;
 
     private $riders; // Recebe os dados dos ciclistas
 
@@ -23,6 +23,26 @@ class readController extends Controller
     {
         $this->view = new View(__DIR__, get_class($this));
         $this->riders = $this->datasets();
+    }
+
+    private function metaData(): array
+    {
+        // Dados para renderização do dataTable
+        $ciclistas = $this->riders['riders'];
+
+        $totalAtividades = 0;
+        foreach ($ciclistas as $ciclista) {
+
+            $totalAtividades += $ciclista->atividade;
+        }
+
+        $data = [
+            'totalCiclistas' => 29,
+            'totalAtividades' => $totalAtividades,
+            'totalDatasets' => 4
+        ];
+
+        return $data;
     }
 
     // Renderiza a view de dashboard
@@ -49,88 +69,41 @@ class readController extends Controller
         return $response;
     }
 
-    // public function analiseAjax(): Response
-    // {
-    //     // Dados para renderização no template
-    //     $data = ['title' => "Análise Exploratória | CycleVis"];
-
-    //     // dados para renderização em metaData 
-    //     $data += ['metaData' => $this->metaData()];
-
-    //     // dados para renderização em begin 
-    //     $data += ['beginData' => $this->beginData()];
-    //     $data += ['url' => url('getDataTable')];
-
-    //     return $this->responseJson(
-    //         [
-    //             'status' => true,
-    //             'message' => "Cadastro realizado com sucesso",
-    //             'response' => $data
-    //         ]
-    //     );
-    // }
-
-    private function metaData(): array
+    public function preprocessar(): Response
     {
-        // Dados para renderização do dataTable
-        $ciclistas = $this->riders['riders'];
+        // Dados para renderização no template
+        $data = $this->dataTheme('Pré - Processar os Arquivos');
+        $this->view->addData($data, '../theme/theme');
+        $this->view->addData($data, '../scripts/scripts');
 
-        $totalAtividades = 0;
-        foreach ($ciclistas as $ciclista) {
+        // dados para renderização em metaData 
+        $this->view->addData($this->metaData(), 'metaData');
 
-            $totalAtividades += $ciclista->atividade;
-        }
+        // dados para renderização em begin 
+        $data = ['riders' => $this->riders['riders']];
+        $data += ['url' => url('preprocessarData')];
+        $this->view->addData($data, 'preprocessar_table');
 
-        $data = [
-            'totalCiclistas' => 29,
-            'totalAtividades' => $totalAtividades,
-            'totalDatasets' => 4
-        ];
+        $response = new Response();
+        $response->getBody()->write(
+            $this->view->render(__FUNCTION__, [])
+        );
 
-        return $data;
+        return $response;
     }
 
     // Obtendo os nós dos arquivos XML
-    public function extractData(): Response
+    public function preprocessarData(): Response
     {
 
-        set_time_limit(120);
-        ini_set('memory_limit', '-1');
-        $request = getRequest()->getParsedBody();
-        $this->ride = new LoadRide($request['dataset'], $request['rider'], $request['atividade']);
-        $result = $this->ride->extract($request['dataset'] . $request['atividade']);
-        dump($result);
-        exit;
+        $request = (object)getRequest()->getParsedBody();
+        $this->ride = new LoadRide($request->dataset, $request->rider, $request->atividade);
+        $result = $this->ride->preprocessar($request->dataset . $request->atividade);
 
-        // Arquivo não encontrado
-        if ($result->fail()) {
-            return $this->responseJson(
-                [
-                    'status' => false,
-                    'message' => $result->message(),
-                    'response' => null
-                ]
-            );
+        if ($result) {
+            return $this->responseJson(true, "Atividade $request->atividade parseada", "sem retorno de dados");
         }
 
-        // Dados não foram salvos no BD
-        // if (!$result->save()) {
-        //     return $this->responseJson(
-        //         [
-        //             'status' => false,
-        //             'message' => $result->message(),
-        //             'response' => null
-        //         ]
-        //     );
-        // }
-
-        // Dados extraidos com sucesso
-        return $this->responseJson(
-            [
-                'status' => true,
-                'message' => "Informação extraída com sucesso",
-                'response' => $result->data()
-            ]
-        );
+        return $this->responseJson(false, $result, null);
     }
 }

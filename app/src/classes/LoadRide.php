@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace src\classes;
 
 use src\traits\GetNames;
+use src\traits\responseJson;
 use src\models\rideBD;
 use src\classes\ExtractInfoGPX;
 use src\classes\ExtractInfoTCX;
-use SimpleXMLElement;
+
 
 class LoadRide
 {
@@ -18,7 +19,7 @@ class LoadRide
     private $info; // Estrutura para extrair as informações dos arquivos GPX ou TCX
     private $ride; // Estrutura para receber os dados da corrida e persistir no BD
 
-    use GetNames;
+    use GetNames, responseJson;
 
     public function __construct(string $dataset, string $riderID, string $activityID)
     {
@@ -26,17 +27,14 @@ class LoadRide
         $this->dataset = $dataset;
         $this->riderID = $riderID;
         $this->ride = new rideBD();
-    }
-
-    public function __get($name)
-    {
-        return ($this->$name ?? null);
+        $this->ride->bootstrap($riderID);
     }
 
     public function fileExists(string $filename)
     {
 
         if (file_exists($filename . ".gpx")) {
+
             return ".gpx";
         }
 
@@ -44,25 +42,11 @@ class LoadRide
             return ".tcx";
         }
 
-        $this->ride->setFail(true);
-        $this->ride->setMessage("Arquivo {$filename} não encontrado");
         return false;
     }
 
-    // Pre processando a string XML
-    private function preprocessing(string $file)
-    {
 
-        // Pré-processando o arquivo XML
-        $search = array('gpxtpx:TrackPointExtension', 'gpxtpx:atemp', 'gpxtpx:hr', 'gpxtpx:cad', 'ele', 'ns3:TrackPointExtension', 'ns3:atemp', 'ns3:hr', 'ns3:cad', 'ns3:ele');
-        $replace = array('TrackPoint', 'temperature', 'heartrate', 'cadence', 'elevation', 'TrackPoint', 'temperature', 'heartrate', 'cadence', 'elevation');
-        $xml_string = str_replace($search, $replace, file_get_contents($file));
-
-        // Transformando o xml em objeto para manipulação
-        return (new SimpleXMLElement($xml_string));
-    }
-
-    public function extract(string $file)
+    public function preprocessar(string $file)
     {
 
         // Identificando extensão do arquivo
@@ -70,18 +54,23 @@ class LoadRide
 
         // Arquivo não encontrado
         if (!$extension) {
-            return $this->ride;
+            return "Arquivo não encontrado";
         }
 
-        $xml = $this->preprocessing($file . $extension);
+        $xml_string = file_get_contents($file . $extension);
 
-        // Extraindo estrutura de nós do arquivo
+        //Extraindo estrutura de nós do arquivo
         $this->info = match ($extension) {
-            ".gpx" => new ExtractInfoGPX($xml),
-            ".tcx" => new ExtractInfoTCX($xml)
+            ".gpx" => new ExtractInfoGPX($xml_string),
+            ".tcx" => new ExtractInfoTCX($xml_string)
         };
 
         $this->ride->nodes = $this->info->getNodes();
-        return $this->ride;
+
+        if ($this->ride->save()) {
+            return true;
+        } else {
+            return "Erro ao salvar no BD" . $this->ride->message();
+        }
     }
 }
