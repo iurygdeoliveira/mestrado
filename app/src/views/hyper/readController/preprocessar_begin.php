@@ -19,20 +19,13 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box">
-                            <h4 class="page-title"> Pré-Processando os arquivos GPX e TCX </h4>
+                            <h4 class="page-title"> Extrair estrutura de nós dos arquivos GPX e TCX </h4>
                         </div>
                     </div>
                 </div>
                 <!-- end page title -->
 
-                <div class="col-12">
-                    <div class="card border-primary border">
-                        <div class="card-body">
-                            <h5 class="card-title text-primary">Resumo Geral dos Dados</h5>
-                            <p class="card-text"><?php $this->insert("metaData") ?></p>
-                        </div> <!-- end card-body-->
-                    </div> <!-- end card-->
-                </div>
+                <?php $this->insert("resumo") ?>
 
                 <?php $this->insert("preprocessar_table") ?>
 

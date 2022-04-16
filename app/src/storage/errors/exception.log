@@ -1,0 +1,1 @@
+[2022-04-14 20-36-27] Fatal Error: Maximum execution time of 5 seconds exceeded in /var/www/html/app/src/classes/ExtractInfoTCX.php:32  @  http://localhost/preprocessarData  @@  exception--2022-04-14--20-36--6946b0d62e.html

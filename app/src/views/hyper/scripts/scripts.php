@@ -15,4 +15,5 @@
 <script defer src="<?= js('dataTables.keyTable.min.js') ?>"></script>
 <script defer src="<?= js('dataTables.select.min.js') ?>"></script>
 <script defer src="<?= js('demo.datatable-init.js') ?>"></script>
+<script defer src="<?= js('apexcharts.min.js') ?>"></script>
 <!-- third party js ends -->

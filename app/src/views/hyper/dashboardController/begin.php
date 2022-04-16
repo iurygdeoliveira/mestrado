@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box">
-                            <h4 id="page-title" class="page-title">Dashboard</h4>
+                            <h4 id="page-title" class="page-title"> Dashboard</h4>
                         </div>
                     </div>
                 </div>

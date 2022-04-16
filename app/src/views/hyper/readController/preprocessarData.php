@@ -1,7 +1,7 @@
 <script>
     async function preprocessar(rider, dataset, total, url) {
 
-        var timeStart = performance.now();
+
         $('#button_carregar_' + rider).hide();
         $('#button_danger_' + rider).hide();
         var data = new FormData();
@@ -10,21 +10,37 @@
         data.append('dataset', dataset);
         data.append('atividade', 0);
 
-        let index, timeDiff;
+        let index
         for (index = 1; index <= parseInt(total); index++) {
 
             $('#button_loading_' + rider).show();
             data.set('atividade', index);
+            $('#activity_extract_' + rider).text(index);
             $('#rider_' + rider + '_extract').text(index);
             await axios.post(url, data)
                 .then(function(response) {
 
                     if (response.data.status === true) {
                         console.log(response.data.message);
-                        let porcentagem = ((100 * index) / parseInt(total)).toFixed(2);
-                        $('#progress_bar_' + rider).attr('style', "width: " + porcentagem + "%;");
-                        $('#progress_bar_' + rider).attr('aria-valuenow', porcentagem);
-                        $('#progress_bar_' + rider).text(porcentagem + "%");
+
+                        if (response.data.message === "Extração Concluída") {
+
+                            let porcentagem = 100;
+                            $('#progress_bar_' + rider).attr('style', "width: " + porcentagem + "%;");
+                            $('#progress_bar_' + rider).attr('aria-valuenow', porcentagem);
+                            $('#progress_bar_' + rider).text(porcentagem + "%");
+                            index = parseInt(total) + 2; // Parar laço de repetição
+                            $('#button_carregar_' + rider).hide();
+                            $('#button_loading_' + rider).hide();
+                            $('#button_success_' + rider).show();
+                            $('#activity_extract_' + rider).text(total);
+                        } else {
+
+                            let porcentagem = ((100 * index) / parseInt(total)).toFixed(2);
+                            $('#progress_bar_' + rider).attr('style', "width: " + porcentagem + "%;");
+                            $('#progress_bar_' + rider).attr('aria-valuenow', porcentagem);
+                            $('#progress_bar_' + rider).text(porcentagem + "%");
+                        }
                     }
 
                     if (response.data.status === false) {
@@ -53,9 +69,7 @@
                     index = parseInt(total) + 2; // Parar laço de repetição
                 });
 
-            var timeNow = performance.now();
-            timeDiff = ((timeNow - timeStart).toFixed(3) / 1000).toFixed(3);
-            $('#time_extract_' + rider).text(timeDiff);
+
         }
         $('#button_loading_' + rider).hide();
 

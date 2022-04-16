@@ -1,6 +1,6 @@
 <?php $this->layout("../theme/theme"); ?>
 
-<?php $this->insert("begin") ?>
+<?php $this->insert("read_begin") ?>
 
 <div class="rightbar-overlay"></div>
 <!-- /End-bar -->

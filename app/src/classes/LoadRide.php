@@ -70,7 +70,7 @@ class LoadRide
         if ($this->ride->save()) {
             return true;
         } else {
-            return "Erro ao salvar no BD" . $this->ride->message();
+            return "Erro ao salvar no BD " . $this->ride->message();
         }
     }
 }

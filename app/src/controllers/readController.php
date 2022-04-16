@@ -10,6 +10,7 @@ use src\core\View;
 use src\core\Controller;
 use src\classes\LoadRide;
 use Laminas\Diactoros\Response;
+use src\models\rideBD;
 
 class readController extends Controller
 {
@@ -54,12 +55,12 @@ class readController extends Controller
         $this->view->addData($data, '../scripts/scripts');
 
         // dados para renderização em metaData 
-        $this->view->addData($this->metaData(), 'metaData');
+        $this->view->addData($this->metaData(), 'resumo');
 
         // dados para renderização em begin 
         $data = ['riders' => $this->riders['riders']];
         $data += ['url' => url('extract')];
-        $this->view->addData($data, 'begin');
+        $this->view->addData($data, 'read_begin');
 
         $response = new Response();
         $response->getBody()->write(
@@ -77,7 +78,7 @@ class readController extends Controller
         $this->view->addData($data, '../scripts/scripts');
 
         // dados para renderização em metaData 
-        $this->view->addData($this->metaData(), 'metaData');
+        $this->view->addData($this->metaData(), 'resumo');
 
         // dados para renderização em begin 
         $data = ['riders' => $this->riders['riders']];
@@ -96,12 +97,25 @@ class readController extends Controller
     public function preprocessarData(): Response
     {
 
+        // Obtendo dados da requisição
         $request = (object)getRequest()->getParsedBody();
+
+        // Verificando se o dataset já foi pre-processado
+        $nodes = new rideBD();
+        $nodes->bootstrap($request->rider);
+
+        if (intval($nodes->find()->count()) == intval($request->total)) {
+            return $this->responseJson(true, "Extração Concluída", "sem retorno de dados");
+        }
+
+        // Obtendo dados do dataset
         $this->ride = new LoadRide($request->dataset, $request->rider, $request->atividade);
         $result = $this->ride->preprocessar($request->dataset . $request->atividade);
 
-        if ($result) {
-            return $this->responseJson(true, "Atividade $request->atividade parseada", "sem retorno de dados");
+        // Se result for true, então o dataset/atividade já foram extraídos
+        // Se result for diferentes de true, retorna a mensagem de erro
+        if ($result === true) {
+            return $this->responseJson(true, "Nós da atividade $request->atividade extraídos", "sem retorno de dados");
         }
 
         return $this->responseJson(false, $result, null);

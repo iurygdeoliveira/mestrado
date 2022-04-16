@@ -26,7 +26,6 @@ class dashboardController extends Controller
     public function dashboard(): Response
     {
         // Dados para renderização no template
-
         $data = $this->dataTheme('Dashboard');
         $this->view->addData($data, '../theme/theme');
         $this->view->addData($data, '../scripts/scripts');

@@ -8,25 +8,31 @@
 
             <li class="side-nav-item">
                 <a href="<?= url() ?>" class="side-nav-link">
-                    <span> 4 - Dashboard </span>
+                    <span> 5 - Dashboard </span>
                 </a>
             </li>
 
             <li class="side-nav-item">
                 <a href="<?= url('/analise') ?>" class="side-nav-link">
-                    <span> 3 - Tabular Dados </span>
+                    <span> 4 - Tabular Dados </span>
                 </a>
             </li>
 
             <li class="side-nav-item">
                 <a href="<?= url('/read') ?>" class="side-nav-link">
-                    <span> 2 - Extrair Dados </span>
+                    <span> 3 - Extrair Dados </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
+                <a href="<?= url('/mapviz') ?>" class="side-nav-link">
+                    <span> 2 - MapVis </span>
                 </a>
             </li>
 
             <li class="side-nav-item">
                 <a href="<?= url('/preprocessar') ?>" class="side-nav-link">
-                    <span> 1 - Pré-processar os dados </span>
+                    <span> 1 - Extrair estrutura de nós </span>
                 </a>
             </li>
 
