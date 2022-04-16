@@ -11,7 +11,7 @@ use src\core\Controller;
 use Laminas\Diactoros\Response;
 
 
-class mapvizController extends Controller
+class diffVisController extends Controller
 {
     use Datasets, responseJson;
 
@@ -46,16 +46,16 @@ class mapvizController extends Controller
     }
 
     // Renderiza a view de mapviz
-    public function mapviz(): Response
+    public function diffvis(): Response
     {
         // Dados para renderização no template
-        $data = $this->dataTheme('MapVis');
+        $data = $this->dataTheme('DiffVis');
         $this->view->addData($data, '../theme/theme');
         $this->view->addData($data, '../scripts/scripts');
 
         // dados para renderização em metaData 
         $data = $this->metaData();
-        $data += ['url' => url('getDataMapviz')];
+        $data += ['url' => url('getdatadiffvis')];
         $this->view->addData($data, 'resumo');
 
         $response = new Response();

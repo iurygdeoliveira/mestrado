@@ -6,4 +6,4 @@
 <!-- /End-bar -->
 
 <?php $this->insert("../scripts/scripts") ?>
-<?php $this->insert("generateMapViz") ?>
+<?php $this->insert("getDataDiffVis") ?>

@@ -19,28 +19,14 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box">
-                            <h4 class="page-title">Mapa da Estrutura de nós dos arquivos</h4>
+                            <h4 class="page-title">DiffVis - Visualizando a diferença na quantidade de informações</h4>
                         </div>
                     </div>
                     <!-- end page title -->
 
                     <?php $this->insert("resumo") ?>
+                    <?php $this->insert("generateDiffVis") ?>
 
-                    <div class="row">
-
-                        <div class="col-xl-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div dir="ltr">
-                                        <div id="mapVis" class="apex-charts"></div>
-                                    </div>
-                                </div>
-                                <!-- end card body-->
-                            </div>
-                            <!-- end card -->
-                        </div>
-                        <!-- end col-->
-                    </div>
                 </div> <!-- container -->
 
             </div> <!-- end content -->

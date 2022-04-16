@@ -25,8 +25,8 @@
             </li>
 
             <li class="side-nav-item">
-                <a href="<?= url('/mapviz') ?>" class="side-nav-link">
-                    <span> 2 - MapVis </span>
+                <a href="<?= url('/diffvis') ?>" class="side-nav-link">
+                    <span> 2 - DiffVis </span>
                 </a>
             </li>
 

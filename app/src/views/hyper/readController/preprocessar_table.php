@@ -28,7 +28,7 @@
                          </button>
                      </div>
                      <div class="d-grid">
-                         <button type="button" id='<?= 'button_success_' . $this->e($rider->name) ?>' class="btn btn-success" style="display: none;" onclick="getNodes('<?= $this->e($rider->name) ?>', '<?= $this->e($rider->dataset) ?>', '<?= $this->e($rider->atividade) ?>','<?= $this->e($url) ?>')">Obter possíveis informações</button>
+                         <button type="button" id='<?= 'button_success_' . $this->e($rider->name) ?>' class="btn btn-success" style="display: none;" disabled>Concluido !</button>
                      </div>
                      <div class="d-grid">
                          <button type="button" id='<?= 'button_danger_' . $this->e($rider->name) ?>' class="btn btn-danger" style="display: none;" onclick="preprocessar('<?= $this->e($rider->name) ?>', '<?= $this->e($rider->dataset) ?>', '<?= $this->e($rider->atividade) ?>','<?= $this->e($url) ?>')">Erro (Tentar novamente) </button>

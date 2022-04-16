@@ -22,7 +22,12 @@
                  </tbody>
              </table>
              </p>
-             <button type="button" class="btn btn-primary" onclick="generateMapViz('<?= $this->e($url) ?>')">Gerar Visualização</button>
+             <button type="button" class="btn btn-primary" id='button_generate' onclick="getDataDiffVis('<?= $this->e($url) ?>')">Gerar Visualização</button>
+             <button class="btn btn-primary" type="button" id='button_loading' style="display: none;" disabled>
+                 <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                 Gerando ...
+             </button>
+             <button type="button" id='button_success' class="btn btn-success" style="display: none;" disabled>Concluido !</button>
          </div> <!-- end card-body-->
      </div> <!-- end card-->
  </div>
