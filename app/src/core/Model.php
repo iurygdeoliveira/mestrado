@@ -59,13 +59,21 @@ abstract class Model
     public function count(string $key = "id")
     {
         try {
+            $conexion = $this->connectDB();
+            if ($conexion instanceof PDO) {
 
-            $stmt = $this->connectDB()->prepare($this->query);
-            $stmt->execute($this->params);
-            $this->fail = null;
-            return $stmt->rowCount();
+                $stmt = $conexion->prepare($this->query);
+                $stmt->execute($this->params);
+                $this->fail = null;
+                return $stmt->rowCount();
+            }
+
+            $this->fail = true;
+            $this->message = "Conexão com Banco de Dados não estabelecida.";
+            return false;
         } catch (PDOException $exception) {
-            $this->fail = $exception;
+            $this->fail = true;
+            $this->message = $exception->getMessage();
             return false;
         }
     }

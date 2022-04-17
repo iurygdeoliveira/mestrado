@@ -9,6 +9,7 @@ use src\traits\responseJson;
 use src\core\View;
 use src\core\Controller;
 use Laminas\Diactoros\Response;
+use src\models\rideBD;
 
 
 class diffVisController extends Controller
@@ -53,10 +54,14 @@ class diffVisController extends Controller
         $this->view->addData($data, '../theme/theme');
         $this->view->addData($data, '../scripts/scripts');
 
-        // dados para renderização em metaData 
+        // Dados para renderização em metaData 
         $data = $this->metaData();
         $data += ['url' => url('getdatadiffvis')];
         $this->view->addData($data, 'resumo');
+
+        // Dados para renderização em generateDiffVis 
+        $data = ['riders' => $this->riders['riders']];
+        $this->view->addData($data, 'generateDiffVis');
 
         $response = new Response();
         $response->getBody()->write(
@@ -64,5 +69,40 @@ class diffVisController extends Controller
         );
 
         return $response;
+    }
+
+    // Obtendo os nós dos arquivos XML
+    public function getDataDiffVis(): Response
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+
+        // Verificando se o dataset já foi pre-processado
+        $nodes = new rideBD();
+        $nodes->bootstrap($request->rider);
+
+        $total = $nodes->find()->count();
+
+        if (!$total) {
+            $this->responseJson(true, "Problema no BD", $nodes->message());
+        }
+
+        $total = intval($total);
+        $response = [];
+        for ($id = 1; $id <= $total; $id++) {
+
+            $name = "$id";
+            $stringNode = $nodes->findById($id, 'nodes')->nodes;
+            $value = strlen($stringNode);
+
+            array_push($response, [
+                'name' => $name,
+                'value' => $value,
+                'nodes' => $stringNode
+            ]);
+        }
+
+        return $this->responseJson(true, "Diffvis concluída", $response);
     }
 }
