@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box">
-                            <h4 class="page-title">DiffVis - Visualizando a diferença na quantidade de informações</h4>
+                            <h4 class="page-title">DiffVis - Visualizando a diferença na quantidade de informações dos ciclistas</h4>
                         </div>
                     </div>
                     <!-- end page title -->

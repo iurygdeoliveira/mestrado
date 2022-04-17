@@ -10,10 +10,14 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use League\Route\Router;
 use src\core\Session;
 use src\core\Response;
+use MemCachier\MemcacheSASL as Cache;
 
 
 if (CONF_DEV_MOD) {
     showErrors();
+    $m = new Cache();
+    $m->addServer('memcached', 11211);
+    cacheStats($m);
 }
 
 $session = new Session(); // Inicia a sessão

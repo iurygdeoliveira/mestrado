@@ -6,7 +6,9 @@ use Laminas\Diactoros\ServerRequestFactory;
 use Illuminate\Support\Str;
 use src\core\Session;
 use Tracy\Debugger;
-
+use MemCachier\MemcacheSASL as Cache;
+use Tracy\Bar;
+use Decimal\Decimal;
 
 function url(string $path = null): string
 {
@@ -108,9 +110,36 @@ function showErrors()
     Debugger::$showLocation = true;
 }
 
-
-
 function bardump($var, $title = '')
 {
     Debugger::barDump($var, $title);
+}
+
+function cacheStats(Cache $cache)
+{
+
+    $status = $cache->getStats('');
+
+    $limit = new Decimal($status['limit_maxbytes']);
+    if ($limit->div('1000000000')->compareTo(new Decimal(1000)) == -1) {
+        bardump($limit->div('1000000')->__toString(), 'Tamanho do cache em Megabytes');
+    } else {
+        bardump($limit->div('1000000000')->__toString(), 'Tamanho do cache em Gigabytes');
+    }
+
+    $size = new Decimal($status['bytes'], 3);
+    if ($size->div('1000000000')->compareTo(new Decimal(1000)) == -1) {
+        bardump($size->div('1000000')->__toString(), 'Uso do cache em Megabytes');
+    } else {
+        bardump($size->div('1000000000')->__toString(), 'Uso do cache em Gigabytes');
+    }
+
+    $itens = new Decimal($status['curr_items']);
+    bardump($itens->__toString(), 'Quantidade de items no cache');
+
+    $hits = new Decimal($status['get_hits']);
+    bardump($hits->__toString(), 'Quantidade de vezes que a chave foi encontrada');
+
+    $misses = new Decimal($status['get_misses']);
+    bardump($misses->__toString(), 'Quantidade de vezes que a chave foi encontrada');
 }
