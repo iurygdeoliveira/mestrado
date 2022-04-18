@@ -121,25 +121,31 @@ function cacheStats(Cache $cache)
     $status = $cache->getStats('');
 
     $limit = new Decimal($status['limit_maxbytes']);
-    if ($limit->div('1000000000')->compareTo(new Decimal(1000)) == -1) {
-        bardump($limit->div('1000000')->__toString(), 'Tamanho do cache em Megabytes');
-    } else {
-        bardump($limit->div('1000000000')->__toString(), 'Tamanho do cache em Gigabytes');
-    }
-
-    $size = new Decimal($status['bytes'], 3);
-    if ($size->div('1000000000')->compareTo(new Decimal(1000)) == -1) {
-        bardump($size->div('1000000')->__toString(), 'Uso do cache em Megabytes');
-    } else {
-        bardump($size->div('1000000000')->__toString(), 'Uso do cache em Gigabytes');
-    }
-
-    $itens = new Decimal($status['curr_items']);
-    bardump($itens->__toString(), 'Quantidade de items no cache');
-
+    $size = new Decimal($status['bytes']);
     $hits = new Decimal($status['get_hits']);
-    bardump($hits->__toString(), 'Quantidade de vezes que a chave foi encontrada');
-
     $misses = new Decimal($status['get_misses']);
-    bardump($misses->__toString(), 'Quantidade de vezes que a chave foi encontrada');
+    $itens = new Decimal($status['curr_items']);
+
+    $kilobyte = new Decimal('1024');
+    $megabyte = $kilobyte->pow('2')->__toString();
+    $gigabyte = $kilobyte->pow('3')->__toString();
+
+
+    if ($limit->div($gigabyte)->compareTo(1) == -1) {
+        bardump([
+            'Tamanho (MB)' => $limit->div($megabyte)->__toString(),
+            'Utilizado (MB)' => $size->div($megabyte)->__toString(),
+            'hits' => $hits->__toString(),
+            'misses' => $misses->__toString(),
+            'itens' => $itens->__toString(),
+        ], __FUNCTION__);
+    } else {
+        bardump([
+            'Tamanho (GB)' => $limit->div($gigabyte)->__toString(),
+            'Utilizado (GB)' => $size->div($gigabyte)->__toString(),
+            'hits' => $hits->__toString(),
+            'misses' => $misses->__toString(),
+            'itens' => $itens->__toString(),
+        ], __FUNCTION__);
+    }
 }

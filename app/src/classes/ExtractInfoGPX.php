@@ -28,9 +28,15 @@ class ExtractInfoGPX
     {
 
         $nodes = array();
+        $aux = array();
 
         preg_match_all("/<([a-z]|[0-9]|[A-Z]|:)+/mius", $this->xml, $nodes);
         $nodes = array_unique($nodes[0], SORT_REGULAR);
+
+        preg_match_all("/lat|lon/mius", $this->xml, $aux);
+        $aux = array_unique($aux[0], SORT_REGULAR);
+
+        $nodes = array_merge($nodes, $aux);
 
         $replace = function ($valor) {
             return str_ireplace('<', '', $valor);

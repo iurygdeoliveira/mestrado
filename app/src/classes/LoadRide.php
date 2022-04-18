@@ -27,7 +27,7 @@ class LoadRide
         $this->dataset = $dataset;
         $this->riderID = $riderID;
         $this->ride = new rideBD();
-        $this->ride->bootstrap($riderID);
+        $this->ride->bootstrap($riderID, $activityID);
     }
 
     public function fileExists(string $filename)

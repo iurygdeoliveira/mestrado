@@ -20,17 +20,20 @@
                         if (res.data.message === "Extração Concluída") {
 
                             let porcentagem = 100;
-                            $('#progress_bar_' + rider).attr('style', "width: " + porcentagem + "%;");
-                            $('#progress_bar_' + rider).attr('aria-valuenow', porcentagem);
-                            $('#progress_bar_' + rider).text(porcentagem + "%");
+                            $('#progress_bar').attr('style', "width: " + porcentagem + "%;");
+                            $('#progress_bar').attr('aria-valuenow', porcentagem);
+                            $('#progress_bar').text(porcentagem + "%");
                             index = parseInt(total) + 2; // Parar laço de repetição
-                            $('#button_carregar_' + rider).hide();
-                            $('#button_loading_' + rider).hide();
-                            $('#button_success_' + rider).show();
-                            $('#activity_extract_' + rider).text(total);
+                            $('#button_carregar').hide();
+                            $('#button_loading').hide();
+                            $('#button_success').show();
                         } else {
 
                             renderChart(index, res.data.response);
+                            let porcentagem = ((100 * index) / parseInt(total)).toFixed(2);
+                            $('#progress_bar').attr('style', "width: " + porcentagem + "%;");
+                            $('#progress_bar').attr('aria-valuenow', porcentagem);
+                            $('#progress_bar').text(porcentagem + "%");
                         }
                     }
 
@@ -114,7 +117,7 @@
 
         // add a color range
         chart.colorRange().enabled(true);
-        chart.colorRange().length("90%");
+        chart.colorRange().length("100%");
 
         // initiate drawing the chart
         chart.draw();

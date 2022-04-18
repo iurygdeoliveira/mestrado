@@ -13,11 +13,12 @@ use src\core\Response;
 use MemCachier\MemcacheSASL as Cache;
 
 
+$m = new Cache();
+$m->addServer('memcached', 11211);
+
 if (CONF_DEV_MOD) {
-    showErrors();
-    $m = new Cache();
-    $m->addServer('memcached', 11211);
-    cacheStats($m);
+    //showErrors();
+    //cacheStats($m);
 }
 
 $session = new Session(); // Inicia a sessão
