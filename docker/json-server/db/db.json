@@ -52,5 +52,6 @@
             "calories": true,
             "total trackpoints": true
         }
-    }
+    },
+    "diffvis": {}
 }

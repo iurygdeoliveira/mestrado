@@ -7,3 +7,4 @@
 
 <?php $this->insert("../scripts/scripts") ?>
 <?php $this->insert("getDataDiffVis") ?>
+<?php $this->insert("generateStats") ?>

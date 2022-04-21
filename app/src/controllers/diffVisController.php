@@ -57,6 +57,7 @@ class diffVisController extends Controller
         // Dados para renderização em metaData 
         $data = $this->metaData();
         $data += ['url' => url('getdatadiffvis')];
+        $data += ['url_stats' => CONF_JSON_SERVER . '/diffvis'];
         $this->view->addData($data, 'resumo');
 
         // Dados para renderização em generateDiffVis 
@@ -94,7 +95,7 @@ class diffVisController extends Controller
 
             $name = "$id";
             $stringNode = $nodes->findById($id, 'nodes')->nodes;
-            $value = strlen($stringNode);
+            $value = count(explode("-", $stringNode));
 
             array_push($response, [
                 'name' => $name,

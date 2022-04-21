@@ -101,12 +101,12 @@ class readController extends Controller
         $request = (object)getRequest()->getParsedBody();
 
         // Verificando se o dataset já foi pre-processado
-        // $nodes = new rideBD();
-        // $nodes->bootstrap($request->rider);
+        $nodes = new rideBD();
+        $nodes->bootstrap($request->rider);
 
-        // if (intval($nodes->find()->count()) == intval($request->total)) {
-        //     return $this->responseJson(true, "Extração Concluída", "sem retorno de dados");
-        // }
+        if (intval($nodes->find()->count()) == intval($request->total)) {
+            return $this->responseJson(true, "Extração Concluída", "sem retorno de dados");
+        }
 
         // Obtendo dados do dataset
         $this->ride = new LoadRide($request->dataset, $request->rider, $request->atividade);

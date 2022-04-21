@@ -9,6 +9,9 @@ sudo docker system df -v
 - Remover todas as imagens
 sudo docker system prune -a
 
+- Remover containers, volumes e imagens
+docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker volume rm $(docker volume ls -qf dangling=true) && docker rmi $(docker images -q) 
+
 Verificar quais imagens estão presentes na máquina
 sudo docker images
 
