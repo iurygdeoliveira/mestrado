@@ -6,14 +6,13 @@ namespace src\traits;
 
 use PDOException;
 use PDO;
-use src\traits\dbConnection;
-use src\traits\dbError;
+use src\traits\crud\connection;
 use src\traits\Filter;
 
-trait dbUpdate
+trait update
 {
 
-    use dbConnection, dbError, Filter;
+    use connection, Filter;
 
     protected function update(array $data, string $terms, string $params)
     {

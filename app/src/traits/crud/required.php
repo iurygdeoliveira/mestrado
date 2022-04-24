@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace src\traits;
+namespace src\traits\crud;
 
 
-trait dbRequired
+trait required
 {
 
     public function required(array $array): bool

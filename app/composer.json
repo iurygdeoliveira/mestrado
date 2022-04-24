@@ -1,6 +1,6 @@
 {
-    "name": "iuryprof/inscricao",
-    "description": "Projeto Inscricoes",
+    "name": "iuryprof/mestrado",
+    "description": "Projeto de Mestrado",
     "type": "project",
     "license": "MIT",
     "authors": [
@@ -30,7 +30,6 @@
         "ext-memcached": "*",
         "php-decimal/php-decimal": "v1.1.*",
         "illuminate/support": "^v9.7.0",
-        "illuminate/filesystem": "^v9.7.0",
         "illuminate/http": "^v9.7.0",
         "league/csv": "^9.8",
         "league/plates": "^v3.4",
@@ -39,7 +38,6 @@
         "league/container": "^4.2",
         "symfony/serializer": "^5.3",
         "symfony/property-access": "^5.3",
-        "symfony/filesystem": "^6.0",
         "spatie/regex": "^3.0",
         "spatie/temporary-directory": "^2.0",
         "spatie/db-dumper": "^3.0",
@@ -47,7 +45,6 @@
         "laminas/laminas-httphandlerrunner": "^2.1",
         "sebastiaanluca/php-pipe-operator": "^4.0",
         "respect/validation": "^2.2",
-        "rosell-dk/webp-convert": "^2.7",
         "psr/container": "^2.0",
         "memcachier/php-memcache-sasl": "^1.0"
     },

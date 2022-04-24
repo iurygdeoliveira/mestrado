@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace src\traits;
+namespace src\traits\crud;
 
 use PDO;
-use src\traits\dbConnection;
+use src\traits\crud\connection;
 
-trait dbFetch
+trait fetch
 {
-    use dbConnection;
+    use connection;
 
     public function fetch(bool $all = false)
     {

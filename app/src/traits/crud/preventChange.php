@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace src\traits;
+namespace src\traits\crud;
 
 
-trait dbPreventChange
+trait preventChange
 {
 
     /**

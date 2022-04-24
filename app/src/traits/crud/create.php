@@ -6,13 +6,12 @@ namespace src\traits;
 
 use PDOException;
 use PDO;
-use src\traits\dbConnection;
-use src\traits\dbError;
+use src\traits\crud\connection;
 use src\traits\Filter;
 
 trait dbCreate
 {
-    use dbConnection, Filter, dbError;
+    use connection, Filter;
 
     protected function create(array $data)
     {

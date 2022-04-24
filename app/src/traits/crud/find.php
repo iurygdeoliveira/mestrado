@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace src\traits;
+namespace src\traits\crud;
 
-trait dbFind
+trait find
 {
     public function find(?string $terms = null, ?string $params = null, string $columns = "*")
     {

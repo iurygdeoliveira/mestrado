@@ -1,7 +1,6 @@
 <script>
     async function preprocessar(rider, dataset, total, url) {
 
-
         $('#button_carregar_' + rider).hide();
         $('#button_danger_' + rider).hide();
         var data = new FormData();
@@ -11,7 +10,7 @@
         data.append('atividade', 0);
 
         let index
-        for (index = 1; index <= parseInt(total); index++) {
+        for (index = 1; index <= parseInt(1); index++) {
 
             $('#button_loading_' + rider).show();
             data.set('atividade', index);

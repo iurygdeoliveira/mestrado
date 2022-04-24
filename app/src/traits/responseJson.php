@@ -14,7 +14,8 @@ trait responseJson
      * @param string $status Status do retorno da requisição, true ou false
      * @param string $message Mensagem de retorno para o usuario
      * @param string $response Dados de retorno da requisição
-     * @return JsonResponse
+     * @return JsonResponse Objeto JsonResponse
+     * 
      */
     public function responseJson($status, $message, $response): JsonResponse
     {

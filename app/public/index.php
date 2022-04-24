@@ -17,10 +17,9 @@ $m = new Cache();
 $m->addServer('memcached', 11211);
 
 if (CONF_DEV_MOD) {
-    //showErrors();
+    showErrors();
     //cacheStats($m);
 }
-
 $session = new Session(); // Inicia a sessão
 $request = getRequest(); // Obter requisição
 $router = new Router(); // Inicia o roteador

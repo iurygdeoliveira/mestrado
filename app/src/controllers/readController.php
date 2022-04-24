@@ -75,14 +75,15 @@ class readController extends Controller
         // Dados para renderização no template
         $data = $this->dataTheme('Pré - Processar os Arquivos');
         $this->view->addData($data, '../theme/theme');
-        $this->view->addData($data, '../scripts/scripts');
 
         // dados para renderização em metaData 
         $this->view->addData($this->metaData(), 'resumo');
 
         // dados para renderização em begin 
-        $data = ['riders' => $this->riders['riders']];
-        $data += ['url' => url('preprocessarData')];
+        $data = [
+            'riders' => $this->riders['riders'],
+            'url' => url('preprocessarData')
+        ];
         $this->view->addData($data, 'preprocessar_table');
 
         $response = new Response();
@@ -114,6 +115,7 @@ class readController extends Controller
 
         // Se result for true, então o dataset/atividade já foram extraídos
         // Se result for diferentes de true, retorna a mensagem de erro
+        $result = true;
         if ($result === true) {
             return $this->responseJson(true, "Nós da atividade $request->atividade extraídos", "sem retorno de dados");
         }

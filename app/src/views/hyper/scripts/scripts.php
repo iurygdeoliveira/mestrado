@@ -1,6 +1,7 @@
 <script defer src="<?= js('vendor.min.js') ?>"></script>
 <script defer src="<?= js('app.min.js') ?>"></script>
 <script defer src="<?= js('axios.min.js') ?>"></script>
+<script defer src="<?= js('appwrite.js') ?>"></script>
 
 <!-- third party js -->
 <script defer src="<?= js('jquery.dataTables.min.js') ?>"></script>

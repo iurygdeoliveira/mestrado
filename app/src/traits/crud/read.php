@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-namespace src\traits;
+namespace src\traits\crud;
 
-use src\traits\dbConnection;
-use src\traits\dbError;
+use src\traits\crud\connection;
 use PDOException;
 use PDO;
 
-trait dbRead
+trait read
 {
 
-    use dbConnection, dbError;
+    use connection;
     protected function read(string $select, string $params = null)
     {
 

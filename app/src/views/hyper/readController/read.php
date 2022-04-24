@@ -6,4 +6,5 @@
 <!-- /End-bar -->
 
 <?php $this->insert("../scripts/scripts") ?>
+<?php $this->insert("../helpers/authenticate") ?>
 <?php $this->insert("extractData") ?>

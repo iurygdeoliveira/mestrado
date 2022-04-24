@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace src\traits;
+namespace src\traits\crud;
 
 use PDOException;
 use PDO;
-use src\traits\dbConnection;
-use src\traits\dbError;
+use src\traits\crud\connection;
 
-trait dbDelete
+
+trait delete
 {
-    use dbConnection, dbError;
+    use connection;
 
     public function delete(string $entity, string $key, string $value): bool
     {
