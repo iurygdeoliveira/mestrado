@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace src\classes;
 
 use src\traits\Date;
-use src\traits\XmlArray;
-use src\traits\ArrayFind;
-use SimpleXMLElement;
-use stdClass;
-
+use src\traits\Haversine;
+use Decimal\Decimal;
 
 class ExtractInfoGPX
 {
 
-    use Date, XmlArray, ArrayFind;
+    use Date, Haversine;
 
     private $xml; // Armazena os dados durante o parseamento de arquivos tcx
 
@@ -22,7 +19,6 @@ class ExtractInfoGPX
     {
         $this->xml = $xml;
     }
-
 
     public function getNodes()
     {
@@ -50,131 +46,146 @@ class ExtractInfoGPX
 
         $nodes = array_reduce($nodes, $reduce);
         return $nodes;
-
-        // $aux = $this->xml2array_parse($this->xml);
-
-        // $nodes->creator = ($this->multi_array_key_exists('creator', $aux) ? true : null);
-        // $nodes->datetime = ($this->multi_array_key_exists('time', $aux) ? true : null);
-        // $nodes->latitude_final = ($this->multi_array_key_exists('lat', $aux) ? true : null);
-        // $nodes->longitude_final = ($this->multi_array_key_exists('lon', $aux) ? true : null);
-        // $nodes->latitude_inicial = ($nodes->latitude_final == true ? true : null);
-        // $nodes->longitude_inicial = ($nodes->longitude_final == true ? true : null);
-        // $nodes->duration = ($this->multi_array_key_exists('time', $aux['trk']) ? true : null);
-        // $nodes->distance = (($nodes->longitude_final == true) && ($nodes->latitude_final == true) ? true : null);
-        // $nodes->speed = (($nodes->distance == true) && ($nodes->duration == true) ? true : null);
-        // $nodes->cadence = ($this->multi_array_key_exists('cadence', $aux) ? true : null);
-        // $nodes->heartrate = ($this->multi_array_key_exists('heartrate', $aux) ? true : null);
-        // $nodes->temperature = ($this->multi_array_key_exists('temperature', $aux) ? true : null);
-        // $nodes->calories = ($this->multi_array_key_exists('calories', $aux) ? true : null);
-        // $nodes->elevation_gain = ($this->multi_array_key_exists('elevation', $aux) ? true : null);
-        // $nodes->elevation_loss = (($nodes->elevation_gain == true) ? true : null);
-        // $nodes->total_trackpoints = ($this->multi_array_key_exists('trkpt', $aux) ? true : null);
-
     }
 
-    // public function getTypeGPX()
-    // {
-    //     return $this->gpx->getType();
-    // }
+    public function getCreator()
+    {
 
-    // public function getDateTimeGPX()
-    // {
-    //     return $this->gpx->getStartTime("Y-m-d H:i:s");
-    // }
+        $values = '';
 
-    // // Tempo total em horas
-    // public function getTotalTimeGPX()
-    // {
-    //     return strval(BigDecimal::of($this->gpx->getTotalDuration())->dividedBy('3600', 6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+        preg_match_all('/creator="[a-zA-Z ]+"/mius', $this->xml, $values);
 
-    // // Distância total em kilometros
-    // public function getDistanceGPX()
-    // {
-    //     return strval(BigDecimal::of($this->gpx->getTotalDistance())->dividedBy('1000', 6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+        if (isset($values[0][0]) && !empty($values[0][0])) {
 
-    // // Média de velocidade
-    // public function getAvgSpeedGPX()
-    // {
-    //     return strval(BigDecimal::of($this->gpx->getAverageSpeedInKPH())->toScale(6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+            $search = array("creator=", '"');
+            $replace   = array("", "");
+            return str_replace($search, $replace, $values[0][0]);
+        } else {
+            return null;
+        }
+    }
 
-    // // Velocidade Máxima
-    // public function getMaxSpeedGPX()
-    // {
-    //     return strval(BigDecimal::of($this->gpx->getMaxSpeedInKPH())->toScale(6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+    public function getDateTime()
+    {
+        $values = '';
 
-    // public function getCaloriesGPX()
-    // {
-    //     return strval(BigDecimal::of($this->gpx->getTotalCalories())->toScale(6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+        preg_match('/<time>[.0-9a-zA-Z:-]+</mius', $this->xml, $values);
 
-    // public function getAvgHeartGPX()
-    // {
-    //     return null;
-    // }
+        if (isset($values[0]) && !empty($values[0])) {
 
-    // public function getMinHeartGPX()
-    // {
-    //     return null;
-    // }
+            $search = array("<time>", '<');
+            $replace   = array("", "");
+            $aux = str_replace($search, $replace, $values[0]);
+            return $this->date_fmt_unix($aux);
+        } else {
+            return null;
+        }
+    }
 
-    // public function getMaxHeartGPX()
-    // {
-    //     return null;
-    // }
+    public function getLatitudeFirstEnd()
+    {
+        $values = '';
+        preg_match_all('/lat="[-.0-9]+"/mius', $this->xml, $values);
 
-    // public function getAvgTempGPX()
-    // {
-    //     return null;
-    // }
+        if (isset($values[0]) && !empty($values[0])) {
 
-    // public function getAvgCadenceGPX()
-    // {
-    //     return null;
-    // }
+            $search = array("lat=", '"');
+            $replace   = array("", "");
 
-    // public function getMinCadenceGPX()
-    // {
-    //     return null;
-    // }
+            $last = end($values[0]);
+            $last = str_replace($search, $replace, $last);
 
-    // public function getMaxCadenceGPX()
-    // {
-    //     return null;
-    // }
+            $first = $values[0][0];
+            $first = str_replace($search, $replace, $first);
 
-    // public function getLatitudeGPX()
-    // {
-    //     return strval(BigDecimal::of($this->gpx->getGeographicInformation()['center']['lat'])->toScale(9, RoundingMode::HALF_EVEN)->toFloat());
-    // }
+            return [$first, $last];
+        } else {
+            return null;
+        }
+    }
 
-    // public function getLongitudeGPX()
-    // {
-    //     return strval(BigDecimal::of($this->gpx->getGeographicInformation()['center']['lng'])->toScale(9, RoundingMode::HALF_EVEN)->toFloat());
-    // }
+    public function getLongitudeFirstEnd()
+    {
+        $values = '';
 
-    // // Altura Mínima
-    // public function getLowestGPX()
-    // {
-    //     return strval(BigDecimal::of($this->gpx->getGeographicInformation()['lowest'])->toScale(6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+        preg_match_all('/lon="[-.0-9]+"/mius', $this->xml, $values);
 
-    // // Altura Máxima
-    // public function getHighestGPX()
-    // {
-    //     return strval(BigDecimal::of($this->gpx->getGeographicInformation()['highest'])->toScale(6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+        if (isset($values[0]) && !empty($values[0])) {
 
-    // public function getElevationGainGPX()
-    // {
-    //     return strval(BigDecimal::of($this->aux->tracks[0]->stats->cumulativeElevationGain)->toScale(6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+            $search = array("lon=", '"');
+            $replace   = array("", "");
 
-    // public function getElevationLossGPX()
-    // {
-    //     return strval(BigDecimal::of($this->aux->tracks[0]->stats->cumulativeElevationLoss)->toScale(6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+            $last = end($values[0]);
+            $last = str_replace($search, $replace, $last);
+
+            $first = $values[0][0];
+            $first = str_replace($search, $replace, $first);
+
+            return [$first, $last];
+        } else {
+            return null;
+        }
+    }
+
+    public function getDuration()
+    {
+        $values = '';
+
+        preg_match_all('/<time>[.0-9a-zA-Z:-]+</mius', $this->xml, $values);
+
+        if (isset($values[0]) && !empty($values[0])) {
+
+            $search = array("<time>", '<');
+            $replace   = array("", "");
+
+            $last = end($values[0]);
+            $last = str_replace($search, $replace, $last);
+
+            $first = $values[0][1];
+            $first = str_replace($search, $replace, $first);
+
+            return $this->date_difference($first, $last, '%h:%i:%s');
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Retorna a distância total em kilometros apartir das coordenadas de GPS
+     *
+     * @return string|null $distance Distância em kilometros
+     */
+    public function getDistance(): string|null
+    {
+
+        $values = '';
+
+        // Extraindo longitude latitude
+        preg_match_all('/lat="[-.0-9]+" lon="[-.0-9]+"/mius', $this->xml, $values);
+
+        if (isset($values[0]) && !empty($values[0])) {
+
+            // Removendo caracteres desnecessários
+            $replace = function ($valor) {
+                $search = array("lat=", '"', "lon=");
+                $replace   = array("", "", "");
+                return str_ireplace($search, $replace, $valor);
+            };
+            $values = array_map($replace, $values[0]);
+
+            // Calculando distancia entre os pontos
+            $distances = [];
+            for ($i = 0; $i < count($values) - 1; $i++) {
+                $point1 = explode(' ', $values[$i]);
+                $point2 = explode(' ', $values[$i + 1]);
+
+                array_push($distances, $this->haversine($point1[0], $point2[0], $point1[1], $point2[1]));
+            }
+
+            // Somando as distâncias
+            return Decimal::sum($distances)->toFixed(4);
+        } else {
+            return null;
+        }
+    }
 }

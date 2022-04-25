@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace src\classes;
 
+use Decimal\Decimal;
 use src\traits\Date;
-use src\traits\XmlArray;
-use src\traits\ArrayFind;
-use SimpleXMLElement;
-use stdClass;
+use src\traits\Haversine;
 
 class ExtractInfoTCX
 {
 
-    use Date, XmlArray, ArrayFind;
+    use Date, Haversine;
 
     private $xml; // Armazena os dados durante o parseamento de arquivos tcx
 
@@ -43,131 +41,173 @@ class ExtractInfoTCX
 
         $nodes = array_reduce($nodes, $reduce);
         return $nodes;
-        // $aux = $this->xml2array_parse($this->xml);
-        // dump($aux);
-
-        // $nodes->creator = ($this->multi_array_key_exists('Name', $aux) ? true : null);
-        // $nodes->datetime = ($this->multi_array_key_exists('Id', $aux) ? true : null);
-        // $nodes->latitude_final = ($this->multi_array_key_exists('LatitudeDegrees', $aux) ? true : null);
-        // $nodes->longitude_final = ($this->multi_array_key_exists('LongitudeDegrees', $aux) ? true : null);
-        // $nodes->latitude_inicial = ($nodes->latitude_final == true ? true : null);
-        // $nodes->longitude_inicial = ($nodes->longitude_final == true ? true : null);
-        // $nodes->duration = ($this->multi_array_key_exists('TotalTimeSeconds', $aux) ? true : null);
-        // $nodes->distance = ($this->multi_array_key_exists('DistanceMeters', $aux) ? true : null);
-        // $nodes->speed = (($nodes->distance == true) && ($nodes->duration == true) ? true : null);
-        // $nodes->cadence = ($this->multi_array_key_exists('Cadence', $aux) ? true : null);
-        // $nodes->heartrate = ($this->multi_array_key_exists('HeartRateBpm', $aux) ? true : null);
-        // $nodes->temperature = ($this->multi_array_key_exists('temperature', $aux) ? true : null);
-        // $nodes->calories = ($this->multi_array_key_exists('Calories', $aux) ? true : null);
-        // $nodes->elevation_gain = ($this->multi_array_key_exists('AltitudeMeters', $aux) ? true : null);
-        // $nodes->elevation_loss = (($nodes->elevation_gain == true) ? true : null);
-        // $nodes->total_trackpoints = ($this->multi_array_key_exists('Trackpoint', $aux) ? true : null);
-
     }
 
-    // public function getTypeTCX()
-    // {
-    //     return $this->tcx->getType();
-    // }
+    public function getCreator()
+    {
 
-    // public function getDateTimeTCX()
-    // {
-    //     return $this->tcx->getStartTime("Y-m-d H:i:s");
-    // }
+        $values = '';
 
-    // // Tempo total em horas
-    // public function getTotalTimeTCX()
-    // {
-    //     return strval(BigDecimal::of($this->tcx->getTotalDuration())->dividedBy('3600', 6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+        preg_match('/<Name>[0-9a-zA-Z ]+</mius', $this->xml, $values);
 
-    // // Distância total em kilometros
-    // public function getDistanceTCX()
-    // {
-    //     return strval(BigDecimal::of($this->tcx->getTotalDistance())->dividedBy('1000', 6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+        if (isset($values[0]) && !empty($values[0])) {
 
-    // // Média de velocidade
-    // public function getAvgSpeedTCX()
-    // {
-    //     return strval(BigDecimal::of($this->tcx->getAverageSpeedInKPH())->toScale(6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+            $search = array("<Name>", '<');
+            $replace   = array("", "");
+            return str_replace($search, $replace, $values[0]);
+        } else {
+            return null;
+        }
+    }
 
-    // // Velocidade Máxima
-    // public function getMaxSpeedTCX()
-    // {
-    //     return strval(BigDecimal::of($this->tcx->getMaxSpeedInKPH())->toScale(6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+    public function getDateTime()
+    {
+        $values = '';
 
-    // public function getCaloriesTCX()
-    // {
-    //     return strval(BigDecimal::of($this->tcx->getTotalCalories())->toScale(6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+        preg_match('/<Id>[.0-9a-zA-Z:-]+</mius', $this->xml, $values);
 
-    // public function getAvgHeartTCX()
-    // {
-    //     return null;
-    // }
+        if (isset($values[0]) && !empty($values[0])) {
 
-    // public function getMinHeartTCX()
-    // {
-    //     return null;
-    // }
+            $search = array("<Id>", '<');
+            $replace   = array("", "");
+            $aux = str_replace($search, $replace, $values[0]);
+            return $this->date_fmt_unix($aux);
+        } else {
+            return null;
+        }
+    }
 
-    // public function getMaxHeartTCX()
-    // {
-    //     return null;
-    // }
+    public function getLatitudeFirstEnd()
+    {
+        $values = '';
 
-    // public function getAvgTempTCX()
-    // {
-    //     return null;
-    // }
+        preg_match_all('/<LatitudeDegrees>[-.0-9]+</mius', $this->xml, $values);
 
-    // public function getAvgCadenceTCX()
-    // {
-    //     return null;
-    // }
+        if (isset($values[0]) && !empty($values[0])) {
 
-    // public function getMinCadenceTCX()
-    // {
-    //     return null;
-    // }
+            $search = array("<LatitudeDegrees>", '<');
+            $replace   = array("", "");
 
-    // public function getMaxCadenceTCX()
-    // {
-    //     return null;
-    // }
+            $last = end($values[0]);
+            $last = str_replace($search, $replace, $last);
 
-    // public function getLatitudeTCX()
-    // {
-    //     return strval(BigDecimal::of($this->tcx->getGeographicInformation()['center']['lat'])->toScale(9, RoundingMode::HALF_EVEN)->toFloat());
-    // }
+            $first = $values[0][0];
+            $first = str_replace($search, $replace, $first);
 
-    // public function getLongitudeTCX()
-    // {
-    //     return strval(BigDecimal::of($this->tcx->getGeographicInformation()['center']['lng'])->toScale(9, RoundingMode::HALF_EVEN)->toFloat());
-    // }
+            return [$first, $last];
+        } else {
+            return null;
+        }
+    }
 
-    // // Altura Mínima
-    // public function getLowestTCX()
-    // {
-    //     return strval(BigDecimal::of($this->tcx->getGeographicInformation()['lowest'])->toScale(6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+    public function getLongitudeFirstEnd()
+    {
+        $values = '';
 
-    // // Altura Máxima
-    // public function getHighestTCX()
-    // {
-    //     return strval(BigDecimal::of($this->tcx->getGeographicInformation()['highest'])->toScale(6, RoundingMode::HALF_DOWN)->toFloat());
-    // }
+        preg_match_all('/<LongitudeDegrees>[-.0-9]+</mius', $this->xml, $values);
 
-    // public function getElevationGainTCX()
-    // {
-    //     return null;
-    // }
+        if (isset($values[0]) && !empty($values[0])) {
 
-    // public function getElevationLossTCX()
-    // {
-    //     return null;
-    // }
+            $search = array("<LongitudeDegrees>", '<');
+            $replace   = array("", "");
+
+            $last = end($values[0]);
+            $last = str_replace($search, $replace, $last);
+
+            $first = $values[0][0];
+            $first = str_replace($search, $replace, $first);
+
+            return [$first, $last];
+        } else {
+            return null;
+        }
+    }
+
+    public function getDuration()
+    {
+        $values = '';
+
+        preg_match('/<TotalTimeSeconds>[.0-9]+</mius', $this->xml, $values);
+
+        if (isset($values[0]) && !empty($values[0])) {
+
+            $search = array("<TotalTimeSeconds>", '<');
+            $replace   = array("", "");
+
+            $totalTimeSeconds = new Decimal(str_replace($search, $replace, $values[0]));
+            $hours = $totalTimeSeconds->div(3600)->floor()->__toString();
+            $minutes = $totalTimeSeconds->div(60)->mod(60)->floor()->__toString();
+            $seconds = $totalTimeSeconds->mod(60)->__toString();
+            return "$hours:$minutes:$seconds";
+        }
+
+        $values = '';
+        preg_match_all('/<Time>[.0-9a-zA-Z:-]+</mius', $this->xml, $values);
+
+        if (isset($values[0]) && !empty($values[0])) {
+
+            $search = array("<Time>", '<');
+            $replace   = array("", "");
+
+            $last = end($values[0]);
+            $last = str_replace($search, $replace, $last);
+
+            $first = $values[0][0];
+            $first = str_replace($search, $replace, $first);
+
+            return $this->date_difference($first, $last, '%h:%i:%s');
+        }
+
+        return null;
+    }
+
+    /**
+     * Retorna a distância total em kilometros apartir das coordenadas de GPS
+     *
+     * @return string|null $distance Distância em kilometros
+     */
+    public function getDistance(): string|null
+    {
+
+        $values = '';
+
+        preg_match('/<DistanceMeters>[.0-9]+</mius', $this->xml, $values);
+
+        if (isset($values[0]) && !empty($values[0])) {
+
+            $search = array("<DistanceMeters>", '<');
+            $replace   = array("", "");
+
+            $totalDistance = new Decimal(str_replace($search, $replace, $values[0]));
+            return $totalDistance->div(1000)->toFixed(4);
+        }
+
+        // Extraindo longitude latitude
+        preg_match_all('/<LatitudeDegrees>[-.0-9]+</mius', $this->xml, $latitudes);
+        preg_match_all('/<LongitudeDegrees>[-.0-9]+</mius', $this->xml, $longitudes);
+
+        if ((isset($latitudes[0]) && !empty($latitudes[0])) && (isset($longitudes[0]) && !empty($longitudes[0]))) {
+
+            // Removendo caracteres desnecessários
+            $replace = function ($valor) {
+                $search = array("<LatitudeDegrees>", '<LongitudeDegrees>', "<");
+                $replace   = array("", "", "");
+                return str_ireplace($search, $replace, $valor);
+            };
+            $latitudes = array_map($replace, $latitudes[0]);
+            $longitudes = array_map($replace, $longitudes[0]);
+
+            // Calculando distancia entre os pontos
+            $distances = [];
+            for ($i = 0; $i < count($latitudes) - 1; $i++) {
+
+                array_push($distances, $this->haversine($latitudes[$i], $latitudes[$i + 1], $longitudes[$i], $longitudes[$i + 1]));
+            }
+
+            // Somando as distâncias
+            return Decimal::sum($distances)->toFixed(4);
+        }
+
+        return null;
+    }
 }

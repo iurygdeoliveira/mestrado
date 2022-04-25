@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace src\core;
 
-use src\traits\dbConnection;
-use src\traits\dbCreate;
-use src\traits\dbDelete;
-use src\traits\dbUpdate;
-use src\traits\dbRead;
-use src\traits\dbError;
-use src\traits\dbRequired;
+use src\traits\crud\connection;
+use src\traits\crud\create;
+use src\traits\crud\delete;
+use src\traits\crud\update;
+use src\traits\crud\read;
+use src\traits\crud\required;
 use src\traits\Filter;
 use PDO;
 use PDOException;
@@ -19,7 +18,7 @@ use stdClass;
 abstract class Model
 {
 
-    use dbConnection, dbCreate, dbDelete, dbUpdate, dbRead, dbError, dbRequired, Filter;
+    use connection, create, delete, update, read, required, Filter;
 
     protected ?object $data;
     protected $fail;

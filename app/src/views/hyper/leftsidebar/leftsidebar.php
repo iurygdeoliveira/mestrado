@@ -20,7 +20,7 @@
 
             <li class="side-nav-item">
                 <a href="<?= url('/read') ?>" class="side-nav-link">
-                    <span> 3 - Extrair Dados </span>
+                    <span> 3 - Extrair Valores </span>
                 </a>
             </li>
 

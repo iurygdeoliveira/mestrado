@@ -1,7 +1,7 @@
 <script>
     async function extractActivities(rider, dataset, total, url) {
 
-        var timeStart = performance.now();
+
         $('#button_carregar_' + rider).hide();
         $('#button_danger_' + rider).hide();
         var data = new FormData();
@@ -10,12 +10,11 @@
         data.append('dataset', dataset);
         data.append('atividade', 0);
 
-        let index, timeDiff;
-        for (index = 1; index <= parseInt(total); index++) {
+        let index;
+        for (index = 1; index <= parseInt(5); index++) {
 
             $('#button_loading_' + rider).show();
             data.set('atividade', index);
-            $('#rider_' + rider + '_extract').text(index);
             await axios.post(url, data)
                 .then(function(response) {
 
@@ -34,10 +33,11 @@
                         $('#button_loading_' + rider).hide();
                         $('#button_success_' + rider).hide();
                         $('#button_danger_' + rider).show();
-                        $('#error_extract').text(response.data.message);
+                        $('#progress_bar_' + rider).hide();
+                        $('#rider_' + rider + '_error').text(response.data.message);
+                        $('#rider_' + rider + '_error').show();
                         index = parseInt(total) + 2; // Parar laço de repetição
                     }
-
 
                 })
                 .catch(function(error) {
@@ -52,10 +52,6 @@
                     $('#button_danger_' + rider).show();
                     index = parseInt(total) + 2; // Parar laço de repetição
                 });
-
-            var timeNow = performance.now();
-            timeDiff = ((timeNow - timeStart).toFixed(3) / 1000).toFixed(3);
-            $('#time_extract_' + rider).text(timeDiff);
         }
         $('#button_loading_' + rider).hide();
 

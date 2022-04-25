@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace src\traits;
+namespace src\traits\crud;
 
 use PDOException;
 use PDO;
 use src\traits\crud\connection;
 use src\traits\Filter;
 
-trait dbCreate
+trait create
 {
     use connection, Filter;
 

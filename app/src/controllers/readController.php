@@ -57,10 +57,10 @@ class readController extends Controller
         // dados para renderização em metaData 
         $this->view->addData($this->metaData(), 'resumo');
 
-        // dados para renderização em begin 
+        // dados para renderização em read_table 
         $data = ['riders' => $this->riders['riders']];
-        $data += ['url' => url('extract')];
-        $this->view->addData($data, 'read_begin');
+        $data += ['url' => url('readData')];
+        $this->view->addData($data, 'read_table');
 
         $response = new Response();
         $response->getBody()->write(
@@ -68,6 +68,27 @@ class readController extends Controller
         );
 
         return $response;
+    }
+
+    // Obtendo os valores dos arquivos 
+    public function readData(): Response
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+
+        // Obtendo dados do dataset
+        $this->ride = new LoadRide($request->dataset, $request->rider, $request->atividade);
+        $result = $this->ride->extractData($request->dataset . $request->atividade);
+
+        // Se result for true, então o dataset/atividade já foram extraídos
+        // Se result for diferentes de true, retorna a mensagem de erro
+        $result = true;
+        if ($result === true) {
+            return $this->responseJson(true, "Valores da atividade $request->atividade extraídos", "sem retorno de dados");
+        }
+
+        return $this->responseJson(false, $result, null);
     }
 
     public function preprocessar(): Response
@@ -115,7 +136,6 @@ class readController extends Controller
 
         // Se result for true, então o dataset/atividade já foram extraídos
         // Se result for diferentes de true, retorna a mensagem de erro
-        $result = true;
         if ($result === true) {
             return $this->responseJson(true, "Nós da atividade $request->atividade extraídos", "sem retorno de dados");
         }

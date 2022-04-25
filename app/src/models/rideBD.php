@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace src\models;
 
 use src\core\Model;
-use src\traits\dbPreventChange;
+use src\traits\crud\preventChange;
 use src\traits\encryptPass;
 use src\traits\Validate;
 use Exception;
@@ -20,9 +20,7 @@ class rideBD extends Model
 
     protected static $preventChange = ['id'];
 
-
-    use dbPreventChange;
-
+    use preventChange;
 
     public function bootstrap(string $riderID, string $activityID = null)
     {
@@ -33,6 +31,7 @@ class rideBD extends Model
 
             if ($data instanceof rideBD) {
                 $this->id = $data->id;
+                $this->nodes = $data->nodes;
             }
         }
     }
