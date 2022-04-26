@@ -18,6 +18,12 @@ trait Deg2rad
 
     public function deg2rad(string $degrees): string
     {
+
+        if (strlen($degrees) > 14) {
+            $aux = str_split($degrees, 13);
+            $degrees = $aux[0];
+        }
+
         $value = new Decimal($degrees);
         $denominator = new Decimal(strval(180));
         $pi = new Decimal(strval(M_PI));

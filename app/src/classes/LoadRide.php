@@ -114,14 +114,22 @@ class LoadRide
 
         $this->ride->duration = $this->info->getDuration();
         $this->ride->distance = $this->info->getDistance();
-        $this->ride->speed = $this->info->getSpeed();
-        // $nodes->cadence = ($this->multi_array_key_exists('cadence', $aux) ? true : null);
-        // $nodes->heartrate = ($this->multi_array_key_exists('heartrate', $aux) ? true : null);
-        // $nodes->temperature = ($this->multi_array_key_exists('temperature', $aux) ? true : null);
-        // $nodes->calories = ($this->multi_array_key_exists('calories', $aux) ? true : null);
+
+        if (($this->ride->duration != null) && ($this->ride->distance != null)) {
+            $this->ride->speed = $this->info->getSpeed(
+                $this->ride->distance,
+                $this->ride->duration
+            );
+        } else {
+            $this->ride->speed = null;
+        }
+        $this->ride->cadence = $this->info->getCadence();
+        $this->ride->heartrate = $this->info->getHeartRate();
+        $this->ride->temperature = $this->info->getTemperature();
+        $this->ride->calories = $this->info->getCalories();
         // $nodes->elevation_gain = ($this->multi_array_key_exists('elevation', $aux) ? true : null);
         // $nodes->elevation_loss = (($nodes->elevation_gain == true) ? true : null);
-        // $nodes->total_trackpoints = ($this->multi_array_key_exists('trkpt', $aux) ? true : null);
+        $this->ride->total_trackpoints = $this->info->getTotalTrackpoints();
 
         if ($this->ride->save()) {
             return true;

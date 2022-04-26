@@ -11,7 +11,7 @@
         data.append('atividade', 0);
 
         let index;
-        for (index = 1; index <= parseInt(5); index++) {
+        for (index = 1; index <= parseInt(total); index++) {
 
             $('#button_loading_' + rider).show();
             data.set('atividade', index);

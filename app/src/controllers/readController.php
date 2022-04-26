@@ -82,8 +82,7 @@ class readController extends Controller
         $result = $this->ride->extractData($request->dataset . $request->atividade);
 
         // Se result for true, então o dataset/atividade já foram extraídos
-        // Se result for diferentes de true, retorna a mensagem de erro
-        $result = true;
+        // Se result for diferentes de true, retorna a mensagem de erros
         if ($result === true) {
             return $this->responseJson(true, "Valores da atividade $request->atividade extraídos", "sem retorno de dados");
         }

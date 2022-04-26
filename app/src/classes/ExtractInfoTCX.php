@@ -210,4 +210,159 @@ class ExtractInfoTCX
 
         return null;
     }
+
+    /**
+     * Calcula a velocidade média em km/h
+     *
+     * @param string $distance distância em kilometros
+     * @param string $duration tempo em horas:minutos:segundos
+     * @return string|null
+     */
+    public function getSpeed(string $distance, string $duration): string|null
+    {
+        if (!empty($distance) && !empty($duration)) {
+
+            $distance = new Decimal($distance);
+            $duration = explode(':', $duration);
+
+            $hours = new Decimal($duration[0]);
+            $minutes = new Decimal($duration[1]);
+            $seconds = new Decimal($duration[2]);
+
+            $hours = $hours->add($minutes->div(60));
+            $hours = $hours->add($seconds->div(3600));
+
+            return $distance->div($hours)->toFixed(4);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Retorna a cadência
+     */
+    public function getCadence(): string|null
+    {
+
+        $values = '';
+
+        preg_match('/<Intensity>\n[ ]+<Cadence>[.0-9]+</mius', $this->xml, $values);
+
+        if (isset($values[0]) && !empty($values[0])) {
+
+            $search = array('<Intensity>', '\n', "<Cadence>", '<');
+            $replace   = array("", "", "", "");
+
+            return trim(str_replace($search, $replace, $values[0]));
+        }
+
+        $values = '';
+
+        // Extraindo longitude latitude
+        preg_match_all('/<Cadence>[.0-9]+</mius', $this->xml, $values);
+
+        if (isset($values[0]) && !empty($values[0])) {
+
+            // Removendo caracteres desnecessários
+            $replace = function ($valor) {
+                $search = array("<Cadence>", '<');
+                $replace   = array("", "");
+                return str_ireplace($search, $replace, $valor);
+            };
+            $cadences = array_map($replace, $values[0]);
+            unset($cadences[0]); // Eliminando o primeiro valor pois é o AVG
+
+            // Somando as distâncias
+            return Decimal::avg($cadences)->toFixed(4);
+        }
+
+        return null;
+    }
+
+    /**
+     * Retorna a frequência cardíaca
+     */
+    public function getHeartRate(): string|null
+    {
+
+        $values = '';
+
+        preg_match('/<AverageHeartRateBpm>\n[ ]+<Value>[.0-9]+</mius', $this->xml, $values);
+
+        if (isset($values[0]) && !empty($values[0])) {
+
+            $search = array('<AverageHeartRateBpm>', '\n', "<Value>", '<',);
+            $replace   = array("", "", "", "");
+
+            return trim(str_replace($search, $replace, $values[0]));
+        }
+
+        $values = '';
+
+        // Extraindo longitude latitude
+        preg_match_all('/<HeartRateBpm>\n[ ]+<Value>[.0-9]+</mius', $this->xml, $values);
+
+        if (isset($values[0]) && !empty($values[0])) {
+
+            // Removendo caracteres desnecessários
+            $replace = function ($valor) {
+                $search = array("<HeartRateBpm>", '\n', "<Value>", '<');
+                $replace   = array("", "", "", "");
+                return trim(str_ireplace($search, $replace, $valor));
+            };
+            $heartrates = array_map($replace, $values[0]);
+
+            // Somando as distâncias
+            return Decimal::avg($heartrates)->toFixed(4);
+        }
+
+        return null;
+    }
+
+    /**
+     * Nos arquivos TCX não existem temperatures
+     */
+    public function getTemperature(): string|null
+    {
+        return null;
+    }
+
+    /**
+     * Retorna o total de calorias
+     */
+    public function getCalories(): string|null
+    {
+        $values = '';
+
+        preg_match('/<Calories>[.0-9]+</mius', $this->xml, $values);
+
+        if (isset($values[0]) && !empty($values[0])) {
+
+            $search = array('<Calories>', '<',);
+            $replace   = array("", "");
+
+            return trim(str_replace($search, $replace, $values[0]));
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Retorna o total de trackpoints
+     */
+    public function getTotalTrackpoints(): string|null
+    {
+        $values = '';
+
+        // Extraindo longitude latitude
+        preg_match_all('/<Trackpoint/mius', $this->xml, $values);
+
+        if (isset($values[0]) && !empty($values[0])) {
+
+            // Somando as distâncias
+            return strval(count($values[0]));
+        } else {
+            return null;
+        }
+    }
 }
