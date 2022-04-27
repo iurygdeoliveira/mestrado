@@ -1,7 +1,6 @@
 <script>
     async function extractActivities(rider, dataset, total, url) {
 
-
         $('#button_carregar_' + rider).hide();
         $('#button_danger_' + rider).hide();
         var data = new FormData();

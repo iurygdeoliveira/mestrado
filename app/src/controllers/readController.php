@@ -6,15 +6,16 @@ namespace src\controllers;
 
 use src\traits\Datasets;
 use src\traits\responseJson;
+use src\traits\Csv;
 use src\core\View;
 use src\core\Controller;
 use src\classes\LoadRide;
-use Laminas\Diactoros\Response;
 use src\models\rideBD;
+use Laminas\Diactoros\Response;
 
 class readController extends Controller
 {
-    use Datasets, responseJson;
+    use Datasets, responseJson, Csv;
 
     private $riders; // Recebe os dados dos ciclistas
 
@@ -46,7 +47,64 @@ class readController extends Controller
         return $data;
     }
 
-    // Renderiza a view de dashboard
+    public function exportCSV(): Response
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+
+        // Buscando dados no BD
+        $rider = new rideBD();
+        $rider->bootstrap(strval($request->id));
+        $data = $rider->find()->fetch(true);
+
+        //Criando cabeçalho do arquivo CSV
+        if ($request->id == 1) {
+            $this->createCSV(
+                'riders.csv',
+                ['Rider', 'Atividade', 'Datetime', 'Latitude_Inicial', 'Longitude_Inicial', 'Latitude_Final', 'Longitude_Final', 'Duration', 'Distance', 'Speed', 'Cadence', 'HeartRate', 'Calories', 'Temperature', 'Total_Trackpoints'],
+                true,
+                'w'
+            );
+            bardump("Arquivo criado id == {$request->id}");
+        }
+
+        // Criando linha do arquivo CSV
+        $records = [];
+        foreach ($data as $key => $value) {
+            $record = [
+                $request->id,
+                $value->data()->id,
+                $value->data()->datetime,
+                $value->data()->latitude_inicial,
+                $value->data()->longitude_inicial,
+                $value->data()->latitude_final,
+                $value->data()->longitude_final,
+                $value->data()->duration,
+                $value->data()->distance,
+                $value->data()->speed,
+                $value->data()->cadence,
+                $value->data()->heartrate,
+                $value->data()->calories,
+                $value->data()->temperature,
+                $value->data()->total_trackpoints
+            ];
+
+            array_push($records, $record);
+        }
+
+        $result = $this->createCSV('riders.csv', $records, false, 'a');
+
+        // Se result for true, então o dataset/atividade já foram extraídos
+        // Se result for diferentes de true, retorna a mensagem de erros
+        if ($result === true) {
+            return $this->responseJson(true, "CSV do rider $request->id concluído", "sem retorno de dados");
+        }
+
+        return $this->responseJson(false, $result, null);
+    }
+
+    // Renderiza a view read
     public function read(): Response
     {
         // Dados para renderização no template
@@ -55,7 +113,9 @@ class readController extends Controller
         $this->view->addData($data, '../scripts/scripts');
 
         // dados para renderização em metaData 
-        $this->view->addData($this->metaData(), 'resumo');
+        $data = $this->metaData();
+        $data += ['url_csv' => url('exportCSV')];
+        $this->view->addData($data, 'resumo');
 
         // dados para renderização em read_table 
         $data = ['riders' => $this->riders['riders']];

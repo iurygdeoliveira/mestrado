@@ -46,7 +46,6 @@
                              </button>
                              <button type="button" id='button_success_stats' class="btn btn-success" style="display: none;" disabled>Concluido !</button>
                              <button type="button" id='button_danger_stats' class="btn btn-danger" style="display: none;" onclick="generateStats('<?= $this->e($url_stats) ?>')">Erro (Tentar novamente) </button>
-
                          </td>
 
                          <td colspan="3" class='text-center'>Status:

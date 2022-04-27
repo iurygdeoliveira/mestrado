@@ -105,8 +105,8 @@ function showErrors()
     Debugger::timer();
     Debugger::$strictMode = true; // display all errors
     Debugger::$dumpTheme = 'dark';
-    Debugger::$maxDepth = 8; // default: 7
-    Debugger::$maxLength = 150; // default: 150
+    Debugger::$maxDepth = 100; // default: 7
+    Debugger::$maxLength = 200; // default: 150
     Debugger::$showLocation = true;
 }
 
