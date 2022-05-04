@@ -9,11 +9,12 @@ use src\core\View;
 use src\core\Controller;
 use src\models\rideBD;
 use Laminas\Diactoros\Response;
+use src\traits\responseJson;
 
 
 class analiseController extends Controller
 {
-    use Datasets;
+    use Datasets, responseJson;
 
     private $riders; // Recebe os dados dos ciclistas
 
@@ -49,27 +50,6 @@ class analiseController extends Controller
         return $response;
     }
 
-    public function analiseAjax(): Response
-    {
-        // Dados para renderização no template
-        $data = ['title' => "Análise Exploratória | CycleVis"];
-
-        // dados para renderização em metaData 
-        $data += ['metaData' => $this->metaData()];
-
-        // dados para renderização em begin 
-        $data += ['beginData' => $this->beginData()];
-        $data += ['url' => url('getDataTable')];
-
-        return $this->responseJson(
-            [
-                'status' => true,
-                'message' => "Cadastro realizado com sucesso",
-                'response' => $data
-            ]
-        );
-    }
-
     private function metaData(): array
     {
         // Dados para renderização do dataTable
@@ -101,21 +81,21 @@ class analiseController extends Controller
         return $data;
     }
 
-    public function getDataTable(): Response
-    {
+    // public function getDataTable(): Response
+    // {
 
-        set_time_limit(60);
-        $request = getRequest()->getParsedBody();
-        $this->ride = new rideBD();
-        $this->ride->bootstrap('ride' . $request['rider']);
+    //     set_time_limit(60);
+    //     $request = getRequest()->getParsedBody();
+    //     $this->ride = new rideBD();
+    //     $this->ride->bootstrap('ride' . $request['rider']);
 
-        // Arquivo não encontrado
-        $result = $this->ride->findById(intval($request['atividade']));
-        dump($this->ride);
-        dump($result);
-        exit;
+    //     // Arquivo não encontrado
+    //     $result = $this->ride->findById(intval($request['atividade']));
+    //     dump($this->ride);
+    //     dump($result);
+    //     exit;
 
-        $response = ['status' => true, 'message' => "Cadastro realizado com sucesso"];
-        return $this->responseJson($response);
-    }
+    //     $response = ['status' => true, 'message' => "Cadastro realizado com sucesso"];
+    //     return $this->responseJson($response);
+    // }
 }

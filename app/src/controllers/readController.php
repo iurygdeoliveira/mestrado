@@ -62,20 +62,24 @@ class readController extends Controller
         if ($request->id == 1) {
             $this->createCSV(
                 'riders.csv',
-                ['Rider', 'Atividade', 'Datetime', 'Latitude_Inicial', 'Longitude_Inicial', 'Latitude_Final', 'Longitude_Final', 'Duration', 'Distance', 'Speed', 'Cadence', 'HeartRate', 'Calories', 'Temperature', 'Total_Trackpoints'],
+                ['Creator', 'Rider', 'Atividade', 'Total_nodes', 'Datetime', 'Country', 'City', 'Road', 'Latitude_Inicial', 'Longitude_Inicial', 'Latitude_Final', 'Longitude_Final', 'Duration', 'Distance', 'Speed', 'Cadence', 'HeartRate', 'Calories', 'Temperature', 'Total_Trackpoints'],
                 true,
                 'w'
             );
-            bardump("Arquivo criado id == {$request->id}");
         }
 
         // Criando linha do arquivo CSV
         $records = [];
         foreach ($data as $key => $value) {
             $record = [
+                $value->data()->creator,
                 $request->id,
                 $value->data()->id,
+                strlen($value->data()->nodes),
                 $value->data()->datetime,
+                $value->data()->country,
+                $value->data()->city,
+                $value->data()->road,
                 $value->data()->latitude_inicial,
                 $value->data()->longitude_inicial,
                 $value->data()->latitude_final,
@@ -156,8 +160,10 @@ class readController extends Controller
         $data = $this->dataTheme('Pré - Processar os Arquivos');
         $this->view->addData($data, '../theme/theme');
 
-        // dados para renderização em metaData 
-        $this->view->addData($this->metaData(), 'resumo');
+        // dados para renderização em metaData
+        $data = $this->metaData();
+        $data += ['url_csv' => url('exportCSV')];
+        $this->view->addData($data, 'resumo');
 
         // dados para renderização em begin 
         $data = [

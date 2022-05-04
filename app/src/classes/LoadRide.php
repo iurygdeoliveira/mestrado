@@ -99,8 +99,9 @@ class LoadRide
         };
 
         // Salvando dados da corrida no BD
-        $this->ride->creator = $this->info->getCreator();
-        $this->ride->datetime = $this->info->getDateTime();
+        // $this->ride->creator = $this->info->getCreator();
+        // $this->ride->datetime = $this->info->getDateTime();
+
 
         // Latitude Inicial e Final
         $latitudes = $this->info->getLatitudeFirstEnd();
@@ -112,24 +113,37 @@ class LoadRide
         $this->ride->longitude_final = (isset($longitudes[1]) ? $longitudes[1] : null);
         $this->ride->longitude_inicial = (isset($longitudes[0]) ? $longitudes[0] : null);
 
-        $this->ride->duration = $this->info->getDuration();
-        $this->ride->distance = $this->info->getDistance();
+        if (($this->ride->latitude_inicial != null) && ($this->ride->longitude_inicial != null)) {
 
-        if (($this->ride->duration != null) && ($this->ride->distance != null)) {
-            $this->ride->speed = $this->info->getSpeed(
-                $this->ride->distance,
-                $this->ride->duration
-            );
+            $address = $this->info->getAddress($this->ride->latitude_inicial, $this->ride->longitude_inicial);
+            $this->ride->country = (isset($address[0]) ? $address[0] : null);
+            $this->ride->city = (isset($address[1]) ? $address[1] : null);
+            $this->ride->road = (isset($address[2]) ? $address[2] : null);
         } else {
-            $this->ride->speed = null;
+            $this->ride->country = null;
+            $this->ride->city = null;
+            $this->ride->road = null;
         }
-        $this->ride->cadence = $this->info->getCadence();
-        $this->ride->heartrate = $this->info->getHeartRate();
-        $this->ride->temperature = $this->info->getTemperature();
-        $this->ride->calories = $this->info->getCalories();
+
+
+        // $this->ride->duration = $this->info->getDuration();
+        // $this->ride->distance = $this->info->getDistance();
+
+        // if (($this->ride->duration != null) && ($this->ride->distance != null)) {
+        //     $this->ride->speed = $this->info->getSpeed(
+        //         $this->ride->distance,
+        //         $this->ride->duration
+        //     );
+        // } else {
+        //     $this->ride->speed = null;
+        // }
+        // $this->ride->cadence = $this->info->getCadence();
+        // $this->ride->heartrate = $this->info->getHeartRate();
+        // $this->ride->temperature = $this->info->getTemperature();
+        // $this->ride->calories = $this->info->getCalories();
         // $nodes->elevation_gain = ($this->multi_array_key_exists('elevation', $aux) ? true : null);
         // $nodes->elevation_loss = (($nodes->elevation_gain == true) ? true : null);
-        $this->ride->total_trackpoints = $this->info->getTotalTrackpoints();
+        // $this->ride->total_trackpoints = $this->info->getTotalTrackpoints();
 
         if ($this->ride->save()) {
             return true;

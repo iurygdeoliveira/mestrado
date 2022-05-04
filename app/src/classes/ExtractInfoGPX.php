@@ -7,11 +7,13 @@ namespace src\classes;
 use src\traits\Date;
 use src\traits\Haversine;
 use Decimal\Decimal;
+use src\traits\Geotools;
+use Exception;
 
 class ExtractInfoGPX
 {
 
-    use Date, Haversine;
+    use Date, Haversine, Geotools;
 
     private $xml; // Armazena os dados durante o parseamento de arquivos tcx
 
@@ -102,6 +104,46 @@ class ExtractInfoGPX
         } else {
             return null;
         }
+    }
+
+    public function getAddress(string $lat, string $lon)
+    {
+
+        if (strlen($lat) > 14) {
+            $aux = str_split($lat, 13);
+            $lat = $aux[0];
+        }
+
+        if (strlen($lon) > 14) {
+            $aux = str_split($lon, 13);
+            $lon = $aux[0];
+        }
+
+        $address = $this->getAddressFromGPS(floatval($lat), floatval($lon));
+
+        if ($address instanceof Exception) {
+            return ['Erro ao obter país', 'Erro ao obter cidade', 'Erro ao obter estrada'];
+        }
+
+        if ($address == false) {
+            return [null, null, null];
+        }
+
+        if (!empty($address) && isset($address['municipality'])) {
+            $country = (isset($address['country']) ? $address['country'] : null);
+            $city = (isset($address['municipality']) ? $address['municipality'] : null);
+            $road = (isset($address['road']) ? $address['road'] : null);
+            return [$country, $city, $road];
+        }
+
+        if (!empty($address) && isset($address['town'])) {
+            $country = (isset($address['country']) ? $address['country'] : null);
+            $city = (isset($address['town']) ? $address['town'] : null);
+            $road = (isset($address['road']) ? $address['road'] : null);
+            return [$country, $city, $road];
+        }
+
+        return null;
     }
 
     public function getLongitudeFirstEnd()

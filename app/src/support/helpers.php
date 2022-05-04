@@ -5,10 +5,9 @@ declare(strict_types=1);
 use Laminas\Diactoros\ServerRequestFactory;
 use Illuminate\Support\Str;
 use src\core\Session;
-use Tracy\Debugger;
 use MemCachier\MemcacheSASL as Cache;
-use Tracy\Bar;
 use Decimal\Decimal;
+use DebugBar\StandardDebugBar;
 
 function url(string $path = null): string
 {
@@ -61,6 +60,13 @@ function css(string $path = null): string
     return CONF_URL_BASE . "/assets/css/";
 }
 
+/**
+ * Retorna o caminho para a pasta JS, ou o caminho para um arquivo específico dentro da pasta JS
+ *
+ * @param string path O caminho para o arquivo.
+ *
+ * @return string o caminho para a pasta js.
+ */
 function js(string $path = null): string
 {
     if (Str::contains($_SERVER['HTTP_HOST'], 'localhost')) {
@@ -77,6 +83,11 @@ function js(string $path = null): string
 }
 
 
+/**
+ * Se houver uma mensagem flash, faça eco e retorne null
+ * 
+ * @return ?string null
+ */
 function flash(): ?string
 {
     $session = new Session();
@@ -87,6 +98,9 @@ function flash(): ?string
     return null;
 }
 
+/**
+ * Cria um objeto de solicitação PSR-7 a partir das variáveis ​​globais
+ */
 function getRequest()
 {
     $request = ServerRequestFactory::fromGlobals(
@@ -99,22 +113,32 @@ function getRequest()
     return $request;
 }
 
+/**
+ * Ele cria um novo manipulador de erros Whoops, registra-o, cria um novo DebugBar e cria um novo
+ * DebugBarRenderer
+ */
 function showErrors()
 {
-    Debugger::enable(Debugger::DEVELOPMENT, CONF_ERROR_LOG);
-    Debugger::timer();
-    Debugger::$strictMode = true; // display all errors
-    Debugger::$dumpTheme = 'dark';
-    Debugger::$maxDepth = 100; // default: 7
-    Debugger::$maxLength = 200; // default: 150
-    Debugger::$showLocation = true;
+
+    $whoops = new \Whoops\Run;
+    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+    $whoops->register();
+
+    $_SESSION['debugbar'] = new StandardDebugBar();
+    $_SESSION['debugbarRenderer'] = $_SESSION['debugbar']->getJavascriptRenderer();
 }
 
-function bardump($var, $title = '')
+function debugbar($var)
 {
-    Debugger::barDump($var, $title);
+    $debugbar = $_SESSION['debugbar'];
+    $debugbar["messages"]->addMessage($var);
+    $_SESSION['debugbar'] = $debugbar;
 }
 
+/**
+ * É uma função que recebe um objeto de cache e retorna uma barra de depuração com as estatísticas do cache
+ * @param Cache de cache O objeto de cache.
+ */
 function cacheStats(Cache $cache)
 {
 
@@ -132,20 +156,20 @@ function cacheStats(Cache $cache)
 
 
     if ($limit->div($gigabyte)->compareTo(1) == -1) {
-        bardump([
+        debugbar([
             'Tamanho (MB)' => $limit->div($megabyte)->__toString(),
             'Utilizado (MB)' => $size->div($megabyte)->__toString(),
             'hits' => $hits->__toString(),
             'misses' => $misses->__toString(),
             'itens' => $itens->__toString(),
-        ], __FUNCTION__);
+        ]);
     } else {
-        bardump([
+        debugbar([
             'Tamanho (GB)' => $limit->div($gigabyte)->__toString(),
             'Utilizado (GB)' => $size->div($gigabyte)->__toString(),
             'hits' => $hits->__toString(),
             'misses' => $misses->__toString(),
             'itens' => $itens->__toString(),
-        ], __FUNCTION__);
+        ]);
     }
 }

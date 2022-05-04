@@ -22,11 +22,21 @@
     <link defer href="<?= css('icons.min.css') ?>" rel="stylesheet" type="text/css" />
     <link defer href="<?= css('app.min.css') ?>" rel="stylesheet" type="text/css" id="light-style" />
     <link defer href="<?= css('app-dark.min.css') ?>" rel="stylesheet" type="text/css" id="dark-style" />
+    <?php
+    if (CONF_DEV_MOD) :
+        echo $_SESSION['debugbarRenderer']->setBaseUrl(url('assets/debugbar/Resources'))->renderHead();
+    endif;
+    ?>
 </head>
 
 <body class="loading" data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
 
     <?= $this->section('content') ?>
+    <?php
+    if (CONF_DEV_MOD) :
+        echo $_SESSION['debugbarRenderer']->render();
+    endif;
+    ?>
 </body>
 
 </html>
