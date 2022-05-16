@@ -7,7 +7,6 @@ namespace src\traits\crud;
 use PDOException;
 use PDO;
 
-
 trait connection
 {
 

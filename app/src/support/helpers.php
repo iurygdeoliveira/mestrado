@@ -5,9 +5,9 @@ declare(strict_types=1);
 use Laminas\Diactoros\ServerRequestFactory;
 use Illuminate\Support\Str;
 use src\core\Session;
+use Tracy\Debugger;
 use MemCachier\MemcacheSASL as Cache;
 use Decimal\Decimal;
-use DebugBar\StandardDebugBar;
 
 function url(string $path = null): string
 {
@@ -123,16 +123,12 @@ function showErrors()
     $whoops = new \Whoops\Run;
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
     $whoops->register();
-
-    $_SESSION['debugbar'] = new StandardDebugBar();
-    $_SESSION['debugbarRenderer'] = $_SESSION['debugbar']->getJavascriptRenderer();
 }
 
-function debugbar($var)
+function dumpexit($var)
 {
-    $debugbar = $_SESSION['debugbar'];
-    $debugbar["messages"]->addMessage($var);
-    $_SESSION['debugbar'] = $debugbar;
+    var_dump($var);
+    exit;
 }
 
 /**
@@ -156,7 +152,7 @@ function cacheStats(Cache $cache)
 
 
     if ($limit->div($gigabyte)->compareTo(1) == -1) {
-        debugbar([
+        dump([
             'Tamanho (MB)' => $limit->div($megabyte)->__toString(),
             'Utilizado (MB)' => $size->div($megabyte)->__toString(),
             'hits' => $hits->__toString(),
@@ -164,7 +160,7 @@ function cacheStats(Cache $cache)
             'itens' => $itens->__toString(),
         ]);
     } else {
-        debugbar([
+        dump([
             'Tamanho (GB)' => $limit->div($gigabyte)->__toString(),
             'Utilizado (GB)' => $size->div($gigabyte)->__toString(),
             'hits' => $hits->__toString(),

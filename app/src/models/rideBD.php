@@ -25,13 +25,13 @@ class rideBD extends Model
     public function bootstrap(string $riderID, string $activityID = null)
     {
         $this->table = "rider" . $riderID;
+        $this->rider = $riderID;
 
         if ($activityID) {
             $data = $this->findById(intval($activityID));
 
             if ($data instanceof rideBD) {
                 $this->id = $data->id;
-                $this->nodes = $data->nodes;
             }
         }
     }

@@ -3,6 +3,7 @@
 
         $('#button_carregar_' + rider).hide();
         $('#button_danger_' + rider).hide();
+        $('#button_loading_' + rider).show();
         var data = new FormData();
         data.append('rider', rider);
         data.append('total', total);
@@ -12,7 +13,6 @@
         let index;
         for (index = 1; index <= parseInt(total); index++) {
 
-            $('#button_loading_' + rider).show();
             data.set('atividade', index);
             await axios.post(url, data)
                 .then(function(response) {

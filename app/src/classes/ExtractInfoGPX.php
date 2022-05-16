@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace src\classes;
 
 use src\traits\Date;
-use src\traits\Haversine;
-use Decimal\Decimal;
 use src\traits\Geotools;
-use Exception;
+use src\classes\Regex;
+use src\classes\Math;
+use Decimal\Decimal;
+use stdClass;
 
 class ExtractInfoGPX
 {
 
-    use Date, Haversine, Geotools;
+    use Date, Geotools;
 
     private $xml; // Armazena os dados durante o parseamento de arquivos tcx
 
@@ -22,19 +23,31 @@ class ExtractInfoGPX
         $this->xml = $xml;
     }
 
+    public function getCreator()
+    {
+
+        $results = Regex::match('/creator="[.a-zA-Z ]+"/mius', $this->xml);
+
+        if ($results) {
+
+            if (count($results) >= 1) {
+                $results = $results[0];
+            }
+
+            $search = array("creator=", '"');
+            $replace   = array("", "");
+            return str_replace($search, $replace, $results);
+        } else {
+            return null;
+        }
+    }
+
     public function getNodes()
     {
 
-        $nodes = array();
-        $aux = array();
+        $results = Regex::match('/<([a-z]|[0-9]|[A-Z]|:)+|lat|lon/mius', $this->xml);
 
-        preg_match_all("/<([a-z]|[0-9]|[A-Z]|:)+/mius", $this->xml, $nodes);
-        $nodes = array_unique($nodes[0], SORT_REGULAR);
-
-        preg_match_all("/lat|lon/mius", $this->xml, $aux);
-        $aux = array_unique($aux[0], SORT_REGULAR);
-
-        $nodes = array_merge($nodes, $aux);
+        $nodes = array_unique($results, SORT_REGULAR);
 
         $replace = function ($valor) {
             return str_ireplace('<', '', $valor);
@@ -42,65 +55,64 @@ class ExtractInfoGPX
         $nodes = array_map($replace, $nodes);
 
         $reduce = function ($carry, $item) {
-            $carry .= $item . '-';
+            $carry .= $item . '|';
             return $carry;
         };
 
         $nodes = array_reduce($nodes, $reduce);
+
         return $nodes;
-    }
-
-    public function getCreator()
-    {
-
-        $values = '';
-
-        preg_match_all('/creator="[.a-zA-Z ]+"/mius', $this->xml, $values);
-
-        if (isset($values[0][0]) && !empty($values[0][0])) {
-
-            $search = array("creator=", '"');
-            $replace   = array("", "");
-            return str_replace($search, $replace, $values[0][0]);
-        } else {
-            return null;
-        }
     }
 
     public function getDateTime()
     {
-        $values = '';
 
-        preg_match('/<time>[.0-9a-zA-Z:-]+</mius', $this->xml, $values);
+        $results = Regex::match('/<time>[.0-9a-zA-Z:-]+</mius', $this->xml);
 
-        if (isset($values[0]) && !empty($values[0])) {
+        if ($results) {
 
-            $search = array("<time>", '<');
+            if (count($results) >= 1) {
+                $results = $results[0];
+            }
+
+            $search = array("<time>", "<");
             $replace   = array("", "");
-            $aux = str_replace($search, $replace, $values[0]);
-            return $this->date_fmt_unix($aux);
+            $value = str_replace($search, $replace, $results);
+            return $this->date_fmt_unix($value);
         } else {
             return null;
         }
     }
 
-    public function getLatitudeFirstEnd()
+    public function getLatitudes()
     {
-        $values = '';
-        preg_match_all('/lat="[-.0-9]+"/mius', $this->xml, $values);
 
-        if (isset($values[0]) && !empty($values[0])) {
+        $results = Regex::match('/lat="[-.0-9]+"/mius', $this->xml);
+
+        if ($results) {
 
             $search = array("lat=", '"');
             $replace   = array("", "");
+            $latitudes = str_replace($search, $replace, $results);
 
-            $last = end($values[0]);
-            $last = str_replace($search, $replace, $last);
+            return [$latitudes[0], implode('|', $latitudes)];
+        } else {
+            return null;
+        }
+    }
 
-            $first = $values[0][0];
-            $first = str_replace($search, $replace, $first);
+    public function getLongitudes()
+    {
 
-            return [$first, $last];
+        $results = Regex::match('/lon="[-.0-9]+"/mius', $this->xml);
+
+        if ($results) {
+
+            $search = array("lon=", '"');
+            $replace   = array("", "");
+            $longitudes = str_replace($search, $replace, $results);
+
+            return [$longitudes[0], implode('|', $longitudes)];
         } else {
             return null;
         }
@@ -119,309 +131,375 @@ class ExtractInfoGPX
             $lon = $aux[0];
         }
 
-        $address = $this->getAddressFromGPS(floatval($lat), floatval($lon));
-
-        if ($address instanceof Exception) {
-            return ['Erro ao obter país', 'Erro ao obter cidade', 'Erro ao obter estrada'];
-        }
-
-        if ($address == false) {
-            return [null, null, null];
-        }
-
-        if (!empty($address) && isset($address['municipality'])) {
-            $country = (isset($address['country']) ? $address['country'] : null);
-            $city = (isset($address['municipality']) ? $address['municipality'] : null);
-            $road = (isset($address['road']) ? $address['road'] : null);
-            return [$country, $city, $road];
-        }
-
-        if (!empty($address) && isset($address['town'])) {
-            $country = (isset($address['country']) ? $address['country'] : null);
-            $city = (isset($address['town']) ? $address['town'] : null);
-            $road = (isset($address['road']) ? $address['road'] : null);
-            return [$country, $city, $road];
-        }
-
-        return null;
+        return $this->addressFromGeoTools(floatval($lat), floatval($lon));
     }
 
-    public function getLongitudeFirstEnd()
+    private function percentageAttribute(string $pattern, array $search, array $offset = [])
     {
-        $values = '';
 
-        preg_match_all('/lon="[-.0-9]+"/mius', $this->xml, $values);
+        $results = Regex::match($pattern, $this->xml);
 
-        if (isset($values[0]) && !empty($values[0])) {
+        if ($results) {
 
-            $search = array("lon=", '"');
-            $replace   = array("", "");
+            // Removendo caracteres desnecessários
+            $replace = function ($valor) use ($search) {
 
-            $last = end($values[0]);
-            $last = str_replace($search, $replace, $last);
+                $replace_array = [];
+                foreach ($search as $key => $value) {
+                    array_push($replace_array, "");
+                }
 
-            $first = $values[0][0];
-            $first = str_replace($search, $replace, $first);
+                return str_ireplace($search, $replace_array, $valor);
+            };
+            $attributes = array_map($replace, $results);
 
-            return [$first, $last];
+            // Eliminando resultados que não devem ser considerados
+            if (!empty($offset)) {
+                foreach ($offset as $key => $value) {
+                    unset($attributes[$value]);
+                }
+            }
+
+            $parcial = 0;
+            foreach ($attributes as $key => $value) {
+
+                $value = (empty($value) ? false : true);
+                if ($value) {
+                    $parcial += 1;
+                }
+            }
+
+            $total = $this->getTotalTrackpoints();
+
+            if (!empty($total)) {
+                $porcentagem = Math::porcentagem($parcial, $total);
+                return strval($porcentagem) . '%';
+            } else {
+                return 'Erro no valor total de trackpoints';
+            }
+        }
+    }
+
+    public function getCoordinatesPercentage()
+    {
+
+        $latitudes = $this->percentageAttribute('/lat="[-.0-9]+"/mius', ['lat="', '"']);
+        $longitudes = $this->percentageAttribute('/lon="[-.0-9]+"/mius', ['lon="', '"']);
+
+        if ($latitudes == '100.00%' && $longitudes == '100.00%') {
+            return '100%';
         } else {
-            return null;
+            return 'latitude: ' . $latitudes . ' and longitude: ' . $longitudes;
         }
     }
 
     public function getDuration()
     {
-        $values = '';
+        $results = Regex::match('/<time>[.0-9a-zA-Z:-]+</mius', $this->xml);
 
-        preg_match_all('/<time>[.0-9a-zA-Z:-]+</mius', $this->xml, $values);
+        $duration = new stdClass();
+        $duration->file = null; // Em arquivos GPX não existe registro de duração total
 
-        if (isset($values[0]) && !empty($values[0])) {
+        if ($results) {
 
             $search = array("<time>", '<');
             $replace   = array("", "");
 
-            $last = end($values[0]);
+            $last = end($results);
             $last = str_replace($search, $replace, $last);
 
-            $first = $values[0][1];
+            $first = $results[0];
             $first = str_replace($search, $replace, $first);
 
-            return $this->date_difference($first, $last, '%h:%i:%s');
+            $duration->php = $this->date_difference($first, $last, '%h:%i:%s');
+            return $duration;
         } else {
-            return null;
+            $duration->php = null;
+            return $duration;
         }
+    }
+
+    public function getTimePercentage()
+    {
+        return $this->percentageAttribute('/<time>[.0-9a-zA-Z:-]+</mius', ["<time>", '<'], [1]);
     }
 
     /**
      * Retorna a distância total em kilometros apartir das coordenadas de GPS
      *
-     * @return string|null $distance Distância em kilometros
+     * @return stdClass $distance Distância em kilometros
      */
-    public function getDistance(): string|null
+    public function getDistance(): stdClass
     {
 
+        $distance = new stdClass();
+        $distance->file = null; // Em arquivos GPX não existe registro de distância total
 
-        // Extraindo longitude latitude
-        $values = '';
-        preg_match_all('/lat="[-.0-9]+" lon="[-.0-9]+"/mius', $this->xml, $values);
+        $latitudes = $this->getLatitudes();
+        $longitudes = $this->getLongitudes();
 
-        if (isset($values[0]) && !empty($values[0])) {
+        if (empty($latitudes) || empty($longitudes)) {
 
-            // Removendo caracteres desnecessários
-            $replace = function ($valor) {
-                $search = array("lat=", '"', "lon=");
-                $replace   = array("", "", "");
-                return str_ireplace($search, $replace, $valor);
-            };
-            $values = array_map($replace, $values[0]);
+            $distance->php = null;
+            return $distance;
+        }
+
+        $latitudes = explode('|', $latitudes[1]);
+        $longitudes = explode('|', $longitudes[1]);
+
+        if (count($latitudes) == count($longitudes)) {
 
             // Calculando distancia entre os pontos
             $distances = [];
-            for ($i = 0; $i < count($values) - 1; $i++) {
-                $point1 = explode(' ', $values[$i]); // Latitudes
-                $point2 = explode(' ', $values[$i + 1]); // Longitudes
+            for ($i = 0; $i < count($latitudes) - 1; $i++) {
 
-                array_push($distances, $this->haversine($point1[0], $point2[0], $point1[1], $point2[1]));
+                array_push($distances, Math::haversine($latitudes[$i], $longitudes[$i], $latitudes[$i + 1], $longitudes[$i + 1]));
             }
 
             // Somando as distâncias
-            return Decimal::sum($distances)->toFixed(4);
+            $distance->php = Decimal::sum($distances)->toFixed(4);
+            return $distance;
         }
 
-        // Extraindo longitude latitude
-        $values = '';
-        preg_match_all('/lon="[-.0-9]+" lat="[-.0-9]+"/mius', $this->xml, $values);
-
-        if (isset($values[0]) && !empty($values[0])) {
-
-            // Removendo caracteres desnecessários
-            $replace = function ($valor) {
-                $search = array("lon=", '"', "lat=");
-                $replace   = array("", "", "");
-                return str_ireplace($search, $replace, $valor);
-            };
-            $values = array_map($replace, $values[0]);
-
-            // Calculando distancia entre os pontos
-            $distances = [];
-            for ($i = 0; $i < count($values) - 1; $i++) {
-                $point1 = explode(' ', $values[$i]); // Longitudes
-                $point2 = explode(' ', $values[$i + 1]); // Latitudes
-
-                array_push($distances, $this->haversine($point2[0], $point1[0], $point2[1], $point1[1]));
-            }
-
-            // Somando as distâncias
-            return Decimal::sum($distances)->toFixed(4);
-        }
-
-        return null;
+        $distance->php = null;
+        return $distance;
     }
 
     /**
      * Calcula a velocidade média em km/h
      *
-     * @param string $distance distância em kilometros
-     * @param string $duration tempo em horas:minutos:segundos
-     * @return string|null
+     * @param stdClass $distance distância em kilometros
+     * @param stdClass $duration tempo em horas:minutos:segundos
+     * @return stdClass Velocidade média em km/h
+     *
      */
-    public function getSpeed(string $distance, string $duration): string|null
+    public function getSpeed(stdClass $distance, stdClass $duration): stdClass
     {
-        if (!empty($distance) && !empty($duration)) {
+        $speed = new stdClass();
+        $speed->file = null;
+        $speed->php = null;
 
-            $distance = new Decimal($distance);
-            $duration = explode(':', $duration);
+        if (
+            $distance->php != null &&
+            $distance->php != '0.0000' &&
+            $distance->php != '0' &&
+            $distance->php != 0 &&
+            $duration->php != null &&
+            $duration->php != '0:0:0' &&
+            $duration->php != '0' &&
+            $duration->php != 0
+        ) {
 
-            $hours = new Decimal($duration[0]);
-            $minutes = new Decimal($duration[1]);
-            $seconds = new Decimal($duration[2]);
-
-            $hours = $hours->add($minutes->div(60));
-            $hours = $hours->add($seconds->div(3600));
-
-            return $distance->div($hours)->toFixed(4);
-        } else {
-            return null;
+            $hours = Math::timeToHours($duration->php);
+            $speed->php = Math::div($distance->php, $hours, 4);
         }
+
+        if (
+            $distance->file != null &&
+            $distance->file != '0.0000' &&
+            $distance->file != '0' &&
+            $distance->file != 0 &&
+            $duration->file != null &&
+            $duration->file != '0:0:0' &&
+            $duration->file != '0' &&
+            $duration->file != 0
+        ) {
+
+            $hours = Math::timeToHours($duration->file);
+            $speed->file = Math::div($distance->file, $hours, 4);
+        }
+
+        return $speed;
     }
 
     /**
      * Retorna a cadência
      */
-    public function getCadence(): string|null
+    public function getCadence(): stdClass
     {
 
+        $cadence = new stdClass();
+        $cadence->file = null; // Em arquivos GPX não existe registro de cadência total
+        $cadence->php = null;
 
-        // Extraindo longitude latitude
-        $values = '';
-        preg_match_all('/<gpxtpx:cad>[.0-9]+</mius', $this->xml, $values);
+        $results = Regex::match('/(<gpxtpx:cad>[.0-9]+<)|(<ns3:cad>[.0-9]+<)/mius', $this->xml);
 
-        if (isset($values[0]) && !empty($values[0])) {
-
-            // Removendo caracteres desnecessários
-            $replace = function ($valor) {
-                $search = array("<gpxtpx:cad>", '<');
-                $replace   = array("", "");
-                return str_ireplace($search, $replace, $valor);
-            };
-            $cadences = array_map($replace, $values[0]);
-
-            // Somando as distâncias
-            return Decimal::avg($cadences)->toFixed(4);
-        }
-
-        $values = '';
-        preg_match_all('/<ns3:cad>[.0-9]+</mius', $this->xml, $values);
-        if (isset($values[0]) && !empty($values[0])) {
+        if ($results) {
 
             // Removendo caracteres desnecessários
             $replace = function ($valor) {
-                $search = array("<ns3:cad>", '<');
-                $replace   = array("", "");
+                $search = array("<gpxtpx:cad>", '<', "<ns3:cad>", "ns3:cad>");
+                $replace   = array("", "", "", "");
                 return str_ireplace($search, $replace, $valor);
             };
-            $cadences = array_map($replace, $values[0]);
+            $cadences = array_map($replace, $results);
 
             // Somando as distâncias
-            return Decimal::avg($cadences)->toFixed(4);
+            $cadence->php = Decimal::avg($cadences)->toFixed(4);
+            return $cadence;
         }
 
-        return null;
+        return $cadence;
+    }
+
+    /**
+     * Retorna a porcentagem de cadencia
+     */
+    public function getCadencePercentage()
+    {
+        return $this->percentageAttribute('/(<gpxtpx:cad>[.0-9]+<)|(<ns3:cad>[.0-9]+<)/mius', ["<gpxtpx:cad>", '<', "<ns3:cad>", "ns3:cad>"]);
     }
 
     /**
      * Retorna a Frequência Cardíaca
      */
-    public function getHeartRate(): string|null
+    public function getHeartRate(): object
     {
+        $heartrate = new stdClass();
+        $heartrate->file = null; // Em arquivos GPX não existe registro de cadência total
+        $heartrate->php = null;
 
-        $values = '';
+        $results = Regex::match('/(<gpxtpx:hr>[.0-9]+<)|(<ns3:hr>[.0-9]+)/mius', $this->xml);
 
-        // Extraindo longitude latitude
-        preg_match_all('/<gpxtpx:hr>[.0-9]+</mius', $this->xml, $values);
-
-        if (isset($values[0]) && !empty($values[0])) {
-
-            // Removendo caracteres desnecessários
-            $replace = function ($valor) {
-                $search = array("<gpxtpx:hr>", '<');
-                $replace   = array("", "");
-                return str_ireplace($search, $replace, $valor);
-            };
-            $heartrates = array_map($replace, $values[0]);
-
-            // Somando as distâncias
-            return Decimal::avg($heartrates)->toFixed(4);
-        }
-
-        $values = '';
-        preg_match_all('/<ns3:hr>[.0-9]+</mius', $this->xml, $values);
-        if (isset($values[0]) && !empty($values[0])) {
+        if ($results) {
 
             // Removendo caracteres desnecessários
             $replace = function ($valor) {
-                $search = array("<ns3:hr>", '<');
-                $replace   = array("", "");
+                $search = array("<gpxtpx:hr>", '<', "<ns3:hr>", "ns3:hr>");
+                $replace   = array("", "", "", "");
                 return str_ireplace($search, $replace, $valor);
             };
-            $cadences = array_map($replace, $values[0]);
+            $heartrates = array_map($replace, $results);
 
-            // Somando as distâncias
-            return Decimal::avg($cadences)->toFixed(4);
+            // Média das frequências
+            $heartrate->php = Decimal::avg($heartrates)->toFixed(4);
         }
-        return null;
+
+        return $heartrate;
+    }
+
+    /**
+     * Retorna a porcentagem da frequencia cardiaca
+     */
+    public function getHeartRatePercentage(): string|null
+    {
+        return $this->percentageAttribute('/(<gpxtpx:hr>[.0-9]+<)|(<ns3:hr>[.0-9]+)/mius', ["<gpxtpx:hr>", '<', "<ns3:hr>", "ns3:hr>"]);
     }
 
     /**
      * Retorna a Frequência Cardíaca
      */
-    public function getTemperature(): string|null
+    public function getTemperature(): object
     {
+        $temperature = new stdClass();
+        $temperature->file = null; // Em arquivos GPX não existe registro de temperatura total
+        $temperature->php = null;
 
-        $values = '';
+        $results = Regex::match('/(<gpxtpx:atemp>[.0-9]+<)|(<ns3:atemp>[.0-9]+<)/mius', $this->xml);
 
-        // Extraindo longitude latitude
-        preg_match_all('/<gpxtpx:atemp>[.0-9]+</mius', $this->xml, $values);
-
-        if (isset($values[0]) && !empty($values[0])) {
-
-            // Removendo caracteres desnecessários
-            $replace = function ($valor) {
-                $search = array("<gpxtpx:atemp>", '<');
-                $replace   = array("", "");
-                return str_ireplace($search, $replace, $valor);
-            };
-            $temperatures = array_map($replace, $values[0]);
-
-            // Somando as distâncias
-            return Decimal::avg($temperatures)->toFixed(4);
-        }
-
-        $values = '';
-        preg_match_all('/<ns3:atemp>[.0-9]+</mius', $this->xml, $values);
-        if (isset($values[0]) && !empty($values[0])) {
+        if ($results) {
 
             // Removendo caracteres desnecessários
             $replace = function ($valor) {
-                $search = array("<ns3:atemp>", '<');
+                $search = array("<gpxtpx:atemp>", "<ns3:atemp>", '<');
                 $replace   = array("", "");
                 return str_ireplace($search, $replace, $valor);
             };
-            $cadences = array_map($replace, $values[0]);
+            $temperatures = array_map($replace, $results);
 
             // Somando as distâncias
-            return Decimal::avg($cadences)->toFixed(4);
+            $temperature->php = Decimal::avg($temperatures)->toFixed(4);
         }
 
-        return null;
+        return $temperature;
+    }
+
+    /**
+     * Retorna a porcentagem da Temperatura
+     */
+    public function getTemperaturePercentage(): string|null
+    {
+        return $this->percentageAttribute('/(<gpxtpx:atemp>[.0-9]+<)|(<ns3:atemp>[.0-9]+<)/mius', ["<gpxtpx:atemp>", "<ns3:atemp>", '<']);
     }
 
     /**
      * Nos arquivos GPX não existem Calories
      */
-    public function getCalories(): string|null
+    public function getCalories(): object
+    {
+        $calories = new stdClass();
+        $calories->file = null; // Em arquivos GPX não existe registro de Calorias total
+        $calories->php = null;
+
+        return $calories;
+    }
+
+    public function getCaloriesPercentage()
     {
         return null;
+    }
+
+    public function get_with_threshold(array $elevations)
+    {
+        return null;
+    }
+
+    public function get_without_threshold(array $elevations)
+    {
+
+        $gain = [];
+        $loss = [];
+        for ($i = 0; $i < count($elevations) - 1; $i++) {
+
+            $result = floatval(Math::sub($elevations[$i + 1], $elevations[$i], 4));
+            if ($result > 0) {
+                array_push($gain, strval($result));
+            } else {
+                array_push($loss, strval($result));
+            }
+        }
+
+        $gain_sum = Decimal::sum($gain)->toFixed(4);
+        $loss_sum = Decimal::sum($loss)->toFixed(4);
+
+        return Math::add($gain_sum, $loss_sum, 4);
+    }
+
+    /**
+     * Retorna altitude
+     *
+     * @return object $distance Altitude em metros
+     */
+    public function getAltitude(): object
+    {
+        $elevation = new stdClass();
+        $elevation->file = null; // Em arquivos GPX não existe registro de elevação total
+        $elevation->without_threshold = null;
+        $elevation->with_threshold = null;
+
+        $results = Regex::match('/<ele>[.0-9]+</mius', $this->xml);
+
+        if ($results) {
+
+            // Removendo caracteres desnecessários
+            $replace = function ($valor) {
+                $search = array("<ele>", '<');
+                $replace   = array("", "");
+                return str_ireplace($search, $replace, $valor);
+            };
+            $elevations = array_map($replace, $results);
+
+            // Somando as distâncias
+            $elevation->without_threshold = $this->get_without_threshold($elevations);
+            $elevation->with_threshold = $this->get_with_threshold($elevations);
+        }
+
+        return $elevation;
+    }
+
+    public function getAltitudePercentage(): string|null
+    {
+        return $this->percentageAttribute('/<ele>[.0-9]+</mius', ["<ele>", '<']);
     }
 
     /**
@@ -429,15 +507,11 @@ class ExtractInfoGPX
      */
     public function getTotalTrackpoints(): string|null
     {
-        $values = '';
 
-        // Extraindo longitude latitude
-        preg_match_all('/<trkpt/mius', $this->xml, $values);
+        $results = Regex::match('/<trkpt/mius', $this->xml);
 
-        if (isset($values[0]) && !empty($values[0])) {
-
-            // Somando as distâncias
-            return strval(count($values[0]));
+        if ($results) {
+            return strval(count($results));
         } else {
             return null;
         }
