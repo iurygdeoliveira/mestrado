@@ -9,6 +9,7 @@ use Exception;
 use Geocoder\ProviderAggregator;
 use Geocoder\Provider\GoogleMaps\GoogleMaps as ProviderGoogleMaps;
 use Geocoder\Provider\Nominatim\Nominatim as ProviderOpenStreetMap;
+use Geocoder\Provider\BingMaps\BingMaps as ProviderBingMaps;
 use Http\Adapter\Guzzle7\Client as GuzzleAdapter;
 use League\Geotools\Geotools as GeoLocation;
 use League\Geotools\Coordinate\Coordinate;
@@ -20,33 +21,27 @@ use stdClass;
 trait Geotools
 {
 
-    private function getAddressFromOpenStreetMap(object $data)
+    private function getAddressFromProvider(object $data)
     {
 
         $provider = new stdClass();
-        $aux = $data->getAddress()->getDisplayName();
-        $provider->address = ($aux ? $aux : 'Error getting address');
 
-        $bounds = $data->getAddress()->getBounds()->toArray();
-        $provider->bounds = ($bounds ? 'south ' . $bounds['south'] . '|west ' . $bounds['west'] . '|north ' . $bounds['north'] . '|east ' . $bounds['east'] : 'Error getting bounds'
-        );
+        if (!empty($data->getAddress())) {
+
+            $aux = $data->getAddress()->toArray();
+            $provider->address = ($aux ? $aux['country'] . '|' . $aux['locality'] . '|' . $aux['streetName'] : 'Error getting address');
+
+            $bounds = $data->getAddress()->getBounds()->toArray();
+            $provider->bounds = ($bounds ? 'south ' . $bounds['south'] . '|west ' . $bounds['west'] . '|north ' . $bounds['north'] . '|east ' . $bounds['east'] : 'Error getting bounds'
+            );
+        } else {
+            $provider->address = 'Error getting address';
+            $provider->bounds = 'Error getting bounds';
+        }
 
         return $provider;
     }
 
-    private function getAddressFromGoogle(object $data)
-    {
-
-        $provider = new stdClass();
-        $aux = $data->getAddress()->getFormattedAddress();
-        $provider->address = ($aux ? $aux : 'Error getting address');
-
-        $bounds = $data->getAddress()->getBounds()->toArray();
-        $provider->bounds = ($bounds ? 'south ' . $bounds['south'] . '|west ' . $bounds['west'] . '|north ' . $bounds['north'] . '|east ' . $bounds['east'] : 'Error getting bounds'
-        );
-
-        return $provider;
-    }
 
     public function addressFromGeoTools(float $lat, float $lon)
     {
@@ -54,8 +49,9 @@ trait Geotools
         $httpClient = new GuzzleAdapter();
 
         $geocoder->registerProviders([
-            new ProviderOpenStreetMap($httpClient, 'https://nominatim.openstreetmap.org', 'CycleVis'),
-            new ProviderGoogleMaps($httpClient, null, CONF_GOOGLE_API_KEY),
+            //new ProviderOpenStreetMap($httpClient, 'https://nominatim.openstreetmap.org', 'CycleVis'),
+            //new ProviderGoogleMaps($httpClient, null, CONF_GOOGLE_API_KEY),
+            new ProviderBingMaps($httpClient, CONF_BING_API_KEY)
         ]);
 
         try {
@@ -65,13 +61,13 @@ trait Geotools
                 new Coordinate([$lat, $lon])
             )->parallel();
         } catch (Exception $e) {
-            dumpexit($e->getMessage());
+            dumpexit($e->getMessage(), __LINE__, __FILE__, __FUNCTION__);
         }
 
         $address = new stdClass();
 
         if ($results[0]->getProviderName() == 'nominatim') {
-            $address->openstreetmap = $this->getAddressFromOpenStreetMap($results[0]);
+            $address->openstreetmap = $this->getAddressFromProvider($results[0]);
         } else {
 
             $openstreetmap = new stdClass();
@@ -81,13 +77,23 @@ trait Geotools
         }
 
         if ($results[1]->getProviderName() == 'google_maps') {
-            $address->google = $this->getAddressFromGoogle($results[1]);
+            $address->google = $this->getAddressFromProvider($results[1]);
         } else {
 
             $google = new stdClass();
             $google->address = 'Error getting address';
             $google->bounds = 'Error getting bounds';
             $address->google = $google;
+        }
+
+        if ($results[2]->getProviderName() == 'bing_maps') {
+            $address->bing = $this->getAddressFromProvider($results[2]);
+        } else {
+
+            $bing = new stdClass();
+            $bing->address = 'Error getting address';
+            $bing->bounds = 'Error getting bounds';
+            $address->bing = $bing;
         }
 
         return $address;

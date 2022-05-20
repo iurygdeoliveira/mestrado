@@ -125,9 +125,16 @@ function showErrors()
     $whoops->register();
 }
 
-function dumpexit($var)
+function dumpexit($var, $line, $file, $function)
 {
-    var_dump($var);
+    var_dump(
+        [
+            'function' => $function,
+            'file' => $file,
+            'line' => $line,
+            'var' => $var
+        ]
+    );
     exit;
 }
 

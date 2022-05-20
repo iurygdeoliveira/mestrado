@@ -52,6 +52,7 @@
         "geocoder-php/nominatim-provider": "^5.5",
         "geocoder-php/cache-provider": "^4.3",
         "geocoder-php/chain-provider": "^4.4",
+        "geocoder-php/bing-maps-provider": "^4.2",
         "react/react": "^1.2",
         "php-http/message": "^1.13"
     },
