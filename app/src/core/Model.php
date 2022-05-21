@@ -142,6 +142,14 @@ abstract class Model
         return $find->fetch();
     }
 
+    public function getRowsNumber()
+    {
+
+        $this->query = 'SELECT COUNT(*) FROM ' . $this->table;
+        $result = (array)$this->fetch()->data();
+        return $result['COUNT(*)'];
+    }
+
     public function message()
     {
         return $this->message;

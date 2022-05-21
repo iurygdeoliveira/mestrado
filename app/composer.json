@@ -54,7 +54,8 @@
         "geocoder-php/chain-provider": "^4.4",
         "geocoder-php/bing-maps-provider": "^4.2",
         "react/react": "^1.2",
-        "php-http/message": "^1.13"
+        "php-http/message": "^1.13",
+        "php-curl-class/php-curl-class": "^9.6"
     },
     "require-dev": {
         "fakerphp/faker": "^v1.17.0",

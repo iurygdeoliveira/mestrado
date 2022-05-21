@@ -29,13 +29,13 @@
                              <button type="button" id='button_success_csv' class="btn btn-success" style="display: none;" disabled>Concluido !</button>
                              <button type="button" id='button_danger_csv' class="btn btn-danger" style="display: none;" onclick="exportCSV('<?= $this->e($url_csv) ?>', '<?= $this->e($totalCiclistas) ?>')">Erro (Tentar novamente) </button>
                          </td>
-
                          <td colspan="3" class='text-center'>Status:
                              <span class="progress">
                                  <div class="progress-bar" id='progress_bar_csv' role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                              </span>
                          </td>
                      </tr>
+
                      <tr>
                          <td colspan="4" class="col-12">
                              <h5 class=" card-title text-danger mt-3">Erro</h5>

@@ -13,6 +13,7 @@ use src\classes\LoadRide;
 use src\models\rideBD;
 use Laminas\Diactoros\Response;
 
+
 class readController extends Controller
 {
     use Datasets, responseJson, Csv;
@@ -107,6 +108,7 @@ class readController extends Controller
 
         return $this->responseJson(false, $result, null);
     }
+
 
     // Renderiza a view read
     public function read(): Response

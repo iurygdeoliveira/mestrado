@@ -30,13 +30,8 @@ trait Geotools
 
             $aux = $data->getAddress()->toArray();
             $provider->address = ($aux ? $aux['country'] . '|' . $aux['locality'] . '|' . $aux['streetName'] : 'Error getting address');
-
-            $bounds = $data->getAddress()->getBounds()->toArray();
-            $provider->bounds = ($bounds ? 'south ' . $bounds['south'] . '|west ' . $bounds['west'] . '|north ' . $bounds['north'] . '|east ' . $bounds['east'] : 'Error getting bounds'
-            );
         } else {
             $provider->address = 'Error getting address';
-            $provider->bounds = 'Error getting bounds';
         }
 
         return $provider;
@@ -49,8 +44,8 @@ trait Geotools
         $httpClient = new GuzzleAdapter();
 
         $geocoder->registerProviders([
-            //new ProviderOpenStreetMap($httpClient, 'https://nominatim.openstreetmap.org', 'CycleVis'),
-            //new ProviderGoogleMaps($httpClient, null, CONF_GOOGLE_API_KEY),
+            new ProviderOpenStreetMap($httpClient, 'https://nominatim.openstreetmap.org', 'CycleVis'),
+            new ProviderGoogleMaps($httpClient, null, CONF_GOOGLE_API_KEY),
             new ProviderBingMaps($httpClient, CONF_BING_API_KEY)
         ]);
 
@@ -72,7 +67,6 @@ trait Geotools
 
             $openstreetmap = new stdClass();
             $openstreetmap->address = 'Error getting address';
-            $openstreetmap->bounds = 'Error getting bounds';
             $address->openstreetmap = $openstreetmap;
         }
 
@@ -82,7 +76,6 @@ trait Geotools
 
             $google = new stdClass();
             $google->address = 'Error getting address';
-            $google->bounds = 'Error getting bounds';
             $address->google = $google;
         }
 
@@ -92,7 +85,6 @@ trait Geotools
 
             $bing = new stdClass();
             $bing->address = 'Error getting address';
-            $bing->bounds = 'Error getting bounds';
             $address->bing = $bing;
         }
 

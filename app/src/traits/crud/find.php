@@ -23,4 +23,10 @@ trait find
         $find = $this->find("id = :id", "id={$id}", $columns);
         return $find->fetch();
     }
+
+    public function findRowsNumber()
+    {
+        $this->query = 'SELECT COUNTS(*) FROM ' . $this->table;
+        return $this;
+    }
 }

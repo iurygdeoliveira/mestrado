@@ -101,18 +101,18 @@ class LoadRide
         //     $this->ride->address_google = (isset($result->google->address) ? $result->google->address : null);
         //     $this->ride->address_bing = (isset($result->bing->address) ? $result->bing->address : null);
         //     $this->ride->address_strava = (isset($result->strava->address) ? $result->strava->address : null);
-        //     $this->ride->bounds_openstreetmap = (isset($result->openstreetmap->bounds) ? $result->openstreetmap->bounds : null);
-        //     $this->ride->bounds_google = (isset($result->google->bounds) ? $result->google->bounds : null);
-        //     $this->ride->bounds_bing = (isset($result->bing->bounds) ? $result->bing->bounds : null);
         // } else {
         //     $this->ride->address_openstreetmap =  null;
         //     $this->ride->address_google = null;
         //     $this->ride->address_bing = null;
         //     $this->ride->address_strava = null;
-        //     $this->ride->bounds_openstreetmap = null;
-        //     $this->ride->bounds_google = null;
-        //     $this->ride->bounds_bing = null;
         // }
+
+        if (($this->ride->latitude_inicial != null) && ($this->ride->longitude_inicial != null)) {
+            $this->ride->bbox = $this->info->getBbox($this->ride->latitudes, $this->ride->longitudes);
+        } else {
+            $this->ride->bbox = null;
+        }
 
         // $duration = $this->info->getDuration();
         // $this->ride->duration_file = $duration->file;

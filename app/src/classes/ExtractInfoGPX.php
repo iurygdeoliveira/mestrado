@@ -10,6 +10,8 @@ use src\classes\Regex;
 use src\classes\Math;
 use Decimal\Decimal;
 use stdClass;
+use League\Geotools\Polygon\Polygon;
+use League\Geotools\Coordinate\Coordinate;
 
 class ExtractInfoGPX
 {
@@ -190,6 +192,37 @@ class ExtractInfoGPX
             return '100%';
         } else {
             return 'latitude: ' . $latitudes . ' and longitude: ' . $longitudes;
+        }
+    }
+
+    public function getBbox(string $latitudes, string $longitudes)
+    {
+        // Convertendo string para array
+        $latitudes = explode('|', $latitudes);
+        $longitudes = explode('|', $longitudes);
+
+        // Convertendo valores para float
+        $convert = function ($valor) {
+            return floatval($valor);
+        };
+        $latitudes = array_map($convert, $latitudes);
+        $longitudes = array_map($convert, $longitudes);
+
+        // Montando Poligono
+        if (count($latitudes) == count($longitudes)) {
+            $coordinates = [];
+            foreach ($latitudes as $key => $latitude) {
+                array_push($coordinates, new Coordinate([$latitude, $longitudes[$key]]));
+            }
+
+            $polygon = new Polygon($coordinates);
+            $east = $polygon->getBoundingBox()->getEast();
+            $north = $polygon->getBoundingBox()->getNorth();
+            $west = $polygon->getBoundingBox()->getWest();
+            $south = $polygon->getBoundingBox()->getSouth();
+            return 'north ' . $north . '|south ' . $south . '|east ' . $east . '|west ' . $west;
+        } else {
+            return null;
         }
     }
 
