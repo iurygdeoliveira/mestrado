@@ -46,7 +46,6 @@
         "respect/validation": "^2.2",
         "psr/container": "^2.0",
         "memcachier/php-memcache-sasl": "^1.0",
-        "biscolab/google-maps-php-sdk": "^0.9.0",
         "php-http/guzzle7-adapter": "^1.0",
         "geocoder-php/google-maps-provider": "^4.6",
         "geocoder-php/nominatim-provider": "^5.5",
@@ -55,7 +54,8 @@
         "geocoder-php/bing-maps-provider": "^4.2",
         "react/react": "^1.2",
         "php-http/message": "^1.13",
-        "php-curl-class/php-curl-class": "^9.6"
+        "php-curl-class/php-curl-class": "^9.6",
+        "netresearch/jsonmapper": "^4.0"
     },
     "require-dev": {
         "fakerphp/faker": "^v1.17.0",

@@ -67,9 +67,10 @@ class LoadRide
 
 
         // Salvando dados da corrida no BD
-        // $this->ride->creator = $this->info->getCreator();
-        // $this->ride->nodes = $this->info->getNodes();
-        // $this->ride->datetime = $this->info->getDateTime();
+
+        $this->ride->creator = $this->info->getCreator();
+        $this->ride->nodes = $this->info->getNodes();
+        $this->ride->datetime = $this->info->getDateTime();
 
         // Latitudes
         $latitudes = $this->info->getLatitudes();
@@ -92,21 +93,21 @@ class LoadRide
             $this->ride->longitude_inicial = null;
             $this->ride->longitudes = null;
         }
-        //$this->ride->coordinates_percentage = $this->info->getCoordinatesPercentage();
+        $this->ride->coordinates_percentage = $this->info->getCoordinatesPercentage();
 
-        // if (($this->ride->latitude_inicial != null) && ($this->ride->longitude_inicial != null)) {
+        if (($this->ride->latitude_inicial != null) && ($this->ride->longitude_inicial != null)) {
 
-        //     $result = $this->info->getAddress($this->ride->latitude_inicial, $this->ride->longitude_inicial);
-        //     $this->ride->address_openstreetmap = (isset($result->openstreetmap->address) ? $result->openstreetmap->address : null);
-        //     $this->ride->address_google = (isset($result->google->address) ? $result->google->address : null);
-        //     $this->ride->address_bing = (isset($result->bing->address) ? $result->bing->address : null);
-        //     $this->ride->address_strava = (isset($result->strava->address) ? $result->strava->address : null);
-        // } else {
-        //     $this->ride->address_openstreetmap =  null;
-        //     $this->ride->address_google = null;
-        //     $this->ride->address_bing = null;
-        //     $this->ride->address_strava = null;
-        // }
+            $result = $this->info->getAddress($this->ride->latitude_inicial, $this->ride->longitude_inicial);
+            $this->ride->address_openstreetmap = (isset($result->openstreetmap->address) ? $result->openstreetmap->address : null);
+            $this->ride->address_google = (isset($result->google->address) ? $result->google->address : null);
+            $this->ride->address_bing = (isset($result->bing->address) ? $result->bing->address : null);
+            $this->ride->address_strava = (isset($result->strava->address) ? $result->strava->address : null);
+        } else {
+            $this->ride->address_openstreetmap =  null;
+            $this->ride->address_google = null;
+            $this->ride->address_bing = null;
+            $this->ride->address_strava = null;
+        }
 
         if (($this->ride->latitude_inicial != null) && ($this->ride->longitude_inicial != null)) {
             $this->ride->bbox = $this->info->getBbox($this->ride->latitudes, $this->ride->longitudes);
@@ -114,42 +115,58 @@ class LoadRide
             $this->ride->bbox = null;
         }
 
-        // $duration = $this->info->getDuration();
-        // $this->ride->duration_file = $duration->file;
-        // $this->ride->duration_php = $duration->php;
-        // $this->ride->time_percentage = $this->info->getTimePercentage();
+        // if (($this->ride->latitude_inicial != null) && ($this->ride->longitude_inicial != null)) {
+
+        //     $elevation = $this->info->getElevation($this->ride->latitudes, $this->ride->longitudes);
+        //     $this->ride->elevation_file = (isset($elevation->file) ? $elevation->file : null);
+        //     $this->ride->elevation_google = (isset($elevation->google) ? $elevation->google : null);
+        //     $this->ride->elevation_bing = (isset($elevation->bing) ? $elevation->bing : null);
+        //     $this->ride->elevation_srtm = (isset($elevation->srtm) ? $elevation->srtm : null);
+        //     $this->ride->elevation_percentage = $this->info->getelevationPercentage();
+        // } else {
+        //     $this->ride->elevation_file = null;
+        //     $this->ride->elevation_google = null;
+        //     $this->ride->elevation_bing = null;
+        //     $this->ride->elevation_srtm = null;
+        //     $this->ride->elevation_percentage = null;
+        // }
+
+        $duration = $this->info->getDuration();
+        $this->ride->duration_file = $duration->file;
+        $this->ride->duration_php = $duration->php;
+        $this->ride->time_percentage = $this->info->getTimePercentage();
 
 
-        // $distance = $this->info->getDistance();
-        // $this->ride->distance_file = $distance->file;
-        // $this->ride->distance_php = $distance->php;
+        $distance = $this->info->getDistance();
+        $this->ride->distance_file = $distance->file;
+        $this->ride->distance_php = $distance->php;
 
-        // $speed = $this->info->getSpeed(
-        //     $distance,
-        //     $duration
-        // );
-        // $this->ride->speed_file = $speed->file;
-        // $this->ride->speed_php = $speed->php;
+        $speed = $this->info->getSpeed(
+            $distance,
+            $duration
+        );
+        $this->ride->speed_file = $speed->file;
+        $this->ride->speed_php = $speed->php;
 
-        // $cadence = $this->info->getCadence();
-        // $this->ride->cadence_file = $cadence->file;
-        // $this->ride->cadence_php = $cadence->php;
-        // $this->ride->cadence_percentage = $this->info->getCadencePercentage();
+        $cadence = $this->info->getCadence();
+        $this->ride->cadence_file = $cadence->file;
+        $this->ride->cadence_php = $cadence->php;
+        $this->ride->cadence_percentage = $this->info->getCadencePercentage();
 
-        // $heartrate = $this->info->getHeartRate();
-        // $this->ride->heartrate_file = $heartrate->file;
-        // $this->ride->heartrate_php = $heartrate->php;
-        // $this->ride->heartrate_percentage = $this->info->getHeartRatePercentage();
+        $heartrate = $this->info->getHeartRate();
+        $this->ride->heartrate_file = $heartrate->file;
+        $this->ride->heartrate_php = $heartrate->php;
+        $this->ride->heartrate_percentage = $this->info->getHeartRatePercentage();
 
-        // $temperature = $this->info->getTemperature();
-        // $this->ride->temperature_file = $temperature->file;
-        // $this->ride->temperature_php = $temperature->php;
-        // $this->ride->temperature_percentage = $this->info->getTemperaturePercentage();
+        $temperature = $this->info->getTemperature();
+        $this->ride->temperature_file = $temperature->file;
+        $this->ride->temperature_php = $temperature->php;
+        $this->ride->temperature_percentage = $this->info->getTemperaturePercentage();
 
-        // $calories = $this->info->getCalories();
-        // $this->ride->calories_file = $calories->file;
-        // $this->ride->calories_php = $calories->php;
-        // $this->ride->calories_percentage = $this->info->getCaloriesPercentage();
+        $calories = $this->info->getCalories();
+        $this->ride->calories_file = $calories->file;
+        $this->ride->calories_php = $calories->php;
+        $this->ride->calories_percentage = $this->info->getCaloriesPercentage();
 
         // if (($this->ride->latitude_inicial != null) && ($this->ride->longitude_inicial != null)) {
 
@@ -165,7 +182,7 @@ class LoadRide
         //     $this->ride->altitude_percentage = null;
         // }
 
-        // $this->ride->total_trackpoints = $this->info->getTotalTrackpoints();
+        $this->ride->total_trackpoints = $this->info->getTotalTrackpoints();
 
         set_time_limit(30);
         if ($this->ride->save()) {

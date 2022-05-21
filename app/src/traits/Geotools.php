@@ -14,12 +14,15 @@ use Http\Adapter\Guzzle7\Client as GuzzleAdapter;
 use League\Geotools\Geotools as GeoLocation;
 use League\Geotools\Coordinate\Coordinate;
 use Cache\Adapter\PHPArray\ArrayCachePool;
-use Geocoder\Dumper\WktDumper;
-
 use stdClass;
+use Curl\Curl;
+use src\classes\Regex;
+
 
 trait Geotools
 {
+
+    use Date;
 
     private function getAddressFromProvider(object $data)
     {
@@ -36,7 +39,6 @@ trait Geotools
 
         return $provider;
     }
-
 
     public function addressFromGeoTools(float $lat, float $lon)
     {
@@ -89,5 +91,57 @@ trait Geotools
         }
 
         return $address;
+    }
+
+    public function elevationFromGoogle(array $lat, array $lon)
+    {
+
+        $provider = new stdClass();
+
+        if (count($lat) == count($lon)) {
+            $data = [];
+
+            // Quantidade de requisições para o Google elevation API
+            // deve ser até 6000 por minuto
+
+            foreach ($lat as $key => $value) {
+
+                $url = 'https://maps.googleapis.com/maps/api/elevation/xml?locations=' . $lat[$key] . '%2C' . $lon[$key] . '&key=' . CONF_GOOGLE_API_KEY;
+                $curl = new Curl();
+                $curl->get($url);
+
+                if ($curl->error) {
+                    array_push($data, 'error');
+                    //echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
+                } else {
+
+                    $response = json_encode($curl->response);
+                    $response = Regex::match('/elevation":[.0-9]+/mius', $response);
+                    $response = str_replace('elevation":', "", $response);
+                    array_push($data, $response);
+                    // dumpexit($data, __LINE__, __FILE__, __FUNCTION__);
+                }
+            }
+
+            $reduce = function ($carry, $item) {
+                $carry .= $item . '|';
+                return $carry;
+            };
+
+            return array_reduce($data, $reduce);
+        } else {
+            return null;
+        }
+    }
+
+    public function elevationFromGeoTools(array $lat, array $lon)
+    {
+
+        $elevations = new stdClass();
+        $elevations->google = $this->elevationFromGoogle($lat, $lon);
+        $elevations->bing = null;
+        $elevations->srtm = null;
+
+        return $elevations;
     }
 }
