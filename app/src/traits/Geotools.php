@@ -96,30 +96,63 @@ trait Geotools
     public function elevationFromGoogle(array $lat, array $lon)
     {
 
-        $provider = new stdClass();
 
         if (count($lat) == count($lon)) {
             $data = [];
 
             // Quantidade de requisições para o Google elevation API
             // deve ser até 6000 por minuto
-
             foreach ($lat as $key => $value) {
+                array_push($data, "$lat[$key]%2C$lon[$key]");
+            }
 
-                $url = 'https://maps.googleapis.com/maps/api/elevation/xml?locations=' . $lat[$key] . '%2C' . $lon[$key] . '&key=' . CONF_GOOGLE_API_KEY;
+            // Montando bloco de pontos para realizar a requisição
+            $data = array_chunk($data, 510);
+
+            $coordinates = [];
+            foreach ($data as $key => $value) {
+
+                $reduce = function ($carry, $item) {
+                    $carry .= $item . '%7C';
+                    return $carry;
+                };
+
+                $reduzido = array_reduce($data[$key], $reduce);
+                $reduzido = substr($reduzido, 0, -3);
+                array_push($coordinates, $reduzido);
+            }
+
+            //dumpexit(strlen($coordinates[0]), __LINE__, __FILE__, __FUNCTION__);
+
+            $result = [];
+            foreach ($coordinates as $key => $value) {
+
+                $url = 'https://maps.googleapis.com/maps/api/elevation/json?locations=' . $coordinates[$key] . '&key=' . CONF_GOOGLE_API_KEY;
+
                 $curl = new Curl();
                 $curl->get($url);
 
                 if ($curl->error) {
-                    array_push($data, 'error');
-                    //echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
+                    array_push($result, 'error');
+                    dumpexit('Error: ' . $curl->errorCode . ': ' . $curl->errorMessage, __LINE__, __FILE__, __FUNCTION__);
                 } else {
 
-                    $response = json_encode($curl->response);
-                    $response = Regex::match('/elevation":[.0-9]+/mius', $response);
-                    $response = str_replace('elevation":', "", $response);
-                    array_push($data, $response);
-                    // dumpexit($data, __LINE__, __FILE__, __FUNCTION__);
+                    $response = $curl->response;
+                    array_push($result, json_encode($response));
+                }
+            }
+
+            $elevations = [];
+            foreach ($result as $key => $value) {
+
+                $matches = Regex::match('/"elevation":[.0-9]+/mius', $result[$key]);
+
+                if ($matches) {
+                    $search = array('elevation":', '"');
+                    $replace   = array("", "");
+                    $elevations = array_merge($elevations, str_replace($search, $replace, $matches));
+                } else {
+                    array_push($elevations, 'error');
                 }
             }
 
@@ -128,7 +161,7 @@ trait Geotools
                 return $carry;
             };
 
-            return array_reduce($data, $reduce);
+            return array_reduce($elevations, $reduce);
         } else {
             return null;
         }

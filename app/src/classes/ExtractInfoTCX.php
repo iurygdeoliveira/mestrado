@@ -221,6 +221,55 @@ class ExtractInfoTCX
         }
     }
 
+    public function getElevation(string $latitudes, string $longitudes)
+    {
+        $elevation = new stdClass();
+        $elevation->file = $this->getElevationFile();
+
+        $latitudes = explode('|', $latitudes);
+        $longitudes = explode('|', $longitudes);
+
+        $data = $this->elevationFromGeoTools($latitudes, $longitudes);
+        $elevation->google = $data->google;
+        $elevation->bing = $data->bing;
+        $elevation->srtm = $data->srtm;
+
+        return $elevation;
+    }
+
+    public function getElevationFile()
+    {
+
+        $results = Regex::match('/<AltitudeMeters>[.0-9]+</mius', $this->xml);
+
+        if ($results) {
+
+            // Removendo caracteres desnecessários
+            $replace = function ($valor) {
+                $search = array("<AltitudeMeters>", '<');
+                $replace   = array("", "");
+                return str_ireplace($search, $replace, $valor);
+            };
+            $elevations = array_map($replace, $results);
+
+            // Transformando em string
+            $reduce = function ($carry, $item) {
+                $carry .= $item . '|';
+                return $carry;
+            };
+            $elevations = array_reduce($elevations, $reduce);
+
+            return $elevations;
+        }
+
+        return null;
+    }
+
+    public function getElevationPercentage(): string|null
+    {
+        return $this->percentageAttribute('/<AltitudeMeters>[.0-9]+</mius', ["<AltitudeMeters>", '<']);
+    }
+
     public function getDuration()
     {
 
