@@ -42,7 +42,7 @@ trait Geotools
         $httpClient = new GuzzleAdapter();
 
         $geocoder->registerProviders([
-            new ProviderOpenStreetMap($httpClient, 'https://nominatim.openstreetmap.org', 'CycleVis')
+            new ProviderOpenStreetMap($httpClient, CONF_URL_OPEN_STREET_MAP, 'CycleVis')
         ]);
 
         try {
@@ -68,7 +68,7 @@ trait Geotools
         $httpClient = new GuzzleAdapter();
 
         $geocoder->registerProviders([
-            new ProviderGoogleMaps($httpClient, null, CONF_GOOGLE_API_KEY)
+            new ProviderGoogleMaps($httpClient, null, $_ENV['CONF_GOOGLE_API_KEY'])
         ]);
 
         try {
@@ -94,7 +94,7 @@ trait Geotools
         $httpClient = new GuzzleAdapter();
 
         $geocoder->registerProviders([
-            new ProviderBingMaps($httpClient, CONF_BING_API_KEY)
+            new ProviderBingMaps($httpClient, $_ENV['CONF_BING_API_KEY'])
         ]);
 
         try {
@@ -158,7 +158,7 @@ trait Geotools
             $result = [];
             foreach ($coordinates as $key => $value) {
 
-                $url = 'https://maps.googleapis.com/maps/api/elevation/json?locations=' . $coordinates[$key] . '&key=' . CONF_GOOGLE_API_KEY;
+                $url = CONF_URL_ELEVATION_GOOGLE . $coordinates[$key] . '&key=' . $_ENV['CONF_GOOGLE_API_KEY'];
 
                 $curl = new Curl();
                 $curl->get($url);
@@ -242,7 +242,7 @@ trait Geotools
             $result = [];
             foreach ($coordinates as $key => $value) {
 
-                $url = 'https://dev.virtualearth.net/REST/v1/Elevation/List?points=' . $value . '&heights=sealevel&key=' . CONF_BING_API_KEY;
+                $url = CONF_URL_ELEVATION_BING . $value . '&heights=sealevel&key=' . $_ENV['CONF_BING_API_KEY'];
 
                 $curl = new Curl();
                 $curl->get($url);

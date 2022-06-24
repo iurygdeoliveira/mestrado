@@ -7,15 +7,9 @@ namespace src\traits;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Rules;
 use ReCaptcha\ReCaptcha;
-use Ramsey\Uuid\Uuid;
 
 trait Validate
 {
-
-    public function uuid_valid(string $uuid): bool
-    {
-        return Uuid::isValid($uuid);
-    }
 
     public function email_valid(string $email): bool
     {
@@ -168,27 +162,5 @@ trait Validate
     public function onlyText(string $text): bool
     {
         return v::regex('/[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]/')->validate($text);
-    }
-
-    public function recaptcha_valid(string $codeRecaptcha): bool
-    {
-
-
-        $recaptcha = new ReCaptcha(CONF_RECAPTCHA_PRIVATE_KEY);
-
-        $response = $recaptcha
-            ->setExpectedHostname(CONF_RECAPTCHA_HOSTNAME)
-            ->setExpectedAction('registry')
-            ->setScoreThreshold(CONF_RECAPTCHA_MINIMUN_SCORE)
-            ->verify($codeRecaptcha, $_SERVER["REMOTE_ADDR"]);
-
-
-        if ($response->isSuccess()) {
-            // dump($response);
-            return true;
-        } else {
-            // dump($response);
-            return false;
-        }
     }
 }
