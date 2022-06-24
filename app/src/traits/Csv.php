@@ -121,7 +121,7 @@ trait Csv
 
             if ($header == false && $mode == 'a') {
 
-                $writer->insertAll($data);
+                $writer->insertOne($data);
                 return true;
             }
         } catch (CannotInsertRecord $e) {

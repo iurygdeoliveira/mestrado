@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Laminas\Diactoros\ServerRequestFactory;
 use Illuminate\Support\Str;
 use src\core\Session;
-use Tracy\Debugger;
 use MemCachier\MemcacheSASL as Cache;
 use Decimal\Decimal;
 
@@ -30,56 +29,43 @@ function url_back(): string
     return ($_SERVER['HTTP_REFERER'] ?? url());
 }
 
-function img(string $path = null): string
+/**
+ * It returns the path to the asset folder, and if you pass a path, it will return the path to the
+ * asset folder + the path you passed
+ * 
+ * @param string path The path to the file you want to access.
+ * @param string asset The name of the asset folder.
+ * 
+ * @return string the path of the asset.
+ */
+function path(string $path = null, string $asset): string
 {
     if (Str::contains($_SERVER['HTTP_HOST'], 'localhost')) {
         if ($path) {
-            return CONF_URL_TEST . "/assets/img/" . ($path[0] == "/" ? mb_substr($path, 1) : $path);
+            return CONF_URL_TEST . "/assets/$asset/" . ($path[0] == "/" ? mb_substr($path, 1) : $path);
         }
-        return CONF_URL_TEST . "/assets/img/";
+        return CONF_URL_TEST . "/assets/$asset/";
     }
 
     if ($path) {
-        return CONF_URL_BASE . "/assets/img/" . ($path[0] == "/" ? mb_substr($path, 1) : $path);
+        return CONF_URL_BASE . "/assets/$asset/" . ($path[0] == "/" ? mb_substr($path, 1) : $path);
     }
-    return CONF_URL_BASE . "/assets/img/";
+    return CONF_URL_BASE . "/assets/$asset/";
+}
+
+function img(string $path = null): string
+{
+    return path($path, "img");
 }
 
 function css(string $path = null): string
 {
-    if (Str::contains($_SERVER['HTTP_HOST'], 'localhost')) {
-        if ($path) {
-            return CONF_URL_TEST . "/assets/css/" . ($path[0] == "/" ? mb_substr($path, 1) : $path);
-        }
-        return CONF_URL_TEST . "/assets/css/";
-    }
-
-    if ($path) {
-        return CONF_URL_BASE . "/assets/css/" . ($path[0] == "/" ? mb_substr($path, 1) : $path);
-    }
-    return CONF_URL_BASE . "/assets/css/";
+    return path($path, "css");
 }
 
-/**
- * Retorna o caminho para a pasta JS, ou o caminho para um arquivo específico dentro da pasta JS
- *
- * @param string path O caminho para o arquivo.
- *
- * @return string o caminho para a pasta js.
- */
 function js(string $path = null): string
 {
-    if (Str::contains($_SERVER['HTTP_HOST'], 'localhost')) {
-        if ($path) {
-            return CONF_URL_TEST . "/assets/js/" . ($path[0] == "/" ? mb_substr($path, 1) : $path);
-        }
-        return CONF_URL_TEST . "/assets/js/";
-    }
-
-    if ($path) {
-        return CONF_URL_BASE . "/assets/js/" . ($path[0] == "/" ? mb_substr($path, 1) : $path);
-    }
-    return CONF_URL_BASE . "/assets/js/";
+    return path($path, "js");
 }
 
 
@@ -127,6 +113,10 @@ function showErrors()
 
 function dumpexit($var, $line, $file, $function)
 {
+    ini_set("xdebug.var_display_max_children", '-1');
+    ini_set("xdebug.var_display_max_data", '-1');
+    ini_set("xdebug.var_display_max_depth", '-1');
+
     var_dump(
         [
             'function' => $function,
@@ -175,4 +165,32 @@ function cacheStats(Cache $cache)
             'itens' => $itens->__toString(),
         ]);
     }
+}
+
+/**
+ *Gera um token aleatório, armazena-o na sessão e retorna um hash do token
+ *
+ *@return string|false hash de um token aleatório.
+ */
+function csrf()
+{
+    $token = bin2hex(random_bytes(32));
+    $_SESSION['csrf_token'] = $token;
+    return hash('sha256', $token);
+}
+
+/**
+ *Se o token for válido, desmarque-o e retorne true, caso contrário, retorne false
+ *
+ *@param string token O token a ser validado.
+ *
+ *@return bool Um valor booleano.
+ */
+function validateCsrf(string $token)
+{
+    if (isset($_SESSION['csrf_token']) && hash('sha256', $_SESSION['csrf_token']) === $token) {
+        unset($_SESSION['csrf_token']);
+        return true;
+    }
+    return false;
 }

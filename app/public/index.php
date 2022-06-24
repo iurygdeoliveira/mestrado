@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 // Autoload do Composer
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -11,7 +9,6 @@ use League\Route\Router;
 use src\core\Session;
 use src\core\Response;
 use MemCachier\MemcacheSASL as Cache;
-
 
 // $m = new Cache();
 // $m->addServer('memcached', 11211);

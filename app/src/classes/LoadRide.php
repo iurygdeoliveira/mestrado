@@ -26,8 +26,7 @@ class LoadRide
 
         $this->dataset = $dataset;
         $this->riderID = $riderID;
-        $this->ride = new rideBD();
-        $this->ride->bootstrap($riderID, $activityID);
+        $this->ride = (new rideBD())->bootstrap($riderID, $activityID);
     }
 
     public function fileExists(string $filename)
@@ -66,69 +65,94 @@ class LoadRide
         };
 
 
-        // // Salvando dados da corrida no BD
+        // Salvando dados da corrida no BD
 
-        // $this->ride->creator = $this->info->getCreator();
-        // $this->ride->nodes = $this->info->getNodes();
-        // $this->ride->datetime = $this->info->getDateTime();
+        if (empty($this->ride->creator)) {
+            $this->ride->creator = $this->info->getCreator();
+        }
+
+        if (empty($this->ride->nodes)) {
+            $this->ride->creator = $this->info->getNodes();
+        }
+
+        if (empty($this->ride->datetime)) {
+            $this->ride->datetime = $this->info->getDateTime();
+        }
 
         // Latitudes
-        $latitudes = $this->info->getLatitudes();
+        if (empty($this->ride->latitudes)) {
 
-        if ($latitudes) {
-            $this->ride->latitude_inicial = $latitudes[0];
-            $this->ride->latitudes = $latitudes[1];
-        } else {
-            $this->ride->latitude_inicial = null;
-            $this->ride->latitudes = null;
+            $latitudes = $this->info->getLatitudes();
+            if ($latitudes) {
+                $this->ride->latitude_inicial = $latitudes[0];
+                $this->ride->latitudes = $latitudes[1];
+            } else {
+                $this->ride->latitude_inicial = null;
+                $this->ride->latitudes = null;
+            }
         }
 
         // Longitudes
-        $longitudes = $this->info->getLongitudes();
+        if (empty($this->ride->longitudes)) {
 
-        if ($longitudes) {
-            $this->ride->longitude_inicial = $longitudes[0];
-            $this->ride->longitudes = $longitudes[1];
-        } else {
-            $this->ride->longitude_inicial = null;
-            $this->ride->longitudes = null;
+            $longitudes = $this->info->getLongitudes();
+            if ($longitudes) {
+                $this->ride->longitude_inicial = $longitudes[0];
+                $this->ride->longitudes = $longitudes[1];
+            } else {
+                $this->ride->longitude_inicial = null;
+                $this->ride->longitudes = null;
+            }
         }
-        // $this->ride->coordinates_percentage = $this->info->getCoordinatesPercentage();
 
-        // if (($this->ride->latitude_inicial != null) && ($this->ride->longitude_inicial != null)) {
+        if (
+            empty($this->ride->coordinates_percentage) &&
+            !empty($this->ride->latitudes) &&
+            !empty($this->ride->longitudes)
+        ) {
+            $this->ride->coordinates_percentage = $this->info->getCoordinatesPercentage();
+        }
 
-        //     $result = $this->info->getAddress($this->ride->latitude_inicial, $this->ride->longitude_inicial);
-        //     $this->ride->address_openstreetmap = (isset($result->openstreetmap->address) ? $result->openstreetmap->address : null);
-        //     $this->ride->address_google = (isset($result->google->address) ? $result->google->address : null);
-        //     $this->ride->address_bing = (isset($result->bing->address) ? $result->bing->address : null);
-        //     $this->ride->address_strava = (isset($result->strava->address) ? $result->strava->address : null);
-        // } else {
-        //     $this->ride->address_openstreetmap =  null;
-        //     $this->ride->address_google = null;
-        //     $this->ride->address_bing = null;
-        //     $this->ride->address_strava = null;
-        // }
+        if (
+            !empty($this->ride->latitude_inicial) &&
+            !empty($this->ride->longitude_inicial)
+        ) {
 
-        // if (($this->ride->latitude_inicial != null) && ($this->ride->longitude_inicial != null)) {
-        //     $this->ride->bbox = $this->info->getBbox($this->ride->latitudes, $this->ride->longitudes);
-        // } else {
-        //     $this->ride->bbox = null;
-        // }
+            if (empty($this->ride->address_openstreetmap)) {
+                $this->ride->address_openstreetmap = $this->info->getAddressOSM($this->ride->latitude_inicial, $this->ride->longitude_inicial);
+            }
 
-        if (($this->ride->latitude_inicial != null) && ($this->ride->longitude_inicial != null)) {
+            if (empty($this->ride->address_google)) {
+                $this->ride->address_google = $this->info->getAddressGoogle($this->ride->latitude_inicial, $this->ride->longitude_inicial);
+            }
 
-            $elevation = $this->info->getElevation($this->ride->latitudes, $this->ride->longitudes);
-            $this->ride->elevation_file = (isset($elevation->file) ? $elevation->file : null);
-            $this->ride->elevation_google = (isset($elevation->google) ? $elevation->google : null);
-            $this->ride->elevation_bing = (isset($elevation->bing) ? $elevation->bing : null);
-            $this->ride->elevation_srtm = (isset($elevation->srtm) ? $elevation->srtm : null);
-            $this->ride->elevation_percentage = $this->info->getelevationPercentage();
+            if (empty($this->ride->address_bing)) {
+                $this->ride->address_bing = $this->info->getAddressBing($this->ride->latitude_inicial, $this->ride->longitude_inicial);
+            }
+
+            if (empty($this->ride->bbox)) {
+                $this->ride->bbox = $this->info->getBbox($this->ride->latitudes, $this->ride->longitudes);
+            }
+
+            if (empty($this->ride->elevation_file)) {
+                $this->ride->elevation_file = $this->info->getElevationFile();
+            }
+
+            if (empty($this->ride->elevation_google)) {
+                $this->ride->elevation_google = $this->info->getElevationGoogle($this->ride->latitudes, $this->ride->longitudes);
+            }
+
+            if (empty($this->ride->elevation_bing)) {
+                $this->ride->elevation_bing = $this->info->getElevationBing($this->ride->latitudes, $this->ride->longitudes);
+            }
         } else {
+            $this->ride->address_openstreetmap = null;
+            $this->ride->address_google = null;
+            $this->ride->address_bing = null;
+            $this->ride->bbox = null;
             $this->ride->elevation_file = null;
             $this->ride->elevation_google = null;
             $this->ride->elevation_bing = null;
-            $this->ride->elevation_srtm = null;
-            $this->ride->elevation_percentage = null;
         }
 
         // $duration = $this->info->getDuration();

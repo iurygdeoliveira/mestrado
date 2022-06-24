@@ -15,7 +15,4 @@
 <script defer src="<?= js('dataTables.keyTable.min.js') ?>"></script>
 <script defer src="<?= js('dataTables.select.min.js') ?>"></script>
 <script defer src="<?= js('demo.datatable-init.js') ?>"></script>
-<script defer src="<?= js('anychart-core.min.js') ?>"></script>
-<script defer src="<?= js('anychart-treemap.min.js') ?>"></script>
-<script defer src="<?= js('anychart-exports.min.js') ?>"></script>
 <!-- third party js ends -->

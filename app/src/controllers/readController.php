@@ -55,15 +55,14 @@ class readController extends Controller
         $request = (object)getRequest()->getParsedBody();
 
         // Buscando dados no BD
-        $rider = new rideBD();
-        $rider->bootstrap(strval($request->id));
-        $data = $rider->find()->fetch(true);
+        $rider = (new rideBD())->bootstrap(strval($request->id));
+        $total = $rider->getRowsNumber();
 
         //Criando cabeçalho do arquivo CSV
         if ($request->id == 1) {
             $this->createCSV(
-                'riders.csv',
-                ['Creator', 'Rider', 'Atividade', 'Total_nodes', 'Datetime', 'Country', 'City', 'Road', 'Latitude_Inicial', 'Longitude_Inicial', 'Latitude_Final', 'Longitude_Final', 'Duration', 'Distance', 'Speed', 'Cadence', 'HeartRate', 'Calories', 'Temperature', 'Total_Trackpoints'],
+                'dataset_iury.csv',
+                ['creator', 'rider', 'activity', 'nodes_in_file', 'datetime', 'locality_osm(country|city|road)', 'locality_google(country|city|road)', 'locality_bing(country|city|road)', 'bounding_box', 'coordinates_percentage', 'latitudes', 'longitudes',  'elevation_percentage', 'elevation_gps', 'elevation_from_google', 'duration_percentage', 'duration_gps', 'duration_calculated', 'distance_gps', 'distance_calculated', 'speed_gps', 'speed_calculated', 'cadence_percentage', 'cadence_gps(avg)', 'cadence_calculated(avg)', 'heartrate_percentage', 'heart_gps(avg)', 'heartrate_calculated(avg)', 'altitude_percentage', 'altitude_max', 'altitude_min', 'altitude_gps(avg)', 'altitude_with_threshold', 'elevation_gain', 'gradient', 'temperature_percentage', 'temperature_gps(avg)', 'temperature_calculated(avg)', 'calories_percentage', 'calories_gps(avg)', 'calories_calculated(avg)', 'total_trackpoints'],
                 true,
                 'w'
             );
@@ -71,42 +70,69 @@ class readController extends Controller
 
         // Criando linha do arquivo CSV
         $records = [];
-        foreach ($data as $key => $value) {
+        for ($i = 1; $i <= $total; $i++) {
+
+            $cycled = $rider->findById($i);
+
             $record = [
-                $value->data()->creator,
+                $cycled->data()->creator,
                 $request->id,
-                $value->data()->id,
-                strlen($value->data()->nodes),
-                $value->data()->datetime,
-                $value->data()->country,
-                $value->data()->city,
-                $value->data()->road,
-                $value->data()->latitude_inicial,
-                $value->data()->longitude_inicial,
-                $value->data()->latitude_final,
-                $value->data()->longitude_final,
-                $value->data()->duration,
-                $value->data()->distance,
-                $value->data()->speed,
-                $value->data()->cadence,
-                $value->data()->heartrate,
-                $value->data()->calories,
-                $value->data()->temperature,
-                $value->data()->total_trackpoints
+                $cycled->data()->id,
+                $cycled->data()->nodes,
+                $cycled->data()->datetime,
+                $cycled->data()->address_openstreetmap,
+                $cycled->data()->address_google,
+                $cycled->data()->address_bing,
+                $cycled->data()->bbox,
+                $cycled->data()->coordinates_percentage,
+                $cycled->data()->latitudes,
+                $cycled->data()->longitudes,
+                $cycled->data()->elevation_percentage,
+                $cycled->data()->elevation_file,
+                $cycled->data()->elevation_google,
+                $cycled->data()->time_percentage,
+                $cycled->data()->duration_file,
+                $cycled->data()->duration_php,
+                $cycled->data()->time_percentage,
+                $cycled->data()->duration_file,
+                $cycled->data()->duration_php,
+                $cycled->data()->distance_file,
+                $cycled->data()->distance_php,
+                $cycled->data()->speed_file,
+                $cycled->data()->speed_php,
+                $cycled->data()->cadence_percentage,
+                $cycled->data()->cadence_file,
+                $cycled->data()->cadence_php,
+                $cycled->data()->heartrate_percentage,
+                $cycled->data()->heartrate_file,
+                $cycled->data()->heartrate_php,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                $cycled->data()->temperature_percentage,
+                $cycled->data()->temperature_file,
+                $cycled->data()->temperature_php,
+                $cycled->data()->calories_percentage,
+                $cycled->data()->calories_file,
+                $cycled->data()->calories_php,
+                $cycled->data()->total_trackpoints
             ];
 
-            array_push($records, $record);
+            $result = $this->createCSV('dataset_iury.csv', $record, false, 'a');
+            array_push($records, $result);
         }
-
-        $result = $this->createCSV('riders.csv', $records, false, 'a');
 
         // Se result for true, então o dataset/atividade já foram extraídos
         // Se result for diferentes de true, retorna a mensagem de erros
-        if ($result === true) {
-            return $this->responseJson(true, "CSV do rider $request->id concluído", "sem retorno de dados");
+        if (in_array(false, $records)) {
+            return $this->responseJson(false, "Erro ao criar CSV do rider $request->id", null);
         }
 
-        return $this->responseJson(false, $result, null);
+        return $this->responseJson(true, "CSV do rider $request->id concluído", "sem retorno de dados");
     }
 
 

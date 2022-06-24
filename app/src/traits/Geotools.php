@@ -27,27 +27,73 @@ trait Geotools
     private function getAddressFromProvider(object $data)
     {
 
-        $provider = new stdClass();
-
         if (!empty($data->getAddress())) {
 
             $aux = $data->getAddress()->toArray();
-            $provider->address = ($aux ? $aux['country'] . '|' . $aux['locality'] . '|' . $aux['streetName'] : 'Error getting address');
+            return ($aux ? $aux['country'] . '|' . $aux['locality'] . '|' . $aux['streetName'] : 'error');
         } else {
-            $provider->address = 'Error getting address';
+            return 'error';
         }
-
-        return $provider;
     }
 
-    public function addressFromGeoTools(float $lat, float $lon)
+    public function addressFromOSM(float $lat, float $lon)
     {
         $geocoder = new ProviderAggregator();
         $httpClient = new GuzzleAdapter();
 
         $geocoder->registerProviders([
-            new ProviderOpenStreetMap($httpClient, 'https://nominatim.openstreetmap.org', 'CycleVis'),
-            new ProviderGoogleMaps($httpClient, null, CONF_GOOGLE_API_KEY),
+            new ProviderOpenStreetMap($httpClient, 'https://nominatim.openstreetmap.org', 'CycleVis')
+        ]);
+
+        try {
+            $geolocation = new GeoLocation();
+            $cache = new ArrayCachePool();
+            $results = $geolocation->batch($geocoder)->setCache($cache)->reverse(
+                new Coordinate([$lat, $lon])
+            )->parallel();
+        } catch (Exception $e) {
+            dumpexit($e->getMessage(), __LINE__, __FILE__, __FUNCTION__);
+        }
+
+        if ($results[0]->getProviderName() == 'nominatim') {
+            return $this->getAddressFromProvider($results[0]);
+        } else {
+            return 'error';
+        }
+    }
+
+    public function addressFromGoogle(float $lat, float $lon)
+    {
+        $geocoder = new ProviderAggregator();
+        $httpClient = new GuzzleAdapter();
+
+        $geocoder->registerProviders([
+            new ProviderGoogleMaps($httpClient, null, CONF_GOOGLE_API_KEY)
+        ]);
+
+        try {
+            $geolocation = new GeoLocation();
+            $cache = new ArrayCachePool();
+            $results = $geolocation->batch($geocoder)->setCache($cache)->reverse(
+                new Coordinate([$lat, $lon])
+            )->parallel();
+        } catch (Exception $e) {
+            dumpexit($e->getMessage(), __LINE__, __FILE__, __FUNCTION__);
+        }
+
+        if ($results[0]->getProviderName() == 'google_maps') {
+            return $this->getAddressFromProvider($results[0]);
+        } else {
+            return 'error';
+        }
+    }
+
+    public function addressFromBing(float $lat, float $lon)
+    {
+        $geocoder = new ProviderAggregator();
+        $httpClient = new GuzzleAdapter();
+
+        $geocoder->registerProviders([
             new ProviderBingMaps($httpClient, CONF_BING_API_KEY)
         ]);
 
@@ -61,41 +107,28 @@ trait Geotools
             dumpexit($e->getMessage(), __LINE__, __FILE__, __FUNCTION__);
         }
 
-        $address = new stdClass();
-
-        if ($results[0]->getProviderName() == 'nominatim') {
-            $address->openstreetmap = $this->getAddressFromProvider($results[0]);
+        if ($results[0]->getProviderName() == 'bing_maps') {
+            return $this->getAddressFromProvider($results[0]);
         } else {
-
-            $openstreetmap = new stdClass();
-            $openstreetmap->address = 'Error getting address';
-            $address->openstreetmap = $openstreetmap;
+            return 'error';
         }
-
-        if ($results[1]->getProviderName() == 'google_maps') {
-            $address->google = $this->getAddressFromProvider($results[1]);
-        } else {
-
-            $google = new stdClass();
-            $google->address = 'Error getting address';
-            $address->google = $google;
-        }
-
-        if ($results[2]->getProviderName() == 'bing_maps') {
-            $address->bing = $this->getAddressFromProvider($results[2]);
-        } else {
-
-            $bing = new stdClass();
-            $bing->address = 'Error getting address';
-            $address->bing = $bing;
-        }
-
-        return $address;
     }
 
     public function elevationFromGoogle(array $lat, array $lon)
     {
 
+        // Reduzindo tamanho do valor de lagitude e longitude para o tamanho aceito pelo Google
+        $slice = function ($valor) {
+            if (strlen($valor) > 10) {
+                $item = str_split($valor, 10);
+                return $item[0];
+            } else {
+                return $valor;
+            }
+        };
+
+        $lat = array_map($slice, $lat);
+        $lon = array_map($slice, $lon);
 
         if (count($lat) == count($lon)) {
             $data = [];
@@ -122,8 +155,6 @@ trait Geotools
                 array_push($coordinates, $reduzido);
             }
 
-            //dumpexit(strlen($coordinates[0]), __LINE__, __FILE__, __FUNCTION__);
-
             $result = [];
             foreach ($coordinates as $key => $value) {
 
@@ -134,7 +165,7 @@ trait Geotools
 
                 if ($curl->error) {
                     array_push($result, 'error');
-                    dumpexit('Error: ' . $curl->errorCode . ': ' . $curl->errorMessage, __LINE__, __FILE__, __FUNCTION__);
+                    // dumpexit('Error: ' . $curl->errorCode . ': ' . $curl->errorMessage, __LINE__, __FILE__, __FUNCTION__);
                 } else {
 
                     $response = $curl->response;
@@ -166,15 +197,89 @@ trait Geotools
             return null;
         }
     }
-
-    public function elevationFromGeoTools(array $lat, array $lon)
+    public function elevationFromBing(array $lat, array $lon)
     {
 
-        $elevations = new stdClass();
-        $elevations->google = $this->elevationFromGoogle($lat, $lon);
-        $elevations->bing = null;
-        $elevations->srtm = null;
+        // Reduzindo tamanho do valor de lagitude e longitude para o tamanho aceito pelo Google
+        $slice = function ($valor) {
+            if (strlen($valor) > 10) {
+                $item = str_split($valor, 10);
+                return $item[0];
+            } else {
+                return $valor;
+            }
+        };
 
-        return $elevations;
+        $lat = array_map($slice, $lat);
+        $lon = array_map($slice, $lon);
+
+        // {lat1,long1,lat2,long2,latN,longnN}
+        if (count($lat) == count($lon)) {
+            $data = [];
+
+            // Quantidade de requisições para o Google elevation API
+            // deve ser até 6000 por minuto
+            foreach ($lat as $key => $value) {
+                array_push($data, "$lat[$key],$lon[$key]");
+            }
+
+            // Montando bloco de pontos para realizar a requisição
+            $data = array_chunk($data, 70);
+
+            $coordinates = [];
+            foreach ($data as $key => $value) {
+
+                $reduce = function ($carry, $item) {
+                    $carry .= $item . ',';
+                    return $carry;
+                };
+
+                $reduzido = array_reduce($data[$key], $reduce);
+                $reduzido = substr($reduzido, 0, -1);
+                array_push($coordinates, $reduzido);
+            }
+
+            $result = [];
+            foreach ($coordinates as $key => $value) {
+
+                $url = 'https://dev.virtualearth.net/REST/v1/Elevation/List?points=' . $value . '&heights=sealevel&key=' . CONF_BING_API_KEY;
+
+                $curl = new Curl();
+                $curl->get($url);
+
+                if ($curl->error) {
+                    array_push($result, 'error');
+                } else {
+
+                    $response = $curl->response;
+                    // dumpexit($response->resourceSets[0]->resources[0]->elevations, __LINE__, __FILE__, __FUNCTION__);
+                    $filtered = (isset($response->resourceSets[0]->resources[0]->elevations) ? $response->resourceSets[0]->resources[0]->elevations : 'error elevation');
+                    array_push($result, $filtered);
+                }
+            }
+
+            $elevations = [];
+            foreach ($result as $key => $value) {
+
+                $convert = function ($valor) {
+                    return strval($valor);
+                };
+
+                if (is_array($result[$key])) {
+                    $elevations = array_merge($elevations, array_map($convert, $result[$key]));
+                } else {
+                    $elevations = array_merge($elevations, [$result[$key]]);
+                }
+            }
+
+            $reduce = function ($carry, $item) {
+                $carry .= $item . '|';
+                return $carry;
+            };
+
+            return array_reduce($elevations, $reduce);
+        } else {
+            return null;
+        }
     }
 }

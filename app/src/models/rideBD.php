@@ -31,8 +31,11 @@ class rideBD extends Model
             $data = $this->findById(intval($activityID));
 
             if ($data instanceof rideBD) {
-                $this->id = $data->id;
+                $data->table = "rider" . $riderID;
+                return $data;
             }
+        } else {
+            return $this;
         }
     }
 

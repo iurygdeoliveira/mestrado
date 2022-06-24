@@ -120,21 +120,43 @@ class ExtractInfoGPX
         }
     }
 
-    public function getAddress(string $lat, string $lon)
+    private function normalizeCoordinate(string $coordinate)
     {
 
-        if (strlen($lat) > 14) {
-            $aux = str_split($lat, 13);
-            $lat = $aux[0];
+        if (strlen($coordinate) > 14) {
+            $aux = str_split($coordinate, 13);
+            return $aux[0];
         }
-
-        if (strlen($lon) > 14) {
-            $aux = str_split($lon, 13);
-            $lon = $aux[0];
-        }
-
-        return $this->addressFromGeoTools(floatval($lat), floatval($lon));
+        return $coordinate;
     }
+
+    public function getAddressOSM(string $latitude, string $longitude)
+    {
+
+        $lat = $this->normalizeCoordinate($latitude);
+        $lon = $this->normalizeCoordinate($longitude);
+
+        return $this->addressFromOSM(floatval($lat), floatval($lon));
+    }
+
+    public function getAddressGoogle(string $latitude, string $longitude)
+    {
+
+        $lat = $this->normalizeCoordinate($latitude);
+        $lon = $this->normalizeCoordinate($longitude);
+
+        return $this->addressFromGoogle(floatval($lat), floatval($lon));
+    }
+
+    public function getAddressBing(string $latitude, string $longitude)
+    {
+
+        $lat = $this->normalizeCoordinate($latitude);
+        $lon = $this->normalizeCoordinate($longitude);
+
+        return $this->addressFromBing(floatval($lat), floatval($lon));
+    }
+
 
     private function percentageAttribute(string $pattern, array $search, array $offset = [])
     {
@@ -226,20 +248,22 @@ class ExtractInfoGPX
         }
     }
 
-    public function getElevation(string $latitudes, string $longitudes)
+    public function getElevationGoogle(string $latitudes, string $longitudes)
     {
-        $elevation = new stdClass();
-        $elevation->file = $this->getElevationFile();
 
         $latitudes = explode('|', $latitudes);
         $longitudes = explode('|', $longitudes);
 
-        $data = $this->elevationFromGeoTools($latitudes, $longitudes);
-        $elevation->google = $data->google;
-        $elevation->bing = $data->bing;
-        $elevation->srtm = $data->srtm;
+        return $this->elevationFromGoogle($latitudes, $longitudes);
+    }
 
-        return $elevation;
+    public function getElevationBing(string $latitudes, string $longitudes)
+    {
+
+        $latitudes = explode('|', $latitudes);
+        $longitudes = explode('|', $longitudes);
+
+        return $this->elevationFromBing($latitudes, $longitudes);
     }
 
     public function getElevationFile()
