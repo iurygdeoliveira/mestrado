@@ -1,0 +1,834 @@
+commit 3d37cfa46ed46c80851833f40b0524ff9160e6ba
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Fri Jun 24 07:05:44 2022 -0300
+
+    docs: corrigindo documentaçao
+
+M	.gitignore
+D	app/public/assets/debugbar/Resources/debugbar.css
+D	app/public/assets/debugbar/Resources/debugbar.js
+D	app/public/assets/debugbar/Resources/openhandler.css
+D	app/public/assets/debugbar/Resources/openhandler.js
+D	app/public/assets/debugbar/Resources/vendor/font-awesome/css/font-awesome.min.css
+D	app/public/assets/debugbar/Resources/vendor/font-awesome/fonts/FontAwesome.otf
+D	app/public/assets/debugbar/Resources/vendor/font-awesome/fonts/fontawesome-webfont.eot
+D	app/public/assets/debugbar/Resources/vendor/font-awesome/fonts/fontawesome-webfont.svg
+D	app/public/assets/debugbar/Resources/vendor/font-awesome/fonts/fontawesome-webfont.ttf
+D	app/public/assets/debugbar/Resources/vendor/font-awesome/fonts/fontawesome-webfont.woff
+D	app/public/assets/debugbar/Resources/vendor/font-awesome/fonts/fontawesome-webfont.woff2
+D	app/public/assets/debugbar/Resources/vendor/highlightjs/highlight.pack.js
+D	app/public/assets/debugbar/Resources/vendor/highlightjs/styles/github.css
+D	app/public/assets/debugbar/Resources/vendor/jquery/dist/jquery.min.js
+D	app/public/assets/debugbar/Resources/widgets.css
+D	app/public/assets/debugbar/Resources/widgets.js
+D	app/public/assets/debugbar/Resources/widgets/mails/widget.css
+D	app/public/assets/debugbar/Resources/widgets/mails/widget.js
+D	app/public/assets/debugbar/Resources/widgets/sqlqueries/widget.css
+D	app/public/assets/debugbar/Resources/widgets/sqlqueries/widget.js
+D	app/public/assets/debugbar/Resources/widgets/templates/widget.css
+D	app/public/assets/debugbar/Resources/widgets/templates/widget.js
+D	app/public/assets/js/anychart-core.min.js
+D	app/public/assets/js/anychart-exports.min.js
+D	app/public/assets/js/anychart-treemap.min.js
+M	app/public/index.php
+D	app/src/classes/ElevationGoogleClass.php
+M	app/src/classes/ExtractInfoGPX.php
+M	app/src/classes/ExtractInfoTCX.php
+M	app/src/classes/LoadRide.php
+M	app/src/controllers/readController.php
+D	app/src/models/diagram.mwb
+D	app/src/models/diagram.mwb.bak
+D	app/src/models/dump_openstreetmap.sql
+M	app/src/models/rideBD.php
+M	app/src/support/helpers.php
+M	app/src/traits/Csv.php
+M	app/src/traits/Geotools.php
+M	app/src/views/hyper/scripts/scripts.php
+M	docker-compose.yml
+R100	docker/php/docker-php-ext-opcache.ini	docker/php/opcache.ini
+R100	docker/php/app_php.ini	docker/php/php.ini
+M	docker/php/xdebug.ini
+D	intersect.ipynb
+
+commit 53a8aa4b689ba4dd94ba6187af4d4d6ddaaace97
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Sun May 22 07:43:19 2022 -0300
+
+    feat: Integração do Google Elevation API, finalizada
+
+M	app/src/classes/ExtractInfoTCX.php
+M	app/src/classes/LoadRide.php
+M	app/src/traits/Geotools.php
+
+commit 33c3b4d6b52abf79a208eb0cadb577d2ce7c9fb5
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Sat May 21 16:13:10 2022 -0300
+
+    feat: Implementação de um request por coordenada funcionando
+
+M	app/composer.json
+A	app/src/classes/ElevationGoogleClass.php
+M	app/src/classes/ExtractInfoGPX.php
+M	app/src/classes/LoadRide.php
+M	app/src/traits/Geotools.php
+M	docker/nginx/nginx.conf
+
+commit d3207c6c73a072b1863abaa505ea10fdcb90bc98
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Fri May 20 21:46:31 2022 -0300
+
+    feat: Iniciando desenvolvimento do google elevation
+
+M	app/composer.json
+M	app/src/classes/ExtractInfoGPX.php
+M	app/src/classes/ExtractInfoTCX.php
+M	app/src/classes/LoadRide.php
+M	app/src/controllers/readController.php
+M	app/src/core/Model.php
+M	app/src/routes/readRoutes.php
+M	app/src/traits/Geotools.php
+M	app/src/traits/crud/find.php
+M	app/src/views/hyper/readController/resumo.php
+
+commit 6cbf24394b83865530ff482663bbb168a4e63f3e
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Fri May 20 14:24:13 2022 -0300
+
+    feat: Finalizando obtenção de dados de endereço das APIs
+
+M	app/composer.json
+M	app/src/classes/LoadRide.php
+M	app/src/support/helpers.php
+M	app/src/traits/Geotools.php
+A	fig.jpg
+A	intersect.ipynb
+
+commit 3721462e315e60f9598a4e66251286f1b78b5503
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Mon May 16 05:24:35 2022 -0300
+
+    feat: Adicionando novos valores ao dataset, atualizações prontas
+
+M	.gitignore
+D	.vscode/settings.json
+M	app/composer.json
+M	app/public/index.php
+M	app/src/classes/ExtractInfoGPX.php
+M	app/src/classes/ExtractInfoTCX.php
+M	app/src/classes/LoadRide.php
+A	app/src/classes/Math.php
+A	app/src/classes/Regex.php
+D	app/src/controllers/analiseController.php
+D	app/src/controllers/diffVisController.php
+M	app/src/controllers/readController.php
+A	app/src/controllers/testController.php
+A	app/src/models/dump_openstreetmap.sql
+M	app/src/models/rideBD.php
+D	app/src/models/structure.sql
+D	app/src/models/trackpointBD.php
+D	app/src/routes/analiseRoutes.php
+D	app/src/routes/diffVisRoutes.php
+A	app/src/routes/testRoutes.php
+M	app/src/support/helpers.php
+D	app/src/traits/Deg2rad.php
+M	app/src/traits/Geotools.php
+D	app/src/traits/Haversine.php
+M	app/src/traits/crud/connection.php
+D	app/src/views/hyper/analiseController/begin.php
+D	app/src/views/hyper/analiseController/dataTable.php
+D	app/src/views/hyper/analiseController/getDataTable.php
+D	app/src/views/hyper/analiseController/metaData.php
+D	app/src/views/hyper/analiseController/modal-danger.php
+D	app/src/views/hyper/analiseController/modal-processando.php
+D	app/src/views/hyper/analiseController/modal-success.php
+D	app/src/views/hyper/analiseController/modal-validar-candidato.php
+D	app/src/views/hyper/analiseController/modal-visualizar-candidato.php
+D	app/src/views/hyper/analiseController/redirect.php
+D	app/src/views/hyper/diffVisController/begin.php
+D	app/src/views/hyper/diffVisController/diffvis.php
+D	app/src/views/hyper/diffVisController/generateDiffVis.php
+D	app/src/views/hyper/diffVisController/generateStats.php
+D	app/src/views/hyper/diffVisController/getDataDiffVis.php
+D	app/src/views/hyper/diffVisController/resumo.php
+M	app/src/views/hyper/leftsidebar/leftsidebar.php
+D	app/src/views/hyper/readController/preprocessar.php
+D	app/src/views/hyper/readController/preprocessarData.php
+D	app/src/views/hyper/readController/preprocessar_table.php
+M	app/src/views/hyper/readController/readData.php
+R058	app/src/views/hyper/readController/preprocessar_begin.php	app/src/views/hyper/testController/begin.php
+R059	app/src/views/hyper/analiseController/analise.php	app/src/views/hyper/testController/test.php
+M	app/src/views/hyper/theme/theme.php
+M	docker-compose.yml
+M	docker/nginx/nginx.conf
+M	docker/php/Dockerfile
+A	python/01_elevation_gain_minimal.png
+A	python/02_elevation_gain_table_manual.png
+A	python/03_elevation_gain_table_gps.png
+A	python/04_elevation_gain_dem_profile.png
+A	python/05_trk_elevation_threshold.png
+A	python/06_elevation_gain_mh_threshold_dem.png
+A	python/07_elevation_gain_mh_threshold_gps.png
+A	python/08_elevation_gain_hillside_ge.jpg
+A	python/09_elevation_gain_hillside_profile.png
+A	python/10_elevation_gain-hillside-ge.jpg
+A	python/11_trk_distance_threshold-A.png
+A	python/12_trk_distance_threshold-B.png
+
+commit bfddd2c176e4b1cee6fc1ef3a148f3a0b155ef21
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Wed May 4 05:09:52 2022 -0300
+
+    feat: Inicio do desenvolvimento de acuracia do heartrate
+
+A	.vscode/settings.json
+M	app/composer.json
+A	app/public/assets/debugbar/Resources/debugbar.css
+A	app/public/assets/debugbar/Resources/debugbar.js
+A	app/public/assets/debugbar/Resources/openhandler.css
+A	app/public/assets/debugbar/Resources/openhandler.js
+A	app/public/assets/debugbar/Resources/vendor/font-awesome/css/font-awesome.min.css
+A	app/public/assets/debugbar/Resources/vendor/font-awesome/fonts/FontAwesome.otf
+A	app/public/assets/debugbar/Resources/vendor/font-awesome/fonts/fontawesome-webfont.eot
+A	app/public/assets/debugbar/Resources/vendor/font-awesome/fonts/fontawesome-webfont.svg
+A	app/public/assets/debugbar/Resources/vendor/font-awesome/fonts/fontawesome-webfont.ttf
+A	app/public/assets/debugbar/Resources/vendor/font-awesome/fonts/fontawesome-webfont.woff
+A	app/public/assets/debugbar/Resources/vendor/font-awesome/fonts/fontawesome-webfont.woff2
+A	app/public/assets/debugbar/Resources/vendor/highlightjs/highlight.pack.js
+A	app/public/assets/debugbar/Resources/vendor/highlightjs/styles/github.css
+A	app/public/assets/debugbar/Resources/vendor/jquery/dist/jquery.min.js
+A	app/public/assets/debugbar/Resources/widgets.css
+A	app/public/assets/debugbar/Resources/widgets.js
+A	app/public/assets/debugbar/Resources/widgets/mails/widget.css
+A	app/public/assets/debugbar/Resources/widgets/mails/widget.js
+A	app/public/assets/debugbar/Resources/widgets/sqlqueries/widget.css
+A	app/public/assets/debugbar/Resources/widgets/sqlqueries/widget.js
+A	app/public/assets/debugbar/Resources/widgets/templates/widget.css
+A	app/public/assets/debugbar/Resources/widgets/templates/widget.js
+M	app/public/index.php
+M	app/src/classes/ExtractInfoGPX.php
+M	app/src/classes/ExtractInfoTCX.php
+M	app/src/classes/LoadRide.php
+M	app/src/controllers/analiseController.php
+M	app/src/controllers/readController.php
+D	app/src/storage/errors/exception--2022-04-14--20-36--6946b0d62e.html
+D	app/src/storage/errors/exception.log
+M	app/src/support/helpers.php
+A	app/src/traits/Geotools.php
+D	app/src/views/hyper/readController/resumo_bkp.php
+M	app/src/views/hyper/theme/theme.php
+M	docker-compose.yml
+
+commit 3d27c596ea2386d74ad536307358be96cb429491
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Wed Apr 27 18:16:31 2022 -0300
+
+    feat: Finalizando a construção da funcionalidade de exportação em csv
+
+M	app/composer.json
+M	app/public/index.php
+M	app/src/controllers/readController.php
+M	app/src/routes/readRoutes.php
+M	app/src/support/helpers.php
+A	app/src/traits/Csv.php
+M	app/src/views/hyper/diffVisController/resumo.php
+A	app/src/views/hyper/readController/exportCSV.php
+M	app/src/views/hyper/readController/read.php
+M	app/src/views/hyper/readController/readData.php
+M	app/src/views/hyper/readController/resumo.php
+A	app/src/views/hyper/readController/resumo_bkp.php
+M	docker-compose.yml
+
+commit a198ca5573f12659a1af4d37833faa7b3545f4ae
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Tue Apr 26 11:34:41 2022 -0300
+
+    feat: Extração de valores finalizada, concluir ajustes
+
+M	app/public/index.php
+M	app/src/classes/ExtractInfoGPX.php
+M	app/src/classes/ExtractInfoTCX.php
+M	app/src/classes/LoadRide.php
+M	app/src/controllers/readController.php
+M	app/src/traits/Deg2rad.php
+M	app/src/views/hyper/readController/readData.php
+
+commit 82e20000707b22d5345843d5aa20ae73950a04c9
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Mon Apr 25 20:56:06 2022 -0300
+
+    feat: Implementando extração dos dados
+
+A	app/public/assets/js/anychart-core.min.js
+A	app/public/assets/js/anychart-exports.min.js
+A	app/public/assets/js/anychart-treemap.min.js
+D	app/public/assets/js/appwrite.js
+M	app/src/classes/ExtractInfoGPX.php
+M	app/src/classes/ExtractInfoTCX.php
+M	app/src/classes/LoadRide.php
+M	app/src/controllers/readController.php
+M	app/src/core/Model.php
+M	app/src/models/rideBD.php
+M	app/src/routes/readRoutes.php
+D	app/src/traits/ArrayFind.php
+M	app/src/traits/Date.php
+A	app/src/traits/Deg2rad.php
+A	app/src/traits/Haversine.php
+M	app/src/traits/crud/create.php
+M	app/src/traits/crud/update.php
+M	app/src/views/hyper/leftsidebar/leftsidebar.php
+M	app/src/views/hyper/readController/read.php
+R083	app/src/views/hyper/readController/extractData.php	app/src/views/hyper/readController/readData.php
+M	app/src/views/hyper/readController/read_begin.php
+A	app/src/views/hyper/readController/read_table.php
+M	app/src/views/hyper/scripts/scripts.php
+
+commit c8b533745bf8314612f7308308403b10e8d6d6ed
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Sun Apr 24 06:18:37 2022 -0300
+
+    feat: Inicio do desenvolvimento da extração de nós
+
+M	.gitignore
+M	app/composer.json
+A	app/public/assets/js/appwrite.js
+M	app/public/index.php
+M	app/src/controllers/readController.php
+D	app/src/traits/XmlArray.php
+A	app/src/traits/appwrite/collection/createCollection.php
+A	app/src/traits/appwrite/collection/deleteCollection.php
+A	app/src/traits/appwrite/collection/getCollection.php
+A	app/src/traits/appwrite/collection/listCollection.php
+R094	app/src/traits/dbConnection.php	app/src/traits/crud/connection.php
+R091	app/src/traits/dbCreate.php	app/src/traits/crud/create.php
+R086	app/src/traits/dbDelete.php	app/src/traits/crud/delete.php
+R086	app/src/traits/dbFetch.php	app/src/traits/crud/fetch.php
+R093	app/src/traits/dbFind.php	app/src/traits/crud/find.php
+R087	app/src/traits/dbPreventChange.php	app/src/traits/crud/preventChange.php
+R091	app/src/traits/dbRead.php	app/src/traits/crud/read.php
+R087	app/src/traits/dbRequired.php	app/src/traits/crud/required.php
+R091	app/src/traits/dbUpdate.php	app/src/traits/crud/update.php
+D	app/src/traits/dbError.php
+D	app/src/traits/dbReturn.php
+M	app/src/traits/responseJson.php
+A	app/src/views/hyper/helpers/authenticate.php
+M	app/src/views/hyper/readController/preprocessarData.php
+M	app/src/views/hyper/readController/read.php
+M	app/src/views/hyper/scripts/scripts.php
+M	docker-compose.yml
+D	docker/json-server/db/json_config.json
+
+commit 4561e25d0c2a4b400726cb1512907ad8deecb509
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Thu Apr 21 17:25:00 2022 -0300
+
+    feat: Inicio do desenvolvimento com appwrite
+
+M	.gitignore
+M	app/src/controllers/diffVisController.php
+M	app/src/controllers/readController.php
+M	app/src/models/structure.sql
+M	app/src/views/hyper/diffVisController/diffvis.php
+M	app/src/views/hyper/diffVisController/generateDiffVis.php
+A	app/src/views/hyper/diffVisController/generateStats.php
+M	app/src/views/hyper/diffVisController/getDataDiffVis.php
+M	app/src/views/hyper/diffVisController/resumo.php
+M	docker-compose.yml
+M	docker/commands.txt
+M	docker/json-server/db/db.json
+M	docker/nginx/nginx.conf
+
+commit ce50bf57d44ec95d0987ed187b6394d573ab8ab6
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Mon Apr 18 03:26:43 2022 -0300
+
+    feat: Adicionando atualizando de nodes
+
+M	app/public/index.php
+M	app/src/classes/ExtractInfoGPX.php
+M	app/src/classes/LoadRide.php
+M	app/src/controllers/readController.php
+M	app/src/models/rideBD.php
+M	app/src/support/helpers.php
+M	app/src/views/hyper/diffVisController/generateDiffVis.php
+M	app/src/views/hyper/diffVisController/getDataDiffVis.php
+M	app/src/views/hyper/diffVisController/resumo.php
+M	docker-compose.yml
+A	docker/json-server/db/json_config.json
+
+commit 9374885be3fa7e2bfa56de43625bcae7337f856a
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Sun Apr 17 07:35:36 2022 -0300
+
+    feat: Diffvis concluída, fazer ajustes
+
+M	app/src/controllers/diffVisController.php
+M	app/src/core/Model.php
+M	app/src/views/hyper/diffVisController/generateDiffVis.php
+M	app/src/views/hyper/diffVisController/getDataDiffVis.php
+D	app/src/views/hyper/diffVisController/modal-danger.php
+D	app/src/views/hyper/diffVisController/modal-processando.php
+D	app/src/views/hyper/diffVisController/modal-success.php
+M	app/src/views/hyper/diffVisController/resumo.php
+
+commit 281e04010cbacb6e0cec9bd30ba59ac06fc647fe
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Sun Apr 17 03:47:18 2022 -0300
+
+    feat: Implementação do memcached
+
+M	app/composer.json
+M	app/public/index.php
+M	app/src/support/helpers.php
+M	app/src/views/hyper/diffVisController/begin.php
+M	docker-compose.yml
+M	docker/php/Dockerfile
+
+commit 9f41d7b95e12ac8d7736f1fa15060e6afa4f7573
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Sat Apr 16 07:44:16 2022 -0300
+
+    feat: Iniciando a construção da DiffVis
+
+D	app/public/assets/js/apexcharts.min.js
+D	app/public/assets/js/demo.apex-sparklines.js
+M	app/public/index.php
+R089	app/src/controllers/mapvizController.php	app/src/controllers/diffVisController.php
+A	app/src/routes/diffVisRoutes.php
+D	app/src/routes/mapvizRoutes.php
+R060	app/src/views/hyper/mapvizController/begin.php	app/src/views/hyper/diffVisController/begin.php
+R078	app/src/views/hyper/mapvizController/mapviz.php	app/src/views/hyper/diffVisController/diffvis.php
+A	app/src/views/hyper/diffVisController/generateDiffVis.php
+A	app/src/views/hyper/diffVisController/getDataDiffVis.php
+R100	app/src/views/hyper/mapvizController/modal-danger.php	app/src/views/hyper/diffVisController/modal-danger.php
+R100	app/src/views/hyper/mapvizController/modal-processando.php	app/src/views/hyper/diffVisController/modal-processando.php
+R100	app/src/views/hyper/mapvizController/modal-success.php	app/src/views/hyper/diffVisController/modal-success.php
+R068	app/src/views/hyper/mapvizController/resumo.php	app/src/views/hyper/diffVisController/resumo.php
+M	app/src/views/hyper/leftsidebar/leftsidebar.php
+D	app/src/views/hyper/mapvizController/charts-apex-sparklines.html
+D	app/src/views/hyper/mapvizController/generateMapViz.php
+M	app/src/views/hyper/readController/preprocessar_table.php
+M	app/src/views/hyper/scripts/scripts.php
+
+commit 6994ad786d2052d5771cfd2dc1fd7a9f8b569a18
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Sat Apr 16 04:27:35 2022 -0300
+
+    feat: Construindo MapVis
+
+A	app/public/assets/js/apexcharts.min.js
+A	app/public/assets/js/demo.apex-sparklines.js
+M	app/public/index.php
+D	app/src/classes/ExtractInfo.php
+M	app/src/classes/LoadRide.php
+D	app/src/classes/loadTrackPoint.php
+M	app/src/controllers/dashboardController.php
+D	app/src/controllers/loadController.php
+A	app/src/controllers/mapvizController.php
+M	app/src/controllers/readController.php
+M	app/src/models/structure.sql
+D	app/src/routes/loadRoutes.php
+A	app/src/routes/mapvizRoutes.php
+A	app/src/storage/errors/exception--2022-04-14--20-36--6946b0d62e.html
+A	app/src/storage/errors/exception.log
+M	app/src/views/hyper/dashboardController/begin.php
+M	app/src/views/hyper/leftsidebar/leftsidebar.php
+D	app/src/views/hyper/loadController/begin.php
+D	app/src/views/hyper/loadController/dataTable.php
+D	app/src/views/hyper/loadController/redirect.php
+D	app/src/views/hyper/loadController/saveData.php
+A	app/src/views/hyper/mapvizController/begin.php
+A	app/src/views/hyper/mapvizController/charts-apex-sparklines.html
+A	app/src/views/hyper/mapvizController/generateMapViz.php
+R070	app/src/views/hyper/loadController/load.php	app/src/views/hyper/mapvizController/mapviz.php
+R100	app/src/views/hyper/loadController/modal-danger.php	app/src/views/hyper/mapvizController/modal-danger.php
+R100	app/src/views/hyper/loadController/modal-processando.php	app/src/views/hyper/mapvizController/modal-processando.php
+R100	app/src/views/hyper/loadController/modal-success.php	app/src/views/hyper/mapvizController/modal-success.php
+A	app/src/views/hyper/mapvizController/resumo.php
+D	app/src/views/hyper/readController/metaData.php
+M	app/src/views/hyper/readController/preprocessarData.php
+M	app/src/views/hyper/readController/preprocessar_begin.php
+M	app/src/views/hyper/readController/preprocessar_table.php
+M	app/src/views/hyper/readController/read.php
+R087	app/src/views/hyper/readController/begin.php	app/src/views/hyper/readController/read_begin.php
+A	app/src/views/hyper/readController/resumo.php
+M	app/src/views/hyper/scripts/scripts.php
+
+commit 35a987070208459746b5638a7e852567aa8e9ed2
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Thu Apr 14 18:01:32 2022 -0300
+
+    feat: Extração da estrutura de nós concluida
+
+M	app/composer.json
+M	app/src/classes/ExtractInfoGPX.php
+M	app/src/classes/ExtractInfoTCX.php
+M	app/src/classes/LoadRide.php
+M	app/src/controllers/readController.php
+M	app/src/core/Controller.php
+M	app/src/core/Model.php
+M	app/src/models/rideBD.php
+M	app/src/models/structure.sql
+M	app/src/routes/readRoutes.php
+M	app/src/support/helpers.php
+A	app/src/traits/responseJson.php
+M	app/src/views/hyper/leftsidebar/leftsidebar.php
+A	app/src/views/hyper/readController/preprocessar.php
+A	app/src/views/hyper/readController/preprocessarData.php
+A	app/src/views/hyper/readController/preprocessar_begin.php
+A	app/src/views/hyper/readController/preprocessar_table.php
+M	docker/json-server/db/db.json
+
+commit f1dfbbf9ca7dc889edd7f334c8f018da5277570e
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Sun Apr 10 17:48:52 2022 -0300
+
+    feat: Parseamento inicial realizado
+
+M	.gitignore
+M	app/composer.json
+M	app/public/index.php
+A	app/src/classes/ExtractInfo.php
+M	app/src/classes/ExtractInfoGPX.php
+M	app/src/classes/ExtractInfoTCX.php
+M	app/src/classes/LoadRide.php
+A	app/src/controllers/readController.php
+M	app/src/core/Controller.php
+M	app/src/models/rideBD.php
+A	app/src/routes/readRoutes.php
+M	app/src/support/helpers.php
+A	app/src/traits/ArrayFind.php
+D	app/src/traits/ExtratcInfo.php
+A	app/src/traits/XmlArray.php
+M	app/src/traits/dbCreate.php
+M	app/src/views/hyper/dashboardController/dashboard.php
+M	app/src/views/hyper/dashboardController/renderData.php
+R100	app/src/views/hyper/dashboardController/getData.php	app/src/views/hyper/helpers/getData.php
+A	app/src/views/hyper/helpers/redirect.php
+M	app/src/views/hyper/leftsidebar/leftsidebar.php
+A	app/src/views/hyper/readController/begin.php
+A	app/src/views/hyper/readController/extractData.php
+A	app/src/views/hyper/readController/metaData.php
+A	app/src/views/hyper/readController/read.php
+M	docker/json-server/db/db.json
+
+commit 5a8f1ff66466471902c75dd0863d0d3ee210eb1b
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Wed Apr 6 14:19:32 2022 -0300
+
+    feat: ajustes de ferramentas extras
+
+M	app/src/controllers/analiseController.php
+M	app/src/core/Controller.php
+M	app/src/routes/analiseRoutes.php
+M	app/src/views/hyper/dashboardController/begin.php
+M	app/src/views/hyper/dashboardController/dashboard.php
+A	app/src/views/hyper/dashboardController/getData.php
+A	app/src/views/hyper/dashboardController/renderData.php
+M	app/src/views/hyper/leftsidebar/leftsidebar.php
+M	app/src/views/hyper/scripts/scripts.php
+M	app/src/views/hyper/theme/theme.php
+M	docker-compose.yml
+A	docker/json-server/Dockerfile
+A	docker/json-server/db/db.json
+
+commit 2b19b70d218ae357beee60e9fd58b69d1c459358
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Sat Apr 2 09:48:28 2022 -0300
+
+    feat: Inicio do desenvolvimento reativo
+
+M	app/composer.json
+R099	app/src/class/ExtractInfoGPX.php	app/src/classes/ExtractInfoGPX.php
+R099	app/src/class/ExtractInfoTCX.php	app/src/classes/ExtractInfoTCX.php
+R098	app/src/class/LoadRide.php	app/src/classes/LoadRide.php
+R099	app/src/class/loadTrackPoint.php	app/src/classes/loadTrackPoint.php
+M	app/src/controllers/analiseController.php
+M	app/src/controllers/dashboardController.php
+M	app/src/controllers/loadController.php
+M	app/src/core/Controller.php
+M	app/src/core/View.php
+M	app/src/support/helpers.php
+M	app/src/views/hyper/analiseController/analise.php
+M	app/src/views/hyper/analiseController/begin.php
+D	app/src/views/hyper/analiseController/scripts.php
+D	app/src/views/hyper/analiseController/theme.php
+M	app/src/views/hyper/dashboardController/begin.php
+M	app/src/views/hyper/dashboardController/dashboard.php
+D	app/src/views/hyper/dashboardController/footer.php
+D	app/src/views/hyper/dashboardController/scripts.php
+D	app/src/views/hyper/dashboardController/theme.php
+R100	app/src/views/hyper/analiseController/footer.php	app/src/views/hyper/footer/footer.php
+M	app/src/views/hyper/leftsidebar/leftsidebar.php
+M	app/src/views/hyper/loadController/begin.php
+D	app/src/views/hyper/loadController/footer.php
+M	app/src/views/hyper/loadController/load.php
+D	app/src/views/hyper/loadController/scripts.php
+D	app/src/views/hyper/loadController/theme.php
+A	app/src/views/hyper/scripts/scripts.php
+A	app/src/views/hyper/theme/theme.php
+M	docker/commands.txt
+M	docker/nginx/nginx.conf
+M	docker/php/Dockerfile
+
+commit 8430955694ca30646f1860fb11064248276792ee
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Mon Mar 28 14:22:04 2022 -0300
+
+    feat: Captura de dados do ciclista do BD, pronto !
+
+M	app/src/controllers/analiseController.php
+M	app/src/controllers/loadController.php
+M	app/src/core/Model.php
+M	app/src/routes/analiseRoutes.php
+A	app/src/traits/Datasets.php
+M	app/src/views/hyper/analiseController/analise.php
+M	app/src/views/hyper/analiseController/begin.php
+M	app/src/views/hyper/analiseController/dataTable.php
+A	app/src/views/hyper/analiseController/getDataTable.php
+A	app/src/views/hyper/analiseController/metaData.php
+M	app/src/views/hyper/analiseController/scripts.php
+M	app/src/views/hyper/analiseController/theme.php
+
+commit 3327f3d9a6b519e62e57b0dc5b4954f51fcc0cfa
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Mon Mar 28 04:15:40 2022 -0300
+
+    feat: Dados extraidos prontos
+
+D	app/src/class/ExtractInfo.php
+A	app/src/class/ExtractInfoGPX.php
+A	app/src/class/ExtractInfoTCX.php
+M	app/src/class/LoadRide.php
+M	app/src/controllers/loadController.php
+M	app/src/views/hyper/loadController/saveData.php
+M	docker/php/app_php.ini
+
+commit c21752a7b8cf3df91dd72f3bd8303504a3aec611
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Sat Mar 26 09:26:41 2022 -0300
+
+    feat: Salvamento de dados testado
+
+M	app/src/class/LoadRide.php
+M	app/src/controllers/loadController.php
+M	app/src/core/Model.php
+M	app/src/models/rideBD.php
+M	app/src/models/structure.sql
+M	app/src/traits/dbCreate.php
+M	app/src/traits/dbFind.php
+M	app/src/traits/dbUpdate.php
+M	app/src/views/hyper/loadController/dataTable.php
+M	app/src/views/hyper/loadController/saveData.php
+
+commit 775b6109f99cba2fd857b1ae7fc4794ea60aa965
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Fri Mar 25 01:12:50 2022 -0300
+
+    feat: Construindo save data
+
+M	app/src/controllers/loadController.php
+M	app/src/core/Controller.php
+M	app/src/routes/loadRoutes.php
+A	app/src/traits/GetNames.php
+M	app/src/views/hyper/loadController/begin.php
+A	app/src/views/hyper/loadController/dataTable.php
+M	app/src/views/hyper/loadController/load.php
+D	app/src/views/hyper/loadController/modal-validar-candidato.php
+D	app/src/views/hyper/loadController/modal-visualizar-candidato.php
+A	app/src/views/hyper/loadController/saveData.php
+M	docker/nginx/nginx.conf
+
+commit 3789ccdea635341749e1f02a3714dfb64e8dde41
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Thu Mar 24 14:09:45 2022 -0300
+
+    feat: Desenvolvendo aplicação para extrair dados do gpx e tcx
+
+M	app/composer.json
+M	app/public/index.php
+A	app/src/class/ExtractInfo.php
+A	app/src/class/LoadRide.php
+A	app/src/class/loadTrackPoint.php
+M	app/src/controllers/loadController.php
+D	app/src/models/Rider.php
+A	app/src/models/rideBD.php
+A	app/src/models/trackpointBD.php
+A	app/src/traits/ExtratcInfo.php
+M	app/src/traits/dbCreate.php
+M	app/src/traits/dbPreventChange.php
+D	app/src/traits/load_rider.php
+M	docker/nginx/nginx.conf
+M	docker/php/Dockerfile
+M	docker/php/app_php.ini
+
+commit bc0b7f4f261516b89458bcbe2cfe5a3ad4f6f99a
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Fri Mar 18 13:31:46 2022 -0300
+
+    feat: Construindo load rider no banco de dados
+
+M	app/src/controllers/loadController.php
+M	app/src/models/diagram.mwb
+A	app/src/models/diagram.mwb.bak
+A	app/src/models/structure.sql
+M	app/src/routes/loadRoutes.php
+M	app/src/traits/Url.php
+A	app/src/traits/load_rider.php
+M	app/src/views/hyper/leftsidebar/leftsidebar.php
+M	app/src/views/hyper/loadController/begin.php
+
+commit 87bfc11e2fc227f4de8db46d22a654c5fbb409c8
+Author: Iury Gomes de Oliveira <iurygdeoliveira@gmail.com>
+Date:   Thu Mar 17 14:53:46 2022 -0300
+
+    feat: commit inicial
+
+A	.gitignore
+A	app/composer.json
+A	app/public/assets/css/app-dark.min.css
+A	app/public/assets/css/app-dark.min.css.map
+A	app/public/assets/css/app.min.css
+A	app/public/assets/css/app.min.css.map
+A	app/public/assets/css/buttons.bootstrap5.css
+A	app/public/assets/css/dataTables.bootstrap5.css
+A	app/public/assets/css/icons.min.css
+A	app/public/assets/css/icons.min.css.map
+A	app/public/assets/css/responsive.bootstrap5.css
+A	app/public/assets/css/select.bootstrap5.css
+A	app/public/assets/fonts/Nunito-Bold.eot
+A	app/public/assets/fonts/Nunito-Bold.svg
+A	app/public/assets/fonts/Nunito-Bold.ttf
+A	app/public/assets/fonts/Nunito-Bold.woff
+A	app/public/assets/fonts/Nunito-Light.eot
+A	app/public/assets/fonts/Nunito-Light.svg
+A	app/public/assets/fonts/Nunito-Light.ttf
+A	app/public/assets/fonts/Nunito-Light.woff
+A	app/public/assets/fonts/Nunito-Light.woff2
+A	app/public/assets/fonts/Nunito-Regular.eot
+A	app/public/assets/fonts/Nunito-Regular.svg
+A	app/public/assets/fonts/Nunito-Regular.ttf
+A	app/public/assets/fonts/Nunito-Regular.woff
+A	app/public/assets/fonts/Nunito-SemiBold.eot
+A	app/public/assets/fonts/Nunito-SemiBold.svg
+A	app/public/assets/fonts/Nunito-SemiBold.ttf
+A	app/public/assets/fonts/Nunito-SemiBold.woff
+A	app/public/assets/fonts/dripicons-v2.eot
+A	app/public/assets/fonts/dripicons-v2.svg
+A	app/public/assets/fonts/dripicons-v2.ttf
+A	app/public/assets/fonts/dripicons-v2.woff
+A	app/public/assets/fonts/materialdesignicons-webfont.eot
+A	app/public/assets/fonts/materialdesignicons-webfont.ttf
+A	app/public/assets/fonts/materialdesignicons-webfont.woff
+A	app/public/assets/fonts/materialdesignicons-webfont.woff2
+A	app/public/assets/fonts/unicons.eot
+A	app/public/assets/fonts/unicons.svg
+A	app/public/assets/fonts/unicons.ttf
+A	app/public/assets/fonts/unicons.woff
+A	app/public/assets/fonts/unicons.woff2
+A	app/public/assets/img/bg-pattern-dark.png
+A	app/public/assets/img/bg-pattern-light.svg
+A	app/public/assets/img/bg-pattern.png
+A	app/public/assets/img/dashboard/3491efa1-fbb7-4bf1-acd9-665e45148a38.jpeg
+A	app/public/assets/img/dashboard/logo.png
+A	app/public/assets/img/dashboard/logo_laranja.png
+A	app/public/assets/img/dashboard/user.jpg
+A	app/public/assets/img/error/startman.svg
+A	app/public/assets/img/favicon.ico
+A	app/public/assets/img/help-icon.svg
+A	app/public/assets/img/logo.svg
+A	app/public/assets/img/mail_sent.svg
+A	app/public/assets/img/whatsapp.svg
+A	app/public/assets/js/app.min.js
+A	app/public/assets/js/app.min.js.map
+A	app/public/assets/js/axios.min.js
+A	app/public/assets/js/axios.min.map
+A	app/public/assets/js/buttons.bootstrap5.min.js
+A	app/public/assets/js/buttons.flash.min.js
+A	app/public/assets/js/buttons.html5.min.js
+A	app/public/assets/js/buttons.print.min.js
+A	app/public/assets/js/dataTables.bootstrap5.js
+A	app/public/assets/js/dataTables.buttons.min.js
+A	app/public/assets/js/dataTables.keyTable.min.js
+A	app/public/assets/js/dataTables.responsive.min.js
+A	app/public/assets/js/dataTables.select.min.js
+A	app/public/assets/js/demo.datatable-init.js
+A	app/public/assets/js/jquery.dataTables.min.js
+A	app/public/assets/js/responsive.bootstrap5.min.js
+A	app/public/assets/js/vendor.min.js
+A	app/public/assets/js/vendor.min.js.map
+A	app/public/index.php
+A	app/src/controllers/analiseController.php
+A	app/src/controllers/dashboardController.php
+A	app/src/controllers/loadController.php
+A	app/src/core/Controller.php
+A	app/src/core/Model.php
+A	app/src/core/Response.php
+A	app/src/core/Session.php
+A	app/src/core/View.php
+A	app/src/models/Rider.php
+A	app/src/models/diagram.mwb
+A	app/src/routes/analiseRoutes.php
+A	app/src/routes/dashboardRoutes.php
+A	app/src/routes/loadRoutes.php
+A	app/src/support/helpers.php
+A	app/src/traits/Date.php
+A	app/src/traits/Filter.php
+A	app/src/traits/Serialize.php
+A	app/src/traits/Url.php
+A	app/src/traits/Validate.php
+A	app/src/traits/dbConnection.php
+A	app/src/traits/dbCreate.php
+A	app/src/traits/dbDelete.php
+A	app/src/traits/dbError.php
+A	app/src/traits/dbFetch.php
+A	app/src/traits/dbFind.php
+A	app/src/traits/dbPreventChange.php
+A	app/src/traits/dbRead.php
+A	app/src/traits/dbRequired.php
+A	app/src/traits/dbReturn.php
+A	app/src/traits/dbUpdate.php
+A	app/src/views/hyper/analiseController/analise.php
+A	app/src/views/hyper/analiseController/begin.php
+A	app/src/views/hyper/analiseController/dataTable.php
+A	app/src/views/hyper/analiseController/footer.php
+A	app/src/views/hyper/analiseController/modal-danger.php
+A	app/src/views/hyper/analiseController/modal-processando.php
+A	app/src/views/hyper/analiseController/modal-success.php
+A	app/src/views/hyper/analiseController/modal-validar-candidato.php
+A	app/src/views/hyper/analiseController/modal-visualizar-candidato.php
+A	app/src/views/hyper/analiseController/redirect.php
+A	app/src/views/hyper/analiseController/scripts.php
+A	app/src/views/hyper/analiseController/theme.php
+A	app/src/views/hyper/dashboardController/begin.php
+A	app/src/views/hyper/dashboardController/dashboard.php
+A	app/src/views/hyper/dashboardController/dataTable.php
+A	app/src/views/hyper/dashboardController/footer.php
+A	app/src/views/hyper/dashboardController/modal-danger.php
+A	app/src/views/hyper/dashboardController/modal-processando.php
+A	app/src/views/hyper/dashboardController/modal-success.php
+A	app/src/views/hyper/dashboardController/modal-validar-candidato.php
+A	app/src/views/hyper/dashboardController/modal-visualizar-candidato.php
+A	app/src/views/hyper/dashboardController/redirect.php
+A	app/src/views/hyper/dashboardController/scripts.php
+A	app/src/views/hyper/dashboardController/theme.php
+A	app/src/views/hyper/leftsidebar/leftsidebar.php
+A	app/src/views/hyper/loadController/begin.php
+A	app/src/views/hyper/loadController/footer.php
+A	app/src/views/hyper/loadController/load.php
+A	app/src/views/hyper/loadController/modal-danger.php
+A	app/src/views/hyper/loadController/modal-processando.php
+A	app/src/views/hyper/loadController/modal-success.php
+A	app/src/views/hyper/loadController/modal-validar-candidato.php
+A	app/src/views/hyper/loadController/modal-visualizar-candidato.php
+A	app/src/views/hyper/loadController/redirect.php
+A	app/src/views/hyper/loadController/scripts.php
+A	app/src/views/hyper/loadController/theme.php
+A	app/src/views/hyper/topbar/topbar.php
+A	docker-compose.yml
+A	docker/commands.txt
+A	docker/nginx/nginx.conf
+A	docker/php/Dockerfile
+A	docker/php/app_php.ini
+A	docker/php/docker-php-ext-opcache.ini
+A	docker/php/php_errors.log
+A	docker/php/xdebug.ini
