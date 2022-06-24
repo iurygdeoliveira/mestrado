@@ -1,0 +1,107 @@
+version: "3"
+
+services:
+    memcached:
+        image: 'memcached:alpine'
+        container_name: memcached
+        ports:
+            - 11211:11211
+        tty: true
+        restart: always
+        networks:
+            - mestrado
+        command:
+            ["memcached", "-m 2048"]
+
+    # json-server:
+    #     build: ./docker/json-server
+    #     container_name: json-server
+    #     restart: always
+    #     tty: true
+    #     volumes:
+    #         - ./docker/json-server/db/db.json:/tmp/db.json
+    #     ports:
+    #         - 3000:8080
+    #     networks:
+    #         - mestrado
+
+    mysql:
+        image: mysql:latest
+        container_name: mysql
+        restart: always
+        tty: true
+        ports:
+            - ${MYSQL_PORT}:3306
+        command:
+           - --default-authentication-plugin=mysql_native_password
+           - --collation-server=utf8mb4_general_ci
+           - --character-set-server=utf8mb4
+           - --sync-binlog=0
+           #2: mesmo que haja uma falha de energia ou falha do sistema, os dados estarão disponíveis no arquivo de log e poderão ser recuperados.
+           #0: caso haja uma falha de energia ou falha do sistema, todos os dados não liberados não serão recuperáveis, pois não são gravados no arquivo de log ou no disco armazenado.
+           - --innodb-flush-log-at-trx-commit=0 
+           - --innodb-io-capacity=1000
+           # 2x o valor de innodb_io_capacity
+           - --innodb-io-capacity-max=2000
+           - --innodb-flush-method=O_DIRECT
+           - --innodb-flush-sync=0
+           - --skip-innodb-doublewrite
+           - --sql-mode=
+        volumes:
+            - ./docker/mysql/db:/var/lib/mysql/
+            - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+        networks:
+            - mestrado
+        
+        # Estudar sobre esses comandos
+    # command:
+    #   - --collation-server=utf8_unicode_ci
+    #   - --character-set-server=utf8
+    #   - --sync-binlog=0
+    #   - --innodb-flush-log-at-trx-commit=0
+    #   - --innodb-io-capacity=2500
+    #   - --innodb-io-capacity-max=4500
+    #   - --innodb-flush-method=O_DIRECT
+    #   - --innodb-flush-sync=0
+    #   - --skip-innodb-doublewrite
+    #   - --sql-mode=
+
+    app:
+        build: ./docker/php
+        container_name: app
+        extra_hosts:
+            - "host.docker.internal:host-gateway" #Habilitando xdebug com docker
+        restart: always
+        tty: true
+        volumes:
+            - ./app:/var/www/html/app
+            - ./app/src/storage/sessions:/var/www/html/app/src/storage/sessions
+            - ./docker/php/php_errors.log:/usr/share/nginx/html/php_errors.log
+            - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+            - ./docker/php/opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
+            - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+        ports:
+            - ${APP_PORT}:9000
+        networks:
+            - mestrado
+
+    nginx:
+        image: nginx:alpine
+        container_name: nginx
+        restart: always
+        tty: true
+        volumes:
+            - ./app:/var/www/html/app
+            - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+        ports:
+            - "80:80"
+            - "443:443"
+        depends_on:
+            - app
+        networks:
+            - mestrado
+
+networks:
+    mestrado:
+        driver: bridge
+
