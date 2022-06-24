@@ -29,14 +29,22 @@ GRANT ALL PRIVILEGES ON mestrado.* TO 'root'@'%' WITH GRANT OPTION;
 
 select host, user from mysql.user;
 
-#######
-# GIT #
-#######
+################################################
+# GIT - Remover aqrquivos do histórico do git  #
+################################################
+
+Fazer backup do repositorio no estado atual
+tar -czf backup_projeto_mestrado.tar.gz projeto_mestrado
+
+Gerar arquivo de histórico para localizar o arquivo a ser removido
+do histórico do git
+git log --name-status > history.txt
 
 Remover um arquivo grande a arvore do git
-git filter-branch -f --tree-filter 'rm -f /path/to/file' HEAD --all
+git filter-branch -f --prune-empty -d /dev/shm/scratch \
+  --index-filter "git rm --cached -f --ignore-unmatch docker-compose.yml" \
+  --tag-name-filter cat -- --all
 
-Resolvendo o erro “fatal: refusing to merge unrelated histories” no Git
-Para permitir que o Git faça o merge de dois projetos com históricos diferentes, é só passar o parâmetro --allow-unrelated-histories quando for fazer o pull, assim:
+aplicando mudanças no github
+git push --force origin master
 
-git pull origin master --allow-unrelated-histories

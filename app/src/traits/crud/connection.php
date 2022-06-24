@@ -12,12 +12,13 @@ trait connection
 
     public function connectDB()
     {
+
         try {
             $pdo = new PDO(
-                "mysql:host=" . CONF_MYSQL_HOST .
-                    ";dbname=" . CONF_MYSQL_DATABASE,
-                CONF_MYSQL_USER,
-                CONF_MYSQL_PASSWORD,
+                "mysql:host=" . $_ENV['CONF_MYSQL_HOST'] .
+                    ";dbname=" . $_ENV['CONF_MYSQL_DATABASE'],
+                $_ENV['CONF_MYSQL_USER'],
+                $_ENV['CONF_MYSQL_PASSWORD'],
                 [
                     PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

@@ -55,7 +55,8 @@
         "react/react": "^1.2",
         "php-http/message": "^1.13",
         "php-curl-class/php-curl-class": "^9.6",
-        "netresearch/jsonmapper": "^4.0"
+        "netresearch/jsonmapper": "^4.0",
+        "vlucas/phpdotenv": "^5.4"
     },
     "require-dev": {
         "fakerphp/faker": "^v1.17.0",

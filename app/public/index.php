@@ -8,7 +8,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use League\Route\Router;
 use src\core\Session;
 use src\core\Response;
-use MemCachier\MemcacheSASL as Cache;
+use Dotenv\Dotenv;
+//use MemCachier\MemcacheSASL as Cache;
+
+$dotenv = Dotenv::createImmutable(CONF_DOTENV);
+$dotenv->load();
 
 // $m = new Cache();
 // $m->addServer('memcached', 11211);
