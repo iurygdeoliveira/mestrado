@@ -3,7 +3,7 @@ LABEL maintainer="Iury Gomes de Oliveira"
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get -y --no-install-recommends install libcurl4-openssl-dev libmpdec-dev libmemcached-dev memcached
+    apt-get -y --no-install-recommends install libcurl4-openssl-dev libmpdec-dev libmemcached-dev memcached apt-utils
 
 RUN docker-php-ext-install pdo pdo_mysql curl opcache
 RUN docker-php-ext-enable pdo_mysql 
