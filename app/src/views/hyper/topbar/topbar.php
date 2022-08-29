@@ -2,7 +2,6 @@
 <div class="navbar-custom">
     <ul class="list-unstyled topbar-menu float-end mb-0">
 
-
         <li class="dropdown notification-list">
             <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                 <span class="account-user-avatar">
