@@ -111,6 +111,14 @@
 
             <li class="side-nav-item">
                 <div class="side-nav-link">
+                    <div class="mb-0">
+                        <label for="example-range" class="form-label">Faixa de Distância</label>
+                        <input class="form-range" id="example-range" type="range" name="range" min="0" max="100">
+                    </div>
+                </div>
+            </li>
+            <li class="side-nav-item">
+                <div class="side-nav-link">
                     <script>
                         document.write('2021 - ' + (new Date().getFullYear()))
                     </script> © CycleVis
