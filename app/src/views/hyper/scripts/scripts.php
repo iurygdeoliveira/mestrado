@@ -16,4 +16,6 @@
 <script defer src="<?= js('dataTables.select.min.js') ?>"></script> -->
 <!-- <script defer src="<?= js('demo.datatable-init.js') ?>"></script> -->
 <script src="<?= js('jquery-3.6.1.min.js') ?>"></script>
+<script src="<?= js('jquery-ui.min.js') ?>"></script>
+
 <!-- third party js ends -->

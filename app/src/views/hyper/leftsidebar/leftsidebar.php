@@ -111,12 +111,24 @@
 
             <li class="side-nav-item">
                 <div class="side-nav-link">
-                    <div class="mb-0">
-                        <label for="example-range" class="form-label">Faixa de Distância</label>
-                        <input class="form-range" id="example-range" type="range" name="range" min="0" max="100">
+                    <div class="row">
+                        <span class="text-center mb-1">
+                            <label for="distance">Selecionar Distância:</label>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <span class="text-center mb-1">
+                            <div id="distance" style="border:0; color:#FFF; font-weight:bold;"></div>
+                        </span>
+                    </div>
+                    <div class="mb-2" id="slider-range"></div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-light" id="search_ride">Buscar Pedaladas</button>
                     </div>
                 </div>
             </li>
+
             <li class="side-nav-item">
                 <div class="side-nav-link">
                     <script>

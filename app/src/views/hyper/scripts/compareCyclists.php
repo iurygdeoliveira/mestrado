@@ -28,7 +28,7 @@
         if ($this.is(':checked')) {
             selected.push($this.attr("name"));
             $(this).css('background-color', colors.shift())
-            console.log(colors);
+            //console.log(colors);
         } else {
             let value = $this.attr("name");
             selected = arrayRemove(selected, $this.attr("name"))

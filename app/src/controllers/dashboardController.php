@@ -7,7 +7,6 @@ namespace src\controllers;
 use src\core\View;
 use src\core\Controller;
 use Laminas\Diactoros\Response;
-use src\core\Session;
 use src\traits\Validate;
 use src\traits\Url;
 

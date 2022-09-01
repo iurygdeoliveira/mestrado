@@ -22,6 +22,7 @@
     <link defer href="<?= css('icons.min.css') ?>" rel="stylesheet" type="text/css" />
     <link defer href="<?= css('app.min.css') ?>" rel="stylesheet" type="text/css" id="light-style" />
     <link defer href="<?= css('app-dark.min.css') ?>" rel="stylesheet" type="text/css" id="dark-style" />
+    <link defer href="<?= css('jquery-ui.min.css') ?>" rel="stylesheet" type="text/css" id="dark-style" />
 
 </head>
 

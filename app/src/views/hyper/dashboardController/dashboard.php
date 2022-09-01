@@ -7,3 +7,4 @@
 
 <?php $this->insert("../scripts/scripts") ?>
 <?php $this->insert("../scripts/compareCyclists") ?>
+<?php $this->insert("../scripts/distance") ?>
