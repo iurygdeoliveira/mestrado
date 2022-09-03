@@ -1,6 +1,7 @@
 <script src="<?= js('vendor.min.js') ?>"></script>
 <script src="<?= js('app.min.js') ?>"></script>
 <script src="<?= js('axios.min.js') ?>"></script>
+<script src="<?= js('store.modern.min.js') ?>"></script>
 
 <!-- third party js -->
 <!-- <script defer src="<?= js('jquery.dataTables.min.js') ?>"></script>

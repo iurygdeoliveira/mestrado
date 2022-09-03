@@ -6,5 +6,6 @@
 <!-- /End-bar -->
 
 <?php $this->insert("../scripts/scripts") ?>
+<?php $this->insert("../scripts/getMaxDistance") ?>
+<?php $this->insert("../scripts/updateSlider") ?>
 <?php $this->insert("../scripts/compareCyclists") ?>
-<?php $this->insert("../scripts/distance") ?>

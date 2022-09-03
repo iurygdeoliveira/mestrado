@@ -12,7 +12,7 @@
         <!--- Sidemenu -->
         <ul class="side-nav">
             <li class="side-nav-item">
-                <div class="side-nav-link">
+                <div class="side-nav-link pb-0">
                     <div class="row">
                         <span class="text-center mb-1">
                             Comparar Ciclistas:
@@ -20,97 +20,96 @@
                     </div>
                     <div class="row">
                         <span class="form-check col-2 me-1" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_1" name="select_rider_1">
+                            <input type='checkbox' class="form-check-input" id="rider1" name="rider1">
                             <label class="form-check-label">1</label>
                         </span>
                         <span class="form-check col-2 me-1" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_2" name="select_rider_2">
+                            <input type='checkbox' class="form-check-input" id="rider2" name="rider2">
                             <label class="form-check-label">2</label>
                         </span>
                         <span class="form-check col-2 me-1" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_3" name="select_rider_3">
+                            <input type='checkbox' class="form-check-input" id="rider3" name="rider3">
                             <label class="form-check-label">3</label>
                         </span>
                         <span class="form-check col-2 me-1" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_4" name="select_rider_4">
+                            <input type='checkbox' class="form-check-input" id="rider4" name="rider4">
                             <label class="form-check-label">4</label>
                         </span>
                         <span class="form-check col-2 me-1" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_5" name="select_rider_5">
+                            <input type='checkbox' class="form-check-input" id="rider5" name="rider5">
                             <label class="form-check-label">5</label>
                         </span>
                     </div>
                     <div class="row">
                         <span class="form-check col-2 me-1" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_6" name="select_rider_1">
+                            <input type='checkbox' class="form-check-input" id="rider6" name="rider1">
                             <label class="form-check-label">6</label>
                         </span>
                         <span class="form-check col-2 me-1" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_7" name="select_rider_7">
+                            <input type='checkbox' class="form-check-input" id="rider7" name="rider7">
                             <label class="form-check-label">7</label>
                         </span>
                         <span class="form-check col-2 me-1" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_8" name="select_rider_8">
+                            <input type='checkbox' class="form-check-input" id="rider8" name="rider8">
                             <label class="form-check-label">8</label>
                         </span>
                         <span class="form-check col-2 me-1" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_9" name="select_rider_9">
+                            <input type='checkbox' class="form-check-input" id="rider9" name="rider9">
                             <label class="form-check-label">9</label>
                         </span>
                         <span class="form-check col-2 me-1" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_10" name="select_rider_10">
+                            <input type='checkbox' class="form-check-input" id="rider10" name="rider10">
                             <label class="form-check-label">10</label>
                         </span>
                     </div>
                     <div class="row">
                         <span class="form-check col-3" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_11" name="select_rider_11">
+                            <input type='checkbox' class="form-check-input" id="rider11" name="rider11">
                             <label class="form-check-label">11</label>
                         </span>
                         <span class="form-check col-3" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_12" name="select_rider_12">
+                            <input type='checkbox' class="form-check-input" id="rider12" name="rider12">
                             <label class="form-check-label">12</label>
                         </span>
                         <span class="form-check col-3" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_13" name="select_rider_13">
+                            <input type='checkbox' class="form-check-input" id="rider13" name="rider13">
                             <label class="form-check-label">13</label>
                         </span>
                         <span class="form-check col-3" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_14" name="select_rider_14">
+                            <input type='checkbox' class="form-check-input" id="rider14" name="rider14">
                             <label class="form-check-label">14</label>
                         </span>
                     </div>
                     <div class="row">
                         <span class="form-check col-3" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_15" name="select_rider_15">
+                            <input type='checkbox' class="form-check-input" id="rider15" name="rider15">
                             <label class="form-check-label">15</label>
                         </span>
                         <span class="form-check col-3" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_16" name="select_rider_16">
+                            <input type='checkbox' class="form-check-input" id="rider16" name="rider16">
                             <label class="form-check-label">16</label>
                         </span>
                         <span class="form-check col-3" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_17" name="select_rider_17">
+                            <input type='checkbox' class="form-check-input" id="rider17" name="rider17">
                             <label class="form-check-label">17</label>
                         </span>
                         <span class="form-check col-3" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_18" name="select_rider_18">
+                            <input type='checkbox' class="form-check-input" id="rider18" name="rider18">
                             <label class="form-check-label">18</label>
                         </span>
                     </div>
                     <div class="row">
                         <span class="form-check col-3" style="display:inline-block">
-                            <input type="checkbox" class="form-check-input" id="select_rider_19" name=" select_rider_9">
+                            <input type='checkbox' class="form-check-input" id="rider19" name=" rider19">
                             <label class="form-check-label">19</label>
                         </span>
                     </div>
                 </div>
-
             </li>
 
 
             <li class="side-nav-item">
-                <div class="side-nav-link">
+                <div class="side-nav-link pb-0">
                     <div class="row">
                         <span class="text-center mb-1">
                             <label for="distance">Selecionar Distância:</label>
@@ -118,13 +117,14 @@
                     </div>
                     <div class="row">
                         <span class="text-center mb-1">
-                            <div id="distance" style="border:0; color:#FFF; font-weight:bold;"></div>
-                        </span>
+                            <div id="distance" style="border:0; color:#FFF; font-weight:bold;">
+                                <span id="range-min">0 KM</span> - <span id="range-max">? KM</span>
+                            </div>
                     </div>
                     <div class="mb-2" id="slider-range"></div>
 
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-light" id="search_ride">Buscar Pedaladas</button>
+                        <button type="button" class="btn btn-light btn-sm" id="search_ride">Buscar Pedaladas &nbsp;<i class="uil uil-arrow-circle-down m-0"></i></button>
                     </div>
                 </div>
             </li>
