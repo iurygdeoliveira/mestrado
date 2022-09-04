@@ -10,12 +10,14 @@ use Laminas\Diactoros\Response;
 use src\traits\Validate;
 use src\traits\Url;
 use src\traits\responseJson;
+use src\classes\Distance;
 
 class dashboardController extends Controller
 {
     use Validate, Url, responseJson;
 
     public View $view; // Responsavel por renderizar a view home
+    public $rider;
 
     public function __construct()
     {
@@ -46,6 +48,10 @@ class dashboardController extends Controller
         // Obtendo dados da requisição
         $request = (object)getRequest()->getParsedBody();
 
-        return $this->responseJson(true, "Distância máxima do $request->rider encontrada", mt_rand(10, 100));
+        // Obtendo dados do dataset
+        $this->rider = new Distance($request->rider);
+        $result = $this->rider->maxDistance();
+
+        return $this->responseJson(true, "Distância máxima do $request->rider encontrada", $result);
     }
 }

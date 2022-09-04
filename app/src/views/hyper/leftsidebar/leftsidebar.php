@@ -111,7 +111,7 @@
             <li class="side-nav-item">
                 <div class="side-nav-link pb-0">
                     <div class="row">
-                        <span class="text-center mb-1">
+                        <span class="text-center">
                             <label for="distance">Selecionar Distância:</label>
                         </span>
                     </div>
@@ -124,7 +124,9 @@
                     <div class="mb-2" id="slider-range"></div>
 
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-light btn-sm" id="search_ride">Buscar Pedaladas &nbsp;<i class="uil uil-arrow-circle-down m-0"></i></button>
+                        <button type="button" class="btn btn-light btn-sm" id="search_rides" onclick="searchRiders()">
+                            Buscar Pedaladas &nbsp;<i id="icon_search_rides" class="uil uil-arrow-circle-down m-0"></i>
+                        </button>
                     </div>
                 </div>
             </li>

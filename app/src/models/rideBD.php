@@ -6,10 +6,6 @@ namespace src\models;
 
 use src\core\Model;
 use src\traits\crud\preventChange;
-use src\traits\encryptPass;
-use src\traits\Validate;
-use Exception;
-use PDOException;
 
 class rideBD extends Model
 {
