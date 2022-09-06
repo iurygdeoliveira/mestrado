@@ -3,7 +3,7 @@
         if (store.session.has(rider)) {
 
             if (store.session.get(rider).maxDistance <= 0) {
-                console.log('Erro na distância máxima do' + rider);
+                console.log('Erro na distância máxima do ' + rider);
                 return -1;
             }
 
@@ -44,15 +44,15 @@
         // Encontrando o maior valor
 
         // Atualizando slider
-        console.log(distances);
+        console.log("Distancias selecionadas: ", distances);
         if (distances.length == 0) {
-            $("#range-max").text("? KM");
+            $("#range-max").text("?");
         } else {
             const maxDistance = distances.reduce(function(prev, current) {
                 return prev > current ? prev : current;
             });
-            console.log(maxDistance);
-            $("#range-max").text(maxDistance + " KM");
+            console.log("Maior Distância: ", maxDistance);
+            $("#range-max").text(maxDistance);
             updateRangeMax(maxDistance);
         }
 
@@ -62,10 +62,12 @@
         $("#slider-range").slider({
             range: true,
             min: 0,
+            step: 0.01,
             max: maxDistance,
             values: [0, maxDistance],
             slide: function(event, ui) {
-                $("#distance").text(ui.values[0] + " KM - " + ui.values[1] + " KM");
+                $("#range-min").text(ui.values[0]);
+                $("#range-max").text(ui.values[1]);
             }
         });
     }

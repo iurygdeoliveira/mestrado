@@ -11,6 +11,7 @@ use src\traits\Validate;
 use src\traits\Url;
 use src\traits\responseJson;
 use src\classes\Distance;
+use src\classes\Pedalada;
 
 class dashboardController extends Controller
 {
@@ -29,10 +30,12 @@ class dashboardController extends Controller
     {
         // Dados para renderização no template
         $data = $this->dataTheme('Dashboard');
+        $data += ['url_maxDistance' => url('maxDistance')];
+        $data += ['url_search_riders' => url('searchRiders')];
         $this->view->addData($data, '../theme/theme');
         $this->view->addData($data, '../scripts/scripts');
-        $data += ['url_maxDistance' => url('maxDistance')];
         $this->view->addData($data, '../scripts/getMaxDistance');
+        $this->view->addData($data, '../scripts/searchRiders');
 
         $response = new Response();
         $response->getBody()->write(
@@ -53,5 +56,17 @@ class dashboardController extends Controller
         $result = $this->rider->maxDistance();
 
         return $this->responseJson(true, "Distância máxima do $request->rider encontrada", $result);
+    }
+
+    public function searchRiders(): Response
+    {
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+
+        // Obtendo dados do dataset
+        $this->rider = new Distance($request->rider);
+        $result = $this->rider->distances();
+
+        return $this->responseJson(true, "Distâncias do $request->rider encontradas", $result);
     }
 }

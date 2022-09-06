@@ -30,9 +30,29 @@ class Distance
         set_time_limit(0);
         ini_set('memory_limit', '-1');
 
-        $distance = max($this->ride->getDistances());
+        $distances = [];
+        foreach ($this->ride->getDistances() as $key => $value) {
+            $number = floatval($value->data()->distance_avg);
+            array_push($distances, number_format($number, 2, '.', ''));
+        }
+
+        $distance = max($distances);
 
         set_time_limit(30);
         return $distance;
+    }
+
+    public function distances()
+    {
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
+
+        $distances = [];
+        foreach ($this->ride->getDistances() as $key => $value) {
+            array_push($distances, $value->data());
+        }
+
+        set_time_limit(30);
+        return $distances;
     }
 }

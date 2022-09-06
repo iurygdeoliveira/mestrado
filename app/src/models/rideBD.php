@@ -121,4 +121,24 @@ class rideBD extends Model
         }
         return true;
     }
+
+    public function getDistances()
+    {
+
+        $this->query = 'SELECT id,distance_avg FROM ' . $this->table;
+        return (array)$this->fetch(true);
+    }
+
+    public function getPedaladas()
+    {
+
+        $this->query = 'SELECT distance_calculated FROM ' . $this->table;
+        $result = (array)$this->fetch(true);
+
+        $distances = [];
+        foreach ($result as $key => $value) {
+            array_push($distances, intval($value->data()->distance_calculated));
+        }
+        return $distances;
+    }
 }

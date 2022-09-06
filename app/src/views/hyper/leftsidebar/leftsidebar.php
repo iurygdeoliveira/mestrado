@@ -15,7 +15,7 @@
                 <div class="side-nav-link pb-0">
                     <div class="row">
                         <span class="text-center mb-1">
-                            Comparar Ciclistas:
+                            1º Selecionar Ciclistas:
                         </span>
                     </div>
                     <div class="row">
@@ -112,20 +112,40 @@
                 <div class="side-nav-link pb-0">
                     <div class="row">
                         <span class="text-center">
-                            <label for="distance">Selecionar Distância:</label>
+                            <label for="distance">2º Selecionar Distância:</label>
                         </span>
                     </div>
                     <div class="row">
                         <span class="text-center mb-1">
                             <div id="distance" style="border:0; color:#FFF; font-weight:bold;">
-                                <span id="range-min">0 KM</span> - <span id="range-max">? KM</span>
+                                <span id="range-min">0</span> KM - <span id="range-max">?</span> KM
                             </div>
                     </div>
-                    <div class="mb-2" id="slider-range"></div>
+                    <div class="mb-2" id="slider-range" style="display: none;"></div>
 
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-light btn-sm" id="search_rides" onclick="searchRiders()">
+                        <button type="button" class="btn btn-light btn-sm col-12" id="search_rides" onclick="searchRiders()" disabled>
                             Buscar Pedaladas &nbsp;<i id="icon_search_rides" class="uil uil-arrow-circle-down m-0"></i>
+                        </button>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-light btn-sm col-12" id="search_rides_update" onclick="searchRiders()" style="display: none;">
+                            Atualizar Pedaladas &nbsp;<i id="icon_search_rides" class="uil uil-arrow-circle-down m-0"></i>
+                        </button>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-light btn-sm col-12" id="search_rides_loading" disabled style="display: none;">
+                            Buscando ... &nbsp;<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-success btn-sm col-12" id="search_rides_success" style="display: none;">
+                            Sucesso &nbsp;<i id="icon_search_rides" class="uil uil-check-circle"></i>
+                        </button>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-danger btn-sm col-12" id="search_rides_danger" style="display: none;">
+                            Erro &nbsp;<i id="icon_search_rides" class="uil uil-times-circle"></i>
                         </button>
                     </div>
                 </div>

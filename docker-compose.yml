@@ -46,7 +46,6 @@ services:
            - --innodb-flush-method=O_DIRECT
            - --innodb-flush-sync=0
            - --skip-innodb-doublewrite
-           - --sql-mode=
         volumes:
             - ./docker/mysql/db:/var/lib/mysql/
             - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf

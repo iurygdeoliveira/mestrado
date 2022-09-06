@@ -150,18 +150,6 @@ abstract class Model
         return $result['COUNT(*)'];
     }
 
-    public function getDistances()
-    {
-
-        $this->query = 'SELECT distance_calculated FROM ' . $this->table;
-        $result = (array)$this->fetch(true);
-
-        $distances = [];
-        foreach ($result as $key => $value) {
-            array_push($distances, intval($value->data()->distance_calculated));
-        }
-        return $distances;
-    }
 
     public function message()
     {

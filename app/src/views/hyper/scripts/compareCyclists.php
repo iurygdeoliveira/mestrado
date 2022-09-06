@@ -21,6 +21,7 @@
     $('#rider18').on('click', click_handler);
     $('#rider19').on('click', click_handler);
 
+
     // Monitora os clicks do mouse
     function click_handler() {
         // converte um HTMLElement para um objeto jQuery
@@ -38,12 +39,14 @@
             // console.log(selected);
         }
 
+        // Atualizando checkbox
         if (selected.length >= 5) {
             disabledCheckBox();
         } else {
             enableCheckBox();
         }
 
+        updateButtonSearchRiders(selected, false, false, false, false, false)
         updateSlider(selected);
     }
 
