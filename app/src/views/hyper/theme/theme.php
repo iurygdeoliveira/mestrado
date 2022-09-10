@@ -11,18 +11,17 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="<?= img('favicon.ico') ?>">
 
-    <!-- third party css -->
-    <link defer href="<?= css('dataTables.bootstrap5.css') ?>" rel="stylesheet" type="text/css" />
-    <link defer href="<?= css('responsive.bootstrap5.css') ?>" rel="stylesheet" type="text/css" />
-    <link defer href="<?= css('buttons.bootstrap5.css') ?>" rel="stylesheet" type="text/css" />
-    <link defer href="<?= css('select.bootstrap5.css') ?>" rel="stylesheet" type="text/css" />
-    <!-- third party css end -->
-
     <!-- App css -->
-    <link defer href="<?= css('icons.min.css') ?>" rel="stylesheet" type="text/css" />
-    <link defer href="<?= css('app.min.css') ?>" rel="stylesheet" type="text/css" id="light-style" />
-    <link defer href="<?= css('app-dark.min.css') ?>" rel="stylesheet" type="text/css" id="dark-style" />
-    <link defer href="<?= css('jquery-ui.min.css') ?>" rel="stylesheet" type="text/css" id="dark-style" />
+    <link href="<?= css('icons.min.css') ?>" rel="stylesheet" type="text/css" />
+    <link href="<?= css('app.min.css') ?>" rel="stylesheet" type="text/css" id="app-style" />
+    <link href="<?= css('app-dark.min.css') ?>" rel="stylesheet" type="text/css" id="dark-style" />
+    <link href="<?= css('jquery-ui.min.css') ?>" rel="stylesheet" type="text/css" id="dark-style" />
+
+    <style>
+        .modal-backdrop {
+            z-index: 2;
+        }
+    </style>
 
 </head>
 

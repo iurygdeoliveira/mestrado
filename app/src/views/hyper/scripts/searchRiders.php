@@ -14,12 +14,12 @@
             // console.log($('#range-min').text());
             // console.log($('#range-max').text());
 
-            return await axios.post('<?= $this->e($url_search_riders) ?>', data)
+            let pedaladas = await axios.post('<?= $this->e($url_search_riders) ?>', data)
                 .then(function(res) {
 
                     if (res.data.status === true) {
                         console.log(res.data.message);
-                        console.log(res.data.response);
+                        //console.log(res.data.response);
                         updateButtonSearchRiders(selected, false, false, false, true, false);
                         return res.data.response;
                     }
@@ -38,6 +38,8 @@
                     return -1;
                 });
 
+            await createTableLens(pedaladas);
+
         }
     }
 
@@ -47,7 +49,7 @@
         // modficar novamente os ciclistas selecionados
         let buttonSuccess = $('#search_rides_success').css("display");
         let buttonDanger = $('#search_rides_danger').css("display");
-        console.log(buttonSuccess, buttonDanger);
+        //console.log(buttonSuccess, buttonDanger);
         if ((buttonSuccess == 'block') || (buttonDanger == 'block')) {
             $('#search_rides').hide();
             $('#search_rides_loading').hide();
@@ -57,9 +59,10 @@
         }
 
         // Atualizando botão de busca de pedaladas e slider
-        console.log(selected.length)
+        //console.log(selected.length)
         if (selected.length > 0) {
             document.getElementById('search_rides').disabled = false;
+            document.getElementById('search_rides_update').disabled = false;
             $('#slider-range').show();
         } else {
             document.getElementById('search_rides').disabled = true;
