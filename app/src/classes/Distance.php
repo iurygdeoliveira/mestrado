@@ -32,7 +32,7 @@ class Distance
 
         $distances = [];
         foreach ($this->ride->getDistances() as $key => $value) {
-            $number = floatval($value->data()->distance_avg);
+            $number = floatval($value->data()->distance_haversine);
             array_push($distances, number_format($number, 2, '.', ''));
         }
 

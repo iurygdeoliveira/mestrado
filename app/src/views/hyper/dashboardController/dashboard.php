@@ -6,8 +6,9 @@
 <!-- /End-bar -->
 
 <?php $this->insert("../scripts/scripts") ?>
-<?php $this->insert("../scripts/getMaxDistance") ?>
+<?php $this->insert("../scripts/getDistances") ?>
 <?php $this->insert("../scripts/updateSlider") ?>
+<?php $this->insert("../scripts/updateButtons") ?>
 <?php $this->insert("../scripts/selectRiderScript") ?>
 <?php $this->insert("../scripts/createTableLens") ?>
-<?php $this->insert("../scripts/searchRiders") ?>
+<?php $this->insert("../scripts/verPedaladas") ?>

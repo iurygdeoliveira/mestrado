@@ -11,6 +11,6 @@
 </div>
 <div class="mb-2" id="slider-range" style="display: none;"></div>
 
-<?php $this->insert("../leftsidebar/updateButtonSearchRiders") ?>
+<?php $this->insert("../leftsidebar/verPedaladas") ?>
 
 <?php $this->insert("../leftsidebar/modalTableLens") ?>

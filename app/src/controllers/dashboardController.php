@@ -34,8 +34,8 @@ class dashboardController extends Controller
         $data += ['url_search_riders' => url('searchRiders')];
         $this->view->addData($data, '../theme/theme');
         $this->view->addData($data, '../scripts/scripts');
-        $this->view->addData($data, '../scripts/getMaxDistance');
-        $this->view->addData($data, '../scripts/searchRiders');
+        $this->view->addData($data, '../scripts/getDistances');
+        $this->view->addData($data, '../scripts/verPedaladas');
 
         $response = new Response();
         $response->getBody()->write(

@@ -1,24 +1,4 @@
 <script>
-    async function getDistances(rider) {
-        if (store.session.has(rider)) {
-
-            if (store.session.get(rider).maxDistance <= 0) {
-                console.log('Erro na distância máxima do ' + rider);
-                return -1;
-            }
-
-            if (store.session.get(rider).maxDistance > 0) {
-                return store.session.get(rider).maxDistance;
-            }
-        } else {
-            // Se distância máxima não existir, realiza a busca
-            store.session.set(rider, {
-                maxDistance: await getMaxDistance(rider)
-            });
-            return store.session.get(rider).maxDistance;
-        }
-    }
-
     async function updateSlider(selected) {
 
         let distances = [];

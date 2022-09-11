@@ -125,7 +125,7 @@ class rideBD extends Model
     public function getDistances()
     {
 
-        $this->query = 'SELECT id,distance_avg FROM ' . $this->table;
+        $this->query = 'SELECT id,distance_haversine FROM ' . $this->table;
         return (array)$this->fetch(true);
     }
 
