@@ -12,19 +12,18 @@
             </li>
 
             <li class="side-nav-item">
-                <div class="side-nav-link pb-0 pt-0">
-                    <?php $this->insert("../leftsidebar/defineDistance") ?>
-                </div>
-            </li>
-
-            <li class="side-nav-item">
                 <div class="side-nav-link pe-3 ps-3">
                     <?php $this->insert("../leftsidebar/selected") ?>
                 </div>
             </li>
             <li class="side-nav-item">
+                <div class="side-nav-link pb-0 pt-0">
+                    <?php $this->insert("../leftsidebar/defineDistance") ?>
+                </div>
+            </li>
+            <li class="side-nav-item">
                 <div class="side-nav-link pt-0 pb-0">
-                    <?php $this->insert("../leftsidebar/updateButtonCreateVis") ?>
+                    <?php $this->insert("../leftsidebar/createVis") ?>
                 </div>
             </li>
         </ul>

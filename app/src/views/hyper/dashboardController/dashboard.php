@@ -11,4 +11,5 @@
 <?php $this->insert("../scripts/updateButtons") ?>
 <?php $this->insert("../scripts/selectRiderScript") ?>
 <?php $this->insert("../scripts/createTableLens") ?>
+<?php $this->insert("../scripts/animationTableLens") ?>
 <?php $this->insert("../scripts/verPedaladas") ?>

@@ -1,6 +1,6 @@
 <div class="row">
     <span class="text-center text-light">
-        <label for="distance">2º Definir Distância:</label>
+        <label for="distance">3º Definir Distância:</label>
     </span>
 </div>
 <div class="row">
@@ -10,7 +10,3 @@
         </div>
 </div>
 <div class="mb-2" id="slider-range" style="display: none;"></div>
-
-<?php $this->insert("../leftsidebar/verPedaladas") ?>
-
-<?php $this->insert("../leftsidebar/modalTableLens") ?>

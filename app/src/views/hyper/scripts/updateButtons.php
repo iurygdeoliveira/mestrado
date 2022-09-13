@@ -1,16 +1,6 @@
 <script>
     function updateButtonSearchRiders(selected, search_riders, search_riders_loading, search_riders_danger) {
 
-        // Atualizando botão de busca de pedaladas e slider ao 
-        // modficar novamente os ciclistas selecionados
-        let buttonDanger = $('#search_rides_danger').css("display");
-        //console.log(buttonSuccess, buttonDanger);
-        if (buttonDanger == 'block') {
-            $('#search_rides').hide();
-            $('#search_rides_loading').hide();
-            $('#search_rides_danger').hide();
-            $('#search_rides_update').show();
-        }
 
         // Atualizando botão de busca de pedaladas e slider
         //console.log(selected.length)

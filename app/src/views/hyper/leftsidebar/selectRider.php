@@ -27,7 +27,7 @@
 </div>
 <div class="row text-light">
     <span class="form-check col-2 me-1" style="display:inline-block">
-        <input type='checkbox' class="form-check-input" id="rider6" name="rider1">
+        <input type='checkbox' class="form-check-input" id="rider6" name="rider6">
         <label class="form-check-label">6</label>
     </span>
     <span class="form-check col-2 me-1" style="display:inline-block">
@@ -85,7 +85,9 @@
 </div>
 <div class="row text-light">
     <span class="form-check col-3" style="display:inline-block">
-        <input type='checkbox' class="form-check-input" id="rider19" name=" rider19">
+        <input type='checkbox' class="form-check-input" id="rider19" name="rider19">
         <label class="form-check-label">19</label>
     </span>
 </div>
+
+<?php $this->insert("../leftsidebar/verPedaladas") ?>

@@ -1,11 +1,13 @@
 <script>
     async function updateSlider(selected) {
 
-        let distances = [];
-
         //console.log(selected)
+
+        distances = [];
         selected.forEach(rider => {
 
+            // console.log(rider);
+            // console.log(store.session.has(rider));
             if (store.session.has(rider)) {
 
                 if (store.session.get(rider).maxDistance <= 0) {
@@ -13,7 +15,7 @@
                 }
 
                 if (store.session.get(rider).maxDistance > 0) {
-                    distances.push(store.session.get(rider).maxDistance);
+                    distances.push(Math.trunc(store.session.get(rider).maxDistance));
                 }
             } else {
                 console.log('Erro na distância máxima do' + rider);
