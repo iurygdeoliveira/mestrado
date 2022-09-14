@@ -2,6 +2,8 @@
     const background_lens = 'rgb(80,80,80)';
     const mix_height_lens = 3;
     const max_height_lens = 10;
+    let switchToggle = 'overview';
+    let switchOrder = 'descending';
     let selected = [];
     let distances = [];
     let colors = ['rgb(211, 69, 91)', 'rgb(44, 136, 217)', 'rgb(247, 195, 37)', 'rgb(47, 177, 156)', 'rgb(115, 15, 195)']
@@ -25,8 +27,31 @@
     $('#rider18').on('click', click_handler);
     $('#rider19').on('click', click_handler);
 
+    // Alternando modos de visualização do tablelens
+    $('#switchToggle').on('click', function() {
+        if (switchToggle == 'overview') {
+            switchToggle = 'item';
+            console.log('Alternando Table Lens para modo: ' + switchToggle);
+        } else {
+            switchToggle = 'overview';
+            console.log('Alternando Table Lens para modo: ' + switchToggle);
+        }
+        verPedaladas();
+    });
 
-    // Monitora os clicks do mouse
+    $('#switchOrder').on('click', function() {
+        if (switchOrder == 'descending') {
+            switchOrder = 'ascending';
+            console.log('Alternando Table Lens para modo: ' + switchOrder);
+        } else {
+            switchOrder = 'descending';
+            console.log('Alternando Table Lens para modo: ' + switchOrder);
+        }
+        verPedaladas();
+    });
+
+
+    // Monitora os clicks do mouse nos checkbox dos ciclistas
     function click_handler() {
 
         let $this = $(this);
@@ -70,18 +95,21 @@
     function disabledCheckBox() {
         $("input:not(:checked)").each(function() {
             // console.log($(this).attr("id"));
-            // O botão switch toogle não pode receber esse efeito
-            if ($(this).attr("id") != 'switchToggle') {
+            // Os botões switch não podem receber esse efeito
+            let input = $(this).attr("id");
+            if ((input != 'switchToggle') && (input != 'switchOrder')) {
                 document.getElementById($(this).attr("id")).disabled = true;
             }
+
         });
     }
 
     function enableCheckBox() {
         $("input:not(:checked)").each(function() {
 
-            // O botão switch toogle não pode receber esse efeito
-            if ($(this).attr("id") != 'switchToggle') {
+            // Os botões switch não podem receber esse efeito
+            let input = $(this).attr("id");
+            if ((input != 'switchToggle') && (input != 'switchOrder')) {
                 document.getElementById($(this).attr("id")).disabled = false;
                 $(this).css('background-color', 'white');
                 //console.log(colors);

@@ -30,6 +30,8 @@
             createTableLens(store.session.get(selected[count]).distances, count, selected[count], maxDistance);
         }
 
-        animationTableLens();
+        if (switchToggle == 'item') {
+            animationTableLens();
+        }
     }
 </script>
