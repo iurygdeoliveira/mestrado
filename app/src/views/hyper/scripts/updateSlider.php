@@ -1,32 +1,31 @@
 <script>
-    async function updateSlider(selected) {
+    function updateSlider(selected) {
 
-        //console.log(selected)
-
+        console.log("updateSlider | Start");
         distances = [];
-        selected.forEach(rider => {
 
+        // Atualizando distancias
+        selected.forEach(rider => {
             // console.log(rider);
-            // console.log(store.session.has(rider));
+            //console.log(store.session.has(rider));
             if (store.session.has(rider)) {
 
                 if (store.session.get(rider).maxDistance <= 0) {
                     console.log('Erro na distância máxima do' + rider);
+                } else {
+                    distances.push(store.session.get(rider).maxDistance);
+                    updatingSlider();
                 }
-
-                if (store.session.get(rider).maxDistance > 0) {
-                    distances.push(Math.trunc(store.session.get(rider).maxDistance));
-                }
-            } else {
-                console.log('Erro na distância máxima do' + rider);
             }
-
         });
 
-        // Encontrando o maior valor
+        console.log("updateSlider | End");
 
-        // Atualizando slider
-        console.log("Distancias selecionadas: ", distances);
+    }
+
+    function updatingSlider() {
+        console.log("updatingSlider | start");
+
         if (distances.length == 0) {
             $("#range-max").text("?");
         } else {
@@ -37,10 +36,11 @@
             $("#range-max").text(maxDistance);
             updateRangeMax(maxDistance);
         }
-
+        console.log("updatingSlider | end");
     }
 
     function updateRangeMax(maxDistance) {
+        console.log("updateRangeMax | Start");
         $("#slider-range").slider({
             range: true,
             min: 0,
@@ -52,5 +52,6 @@
                 $("#range-max").text(ui.values[1]);
             }
         });
+        console.log("updateRangeMax | End");
     }
 </script>

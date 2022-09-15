@@ -89,5 +89,3 @@
         <label class="form-check-label">19</label>
     </span>
 </div>
-
-<?php $this->insert("../leftsidebar/verPedaladas") ?>

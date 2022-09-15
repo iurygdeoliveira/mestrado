@@ -1,6 +1,6 @@
 <div class="row">
     <span class="text-center text-light">
-        <label for="distance">3º Definir Distância:</label>
+        <label for="distance">2º Definir Distância:</label>
     </span>
 </div>
 <div class="row">

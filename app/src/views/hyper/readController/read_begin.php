@@ -10,8 +10,6 @@
     <div class="content-page">
         <div class="content">
 
-            <?php $this->insert("../topbar/topbar") ?>
-
             <!-- Start Content-->
             <div class="container-fluid">
 

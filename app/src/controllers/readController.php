@@ -40,7 +40,7 @@ class readController extends Controller
         }
 
         $data = [
-            'totalCiclistas' => 29,
+            'totalCiclistas' => 19,
             'totalAtividades' => $totalAtividades,
             'totalDatasets' => 4
         ];
@@ -61,8 +61,8 @@ class readController extends Controller
         //Criando cabeçalho do arquivo CSV
         if ($request->id == 1) {
             $this->createCSV(
-                'dataset_iury.csv',
-                ['creator', 'rider', 'activity', 'nodes_in_file', 'datetime', 'locality_osm(country|city|road)', 'locality_google(country|city|road)', 'locality_bing(country|city|road)', 'bounding_box', 'coordinates_percentage', 'latitudes', 'longitudes',  'elevation_percentage', 'elevation_gps', 'elevation_from_google', 'duration_percentage', 'duration_gps', 'duration_calculated', 'distance_gps', 'distance_calculated', 'speed_gps', 'speed_calculated', 'cadence_percentage', 'cadence_gps(avg)', 'cadence_calculated(avg)', 'heartrate_percentage', 'heart_gps(avg)', 'heartrate_calculated(avg)', 'altitude_percentage', 'altitude_max', 'altitude_min', 'altitude_gps(avg)', 'altitude_with_threshold', 'elevation_gain', 'gradient', 'temperature_percentage', 'temperature_gps(avg)', 'temperature_calculated(avg)', 'calories_percentage', 'calories_gps(avg)', 'calories_calculated(avg)', 'total_trackpoints'],
+                'dataset_iury_distances.csv',
+                ['rider', 'pedalada', 'datetime', 'distance(KM)', 'total_trackpoints'],
                 true,
                 'w'
             );
@@ -75,54 +75,14 @@ class readController extends Controller
             $cycled = $rider->findById($i);
 
             $record = [
-                $cycled->data()->creator,
-                $request->id,
+                $cycled->data()->rider,
                 $cycled->data()->id,
-                $cycled->data()->nodes,
                 $cycled->data()->datetime,
-                $cycled->data()->address_openstreetmap,
-                $cycled->data()->address_google,
-                $cycled->data()->address_bing,
-                $cycled->data()->bbox,
-                $cycled->data()->coordinates_percentage,
-                $cycled->data()->latitudes,
-                $cycled->data()->longitudes,
-                $cycled->data()->elevation_percentage,
-                $cycled->data()->elevation_file,
-                $cycled->data()->elevation_google,
-                $cycled->data()->time_percentage,
-                $cycled->data()->duration_file,
-                $cycled->data()->duration_php,
-                $cycled->data()->time_percentage,
-                $cycled->data()->duration_file,
-                $cycled->data()->duration_php,
-                $cycled->data()->distance_file,
-                $cycled->data()->distance_php,
-                $cycled->data()->speed_file,
-                $cycled->data()->speed_php,
-                $cycled->data()->cadence_percentage,
-                $cycled->data()->cadence_file,
-                $cycled->data()->cadence_php,
-                $cycled->data()->heartrate_percentage,
-                $cycled->data()->heartrate_file,
-                $cycled->data()->heartrate_php,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                $cycled->data()->temperature_percentage,
-                $cycled->data()->temperature_file,
-                $cycled->data()->temperature_php,
-                $cycled->data()->calories_percentage,
-                $cycled->data()->calories_file,
-                $cycled->data()->calories_php,
+                $cycled->data()->distance_haversine,
                 $cycled->data()->total_trackpoints
             ];
 
-            $result = $this->createCSV('dataset_iury.csv', $record, false, 'a');
+            $result = $this->createCSV('dataset_iury_distances.csv', $record, false, 'a');
             array_push($records, $result);
         }
 

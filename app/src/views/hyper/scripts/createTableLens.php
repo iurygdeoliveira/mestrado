@@ -113,13 +113,13 @@
 
         let count = 0;
         let line = 4;
-        for (; count < pedaladas.length; count++, line += 2) {
+        for (; count < pedaladas.length; count++, line += 1) {
 
             let line_size = Math.round(parseFloat(pedaladas[count].distance_haversine));
 
             svg.append('line')
                 .style("stroke", 'rgb(0,0,0)')
-                .style("stroke-width", 1)
+                .style("stroke-width", 0.5)
                 .attr("id", rider + "_pedalada_" + pedaladas[count].id)
                 .attr("distance", pedaladas[count].distance_haversine)
                 .attr("x1", 4)

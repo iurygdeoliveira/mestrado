@@ -37,6 +37,7 @@
 
     async function getMaxDistance(rider) {
 
+        console.log('getMaxDistance | start');
         console.log('Ainda não existe distância máxima para o ' + rider);
         var data = new FormData();
         data.set('rider', rider);
@@ -64,10 +65,12 @@
                 return -1;
             });
 
+        console.log('getMaxDistance | end');
     }
 
     async function getDistances(rider) {
 
+        console.log('getDistances | start');
         console.log('Ainda não existe a distância das pedaladas do ' + rider);
         var data = new FormData();
         data.set('rider', rider);
@@ -95,5 +98,6 @@
                 return -1;
             });
 
+        console.log('getDistances | end');
     }
 </script>

@@ -54,6 +54,7 @@
     // Monitora os clicks do mouse nos checkbox dos ciclistas
     function click_handler() {
 
+        console.log("click_handler | Start");
         let $this = $(this);
         let rider = $this.attr("id");
 
@@ -61,7 +62,9 @@
         // converte um HTMLElement para um objeto jQuery
         if ($this.is(':checked')) {
 
-            storeDistance(rider);
+            storeDistance(rider).then(() => {
+                updateSlider(selected);
+            });
             selected.push($this.attr("name"));
             $(this).css('background-color', colors.shift())
             //console.log(colors);
@@ -81,8 +84,8 @@
             enableCheckBox();
         }
 
-        updateButtonSearchRiders(selected, false, false, false, false, false)
-        updateSlider(selected);
+        updateButtonSearchRiders(selected, false, false, false, false);
+        console.log("click_handler | end");
     }
 
     function arrayRemove(arr, value) {

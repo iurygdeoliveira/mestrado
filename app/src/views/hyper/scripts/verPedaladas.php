@@ -1,6 +1,7 @@
 <script>
     async function verPedaladas() {
 
+        console.log("verPedaladas | Start");
         console.log("Ciclistas Selecionados");
         console.log(selected);
         //console.log(distances);
@@ -33,5 +34,6 @@
         if (switchToggle == 'item') {
             animationTableLens();
         }
+        console.log("verPedaladas | end");
     }
 </script>

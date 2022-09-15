@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-center mt-2">
     <button type="button" class="btn btn-light btn-sm col-12" id="search_rides" onclick="verPedaladas()" data-bs-toggle="modal" data-bs-target="#modalTableLens" disabled>
-        Selecionar Pedaladas &nbsp;<i id="icon_search_rides" class="uil-align-left m-0"></i>
+        3º Selecionar Pedaladas
     </button>
 </div>
 <div class="d-flex justify-content-center">
