@@ -1,12 +1,4 @@
 <script>
-    const background_lens = 'rgb(80,80,80)';
-    const mix_height_lens = 3;
-    const max_height_lens = 10;
-    let switchToggle = 'overview';
-    let switchOrder = 'descending';
-    let selected = [];
-    let distances = [];
-    let colors = ['rgb(211, 69, 91)', 'rgb(44, 136, 217)', 'rgb(247, 195, 37)', 'rgb(47, 177, 156)', 'rgb(115, 15, 195)']
     $('#rider1').on('click', click_handler);
     $('#rider2').on('click', click_handler);
     $('#rider3').on('click', click_handler);
@@ -54,10 +46,8 @@
     // Monitora os clicks do mouse nos checkbox dos ciclistas
     function click_handler() {
 
-        console.log("click_handler | Start");
         let $this = $(this);
         let rider = $this.attr("id");
-
 
         // converte um HTMLElement para um objeto jQuery
         if ($this.is(':checked')) {
@@ -85,7 +75,6 @@
         }
 
         updateButtonSearchRiders(selected, false, false, false, false);
-        console.log("click_handler | end");
     }
 
     function arrayRemove(arr, value) {

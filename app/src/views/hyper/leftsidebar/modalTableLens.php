@@ -16,23 +16,23 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body p-1">
-                <a id="svg0_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='{"show":"100","hide":"100"}' style="top: 6px;">
+                <a id="svg0_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='{"show":"100","hide":"100"}'>
                     <svg id="svg0">
                     </svg>
                 </a>
-                <a id="svg1_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='{"show":"100","hide":"100"}' style="left:215px; top: 6px;">
+                <a id="svg1_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='{"show":"100","hide":"100"}'>
                     <svg id="svg1">
                     </svg>
                 </a>
-                <a id="svg2_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='{"show":"100","hide":"100"}' style="left:424px; top: 6px;">
+                <a id="svg2_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='{"show":"100","hide":"100"}'>
                     <svg id="svg2">
                     </svg>
                 </a>
-                <a id="svg3_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='{"show":"100","hide":"100"}' style="left:633px; top: 6px;">
+                <a id="svg3_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='{"show":"100","hide":"100"}'>
                     <svg id="svg3">
                     </svg>
                 </a>
-                <a id="svg4_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='{"show":"100","hide":"100"}' style="left:842px; top: 6px;">
+                <a id="svg4_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='{"show":"100","hide":"100"}'>
                     <svg id="svg4">
                     </svg>
                 </a>

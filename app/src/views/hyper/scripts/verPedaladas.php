@@ -1,16 +1,9 @@
 <script>
     async function verPedaladas() {
 
-        console.log("verPedaladas | Start");
         console.log("Ciclistas Selecionados");
         console.log(selected);
         //console.log(distances);
-
-        // Obtendo maior pedalada entre as selecionadas
-        const maxDistance = distances.reduce(function(prev, current) {
-            return prev > current ? prev : current;
-        });
-        //console.log(maxDistance);
 
         // Limpando conteudo dos svg's
         d3.select('#svg0').remove();
@@ -20,20 +13,40 @@
         d3.select('#svg4').remove();
 
 
-        for (count = 0; count < selected.length; count++) {
-            let svg_aux = d3.select('#svg' + count + '_tooltip');
+        for (let count_pedaladas = 0; count_pedaladas < selected.length; count_pedaladas++) {
+
+            let svg_aux = '';
+
+            // Ajustando left para cada box
+            if (count_pedaladas == 0) {
+                svg_aux = d3.select('#svg' + count_pedaladas + '_tooltip').style("top", (y_top) + 'px');
+                svg_aux.style("top", (y_top) + 'px');
+            }
+            if (count_pedaladas == 1) {
+                svg_aux = d3.select('#svg' + count_pedaladas + '_tooltip');
+                svg_aux.style("left", '215px').style("top", (y_top) + 'px');
+            }
+            if (count_pedaladas == 2) {
+                svg_aux = d3.select('#svg' + count_pedaladas + '_tooltip');
+                svg_aux.style("left", '424px').style("top", (y_top) + 'px');
+            }
+            if (count_pedaladas == 3) {
+                svg_aux = d3.select('#svg' + count_pedaladas + '_tooltip');
+                svg_aux.style("left", '633px').style("top", (y_top) + 'px');
+            }
+            if (count_pedaladas == 4) {
+                svg_aux = d3.select('#svg' + count_pedaladas + '_tooltip');
+                svg_aux.style("left", '842px').style("top", (y_top) + 'px');
+            }
+
             svg_aux.append('svg')
-                .attr("id", "svg" + count);
+                .attr("id", "svg" + count_pedaladas);
         }
 
         // Criando o Table Lens
-        for (count = 0; count < selected.length; count++) {
-            createTableLens(store.session.get(selected[count]).distances, count, selected[count], maxDistance);
+        for (count_pedaladas = 0; count_pedaladas < selected.length; count_pedaladas++) {
+            createTableLens(store.session.get(selected[count_pedaladas]).distances, count_pedaladas, selected[count_pedaladas]);
         }
 
-        if (switchToggle == 'item') {
-            animationTableLens();
-        }
-        console.log("verPedaladas | end");
     }
 </script>

@@ -1,7 +1,6 @@
 <script>
     function updateSlider(selected) {
 
-        console.log("updateSlider | Start");
         distances = [];
 
         // Atualizando distancias
@@ -19,28 +18,32 @@
             }
         });
 
-        console.log("updateSlider | End");
 
     }
 
     function updatingSlider() {
-        console.log("updatingSlider | start");
+
 
         if (distances.length == 0) {
             $("#range-max").text("?");
         } else {
-            const maxDistance = distances.reduce(function(prev, current) {
-                return prev > current ? prev : current;
+
+            distances = distances.map(Number);
+
+            maxDistance = distances.reduce(function(a, b) {
+                return Math.max(a, b)
             });
-            console.log("Maior Distância: ", maxDistance);
+
+            //console.log("Distâncias: ", distances);
+            // console.log("Maior Distância: ", maxDistance);
             $("#range-max").text(maxDistance);
             updateRangeMax(maxDistance);
         }
-        console.log("updatingSlider | end");
+
     }
 
     function updateRangeMax(maxDistance) {
-        console.log("updateRangeMax | Start");
+
         $("#slider-range").slider({
             range: true,
             min: 0,
@@ -52,6 +55,6 @@
                 $("#range-max").text(ui.values[1]);
             }
         });
-        console.log("updateRangeMax | End");
+
     }
 </script>
