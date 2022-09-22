@@ -61,7 +61,7 @@
 
     function sizeMax(line_size, distanceMaxRider) {
 
-        return Math.round((line_size * 194) / distanceMaxRider);
+        return Math.round((line_size * 194) / distanceMaxRider) + 4;
     }
 
     function drawSVG(index, color) {
@@ -75,13 +75,15 @@
             .style('width', '201px');
     }
 
-    function drawLines(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, background, height) {
+    function drawLines(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, background, width) {
 
         let line_size = Math.round(parseFloat(distance_pedalada));
 
-        svg.append('line')
+        svg.append('g')
+            .attr("id", rider + "_pedalada_" + id_pedalada + "_group")
+            .append('line')
             .style("stroke", background)
-            .style("stroke-width", height)
+            .style("stroke-width", width)
             .attr("id", rider + "_pedalada_" + id_pedalada)
             .attr("pedalada_clicada", false)
             .attr("distance", distance_pedalada)
@@ -90,27 +92,8 @@
             .attr("x2", sizeMax(line_size, maxDistanceRider))
             .attr("y2", line);
 
-    }
-
-    function drawRects(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, background, height) {
-
-        let line_size = Math.round(parseFloat(distance_pedalada));
-
-        svg.append('rect')
-            .attr("x", x1)
-            .attr("y", line)
-            .attr("width", sizeMax(line_size, maxDistanceRider))
-            .attr("height", height)
-            .attr("fill", background)
-            .attr("id", rider + "_pedalada_" + id_pedalada)
-            .attr("pedalada_clicada", false)
-            .attr("distance", distance_pedalada);
-
         distance_pedalada = parseFloat(distance_pedalada).toFixed(2);
-        d3.select('#' + rider + "_pedalada_" + id_pedalada)
-            .append("text")
-            .attr("id", rider + "_pedalada_" + id_pedalada + "_content")
-            .text("id: " + id_pedalada + " " + distance_pedalada + " KM");
+        d3.select('#' + rider + "_pedalada_" + id_pedalada).text("id: " + id_pedalada + " " + distance_pedalada + " KM");
         //$('#' + rider + "_pedalada_" + id_pedalada).text("id: " + id_pedalada + " " + distance_pedalada + " KM");
 
 
@@ -122,14 +105,14 @@
 
         let count_lines = 0;
         let line = y_pos_inicial;
-        let x = 4;
+        let x1 = 4;
         let distance_pedalada = 0;
         let id_pedalada = 0;
         for (; count_lines < pedaladas.length; count_lines++, line += margin_lens) {
 
             distance_pedalada = pedaladas[count_lines].distance_haversine;
             id_pedalada = pedaladas[count_lines].id;
-            drawRects(svg, distance_pedalada, id_pedalada, x, line, maxDistanceRider, rider, background_lens, min_height_lens)
+            drawLines(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, background_lens, min_height_lens)
 
         }
 

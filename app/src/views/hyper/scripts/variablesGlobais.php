@@ -15,8 +15,8 @@
     const margin_lens = 12; // Utilizado para dar espaço entre as linhas
     const padding_lens_first = 6; // Espaçamento entre as linhas
     const y_top = 6; // posição y para iniciar desenho da box
-    const y_pos_inicial = 5; // posição y para iniciar desenhos dos retângulos
-    const diff_height_box = -4; // diferença necessária para calcular a altura da box
+    const y_pos_inicial = 22; // posição y para iniciar desenhos das linhas
+    const diff_height_box = 1; // diferença necessária para calcular a altura da box
 
     let pedaladas_red_clicadas = 0;
     let pedaladas_blue_clicadas = 0;

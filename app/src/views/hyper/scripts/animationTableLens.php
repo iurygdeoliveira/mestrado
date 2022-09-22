@@ -7,7 +7,7 @@
         pedaladas_green_clicadas = 0;
         pedaladas_purple_clicadas = 0;
 
-        let lines = d3.selectAll('rect')
+        let lines = d3.selectAll('line')
             .on('mouseover', function() {
 
                 // Habilitar animação apenas nas pedaladas não clicadas
@@ -94,30 +94,6 @@
                         pedaladas_red_clicadas += 1;
                         store.session.set('colors_red_current', color_current);
                         console.log("pedaladas red clicadas:", pedaladas_red_clicadas);
-
-                        if (pedaladas_clicadas == 1) {
-
-                            let dad = d3.select(line.parentNode).attr("id");
-                            //console.log("elemento pai:", dad);
-                            //let grandFather = $(line).parent().parent().attr("id");
-                            //console.log("elemento avo:", grandFather);
-                            //grandFather = d3.select(grandFather.parentNode);
-                            // let parent_color = d3.select(line.parentNode).attr("style")
-                            //console.log("cor do pai:", parent_color);
-                            let heightBox = d3.select('#' + dad).style("height");
-                            heightBox = parseInt(heightBox.replace("px", ""));
-                            //console.log("heightBox:", heightBox);
-                            d3.select('#' + dad)
-                                .style('height', ((heightBox + padding_lens_first) + 5) + 'px');
-
-                        }
-                        if (pedaladas_clicadas == 2) {
-
-                        }
-                        if (pedaladas_clicadas == 3) {
-
-                        }
-
                         //console.log("cores vermelhas restantes:", store.session.get('colors_red_current'));
                     }
                     if (color == 'rgb(44, 136, 217)') {
@@ -332,24 +308,12 @@
             .style("stroke-width", max_height_lens);
 
         // Modificando box do table lens
-        let dad = d3.select(line.parentNode).attr("id");
-        //console.log("elemento pai:", dad);
-        //let grandFather = $(line).parent().parent().attr("id");
-        //console.log("elemento avo:", grandFather);
-        //grandFather = d3.select(grandFather.parentNode);
-        // let parent_color = d3.select(line.parentNode).attr("style")
-        //console.log("cor do pai:", parent_color);
-        let heightBox = d3.select('#' + dad).style("height");
+        let grandFather = $(line).parent().parent().attr("id");
+        let heightBox = d3.select('#' + grandFather).style("height");
         heightBox = parseInt(heightBox.replace("px", ""));
         //console.log("heightBox:", heightBox);
-        d3.select('#' + dad)
+        d3.select('#' + grandFather)
             .style('height', ((heightBox + padding_lens_first) + 5) + 'px');
-
-        // let topBox = d3.select('#' + grandFather).style("top")
-        // topBox = parseInt(topBox.replace("px", ""));
-        // //console.log(topBox);
-        // d3.select('#' + grandFather)
-        //     .style('top', (topBox - 5) + 'px');
 
         // Modificando as linhas
         for (let firstOver_id_pedalada = 0; firstOver_id_pedalada < pedaladas_selected.length; firstOver_id_pedalada++) {
@@ -394,17 +358,11 @@
             .style("stroke-width", max_height_lens);
 
         // Modificando box do table lens
-        let dad = d3.select(line.parentNode).attr("id");
-        //console.log("elemento pai:", dad);
-        //let grandFather = $(line).parent().parent().attr("id");
-        //console.log("elemento avo:", grandFather);
-        //grandFather = d3.select(grandFather.parentNode);
-        // let parent_color = d3.select(line.parentNode).attr("style")
-        //console.log("cor do pai:", parent_color);
-        let heightBox = d3.select('#' + dad).style("height");
+        let grandFather = $(line).parent().parent().attr("id");
+        let heightBox = d3.select('#' + grandFather).style("height");
         heightBox = parseInt(heightBox.replace("px", ""));
         //console.log("heightBox:", heightBox);
-        d3.select('#' + dad)
+        d3.select('#' + grandFather)
             .style('height', (heightBox + padding_lens_first) + 'px');
 
         // let topBox = d3.select('#' + grandFather).style("top")
@@ -457,17 +415,11 @@
             .style("stroke-width", min_height_lens);
 
         // Modificando box do table lens
-        let dad = d3.select(line.parentNode).attr("id");
-        //console.log("elemento pai:", parent);
-        //let grandFather = $(line).parent().parent().attr("id");
-        //console.log("elemento avo:", grandFather);
-        //grandFather = d3.select(grandFather.parentNode);
-        // let parent_color = d3.select(line.parentNode).attr("style")
-        //console.log("cor do pai:", parent_color);
-        let heightBox = d3.select('#' + dad).style("height");
+        let grandFather = $(line).parent().parent().attr("id");
+        let heightBox = d3.select('#' + grandFather).style("height");
         heightBox = parseInt(heightBox.replace("px", ""));
         //console.log("heightBox:", heightBox);
-        d3.select('#' + dad)
+        d3.select('#' + grandFather)
             .style('height', ((heightBox - padding_lens_first) - 5) + 'px');
 
         // let topBox = d3.select('#' + grandFather).style("top")
@@ -519,17 +471,11 @@
             .style("stroke-width", min_height_lens);
 
         // Modificando box do table lens
-        let dad = d3.select(line.parentNode).attr("id");
-        //console.log("elemento pai:", dad);
-        //let grandFather = $(line).parent().parent().attr("id");
-        //console.log("elemento avo:", grandFather);
-        //grandFather = d3.select(grandFather.parentNode);
-        // let parent_color = d3.select(line.parentNode).attr("style")
-        //console.log("cor do pai:", parent_color);
-        let heightBox = d3.select('#' + dad).style("height");
+        let grandFather = $(line).parent().parent().attr("id");
+        let heightBox = d3.select('#' + grandFather).style("height");
         heightBox = parseInt(heightBox.replace("px", ""));
         //console.log("heightBox:", heightBox);
-        d3.select('#' + dad)
+        d3.select('#' + grandFather)
             .style('height', (heightBox - padding_lens_first) + 'px');
 
         // let topBox = d3.select('#' + grandFather).style("top")
