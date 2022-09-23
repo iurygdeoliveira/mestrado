@@ -278,6 +278,11 @@
         let pedalada = $(line).attr("id").split("_");
         let color = $('#' + pedalada).attr('style').replace(";", "").replace("background-color: ", "");
 
+        // Alterando tooltip
+        let grandFather = $(line).parent().parent().attr("id");
+        let title_tooltip_original = $('#' + grandFather).attr('title-original');
+        $('#' + grandFather).attr('title', title_tooltip_original);
+
         if ((color == 'rgb(211, 69, 91)') && (pedaladas_red_clicadas == 3)) {
             return false
         }
@@ -308,11 +313,11 @@
             .style("stroke-width", max_height_lens);
 
         // Modificando box do table lens
-        let grandFather = $(line).parent().parent().attr("id");
-        let heightBox = d3.select('#' + grandFather).style("height");
+        let dad = $(line).parent().attr("id");
+        let heightBox = d3.select('#' + dad).style("height");
         heightBox = parseInt(heightBox.replace("px", ""));
         //console.log("heightBox:", heightBox);
-        d3.select('#' + grandFather)
+        d3.select('#' + dad)
             .style('height', ((heightBox + padding_lens_first) + 5) + 'px');
 
         // Modificando as linhas
@@ -331,6 +336,12 @@
                 d3.select(line_modified)
                     .attr("y1", y_pos + padding_lens_first)
                     .attr("y2", y_pos + padding_lens_first);
+
+                // Alterando tooltip
+                let grandFather = $(line).parent().parent().attr("id");
+                let title_tooltip = $('#' + grandFather).attr('title');
+                $('#' + grandFather).attr('title', title_tooltip + '\n' +
+                    'Distância: ' + $(line_modified).attr('distance') + " KM");
             }
 
             if (firstOver_id_pedalada > index_pedalada_mouseover) {
@@ -351,82 +362,25 @@
 
     }
 
-    function lineOthersOver(line, index_pedalada_mouseover, pedalada_mouseover, pedaladas_selected) {
-
-        d3.select(line)
-            .style("stroke", background_lens_focus)
-            .style("stroke-width", max_height_lens);
-
-        // Modificando box do table lens
-        let grandFather = $(line).parent().parent().attr("id");
-        let heightBox = d3.select('#' + grandFather).style("height");
-        heightBox = parseInt(heightBox.replace("px", ""));
-        //console.log("heightBox:", heightBox);
-        d3.select('#' + grandFather)
-            .style('height', (heightBox + padding_lens_first) + 'px');
-
-        // let topBox = d3.select('#' + grandFather).style("top")
-        // topBox = parseInt(topBox.replace("px", ""));
-        // //console.log(topBox);
-        // d3.select('#' + grandFather)
-        //     .style('top', ((topBox - padding_lens_first)) + 'px');
-
-        // Modificando as linhas
-        for (let id_pedalada = 0; id_pedalada < pedaladas_selected.length; id_pedalada++) {
-
-            // Obtendo linhas a serem modificadas
-            // linhas acima da linha focada
-            if (id_pedalada < index_pedalada_mouseover) {
-                let index_pedalada_modified = pedaladas_selected[id_pedalada].id;
-                let line_modified = '#' + pedalada_mouseover[0] + "_" + pedalada_mouseover[1] + "_" + index_pedalada_modified;
-                //console.log("linha a ser modificada", line_modified);
-
-                // Obtendo posição numérica de y da linha a ser modificada
-                // usando parseInt para converter para número na base da 10
-                let y_pos = parseInt($(line_modified).attr("y1"), 10);
-                //console.log("posição de y", y_pos);
-                d3.select(line_modified)
-                    .attr("y1", y_pos - padding_lens_first)
-                    .attr("y2", y_pos - padding_lens_first);
-            }
-            // linhas abaixo da linha focada
-            if (id_pedalada > index_pedalada_mouseover) {
-                let index_pedalada_modified = pedaladas_selected[id_pedalada].id;
-                let line_modified = '#' + pedalada_mouseover[0] + "_" + pedalada_mouseover[1] + "_" + index_pedalada_modified;
-                //console.log("linha a ser modificada", line_modified);
-
-                // Obtendo posição numérica de y da linha a ser modificada
-                // usando parseInt para converter para número na base da 10
-                let y_pos = parseInt($(line_modified).attr("y1"), 10);
-                //console.log("posição de y", y_pos);
-                d3.select(line_modified)
-                    .attr("y1", y_pos + padding_lens_first)
-                    .attr("y2", y_pos + padding_lens_first);
-            }
-
-        }
-
-    }
-
     function lineFirstOut(line, index_pedalada_mouseout, pedalada_mouseout, pedaladas_selected) {
 
         d3.select(line)
             .style("stroke", background_lens)
             .style("stroke-width", min_height_lens);
 
-        // Modificando box do table lens
+
+        // Alterando tooltip
         let grandFather = $(line).parent().parent().attr("id");
-        let heightBox = d3.select('#' + grandFather).style("height");
+        let title_tooltip_original = $('#' + grandFather).attr('title-original');
+        $('#' + grandFather).attr('title', title_tooltip_original);
+
+        // Modificando box do table lens
+        let dad = $(line).parent().attr("id");
+        let heightBox = d3.select('#' + dad).style("height");
         heightBox = parseInt(heightBox.replace("px", ""));
         //console.log("heightBox:", heightBox);
-        d3.select('#' + grandFather)
+        d3.select('#' + dad)
             .style('height', ((heightBox - padding_lens_first) - 5) + 'px');
-
-        // let topBox = d3.select('#' + grandFather).style("top")
-        // topBox = parseInt(topBox.replace("px", ""));
-        // //console.log(topBox);
-        // d3.select('#' + grandFather)
-        //     .style('top', (topBox + 5) + 'px');
 
         // Modificando as linhas
         for (let firstOut_id_pedalada = 0; firstOut_id_pedalada < pedaladas_selected.length; firstOut_id_pedalada++) {
@@ -464,25 +418,91 @@
 
     }
 
+    function lineOthersOver(line, index_pedalada_mouseover, pedalada_mouseover, pedaladas_selected) {
+
+        d3.select(line)
+            .style("stroke", background_lens_focus)
+            .style("stroke-width", max_height_lens);
+
+        // Modificando box do table lens
+        let dad = $(line).parent().attr("id");
+        let heightBox = d3.select('#' + dad).style("height");
+        heightBox = parseInt(heightBox.replace("px", ""));
+        //console.log("heightBox:", heightBox);
+        d3.select('#' + dad)
+            .style('height', ((heightBox + padding_lens_first) + 5) + 'px');
+
+        // Modificando as linhas
+        for (let id_pedalada = 0; id_pedalada < pedaladas_selected.length; id_pedalada++) {
+
+            // Obtendo linhas a serem modificadas
+            if (id_pedalada == index_pedalada_mouseover) {
+                let index_pedalada_modified = pedaladas_selected[id_pedalada].id;
+                let line_modified = '#' + pedalada_mouseover[0] + "_" + pedalada_mouseover[1] + "_" + index_pedalada_modified;
+
+                // Exibindo distância na linha a ser modificada
+                let y_pos = parseInt($(line_modified).attr("y1"), 10);
+
+                // Alterando tooltip
+                let grandFather = $(line).parent().parent().attr("id");
+                let title_tooltip = $('#' + grandFather).attr('title');
+                $('#' + grandFather).attr('title', title_tooltip + '\n' +
+                    'Distância: ' + $(line_modified).attr('distance') + " KM");
+            }
+
+            // linhas acima da linha focada
+            if (id_pedalada < index_pedalada_mouseover) {
+                let index_pedalada_modified = pedaladas_selected[id_pedalada].id;
+                let line_modified = '#' + pedalada_mouseover[0] + "_" + pedalada_mouseover[1] + "_" + index_pedalada_modified;
+                //console.log("linha a ser modificada", line_modified);
+
+                // Obtendo posição numérica de y da linha a ser modificada
+                // usando parseInt para converter para número na base da 10
+                let y_pos = parseInt($(line_modified).attr("y1"), 10);
+                //console.log("posição de y", y_pos);
+                d3.select(line_modified)
+                    .attr("y1", y_pos - padding_lens_first)
+                    .attr("y2", y_pos - padding_lens_first);
+            }
+            // linhas abaixo da linha focada
+            if (id_pedalada > index_pedalada_mouseover) {
+                let index_pedalada_modified = pedaladas_selected[id_pedalada].id;
+                let line_modified = '#' + pedalada_mouseover[0] + "_" + pedalada_mouseover[1] + "_" + index_pedalada_modified;
+                //console.log("linha a ser modificada", line_modified);
+
+                // Obtendo posição numérica de y da linha a ser modificada
+                // usando parseInt para converter para número na base da 10
+                let y_pos = parseInt($(line_modified).attr("y1"), 10);
+                //console.log("posição de y", y_pos);
+                d3.select(line_modified)
+                    .attr("y1", y_pos + padding_lens_first)
+                    .attr("y2", y_pos + padding_lens_first);
+            }
+
+        }
+
+    }
+
     function lineOthersOut(line, index_pedalada_mouseout, pedalada_mouseout, pedaladas_selected) {
 
         d3.select(line)
             .style("stroke", background_lens)
             .style("stroke-width", min_height_lens);
 
-        // Modificando box do table lens
+        // Ocultando exibição da distância dentro da linha
+
+        // Alterando tooltip
         let grandFather = $(line).parent().parent().attr("id");
-        let heightBox = d3.select('#' + grandFather).style("height");
+        let title_tooltip_original = $('#' + grandFather).attr('title-original');
+        $('#' + grandFather).attr('title', title_tooltip_original);
+
+        // Modificando box do table lens
+        let dad = $(line).parent().attr("id");
+        let heightBox = d3.select('#' + dad).style("height");
         heightBox = parseInt(heightBox.replace("px", ""));
         //console.log("heightBox:", heightBox);
-        d3.select('#' + grandFather)
-            .style('height', (heightBox - padding_lens_first) + 'px');
-
-        // let topBox = d3.select('#' + grandFather).style("top")
-        // topBox = parseInt(topBox.replace("px", ""));
-        // //console.log(topBox);
-        // d3.select('#' + grandFather)
-        //     .style('top', (topBox + padding_lens_first) + 'px');
+        d3.select('#' + dad)
+            .style('height', ((heightBox - padding_lens_first) - 5) + 'px');
 
         // Modificando as linhas
         for (let id_pedalada = 0; id_pedalada < pedaladas_selected.length; id_pedalada++) {

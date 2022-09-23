@@ -9,7 +9,9 @@
 
         // Atribuindo tooltip
         let number_rider = rider.replace("rider", "");
-        $('#svg' + index + '_tooltip').attr('title', "Ciclista " + number_rider);
+        $('#svg' + index + '_tooltip')
+            .attr('title', "Ciclista " + number_rider)
+            .attr('title-original', "Ciclista " + number_rider);
 
         // Obtendo faixa de distância
         let range_min = parseFloat($('#range-min').text());
@@ -37,7 +39,7 @@
 
         // Ativar apenas para auxiliar no desenho de linhas
         //*************************************************
-        pedaladas_selected = pedaladas_selected.splice(0, 5);
+        // pedaladas_selected = pedaladas_selected.splice(0, 5);
         //*************************************************
 
         store.session.set(rider + '_selected', {
@@ -78,10 +80,9 @@
     function drawLines(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, background, width) {
 
         let line_size = Math.round(parseFloat(distance_pedalada));
+        distance_pedalada = parseFloat(distance_pedalada).toFixed(2);
 
-        svg.append('g')
-            .attr("id", rider + "_pedalada_" + id_pedalada + "_group")
-            .append('line')
+        svg.append('line')
             .style("stroke", background)
             .style("stroke-width", width)
             .attr("id", rider + "_pedalada_" + id_pedalada)
@@ -91,12 +92,6 @@
             .attr("y1", line)
             .attr("x2", sizeMax(line_size, maxDistanceRider))
             .attr("y2", line);
-
-        distance_pedalada = parseFloat(distance_pedalada).toFixed(2);
-        d3.select('#' + rider + "_pedalada_" + id_pedalada).text("id: " + id_pedalada + " " + distance_pedalada + " KM");
-        //$('#' + rider + "_pedalada_" + id_pedalada).text("id: " + id_pedalada + " " + distance_pedalada + " KM");
-
-
     }
 
     async function drawItens(index, color, pedaladas, maxDistanceRider, rider) {

@@ -21,6 +21,10 @@
         .modal-backdrop {
             z-index: 2;
         }
+
+        .custom-tooltip {
+            --bs-tooltip-bg: 'red';
+        }
     </style>
 
 </head>
