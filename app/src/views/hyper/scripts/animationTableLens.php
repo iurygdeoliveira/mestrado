@@ -278,11 +278,6 @@
         let pedalada = $(line).attr("id").split("_");
         let color = $('#' + pedalada).attr('style').replace(";", "").replace("background-color: ", "");
 
-        // Alterando tooltip
-        let grandFather = $(line).parent().parent().attr("id");
-        let title_tooltip_original = $('#' + grandFather).attr('title-original');
-        $('#' + grandFather).attr('title', title_tooltip_original);
-
         if ((color == 'rgb(211, 69, 91)') && (pedaladas_red_clicadas == 3)) {
             return false
         }
@@ -338,10 +333,8 @@
                     .attr("y2", y_pos + padding_lens_first);
 
                 // Alterando tooltip
-                let grandFather = $(line).parent().parent().attr("id");
-                let title_tooltip = $('#' + grandFather).attr('title');
-                $('#' + grandFather).attr('title', title_tooltip + '\n' +
-                    'Distância: ' + $(line_modified).attr('distance') + " KM");
+                // let children = $(line_modified).children().attr("id");
+                // d3.select('#' + children).attr('class', 'tooltip');
             }
 
             if (firstOver_id_pedalada > index_pedalada_mouseover) {
@@ -370,9 +363,9 @@
 
 
         // Alterando tooltip
-        let grandFather = $(line).parent().parent().attr("id");
-        let title_tooltip_original = $('#' + grandFather).attr('title-original');
-        $('#' + grandFather).attr('title', title_tooltip_original);
+        // let grandFather = $(line).parent().parent().attr("id");
+        // let title_tooltip_original = $('#' + grandFather).attr('title-original');
+        // $('#' + grandFather).attr('title', title_tooltip_original);
 
         // Modificando box do table lens
         let dad = $(line).parent().attr("id");
@@ -444,10 +437,10 @@
                 let y_pos = parseInt($(line_modified).attr("y1"), 10);
 
                 // Alterando tooltip
-                let grandFather = $(line).parent().parent().attr("id");
-                let title_tooltip = $('#' + grandFather).attr('title');
-                $('#' + grandFather).attr('title', title_tooltip + '\n' +
-                    'Distância: ' + $(line_modified).attr('distance') + " KM");
+                // let grandFather = $(line).parent().parent().attr("id");
+                // let title_tooltip = $('#' + grandFather).attr('title');
+                // $('#' + grandFather).attr('title', title_tooltip + '\n' +
+                //     'Distância: ' + $(line_modified).attr('distance') + " KM");
             }
 
             // linhas acima da linha focada
@@ -492,9 +485,9 @@
         // Ocultando exibição da distância dentro da linha
 
         // Alterando tooltip
-        let grandFather = $(line).parent().parent().attr("id");
-        let title_tooltip_original = $('#' + grandFather).attr('title-original');
-        $('#' + grandFather).attr('title', title_tooltip_original);
+        // let grandFather = $(line).parent().parent().attr("id");
+        // let title_tooltip_original = $('#' + grandFather).attr('title-original');
+        // $('#' + grandFather).attr('title', title_tooltip_original);
 
         // Modificando box do table lens
         let dad = $(line).parent().attr("id");

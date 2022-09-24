@@ -14,3 +14,4 @@
 <?php $this->insert("../scripts/createTableLens") ?>
 <?php $this->insert("../scripts/animationTableLens") ?>
 <?php $this->insert("../scripts/verPedaladas") ?>
+<?php $this->insert("../scripts/enableTooltips") ?>

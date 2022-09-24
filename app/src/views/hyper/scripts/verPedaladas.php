@@ -48,5 +48,7 @@
             createTableLens(store.session.get(selected[count_pedaladas]).distances, count_pedaladas, selected[count_pedaladas]);
         }
 
+        enableTooltips();
+
     }
 </script>

@@ -5,3 +5,4 @@
 <script src="<?= js('jquery-3.6.1.min.js') ?>"></script>
 <script src="<?= js('jquery-ui.min.js') ?>"></script>
 <script src="<?= js('d3.v7.min.js') ?>"></script>
+<script src="<?= js('jquery.tipsy.js') ?>"></script>

@@ -16,23 +16,23 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body p-1">
-                <a id="svg0_tooltip" class="d-inline-block position-absolute" data-bs-html="true" data-bs-custom-class="custom-tooltip" data-bs-toggle="tooltip" data-bs-delay='0'>
+                <a id="svg0_tooltip" class="d-inline-block position-absolute">
                     <svg id="svg0">
                     </svg>
                 </a>
-                <a id="svg1_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='0'>
+                <a id="svg1_tooltip" class="d-inline-block position-absolute">
                     <svg id="svg1">
                     </svg>
                 </a>
-                <a id="svg2_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='0'>
+                <a id="svg2_tooltip" class="d-inline-block position-absolute">
                     <svg id="svg2">
                     </svg>
                 </a>
-                <a id="svg3_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='0'>
+                <a id="svg3_tooltip" class="d-inline-block position-absolute">
                     <svg id="svg3">
                     </svg>
                 </a>
-                <a id="svg4_tooltip" class="d-inline-block position-absolute" data-bs-toggle="tooltip" data-bs-delay='0'>
+                <a id="svg4_tooltip" class="d-inline-block position-absolute">
                     <svg id="svg4">
                     </svg>
                 </a>

@@ -8,10 +8,10 @@
         //console.log(color);
 
         // Atribuindo tooltip
-        let number_rider = rider.replace("rider", "");
-        $('#svg' + index + '_tooltip')
-            .attr('title', "Ciclista " + number_rider)
-            .attr('title-original', "Ciclista " + number_rider);
+        // let number_rider = rider.replace("rider", "");
+        // $('#svg' + index + '_tooltip')
+        //     .attr('title', "Ciclista " + number_rider)
+        //     .attr('title-original', "Ciclista " + number_rider);
 
         // Obtendo faixa de distância
         let range_min = parseFloat($('#range-min').text());
@@ -77,17 +77,18 @@
             .style('width', '201px');
     }
 
-    function drawLines(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, background, width) {
+    function drawLines(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, background, width, color) {
 
         let line_size = Math.round(parseFloat(distance_pedalada));
         distance_pedalada = parseFloat(distance_pedalada).toFixed(2);
-
+        // <a href="#" class="d-inline-block" data-bs-toggle="tooltip" title="" data-bs-original-title="Default tooltip">
         svg.append('line')
             .style("stroke", background)
             .style("stroke-width", width)
             .attr("id", rider + "_pedalada_" + id_pedalada)
             .attr("pedalada_clicada", false)
             .attr("distance", distance_pedalada)
+            .attr("tooltip", "Ciclista " + rider.replace(/[^0-9]/g, '') + ' | ' + 'Distância: ' + distance_pedalada + ' KM')
             .attr("x1", x1)
             .attr("y1", line)
             .attr("x2", sizeMax(line_size, maxDistanceRider))
@@ -107,7 +108,7 @@
 
             distance_pedalada = pedaladas[count_lines].distance_haversine;
             id_pedalada = pedaladas[count_lines].id;
-            drawLines(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, background_lens, min_height_lens)
+            drawLines(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, background_lens, min_height_lens, color)
 
         }
 
@@ -129,7 +130,7 @@
 
             distance_pedalada = pedaladas[count_overview].distance_haversine;
             id_pedalada = pedaladas[count_overview].id;
-            drawLines(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, 'rgb(0,0,0)', 0.5);
+            drawLines(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, 'rgb(0,0,0)', 0.5, color);
 
         }
 
