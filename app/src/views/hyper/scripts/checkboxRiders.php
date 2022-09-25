@@ -42,7 +42,6 @@
         verPedaladas();
     });
 
-
     // Monitora os clicks do mouse nos checkbox dos ciclistas
     function click_handler() {
 
@@ -55,6 +54,7 @@
             storeDistance(rider).then(() => {
                 updateSlider(selected);
             });
+
             selected.push($this.attr("name"));
             $(this).css('background-color', colors.shift())
             //console.log(colors);
@@ -63,6 +63,7 @@
         if ($this.is(':not(:checked)')) {
             let value = $this.attr("name");
             selected = arrayRemove(selected, $this.attr("name"))
+            updateSlider(selected);
             getColor($(this));
             // console.log(selected);
         }

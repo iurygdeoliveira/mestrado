@@ -7,12 +7,6 @@
         let color = $('#' + rider).attr('style').replace(";", "").replace("background-color: ", "");
         //console.log(color);
 
-        // Atribuindo tooltip
-        // let number_rider = rider.replace("rider", "");
-        // $('#svg' + index + '_tooltip')
-        //     .attr('title', "Ciclista " + number_rider)
-        //     .attr('title-original', "Ciclista " + number_rider);
-
         // Obtendo faixa de distância
         let range_min = parseFloat($('#range-min').text());
         let range_max = parseFloat($('#range-max').text());
@@ -47,7 +41,7 @@
         });
 
         // Obtendo maior pedaladas do ciclista
-        let maxDistanceRider = Math.max(...pedaladas_selected.map(obj => obj.distance_haversine))
+        let maxDistanceRider = Math.max(...pedaladas_selected.map(obj => obj.distance_haversine));
         //console.log("Maior Distância do ciclista", maxDistanceRider);
 
         // Desenhando linhas

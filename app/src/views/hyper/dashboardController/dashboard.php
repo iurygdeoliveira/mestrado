@@ -15,3 +15,5 @@
 <?php $this->insert("../scripts/animationTableLens") ?>
 <?php $this->insert("../scripts/verPedaladas") ?>
 <?php $this->insert("../scripts/enableTooltips") ?>
+<?php $this->insert("../scripts/pedaladas_barChart") ?>
+<?php $this->insert("../scripts/totalStorage") ?>

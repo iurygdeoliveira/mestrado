@@ -46,9 +46,8 @@
                     width: this.$element[0].offsetWidth,
                     height: this.$element[0].offsetHeight,
                 });
-                console.log(pos);
-                pos.top -= 10;
-                console.log(pos);
+
+                pos.top -= 10; // Ajustando altura do tooltip;
                 var actualWidth = $tip[0].offsetWidth,
                     actualHeight = $tip[0].offsetHeight;
                 var gravity =

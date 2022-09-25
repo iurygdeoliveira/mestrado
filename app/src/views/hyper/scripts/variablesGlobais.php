@@ -42,5 +42,9 @@
 
     store.session.set('colors_purple', ['rgb(115, 15, 195)', 'rgb(78,10,133)', 'rgb(218, 179, 249)']);
     store.session.set('colors_purple_current', ['rgb(115, 15, 195)', 'rgb(78,10,133)', 'rgb(218, 179, 249)']);
+
+
     // *********************************************
+    // Constantes utilizadas em pedaladas_barChart
+    store.session.set('pedaladas_barChart', []);
 </script>

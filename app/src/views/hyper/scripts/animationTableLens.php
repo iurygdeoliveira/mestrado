@@ -94,7 +94,10 @@
                         pedaladas_red_clicadas += 1;
                         store.session.set('colors_red_current', color_current);
                         console.log("pedaladas red clicadas:", pedaladas_red_clicadas);
-                        //console.log("cores vermelhas restantes:", store.session.get('colors_red_current'));
+
+                        // Armazenando as pedaladas para o bar chart
+                        push_pedaladas_barChart(this);
+
                     }
                     if (color == 'rgb(44, 136, 217)') {
 
@@ -112,6 +115,9 @@
                         pedaladas_blue_clicadas += 1;
                         store.session.set('colors_blue_current', color_current);
                         console.log("pedaladas blue clicadas:", pedaladas_blue_clicadas);
+
+                        // Armazenando as pedaladas para o bar chart
+                        push_pedaladas_barChart(this);
                     }
                     if (color == 'rgb(247, 195, 37)') {
 
@@ -128,6 +134,9 @@
                         pedaladas_yellow_clicadas += 1;
                         store.session.set('colors_yellow_current', color_current);
                         console.log("pedaladas yellow clicadas:", pedaladas_yellow_clicadas);
+
+                        // Armazenando as pedaladas para o bar chart
+                        push_pedaladas_barChart(this);
 
                     }
                     if (color == 'rgb(47, 177, 156)') {
@@ -146,6 +155,9 @@
                         store.session.set('colors_green_current', color_current);
                         console.log("pedaladas green clicadas:", pedaladas_green_clicadas);
 
+                        // Armazenando as pedaladas para o bar chart
+                        push_pedaladas_barChart(this);
+
                     }
                     if (color == 'rgb(115, 15, 195)') {
 
@@ -162,6 +174,9 @@
                         pedaladas_purple_clicadas += 1;
                         store.session.set('colors_purple_current', color_current);
                         console.log("pedaladas purple clicadas:", pedaladas_purple_clicadas);
+
+                        // Armazenando as pedaladas para o bar chart
+                        push_pedaladas_barChart(this);
 
 
                     }
@@ -183,6 +198,7 @@
             .style("stroke-width", min_height_lens)
             .attr("pedalada_clicada", false);
         pedaladas_clicadas -= 1;
+        remove_pedaladas_barChart(line); // Removendo pedalada do barchart
         colors_remaining = store.session.get(key);
         colors_remaining.push(color_current);
         store.session.set(key, colors_remaining);
@@ -331,10 +347,6 @@
                 d3.select(line_modified)
                     .attr("y1", y_pos + padding_lens_first)
                     .attr("y2", y_pos + padding_lens_first);
-
-                // Alterando tooltip
-                // let children = $(line_modified).children().attr("id");
-                // d3.select('#' + children).attr('class', 'tooltip');
             }
 
             if (firstOver_id_pedalada > index_pedalada_mouseover) {
@@ -360,12 +372,6 @@
         d3.select(line)
             .style("stroke", background_lens)
             .style("stroke-width", min_height_lens);
-
-
-        // Alterando tooltip
-        // let grandFather = $(line).parent().parent().attr("id");
-        // let title_tooltip_original = $('#' + grandFather).attr('title-original');
-        // $('#' + grandFather).attr('title', title_tooltip_original);
 
         // Modificando box do table lens
         let dad = $(line).parent().attr("id");
@@ -436,11 +442,6 @@
                 // Exibindo distância na linha a ser modificada
                 let y_pos = parseInt($(line_modified).attr("y1"), 10);
 
-                // Alterando tooltip
-                // let grandFather = $(line).parent().parent().attr("id");
-                // let title_tooltip = $('#' + grandFather).attr('title');
-                // $('#' + grandFather).attr('title', title_tooltip + '\n' +
-                //     'Distância: ' + $(line_modified).attr('distance') + " KM");
             }
 
             // linhas acima da linha focada
@@ -481,13 +482,6 @@
         d3.select(line)
             .style("stroke", background_lens)
             .style("stroke-width", min_height_lens);
-
-        // Ocultando exibição da distância dentro da linha
-
-        // Alterando tooltip
-        // let grandFather = $(line).parent().parent().attr("id");
-        // let title_tooltip_original = $('#' + grandFather).attr('title-original');
-        // $('#' + grandFather).attr('title', title_tooltip_original);
 
         // Modificando box do table lens
         let dad = $(line).parent().attr("id");
