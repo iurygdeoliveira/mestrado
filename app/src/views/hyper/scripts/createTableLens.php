@@ -75,14 +75,14 @@
 
         let line_size = Math.round(parseFloat(distance_pedalada));
         distance_pedalada = parseFloat(distance_pedalada).toFixed(2);
-        // <a href="#" class="d-inline-block" data-bs-toggle="tooltip" title="" data-bs-original-title="Default tooltip">
+
         svg.append('line')
             .style("stroke", background)
             .style("stroke-width", width)
             .attr("id", rider + "_pedalada_" + id_pedalada)
             .attr("pedalada_clicada", false)
             .attr("distance", distance_pedalada)
-            .attr("tooltip", "Ciclista " + rider.replace(/[^0-9]/g, '') + ' | ' + 'Distância: ' + distance_pedalada + ' KM')
+            .attr("title", distance_pedalada + ' KM')
             .attr("x1", x1)
             .attr("y1", line)
             .attr("x2", sizeMax(line_size, maxDistanceRider))

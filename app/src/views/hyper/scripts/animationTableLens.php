@@ -80,19 +80,22 @@
                     let color_current = '';
 
                     if (color == 'rgb(211, 69, 91)') {
+                        let colors_red = [];
 
                         //console.log("color red");
                         if (store.session.get('colors_red_current').length == 0) {
                             store.session.set('colors_red_current', store.session.get('colors_red'));
                         }
-                        color_current = store.session.get('colors_red_current');
+                        colors_red = store.session.get('colors_red_current'); // Obtendo cores a serem utilizadas 
+                        color_current = colors_red.pop(); // Obtendo cor específica a ser utilizada
 
                         d3.select(this)
-                            .style("stroke", color_current.pop())
+                            .style("stroke", color_current)
                             .style("stroke-width", max_height_lens)
-                            .attr("pedalada_clicada", true);
+                            .attr("pedalada_clicada", true)
+                            .attr("color_current", color_current);
                         pedaladas_red_clicadas += 1;
-                        store.session.set('colors_red_current', color_current);
+                        store.session.set('colors_red_current', colors_red);
                         console.log("pedaladas red clicadas:", pedaladas_red_clicadas);
 
                         // Armazenando as pedaladas para o bar chart
@@ -100,39 +103,43 @@
 
                     }
                     if (color == 'rgb(44, 136, 217)') {
-
+                        let colors_blue = [];
                         //console.log("color blue");
                         if (store.session.get('colors_blue_current').length == 0) {
                             store.session.set('colors_blue_current', store.session.get('colors_blue'));
                         }
-                        color_current = store.session.get('colors_blue_current');
+                        colors_blue = store.session.get('colors_blue_current'); // Obtendo cores a serem utilizadas 
+                        color_current = colors_blue.pop(); // Obtendo cor específica a ser utilizada
 
                         d3.select(this)
-                            .style("stroke", color_current.pop())
+                            .style("stroke", color_current)
                             .style("stroke-width", max_height_lens)
-                            .attr("pedalada_clicada", true);
+                            .attr("pedalada_clicada", true)
+                            .attr("color_current", color_current);
 
                         pedaladas_blue_clicadas += 1;
-                        store.session.set('colors_blue_current', color_current);
+                        store.session.set('colors_blue_current', colors_blue);
                         console.log("pedaladas blue clicadas:", pedaladas_blue_clicadas);
 
                         // Armazenando as pedaladas para o bar chart
                         push_pedaladas_barChart(this);
                     }
                     if (color == 'rgb(247, 195, 37)') {
-
+                        let colors_yellow = [];
                         //console.log("color yellow");
                         if (store.session.get('colors_yellow_current').length == 0) {
                             store.session.set('colors_yellow_current', store.session.get('colors_yellow'));
                         }
-                        color_current = store.session.get('colors_yellow_current');
+                        colors_yellow = store.session.get('colors_yellow_current'); // Obtendo cores a serem utilizadas 
+                        color_current = colors_yellow.pop(); // Obtendo cor específica a ser utilizada
 
                         d3.select(this)
-                            .style("stroke", color_current.pop())
+                            .style("stroke", color_current)
                             .style("stroke-width", max_height_lens)
-                            .attr("pedalada_clicada", true);
+                            .attr("pedalada_clicada", true)
+                            .attr("color_current", color_current);
                         pedaladas_yellow_clicadas += 1;
-                        store.session.set('colors_yellow_current', color_current);
+                        store.session.set('colors_yellow_current', colors_yellow);
                         console.log("pedaladas yellow clicadas:", pedaladas_yellow_clicadas);
 
                         // Armazenando as pedaladas para o bar chart
@@ -140,19 +147,21 @@
 
                     }
                     if (color == 'rgb(47, 177, 156)') {
-
+                        let colors_green = [];
                         //console.log("color green");
                         if (store.session.get('colors_green_current').length == 0) {
                             store.session.set('colors_green_current', store.session.get('colors_green'));
                         }
-                        color_current = store.session.get('colors_green_current');
+                        colors_green = store.session.get('colors_green_current'); // Obtendo cores a serem utilizadas 
+                        color_current = colors_green.pop(); // Obtendo cor específica a ser utilizada
 
                         d3.select(this)
-                            .style("stroke", color_current.pop())
+                            .style("stroke", color_current)
                             .style("stroke-width", max_height_lens)
-                            .attr("pedalada_clicada", true);
+                            .attr("pedalada_clicada", true)
+                            .attr("color_current", color_current);
                         pedaladas_green_clicadas += 1;
-                        store.session.set('colors_green_current', color_current);
+                        store.session.set('colors_green_current', colors_green);
                         console.log("pedaladas green clicadas:", pedaladas_green_clicadas);
 
                         // Armazenando as pedaladas para o bar chart
@@ -160,19 +169,21 @@
 
                     }
                     if (color == 'rgb(115, 15, 195)') {
-
+                        let colors_purple = [];
                         //console.log("color purple");
                         if (store.session.get('colors_purple_current').length == 0) {
                             store.session.set('colors_purple_current', store.session.get('colors_purple'));
                         }
-                        color_current = store.session.get('colors_purple_current');
+                        colors_purple = store.session.get('colors_purple_current'); // Obtendo cores a serem utilizadas 
+                        color_current = colors_purple.pop(); // Obtendo cor específica a ser utilizada
 
                         d3.select(this)
-                            .style("stroke", color_current.pop())
+                            .style("stroke", color_current)
                             .style("stroke-width", max_height_lens)
-                            .attr("pedalada_clicada", true);
+                            .attr("pedalada_clicada", true)
+                            .attr("color_current", color_current);
                         pedaladas_purple_clicadas += 1;
-                        store.session.set('colors_purple_current', color_current);
+                        store.session.set('colors_purple_current', colors_purple);
                         console.log("pedaladas purple clicadas:", pedaladas_purple_clicadas);
 
                         // Armazenando as pedaladas para o bar chart
