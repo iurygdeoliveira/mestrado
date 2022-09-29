@@ -11,7 +11,7 @@ define("CONF_PROD_MOD", false);
 
 // ###  PROJECT URLs ###
 define("CONF_URL_SCHEME", "http");
-define("CONF_URL_BASE", "https://945d-170-231-129-230.ngrok.io");
+define("CONF_URL_BASE", "https://ccd9-186-193-187-105.ngrok.io");
 define("CONF_URL_TEST", "http://localhost");
 define("CONF_URL_ELEVATION_GOOGLE", "https://maps.googleapis.com/maps/api/elevation/json?locations=");
 define("CONF_URL_ELEVATION_BING", "https://dev.virtualearth.net/REST/v1/Elevation/List?points=");

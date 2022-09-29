@@ -1,4 +1,14 @@
 <script>
+    function has_pedaladas_barChart() {
+
+        if (store.session.get('pedaladas_barChart').length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     function mount_pedalada_barChart(pedalada) {
 
         let rider = d3.select(pedalada).attr('id').split("_");
@@ -80,7 +90,7 @@
         console.log('Atualizando bar chart');
 
         // Atualizando tooltip button tablelens
-        if (store.session.get('pedaladas_barChart').length > 0) {
+        if (has_pedaladas_barChart()) {
             d3.select("#search_rides").attr("title", "See Table Lens");
         } else {
             d3.select("#search_rides").attr("title", "Generate Table Lens");
@@ -117,7 +127,6 @@
                         callbacks: {
                             label: function(context) {
                                 let label = context.dataset.label || '';
-                                console.log(context.parsed);
                                 if (context.parsed.y !== null) {
                                     let pedaladas_barChart_tooltip = store.session.get('pedaladas_barChart');
                                     let tooltip = pedaladas_barChart_tooltip.find(x => x.distance === context.parsed.y);

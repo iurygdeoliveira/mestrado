@@ -1,17 +1,14 @@
 <script>
-    async function verPedaladas() {
+    function syncronize_barChart() {
 
-        console.log("Ciclistas Selecionados");
-        console.log(selected);
-        //console.log(distances);
+        for (count_pedaladas = 0; count_pedaladas < selected.length; count_pedaladas++) {
+            createTableLens(store.session.get(selected[count_pedaladas]).distances, count_pedaladas, selected[count_pedaladas]);
+        }
+        return true;
 
-        // Limpando conteudo dos svg's
-        d3.select('#svg0').remove();
-        d3.select('#svg1').remove();
-        d3.select('#svg2').remove();
-        d3.select('#svg3').remove();
-        d3.select('#svg4').remove();
+    }
 
+    function createSVG() {
 
         for (let count_pedaladas = 0; count_pedaladas < selected.length; count_pedaladas++) {
 
@@ -42,8 +39,27 @@
             svg_aux.append('svg')
                 .attr("id", "svg" + count_pedaladas);
         }
+    }
 
-        // Criando o Table Lens
+    function removeSVG() {
+
+        d3.select('#svg0').remove();
+        d3.select('#svg1').remove();
+        d3.select('#svg2').remove();
+        d3.select('#svg3').remove();
+        d3.select('#svg4').remove();
+
+    }
+
+    async function verPedaladas() {
+
+        console.log("Ciclistas Selecionados");
+        console.log(selected);
+
+        // Limpando conteudo dos svg's
+        removeSVG();
+        createSVG();
+
         for (count_pedaladas = 0; count_pedaladas < selected.length; count_pedaladas++) {
             createTableLens(store.session.get(selected[count_pedaladas]).distances, count_pedaladas, selected[count_pedaladas]);
         }

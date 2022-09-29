@@ -53,6 +53,11 @@
         if (switchToggle == 'overview') {
             drawOverview(index, color, pedaladas_selected, maxDistanceRider, rider);
         }
+
+        // Se houver pedaladas selecionadas, aplicar estado
+        if (has_pedaladas_barChart()) {
+
+        }
     }
 
     function sizeMax(line_size, distanceMaxRider) {
