@@ -10,6 +10,7 @@
     // ************************************************
     // Constantes e variáveis utilizadas no tables lens modo itens
 
+    let widthBox = 0; // Largura do box do table lens
     const min_height_lens = 10;
     const max_height_lens = 20;
     const margin_lens = 12; // Utilizado para dar espaço entre as linhas

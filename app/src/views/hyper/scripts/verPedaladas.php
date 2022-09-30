@@ -1,53 +1,53 @@
 <script>
-    function syncronize_barChart() {
+    function createLabels() {
 
-        for (count_pedaladas = 0; count_pedaladas < selected.length; count_pedaladas++) {
-            createTableLens(store.session.get(selected[count_pedaladas]).distances, count_pedaladas, selected[count_pedaladas]);
+        for (let count = 0; count < selected.length; count++) {
+            let color = $('#' + selected[count]).attr('style').replace(";", "").replace("background-color: ", "");
+
+            d3.select('#table_lens_label').append('div')
+                .attr("id", "table_lens_label_" + count)
+                .attr("class", "col mx-1 text-center fw-bold d-flex justify-content-center")
+                .style('background-color', 'rgb(255,255,255)')
+                .style('color', color)
+                .text("Cyclist " + selected[count].replace(/[^0-9]/g, ''));
         }
-        return true;
 
     }
 
-    function createSVG() {
+    function createBox() {
 
-        for (let count_pedaladas = 0; count_pedaladas < selected.length; count_pedaladas++) {
+        for (let count = 0; count < selected.length; count++) {
 
-            let svg_aux = '';
+            let color = $('#' + selected[count]).attr('style').replace(";", "").replace("background-color: ", "");
 
-            // Ajustando left para cada box
-            if (count_pedaladas == 0) {
-                svg_aux = d3.select('#svg' + count_pedaladas + '_tooltip').style("top", (y_top) + 'px');
-                svg_aux.style("top", (y_top) + 'px');
-            }
-            if (count_pedaladas == 1) {
-                svg_aux = d3.select('#svg' + count_pedaladas + '_tooltip');
-                svg_aux.style("left", '215px').style("top", (y_top) + 'px');
-            }
-            if (count_pedaladas == 2) {
-                svg_aux = d3.select('#svg' + count_pedaladas + '_tooltip');
-                svg_aux.style("left", '424px').style("top", (y_top) + 'px');
-            }
-            if (count_pedaladas == 3) {
-                svg_aux = d3.select('#svg' + count_pedaladas + '_tooltip');
-                svg_aux.style("left", '633px').style("top", (y_top) + 'px');
-            }
-            if (count_pedaladas == 4) {
-                svg_aux = d3.select('#svg' + count_pedaladas + '_tooltip');
-                svg_aux.style("left", '842px').style("top", (y_top) + 'px');
-            }
-
-            svg_aux.append('svg')
-                .attr("id", "svg" + count_pedaladas);
+            d3.select('#table_lens_box').append('div')
+                .attr("id", "table_lens_box_" + count)
+                .attr("class", "col mx-1 p-1 justify-content-center")
+                .style('background-color', 'rgb(255, 255, 255)')
+                .style('border', '3px solid ' + color)
+                .style('border-radius', '0.25rem');
         }
+
     }
 
-    function removeSVG() {
+    async function createSkeleton() {
 
-        d3.select('#svg0').remove();
-        d3.select('#svg1').remove();
-        d3.select('#svg2').remove();
-        d3.select('#svg3').remove();
-        d3.select('#svg4').remove();
+        createLabels();
+        createBox();
+    }
+
+    function removeTableLens() {
+
+        d3.select('#table_lens_label_0').remove();
+        d3.select('#table_lens_box_0').remove();
+        d3.select('#table_lens_label_1').remove();
+        d3.select('#table_lens_box_1').remove();
+        d3.select('#table_lens_label_2').remove();
+        d3.select('#table_lens_box_2').remove();
+        d3.select('#table_lens_label_3').remove();
+        d3.select('#table_lens_box_3').remove();
+        d3.select('#table_lens_label_4').remove();
+        d3.select('#table_lens_box_4').remove();
 
     }
 
@@ -57,14 +57,19 @@
         console.log(selected);
 
         // Limpando conteudo dos svg's
-        removeSVG();
-        createSVG();
+        console.log('Criando esqueleto do table lens');
+        removeTableLens();
+        createSkeleton().then(() => {
 
-        for (count_pedaladas = 0; count_pedaladas < selected.length; count_pedaladas++) {
-            createTableLens(store.session.get(selected[count_pedaladas]).distances, count_pedaladas, selected[count_pedaladas]);
-        }
+            console.log('Criando table lens');
+            for (let count_pedaladas = 0; count_pedaladas < selected.length; count_pedaladas++) {
+                createTableLens(store.session.get(selected[count_pedaladas]).distances, count_pedaladas, selected[count_pedaladas]);
+            }
+            enableTooltips();
 
-        enableTooltips();
+        });
+
+
 
     }
 </script>

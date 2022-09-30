@@ -24,24 +24,25 @@
     function updatingSlider() {
 
 
-        if (distances.length == 0) {
-            $("#range-max").text("?");
-        } else {
+        if (distances.length > 0) {
 
-            if (distances.length > 0) {
-                distances = distances.map(Number);
-                maxDistance = distances.reduce(function(a, b) {
-                    return Math.max(a, b)
-                });
-            } else {
-                maxDistance = '?';
-            }
+            d3.select("#distance")
+                .style("display", 'block');
+            distances = distances.map(Number);
+            maxDistance = distances.reduce(function(a, b) {
+                return Math.max(a, b)
+            });
 
-            // console.log("Distâncias: ", distances);
-            // console.log("Maior Distância: ", maxDistance);
-            $("#range-max").text(maxDistance);
+            //console.log("Distâncias: ", distances);
+            //console.log("Maior Distância: ", maxDistance);
+            d3.select("#range-max").text(maxDistance);
             updateRangeMax(maxDistance);
+
+        } else {
+            d3.select("#distance")
+                .style("display", 'none');
         }
+
 
     }
 
@@ -54,8 +55,8 @@
             max: maxDistance,
             values: [5, maxDistance],
             slide: function(event, ui) {
-                $("#range-min").text(ui.values[0]);
-                $("#range-max").text(ui.values[1]);
+                d3.select("#range-min").text(ui.values[0]);
+                d3.select("#range-max").text(ui.values[1]);
             }
         });
 

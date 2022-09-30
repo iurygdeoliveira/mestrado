@@ -15,16 +15,18 @@
                     <?php $this->insert("../leftsidebar/slider") ?>
                 </div>
             </li>
-            <li class="side-nav-item">
+            <!-- <li class="side-nav-item">
                 <div class="side-nav-link pe-2 ps-2 pt-0">
-                    <?php $this->insert("../leftsidebar/barChart") ?>
+                    <?php //$this->insert("../leftsidebar/barChart") 
+                    ?>
                 </div>
             </li>
             <li class="side-nav-item">
                 <div class="side-nav-link pt-0 pb-0">
-                    <?php $this->insert("../leftsidebar/multiVis") ?>
+                    <?php //$this->insert("../leftsidebar/multiVis") 
+                    ?>
                 </div>
-            </li>
+            </li> -->
         </ul>
 
 

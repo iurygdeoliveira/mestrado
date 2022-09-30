@@ -1,5 +1,5 @@
 <script>
-    function createTableLens(pedaladas, index, rider) {
+    async function createTableLens(pedaladas, index, rider) {
         // console.log(pedaladas);
         // console.log(rider)
 
@@ -50,6 +50,7 @@
                 animationTableLens();
             });
         }
+
         if (switchToggle == 'overview') {
             drawOverview(index, color, pedaladas_selected, maxDistanceRider, rider);
         }
@@ -60,50 +61,53 @@
         }
     }
 
-    function sizeMax(line_size, distanceMaxRider) {
+    function widthLine(distance, distanceMaxRider) {
 
-        return Math.round((line_size * 194) / distanceMaxRider) + 4;
+        return parseFloat((100 * distance) / distanceMaxRider);
     }
 
     function drawSVG(index, color) {
+
+        let widthTable = String(getWidthTable() + 'px');
 
         return d3.select('#svg' + index)
             .style('background-color', 'rgb(255,255,255)')
             .style('outline', '3px solid ' + color)
             .style('padding', '0px')
-            .style('margin-right', '5px')
             .style('margin-bottom', '5px')
-            .style('width', '201px');
+            .style('width', widthTable);
     }
 
-    function drawLines(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, background, width, color) {
+    function drawLines(box, color, rider, distance_pedalada, id_pedalada, maxDistanceRider) {
 
-        let line_size = Math.round(parseFloat(distance_pedalada));
-        distance_pedalada = parseFloat(distance_pedalada).toFixed(2);
+        let tamLine = widthLine(distance_pedalada, maxDistanceRider);
 
-        svg.append('line')
-            .style("stroke", background)
-            .style("stroke-width", width)
+        d3.select(box)
+            .append('div')
             .attr("id", rider + "_pedalada_" + id_pedalada)
-            .attr("pedalada_clicada", false)
-            .attr("distance", distance_pedalada)
-            .attr("title", distance_pedalada + ' KM')
-            .attr("x1", x1)
-            .attr("y1", line)
-            .attr("x2", sizeMax(line_size, maxDistanceRider))
-            .attr("y2", line);
+            .attr("color", color)
+            .style('display', 'block')
+            .style('width', tamLine + '%')
+            .style('background-color', background_lens)
+            .style('border', '0.5px solid ' + background_lens);
+    }
+
+    async function getWidthBox() {
+        return parseFloat(store.session.get(widthBox));
     }
 
     async function drawItens(index, color, pedaladas, maxDistanceRider, rider) {
 
         let svg = drawSVG(index, color);
 
-        let count_lines = 0;
+        console.log(svg);
+
         let line = y_pos_inicial;
         let x1 = 4;
         let distance_pedalada = 0;
         let id_pedalada = 0;
-        for (; count_lines < pedaladas.length; count_lines++, line += margin_lens) {
+
+        for (let count_lines = 0; count_lines < pedaladas.length; count_lines++, line += margin_lens) {
 
             distance_pedalada = pedaladas[count_lines].distance_haversine;
             id_pedalada = pedaladas[count_lines].id;
@@ -118,25 +122,26 @@
 
     function drawOverview(index, color, pedaladas, maxDistanceRider, rider) {
 
-        let svg = drawSVG(index, color);
-
-        let count_overview = 0;
-        let line = 4;
-        let x1 = 4;
+        let box = '#table_lens_box_' + index;
         let distance_pedalada = 0;
         let id_pedalada = 0;
-        for (; count_overview < pedaladas.length; count_overview++, line += 1) {
+        let count = 0;
+        for (; count < pedaladas.length; count++) {
 
-            distance_pedalada = pedaladas[count_overview].distance_haversine;
-            id_pedalada = pedaladas[count_overview].id;
-            drawLines(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, 'rgb(0,0,0)', 0.5, color);
-
+            distance_pedalada = pedaladas[count].distance_haversine;
+            id_pedalada = pedaladas[count].id;
+            drawLines(
+                box,
+                color,
+                rider,
+                distance_pedalada,
+                id_pedalada,
+                maxDistanceRider,
+            );
         }
 
-        d3.select('#svg' + index)
-            .style('height', (line + 3) + 'px')
-            .style('top', '0px');
-
+        d3.select('#table_lens_box_' + index)
+            .style('height', ((count * 2) + 17) + 'px');
     }
 
     function arraySort(mode, pedaladas) {
