@@ -75,6 +75,11 @@
             enableCheckBox();
         }
 
+        if (selected.length <= 0) {
+            removeBarChart();
+            store.session.set('pedaladas_barChart', []);
+        }
+
         updateButtonSearchRiders(selected, false, false, false, false);
     }
 

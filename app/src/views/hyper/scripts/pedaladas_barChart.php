@@ -32,7 +32,7 @@
         store.session.add('pedaladas_barChart', pedalada_barChart);
         //console.log(store.session.get('pedaladas_barChart'));
 
-        // update_barChart();
+        update_barChart();
     }
 
     function remove_pedaladas_barChart(pedalada) {
@@ -41,18 +41,29 @@
         let pedaladas_barChart = store.session.get('pedaladas_barChart');
         pedaladas_barChart = pedaladas_barChart.filter(item => item.id !== pedalada_barChart.id)
         store.session.set('pedaladas_barChart', pedaladas_barChart);
-        //update_barChart();
+        update_barChart();
 
+    }
+
+    function calculateHeightBarChart() {
+
+        let heightWindow = $(window).height();
+        let heightChooseCyclist = $('#choose_cyclist').height();
+        let heightSlider = $('#slider').height();
+        let heightMultiVis = $('#multiVis').height();
+        return parseInt(heightWindow - heightChooseCyclist - heightMultiVis - heightSlider);
     }
 
     function removeBarChart() {
 
+        let heightBarChart = calculateHeightBarChart() - 55;
+        $('#pedaladas_barChart_card').hide();
         d3.select('#pedaladas_barChart').remove();
         d3.select('#pedaladas_barChart_body')
             .append('canvas')
             .attr("id", 'pedaladas_barChart')
-            .attr("width", '100%')
-            .attr("height", '155');
+            .attr("height", heightBarChart + 'px');
+
     }
 
     function mountLabels() {
@@ -82,7 +93,7 @@
         let pedaladas_barChart = store.session.get('pedaladas_barChart');
         let background = [];
         pedaladas_barChart.forEach(element => {
-            background.push(element.color);
+            background.push(element.color_selected);
         });
 
         return background;
@@ -100,6 +111,7 @@
         }
 
         removeBarChart();
+        $('#pedaladas_barChart_card').show();
 
         const ctx = document.getElementById('pedaladas_barChart');
         const data = {
@@ -117,6 +129,7 @@
             type: 'bar',
             data,
             options: {
+                maintainAspectRatio: false,
                 indexAxis: 'x',
                 plugins: {
                     legend: {
@@ -133,7 +146,7 @@
                                 if (context.parsed.y !== null) {
                                     let pedaladas_barChart_tooltip = store.session.get('pedaladas_barChart');
                                     let tooltip = pedaladas_barChart_tooltip.find(x => x.distance === context.parsed.y);
-                                    label += tooltip.distance + ' KM';
+                                    label += tooltip.distance.toFixed(2) + ' KM';
                                 }
                                 return label;
                             }
