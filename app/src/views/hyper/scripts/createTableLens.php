@@ -31,11 +31,6 @@
 
         }
 
-        // Ativar apenas para auxiliar no desenho de linhas
-        //*************************************************
-        // pedaladas_selected = pedaladas_selected.splice(0, 5);
-        //*************************************************
-
         store.session.set(rider + '_selected', {
             pedaladas_selected
         });
@@ -46,19 +41,18 @@
 
         // Desenhando linhas
         if (switchToggle == 'item') {
-            drawItens(index, color, pedaladas_selected, maxDistanceRider, rider).then(() => {
+            drawItens(index, color, pedaladas_selected, maxDistanceRider, rider, 6, 1, 15).then(() => {
                 animationTableLens();
             });
         }
 
         if (switchToggle == 'overview') {
-            drawOverview(index, color, pedaladas_selected, maxDistanceRider, rider);
+            drawItens(index, color, pedaladas_selected, maxDistanceRider, rider, 0, 0, 2).then(() => {
+                animationTableLens();
+            });
+            //drawOverview(index, color, pedaladas_selected, maxDistanceRider, rider);
         }
 
-        // Se houver pedaladas selecionadas, aplicar estado
-        if (has_pedaladas_barChart()) {
-
-        }
     }
 
     function widthLine(distance, distanceMaxRider) {
@@ -66,66 +60,41 @@
         return parseFloat((100 * distance) / distanceMaxRider);
     }
 
-    function drawSVG(index, color) {
-
-        let widthTable = String(getWidthTable() + 'px');
-
-        return d3.select('#svg' + index)
-            .style('background-color', 'rgb(255,255,255)')
-            .style('outline', '3px solid ' + color)
-            .style('padding', '0px')
-            .style('margin-bottom', '5px')
-            .style('width', widthTable);
-    }
-
-    function drawLines(box, color, rider, distance_pedalada, id_pedalada, maxDistanceRider) {
+    function drawLines(box, color, rider, distance_pedalada, id_pedalada, maxDistanceRider, padding, marginBottom) {
 
         let tamLine = widthLine(distance_pedalada, maxDistanceRider);
 
-        d3.select(box)
+        d3.select('#' + box)
             .append('div')
             .attr("id", rider + "_pedalada_" + id_pedalada)
-            .attr("color", color)
+            .attr("box", box)
+            .attr("color_main", color)
+            .attr("line_clicked", 'false')
+            .attr("color_selected", 'false')
+            .attr("distance", distance_pedalada)
+            .attr("title", distance_pedalada.toFixed(2) + " KM")
             .style('display', 'block')
             .style('width', tamLine + '%')
             .style('background-color', background_lens)
-            .style('border', '0.5px solid ' + background_lens);
+            .style('padding', padding + 'px')
+            .style('margin-bottom', marginBottom + 'px')
+            .style('border', '0.1px solid ' + background_lens);
     }
 
-    async function getWidthBox() {
-        return parseFloat(store.session.get(widthBox));
+    function resizeHeight(index, count, fator) {
+
+        d3.select('#table_lens_box_' + index)
+            .style('height', ((count * fator) + 17) + 'px');
     }
 
-    async function drawItens(index, color, pedaladas, maxDistanceRider, rider) {
+    async function drawItens(index, color, pedaladas, maxDistanceRider, rider, padding, marginBottom, factor) {
 
-        let svg = drawSVG(index, color);
-
-        console.log(svg);
-
-        let line = y_pos_inicial;
-        let x1 = 4;
-        let distance_pedalada = 0;
-        let id_pedalada = 0;
-
-        for (let count_lines = 0; count_lines < pedaladas.length; count_lines++, line += margin_lens) {
-
-            distance_pedalada = pedaladas[count_lines].distance_haversine;
-            id_pedalada = pedaladas[count_lines].id;
-            drawLines(svg, distance_pedalada, id_pedalada, x1, line, maxDistanceRider, rider, background_lens, min_height_lens, color)
-
-        }
-
-        d3.select('#svg' + index)
-            .style('height', (line - diff_height_box) + 'px');
-
-    }
-
-    function drawOverview(index, color, pedaladas, maxDistanceRider, rider) {
-
-        let box = '#table_lens_box_' + index;
+        let box = 'table_lens_box_' + index;
         let distance_pedalada = 0;
         let id_pedalada = 0;
         let count = 0;
+        // let padding = 6;
+        // let marginBottom = 1;
         for (; count < pedaladas.length; count++) {
 
             distance_pedalada = pedaladas[count].distance_haversine;
@@ -137,12 +106,42 @@
                 distance_pedalada,
                 id_pedalada,
                 maxDistanceRider,
+                padding,
+                marginBottom
             );
         }
 
-        d3.select('#table_lens_box_' + index)
-            .style('height', ((count * 2) + 17) + 'px');
+        resizeHeight(index, count, factor);
+
     }
+
+    // function drawOverview(index, color, pedaladas, maxDistanceRider, rider) {
+
+    //     let box = 'table_lens_box_' + index;
+    //     let distance_pedalada = 0;
+    //     let id_pedalada = 0;
+    //     let count = 0;
+    //     let padding = 0;
+    //     let marginBottom = 0;
+    //     for (; count < pedaladas.length; count++) {
+
+    //         distance_pedalada = pedaladas[count].distance_haversine;
+    //         id_pedalada = pedaladas[count].id;
+    //         drawLines(
+    //             box,
+    //             color,
+    //             rider,
+    //             distance_pedalada,
+    //             id_pedalada,
+    //             maxDistanceRider,
+    //             padding,
+    //             marginBottom
+    //         );
+    //     }
+
+    //     resizeHeight(index, count, 2);
+
+    // }
 
     function arraySort(mode, pedaladas) {
 

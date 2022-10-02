@@ -10,15 +10,6 @@
     // ************************************************
     // Constantes e variáveis utilizadas no tables lens modo itens
 
-    let widthBox = 0; // Largura do box do table lens
-    const min_height_lens = 10;
-    const max_height_lens = 20;
-    const margin_lens = 12; // Utilizado para dar espaço entre as linhas
-    const padding_lens_first = 6; // Espaçamento entre as linhas
-    const y_top = 6; // posição y para iniciar desenho da box
-    const y_pos_inicial = 22; // posição y para iniciar desenhos das linhas
-    const diff_height_box = 1; // diferença necessária para calcular a altura da box
-
     let pedaladas_red_clicadas = 0;
     let pedaladas_blue_clicadas = 0;
     let pedaladas_yellow_clicadas = 0;

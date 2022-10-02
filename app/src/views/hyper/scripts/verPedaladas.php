@@ -62,14 +62,49 @@
         createSkeleton().then(() => {
 
             console.log('Criando table lens');
-            for (let count_pedaladas = 0; count_pedaladas < selected.length; count_pedaladas++) {
-                createTableLens(store.session.get(selected[count_pedaladas]).distances, count_pedaladas, selected[count_pedaladas]);
+            for (let count = 0; count < selected.length; count++) {
+
+                let pedaladas = store.session.get(selected[count]).distances;
+                let rider = selected[count];
+
+                createTableLens(pedaladas, count, rider).then(() => {
+
+                    if (has_pedaladas_barChart()) {
+                        applyStateBarChar(rider, count);
+                    }
+                });
             }
-            enableTooltips();
+            enableTooltipsLine();
 
         });
+    }
 
+    function applyStateBarChar(rider, count) {
+        let box = 'table_lens_box_' + count;
+        let pedaladas_box = arrayExtract(store.session.get('pedaladas_barChart'), box);
 
+        pedaladas_box.forEach(element => {
+            d3.select('#' + element.id)
+                .attr("color_main", element.color_main)
+                .attr("line_clicked", element.line_clicked)
+                .attr("color_selected", element.color_selected)
+                .attr("distance", element.distance)
+                .attr("title", element.distance.toFixed(2) + " KM")
+                .attr("style", element.style);
+        });
 
+        if (switchToggle == 'overview') {
+
+            let height_box = parseInt(d3.select('#' + box).style('height').replace('px', ''));
+            d3.select('#' + box).style('height', (height_box + (pedaladas_box.length * 13)) + 'px')
+        }
+
+    }
+
+    function arrayExtract(arr, value) {
+
+        return arr.filter(function(ele) {
+            return ele.box === value;
+        });
     }
 </script>

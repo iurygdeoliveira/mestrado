@@ -1,41 +1,16 @@
 <script>
     function animationTableLens() {
 
-        pedaladas_red_clicadas = 0;
-        pedaladas_blue_clicadas = 0;
-        pedaladas_yellow_clicadas = 0;
-        pedaladas_green_clicadas = 0;
-        pedaladas_purple_clicadas = 0;
-
-        let lines = d3.selectAll('line')
+        let lines = d3.selectAll("div[line_clicked]")
             .on('mouseover', function() {
 
                 // Habilitar animação apenas nas pedaladas não clicadas
                 if (disableAnimationBox(this)) {
 
-                    if (($(this).attr("pedalada_clicada") == 'false')) {
-                        // descobrindo pedalada focada
-                        let pedalada_mouseover = $(this).attr("id").split("_");
+                    if ((d3.select(this).attr("line_clicked") == 'false')) {
 
-                        //console.log("pedalada focada:", pedalada_mouseover);
-                        let pedaladas_selected = store.session.get(pedalada_mouseover[0] + '_selected').pedaladas_selected;
-                        //console.log("pedaladas selecionadas: ", pedaladas_selected);
+                        lineOver('#' + d3.select(this).attr("id"));
 
-                        // abaixando 20 pixels a posição das pedaladas
-                        // abaixo da pedalada focada
-                        // usando parseInt para converter id da pedalada focada de string para numerico na base 10
-                        let id_pedalada_mouseover = parseInt(pedalada_mouseover[2], 10);
-                        //console.log("id da pedalada focada:", id_pedalada_mouseover);
-
-                        // Obtendo index no array pedaldas_selected da pedalada focada
-                        let index_pedalada_mouseover = pedaladas_selected.map(object => object.id).indexOf(id_pedalada_mouseover);
-                        //console.log("indice da pedalada focada:", index_pedalada_mouseover);
-
-                        if (index_pedalada_mouseover == 0) {
-                            lineFirstOver(this, index_pedalada_mouseover, pedalada_mouseover, pedaladas_selected);
-                        } else {
-                            lineOthersOver(this, index_pedalada_mouseover, pedalada_mouseover, pedaladas_selected);
-                        }
                     }
                 }
 
@@ -44,170 +19,105 @@
 
                 if (disableAnimationBox(this)) {
 
-                    if ($(this).attr("pedalada_clicada") == 'false') {
+                    if (d3.select(this).attr("line_clicked") == 'false') {
 
-                        let pedalada_mouseout = $(this).attr("id").split("_");
-
-                        // subindo 20 pixels a posição das pedaladas
-                        // abaixo da pedalada focada
-                        // usando parseInt para converter id da pedalada focada de string para numerico na base 10
-                        let pedaladas_selected = store.session.get(pedalada_mouseout[0] + '_selected').pedaladas_selected;
-                        // console.log("pedaladas selecionadas: ", pedaladas_selected);
-                        // console.log("pedalada desfocada:", pedalada_mouseout);
-                        // 
-                        let id_pedalada_mouseout = parseInt(pedalada_mouseout[2], 10);
-                        //console.log("id da pedalada desfocada:", id_pedalada_mouseout);
-                        // Obtendo index no array pedaldas_selected da pedalada focada
-                        let index_pedalada_mouseout = pedaladas_selected.map(object => object.id).indexOf(id_pedalada_mouseout);
-                        //console.log("indice da pedalada desfocada:", index_pedalada_mouseout);
-
-                        if (index_pedalada_mouseout == 0) {
-                            lineFirstOut(this, index_pedalada_mouseout, pedalada_mouseout, pedaladas_selected);
-                        } else {
-                            lineOthersOut(this, index_pedalada_mouseout, pedalada_mouseout, pedaladas_selected);
-                        }
+                        lineOut('#' + d3.select(this).attr("id"));
 
                     }
                 }
             })
             .on('click', function() {
 
-                if (disableClickLineFalse(this)) {
+                // Habilitar clicks apenas no modo item
+                if (switchToggle == 'item') {
+                    // Desabilitar click nas linhas falsas para travar animação
+                    if (disableClickLineFalse(this)) {
 
-                    let pedalada_clicada = $(this).attr("id").split("_");
-                    // Obtendo cores dos ciclistas dos checkbox
-                    let color = $('#' + pedalada_clicada[0]).attr('style').replace(";", "").replace("background-color: ", "");
-                    let color_current = '';
+                        let pedalada_clicada = d3.select(this).attr("id").split("_");
+                        // Obtendo cores dos ciclistas dos checkbox
+                        let color_main = d3.select(this).attr("color_main");
+                        let color_current = '';
 
-                    if (color == 'rgb(211, 69, 91)') {
-                        let colors_red = [];
+                        if (color_main == 'rgb(211, 69, 91)') {
 
-                        //console.log("color red");
-                        if (store.session.get('colors_red_current').length == 0) {
-                            store.session.set('colors_red_current', store.session.get('colors_red'));
+                            lineClicked(this, 'colors_red_current', 'colors_red');
+                            pedaladas_red_clicadas += 1;
+                            console.log("pedaladas red clicadas:", pedaladas_red_clicadas);
+
                         }
-                        colors_red = store.session.get('colors_red_current'); // Obtendo cores a serem utilizadas 
-                        color_current = colors_red.pop(); // Obtendo cor específica a ser utilizada
+                        if (color_main == 'rgb(44, 136, 217)') {
 
-                        d3.select(this)
-                            .style("stroke", color_current)
-                            .style("stroke-width", max_height_lens)
-                            .attr("pedalada_clicada", true)
-                            .attr("color_current", color_current);
-                        pedaladas_red_clicadas += 1;
-                        store.session.set('colors_red_current', colors_red);
-                        console.log("pedaladas red clicadas:", pedaladas_red_clicadas);
+                            lineClicked(this, 'colors_blue_current', 'colors_blue');
+                            pedaladas_blue_clicadas += 1;
+                            console.log("pedaladas blue clicadas:", pedaladas_blue_clicadas);
 
-                        // Armazenando as pedaladas para o bar chart
-                        push_pedaladas_barChart(this);
-
-                    }
-                    if (color == 'rgb(44, 136, 217)') {
-                        let colors_blue = [];
-                        //console.log("color blue");
-                        if (store.session.get('colors_blue_current').length == 0) {
-                            store.session.set('colors_blue_current', store.session.get('colors_blue'));
                         }
-                        colors_blue = store.session.get('colors_blue_current'); // Obtendo cores a serem utilizadas 
-                        color_current = colors_blue.pop(); // Obtendo cor específica a ser utilizada
+                        if (color_main == 'rgb(247, 195, 37)') {
 
-                        d3.select(this)
-                            .style("stroke", color_current)
-                            .style("stroke-width", max_height_lens)
-                            .attr("pedalada_clicada", true)
-                            .attr("color_current", color_current);
+                            lineClicked(this, 'colors_yellow_current', 'colors_yellow');
+                            pedaladas_yellow_clicadas += 1;
+                            console.log("pedaladas yellow clicadas:", pedaladas_yellow_clicadas);
 
-                        pedaladas_blue_clicadas += 1;
-                        store.session.set('colors_blue_current', colors_blue);
-                        console.log("pedaladas blue clicadas:", pedaladas_blue_clicadas);
-
-                        // Armazenando as pedaladas para o bar chart
-                        push_pedaladas_barChart(this);
-                    }
-                    if (color == 'rgb(247, 195, 37)') {
-                        let colors_yellow = [];
-                        //console.log("color yellow");
-                        if (store.session.get('colors_yellow_current').length == 0) {
-                            store.session.set('colors_yellow_current', store.session.get('colors_yellow'));
                         }
-                        colors_yellow = store.session.get('colors_yellow_current'); // Obtendo cores a serem utilizadas 
-                        color_current = colors_yellow.pop(); // Obtendo cor específica a ser utilizada
+                        if (color_main == 'rgb(47, 177, 156)') {
 
-                        d3.select(this)
-                            .style("stroke", color_current)
-                            .style("stroke-width", max_height_lens)
-                            .attr("pedalada_clicada", true)
-                            .attr("color_current", color_current);
-                        pedaladas_yellow_clicadas += 1;
-                        store.session.set('colors_yellow_current', colors_yellow);
-                        console.log("pedaladas yellow clicadas:", pedaladas_yellow_clicadas);
+                            lineClicked(this, 'colors_green_current', 'colors_green');
+                            pedaladas_green_clicadas += 1;
+                            console.log("pedaladas green clicadas:", pedaladas_green_clicadas);
 
-                        // Armazenando as pedaladas para o bar chart
-                        push_pedaladas_barChart(this);
-
-                    }
-                    if (color == 'rgb(47, 177, 156)') {
-                        let colors_green = [];
-                        //console.log("color green");
-                        if (store.session.get('colors_green_current').length == 0) {
-                            store.session.set('colors_green_current', store.session.get('colors_green'));
                         }
-                        colors_green = store.session.get('colors_green_current'); // Obtendo cores a serem utilizadas 
-                        color_current = colors_green.pop(); // Obtendo cor específica a ser utilizada
+                        if (color_main == 'rgb(115, 15, 195)') {
 
-                        d3.select(this)
-                            .style("stroke", color_current)
-                            .style("stroke-width", max_height_lens)
-                            .attr("pedalada_clicada", true)
-                            .attr("color_current", color_current);
-                        pedaladas_green_clicadas += 1;
-                        store.session.set('colors_green_current', colors_green);
-                        console.log("pedaladas green clicadas:", pedaladas_green_clicadas);
+                            lineClicked(this, 'colors_purple_current', 'colors_purple');
+                            pedaladas_purple_clicadas += 1;
+                            console.log("pedaladas purple clicadas:", pedaladas_purple_clicadas);
 
-                        // Armazenando as pedaladas para o bar chart
-                        push_pedaladas_barChart(this);
-
-                    }
-                    if (color == 'rgb(115, 15, 195)') {
-                        let colors_purple = [];
-                        //console.log("color purple");
-                        if (store.session.get('colors_purple_current').length == 0) {
-                            store.session.set('colors_purple_current', store.session.get('colors_purple'));
                         }
-                        colors_purple = store.session.get('colors_purple_current'); // Obtendo cores a serem utilizadas 
-                        color_current = colors_purple.pop(); // Obtendo cor específica a ser utilizada
-
-                        d3.select(this)
-                            .style("stroke", color_current)
-                            .style("stroke-width", max_height_lens)
-                            .attr("pedalada_clicada", true)
-                            .attr("color_current", color_current);
-                        pedaladas_purple_clicadas += 1;
-                        store.session.set('colors_purple_current', colors_purple);
-                        console.log("pedaladas purple clicadas:", pedaladas_purple_clicadas);
-
-                        // Armazenando as pedaladas para o bar chart
-                        push_pedaladas_barChart(this);
-
-
+                    } else {
+                        enableClickLineTrue(this);
                     }
-                } else {
-                    enableClickLineTrue(this);
                 }
             });
 
+    }
+
+    function lineClicked(pedalada, colors_current, colors) {
+        let aux = [];
+
+        //console.log("color red");
+        if (store.session.get(colors_current).length == 0) {
+            store.session.set(colors_current, store.session.get(colors));
+        }
+        aux = store.session.get(colors_current); // Obtendo cores a serem utilizadas 
+        color_current = aux.pop(); // Obtendo cor específica a ser utilizada
+
+        lineStateChange(pedalada, color_current);
+
+        store.session.set(colors_current, aux);
+
+        // Armazenando as pedaladas para o bar chart
+        push_pedaladas_barChart(pedalada);
+    }
+
+    function lineStateChange(line, color_current) {
+        changeColorLine('#' + $(line).attr("id"), color_current);
+        d3.select(line)
+            .attr("line_clicked", 'true')
+            .attr("color_selected", color_current);
     }
 
     function lineStateOriginal(line, key, pedaladas_clicadas) {
         let color_current = '';
         let colors_remaining = '';
         //console.log("Desabilitando clicks no box do table lens");
-        color_current = d3.select(line).style("stroke");
-        //console.log("cor da linha clicada:", color_current);
+        color_current = d3.select(line).attr("color_selected");
+
+        changeColorLine('#' + $(line).attr("id"), background_lens);
         d3.select(line)
-            .style("stroke", background_lens)
-            .style("stroke-width", min_height_lens)
-            .attr("pedalada_clicada", false);
+            .attr("line_clicked", 'false')
+            .attr("color_selected", 'false');
+
+
         pedaladas_clicadas -= 1;
         remove_pedaladas_barChart(line); // Removendo pedalada do barchart
         colors_remaining = store.session.get(key);
@@ -220,7 +130,7 @@
 
     function enableClickLineTrue(line) {
 
-        if ($(line).attr("pedalada_clicada") == 'true') {
+        if ($(line).attr("line_clicked") == 'true') {
             console.log("Habilitando clicks no box do table lens");
 
             let pedalada = $(line).attr("id").split("_");
@@ -257,43 +167,43 @@
         let pedalada = $(line).attr("id").split("_");
         let color = $('#' + pedalada).attr('style').replace(";", "").replace("background-color: ", "");
 
-        if (($(line).attr("pedalada_clicada") == 'false') && (color == 'rgb(211, 69, 91)') && (pedaladas_red_clicadas == 3)) {
+        if (($(line).attr("line_clicked") == 'false') && (color == 'rgb(211, 69, 91)') && (pedaladas_red_clicadas == 3)) {
             return false
         }
 
-        if (($(line).attr("pedalada_clicada") == 'true') && (color == 'rgb(211, 69, 91)')) {
+        if (($(line).attr("line_clicked") == 'true') && (color == 'rgb(211, 69, 91)')) {
             return false
         }
 
-        if (($(line).attr("pedalada_clicada") == 'false') && (color == 'rgb(44, 136, 217)') && (pedaladas_blue_clicadas == 3)) {
+        if (($(line).attr("line_clicked") == 'false') && (color == 'rgb(44, 136, 217)') && (pedaladas_blue_clicadas == 3)) {
             return false
         }
 
-        if (($(line).attr("pedalada_clicada") == 'true') && (color == 'rgb(44, 136, 217)')) {
+        if (($(line).attr("line_clicked") == 'true') && (color == 'rgb(44, 136, 217)')) {
             return false
         }
 
-        if (($(line).attr("pedalada_clicada") == 'false') && (color == 'rgb(247, 195, 37)') && (pedaladas_yellow_clicadas == 3)) {
+        if (($(line).attr("line_clicked") == 'false') && (color == 'rgb(247, 195, 37)') && (pedaladas_yellow_clicadas == 3)) {
             return false
         }
 
-        if (($(line).attr("pedalada_clicada") == 'true') && (color == 'rgb(247, 195, 37)')) {
+        if (($(line).attr("line_clicked") == 'true') && (color == 'rgb(247, 195, 37)')) {
             return false
         }
 
-        if (($(line).attr("pedalada_clicada") == 'false') && (color == 'rgb(47, 177, 156)') && (pedaladas_green_clicadas == 3)) {
+        if (($(line).attr("line_clicked") == 'false') && (color == 'rgb(47, 177, 156)') && (pedaladas_green_clicadas == 3)) {
             return false
         }
 
-        if (($(line).attr("pedalada_clicada") == 'true') && (color == 'rgb(47, 177, 156)')) {
+        if (($(line).attr("line_clicked") == 'true') && (color == 'rgb(47, 177, 156)')) {
             return false
         }
 
-        if (($(line).attr("pedalada_clicada") == 'false') && (color == 'rgb(115, 15, 195)') && (pedaladas_purple_clicadas == 3)) {
+        if (($(line).attr("line_clicked") == 'false') && (color == 'rgb(115, 15, 195)') && (pedaladas_purple_clicadas == 3)) {
             return false
         }
 
-        if (($(line).attr("pedalada_clicada") == 'true') && (color == 'rgb(115, 15, 195)')) {
+        if (($(line).attr("line_clicked") == 'true') && (color == 'rgb(115, 15, 195)')) {
             return false
         }
 
@@ -328,215 +238,17 @@
         return true;
     }
 
-    function lineFirstOver(line, index_pedalada_mouseover, pedalada_mouseover, pedaladas_selected) {
-
+    function changeColorLine(line, color) {
         d3.select(line)
-            .style("stroke", background_lens_focus)
-            .style("stroke-width", max_height_lens);
-
-        // Modificando box do table lens
-        let dad = $(line).parent().attr("id");
-        let heightBox = d3.select('#' + dad).style("height");
-        heightBox = parseInt(heightBox.replace("px", ""));
-        //console.log("heightBox:", heightBox);
-        d3.select('#' + dad)
-            .style('height', ((heightBox + padding_lens_first) + 5) + 'px');
-
-        // Modificando as linhas
-        for (let firstOver_id_pedalada = 0; firstOver_id_pedalada < pedaladas_selected.length; firstOver_id_pedalada++) {
-
-            // Obtendo linha a ser modificada
-            if (firstOver_id_pedalada == index_pedalada_mouseover) {
-                let index_pedalada_modified = pedaladas_selected[firstOver_id_pedalada].id;
-                let line_modified = '#' + pedalada_mouseover[0] + "_" + pedalada_mouseover[1] + "_" + index_pedalada_modified;
-                //console.log("linha a ser modificada", line_modified);
-
-                // Obtendo posição numérica de y da linha a ser modificada
-                // usando parseInt para converter para número na base da 10
-                let y_pos = parseInt($(line_modified).attr("y1"), 10);
-                //console.log("posição de y", y_pos);
-                d3.select(line_modified)
-                    .attr("y1", y_pos + padding_lens_first)
-                    .attr("y2", y_pos + padding_lens_first);
-            }
-
-            if (firstOver_id_pedalada > index_pedalada_mouseover) {
-                let index_pedalada_modified = pedaladas_selected[firstOver_id_pedalada].id;
-                let line_modified = '#' + pedalada_mouseover[0] + "_" + pedalada_mouseover[1] + "_" + index_pedalada_modified;
-                //console.log("linha a ser modificada", line_modified);
-
-                // Obtendo posição numérica de y da linha a ser modificada
-                // usando parseInt para converter para número na base da 10
-                let y_pos = parseInt($(line_modified).attr("y1"), 10);
-                //console.log("posição de y", y_pos);
-                d3.select(line_modified)
-                    .attr("y1", (y_pos + padding_lens_first) + 5)
-                    .attr("y2", (y_pos + padding_lens_first) + 5);
-            }
-
-        }
-
+            .style('background-color', color)
+            .style('border', '0.1px solid ' + color);
     }
 
-    function lineFirstOut(line, index_pedalada_mouseout, pedalada_mouseout, pedaladas_selected) {
-
-        d3.select(line)
-            .style("stroke", background_lens)
-            .style("stroke-width", min_height_lens);
-
-        // Modificando box do table lens
-        let dad = $(line).parent().attr("id");
-        let heightBox = d3.select('#' + dad).style("height");
-        heightBox = parseInt(heightBox.replace("px", ""));
-        //console.log("heightBox:", heightBox);
-        d3.select('#' + dad)
-            .style('height', ((heightBox - padding_lens_first) - 5) + 'px');
-
-        // Modificando as linhas
-        for (let firstOut_id_pedalada = 0; firstOut_id_pedalada < pedaladas_selected.length; firstOut_id_pedalada++) {
-
-            // Obtendo linha a ser modificada
-            if (firstOut_id_pedalada == index_pedalada_mouseout) {
-                let index_pedalada_modified = pedaladas_selected[firstOut_id_pedalada].id;
-                let line_modified = '#' + pedalada_mouseout[0] + "_" + pedalada_mouseout[1] + "_" + index_pedalada_modified;
-                //console.log("linha a ser modificada", line_modified);
-
-                // Obtendo posição numérica de y da linha a ser modificada
-                // usando parseInt para converter para número na base da 10
-                let y_pos = parseInt($(line_modified).attr("y1"), 10);
-                //console.log("posição de y", y_pos);
-                d3.select(line_modified)
-                    .attr("y1", y_pos - padding_lens_first)
-                    .attr("y2", y_pos - padding_lens_first);
-            }
-
-            if (firstOut_id_pedalada > index_pedalada_mouseout) {
-                let index_pedalada_modified = pedaladas_selected[firstOut_id_pedalada].id;
-                let line_modified = '#' + pedalada_mouseout[0] + "_" + pedalada_mouseout[1] + "_" + index_pedalada_modified;
-                //console.log("linha a ser modificada", line_modified);
-
-                // Obtendo posição numérica de y da linha a ser modificada
-                // usando parseInt para converter para número na base da 10
-                let y_pos = parseInt($(line_modified).attr("y1"), 10);
-                //console.log("posição de y", y_pos);
-                d3.select(line_modified)
-                    .attr("y1", (y_pos - padding_lens_first) - 5)
-                    .attr("y2", (y_pos - padding_lens_first) - 5);
-            }
-
-        }
-
+    function lineOver(line) {
+        changeColorLine(line, background_lens_focus)
     }
 
-    function lineOthersOver(line, index_pedalada_mouseover, pedalada_mouseover, pedaladas_selected) {
-
-        d3.select(line)
-            .style("stroke", background_lens_focus)
-            .style("stroke-width", max_height_lens);
-
-        // Modificando box do table lens
-        let dad = $(line).parent().attr("id");
-        let heightBox = d3.select('#' + dad).style("height");
-        heightBox = parseInt(heightBox.replace("px", ""));
-        //console.log("heightBox:", heightBox);
-        d3.select('#' + dad)
-            .style('height', ((heightBox + padding_lens_first) + 5) + 'px');
-
-        // Modificando as linhas
-        for (let id_pedalada = 0; id_pedalada < pedaladas_selected.length; id_pedalada++) {
-
-            // Obtendo linhas a serem modificadas
-            if (id_pedalada == index_pedalada_mouseover) {
-                let index_pedalada_modified = pedaladas_selected[id_pedalada].id;
-                let line_modified = '#' + pedalada_mouseover[0] + "_" + pedalada_mouseover[1] + "_" + index_pedalada_modified;
-
-                // Exibindo distância na linha a ser modificada
-                let y_pos = parseInt($(line_modified).attr("y1"), 10);
-
-            }
-
-            // linhas acima da linha focada
-            if (id_pedalada < index_pedalada_mouseover) {
-                let index_pedalada_modified = pedaladas_selected[id_pedalada].id;
-                let line_modified = '#' + pedalada_mouseover[0] + "_" + pedalada_mouseover[1] + "_" + index_pedalada_modified;
-                //console.log("linha a ser modificada", line_modified);
-
-                // Obtendo posição numérica de y da linha a ser modificada
-                // usando parseInt para converter para número na base da 10
-                let y_pos = parseInt($(line_modified).attr("y1"), 10);
-                //console.log("posição de y", y_pos);
-                d3.select(line_modified)
-                    .attr("y1", y_pos - padding_lens_first)
-                    .attr("y2", y_pos - padding_lens_first);
-            }
-            // linhas abaixo da linha focada
-            if (id_pedalada > index_pedalada_mouseover) {
-                let index_pedalada_modified = pedaladas_selected[id_pedalada].id;
-                let line_modified = '#' + pedalada_mouseover[0] + "_" + pedalada_mouseover[1] + "_" + index_pedalada_modified;
-                //console.log("linha a ser modificada", line_modified);
-
-                // Obtendo posição numérica de y da linha a ser modificada
-                // usando parseInt para converter para número na base da 10
-                let y_pos = parseInt($(line_modified).attr("y1"), 10);
-                //console.log("posição de y", y_pos);
-                d3.select(line_modified)
-                    .attr("y1", y_pos + padding_lens_first)
-                    .attr("y2", y_pos + padding_lens_first);
-            }
-
-        }
-
-    }
-
-    function lineOthersOut(line, index_pedalada_mouseout, pedalada_mouseout, pedaladas_selected) {
-
-        d3.select(line)
-            .style("stroke", background_lens)
-            .style("stroke-width", min_height_lens);
-
-        // Modificando box do table lens
-        let dad = $(line).parent().attr("id");
-        let heightBox = d3.select('#' + dad).style("height");
-        heightBox = parseInt(heightBox.replace("px", ""));
-        //console.log("heightBox:", heightBox);
-        d3.select('#' + dad)
-            .style('height', ((heightBox - padding_lens_first) - 5) + 'px');
-
-        // Modificando as linhas
-        for (let id_pedalada = 0; id_pedalada < pedaladas_selected.length; id_pedalada++) {
-
-            // Obtendo linhas a serem modificada
-            // linhas acima da linha focada
-            if (id_pedalada < index_pedalada_mouseout) {
-                let index_pedalada_modified = pedaladas_selected[id_pedalada].id;
-                let line_modified = '#' + pedalada_mouseout[0] + "_" + pedalada_mouseout[1] + "_" + index_pedalada_modified;
-                //console.log("linha a ser modificada", line_modified);
-
-                // Obtendo posição numérica de y da linha a ser modificada
-                // usando parseInt para converter para número na base da 10
-                let y_pos = parseInt($(line_modified).attr("y1"), 10);
-                //console.log("posição de y", y_pos);
-                d3.select(line_modified)
-                    .attr("y1", y_pos + padding_lens_first)
-                    .attr("y2", y_pos + padding_lens_first);
-            }
-
-            // Linhas abaixo da linha focada
-            if (id_pedalada > index_pedalada_mouseout) {
-                let index_pedalada_modified = pedaladas_selected[id_pedalada].id;
-                let line_modified = '#' + pedalada_mouseout[0] + "_" + pedalada_mouseout[1] + "_" + index_pedalada_modified;
-                //console.log("linha a ser modificada", line_modified);
-
-                // Obtendo posição numérica de y da linha a ser modificada
-                // usando parseInt para converter para número na base da 10
-                let y_pos = parseInt($(line_modified).attr("y1"), 10);
-                //console.log("posição de y", y_pos);
-                d3.select(line_modified)
-                    .attr("y1", y_pos - padding_lens_first)
-                    .attr("y2", y_pos - padding_lens_first);
-            }
-
-        }
-
+    function lineOut(line) {
+        changeColorLine(line, background_lens)
     }
 </script>

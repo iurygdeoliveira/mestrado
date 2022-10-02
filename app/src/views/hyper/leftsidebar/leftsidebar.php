@@ -4,7 +4,7 @@
     <div class="h-100" id="leftside-menu-container" data-simplebar>
 
         <!--- Sidemenu -->
-        <ul class="side-nav" style="z-index: 1">
+        <ul class="side-nav">
             <li class="side-nav-item">
                 <div class="side-nav-link pb-0 pt-1 ps-1 pe-1 mb-1">
                     <?php $this->insert("../leftsidebar/choose_cyclist") ?>

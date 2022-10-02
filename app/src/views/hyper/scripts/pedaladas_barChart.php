@@ -15,11 +15,14 @@
         rider = rider[0].replace(/[^0-9]/g, '')
 
         return {
-            'id': d3.select(pedalada).attr('id'),
             'rider': rider,
+            'id': d3.select(pedalada).attr('id'),
+            'box': d3.select(pedalada).attr('box'),
+            'color_main': d3.select(pedalada).attr('color_main'),
+            'line_clicked': d3.select(pedalada).attr('line_clicked'),
+            'color_selected': d3.select(pedalada).attr('color_selected'),
             'distance': parseFloat(d3.select(pedalada).attr('distance')),
-            'status': d3.select(pedalada).attr('pedalada_clicada'),
-            'color': d3.select(pedalada).attr('color_current')
+            'style': d3.select(pedalada).attr('style')
         };
     }
 
@@ -29,7 +32,7 @@
         store.session.add('pedaladas_barChart', pedalada_barChart);
         //console.log(store.session.get('pedaladas_barChart'));
 
-        update_barChart();
+        // update_barChart();
     }
 
     function remove_pedaladas_barChart(pedalada) {
@@ -38,7 +41,7 @@
         let pedaladas_barChart = store.session.get('pedaladas_barChart');
         pedaladas_barChart = pedaladas_barChart.filter(item => item.id !== pedalada_barChart.id)
         store.session.set('pedaladas_barChart', pedaladas_barChart);
-        update_barChart();
+        //update_barChart();
 
     }
 
