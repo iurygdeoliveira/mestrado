@@ -79,11 +79,45 @@
         });
     }
 
+
+    function applyHeightItem(line) {
+        d3.select(line)
+            .style('padding', padding_item)
+            .style('margin-bottom', margin_item)
+            .style('margin-top', margin_item);
+    }
+
+    function applyHeightOverview(line) {
+        d3.select(line)
+            .style('padding', padding_overview)
+            .style('margin-bottom', margin_overview)
+            .style('margin-top', margin_overview);
+    }
+
+    function adjustHeightLine(line) {
+
+        let stateLine = d3.select(line).attr('line_clicked');
+        if (stateLine == 'true') {
+            applyHeightItem(line);
+        } else {
+            switch (switchToggle) {
+                case 'item':
+                    applyHeightItem(line);
+                    break;
+                case 'overview':
+                    applyHeightOverview(line);
+                    break;
+            }
+        }
+
+    }
+
     function applyStateBarChar(rider, count) {
         let box = 'table_lens_box_' + count;
         let pedaladas_box = arrayExtract(store.session.get('pedaladas_barChart'), box);
 
         pedaladas_box.forEach(element => {
+
             d3.select('#' + element.id)
                 .attr("color_main", element.color_main)
                 .attr("line_clicked", element.line_clicked)
@@ -91,10 +125,13 @@
                 .attr("distance", element.distance)
                 .attr("title", element.distance.toFixed(2) + " KM")
                 .attr("style", element.style);
+
+            adjustHeightLine('#' + element.id);
+
+
         });
 
         if (switchToggle == 'overview') {
-
             let height_box = parseInt(d3.select('#' + box).style('height').replace('px', ''));
             d3.select('#' + box).style('height', (height_box + (pedaladas_box.length * 13)) + 'px')
         }

@@ -28,55 +28,53 @@
             })
             .on('click', function() {
 
-                // Habilitar clicks apenas no modo item
-                if (switchToggle == 'item') {
-                    // Desabilitar click nas linhas falsas para travar animação
-                    if (disableClickLineFalse(this)) {
+                // Desabilitar click nas linhas falsas para travar animação
+                if (disableClickLineFalse(this)) {
 
-                        let pedalada_clicada = d3.select(this).attr("id").split("_");
-                        // Obtendo cores dos ciclistas dos checkbox
-                        let color_main = d3.select(this).attr("color_main");
-                        let color_current = '';
+                    let pedalada_clicada = d3.select(this).attr("id").split("_");
+                    // Obtendo cores dos ciclistas dos checkbox
+                    let color_main = d3.select(this).attr("color_main");
+                    let color_current = '';
 
-                        if (color_main == 'rgb(211, 69, 91)') {
+                    if (color_main == 'rgb(211, 69, 91)') {
 
-                            lineClicked(this, 'colors_red_current', 'colors_red');
-                            pedaladas_red_clicadas += 1;
-                            console.log("pedaladas red clicadas:", pedaladas_red_clicadas);
+                        lineClicked(this, 'colors_red_current', 'colors_red');
+                        pedaladas_red_clicadas += 1;
+                        console.log("pedaladas red clicadas:", pedaladas_red_clicadas);
 
-                        }
-                        if (color_main == 'rgb(44, 136, 217)') {
-
-                            lineClicked(this, 'colors_blue_current', 'colors_blue');
-                            pedaladas_blue_clicadas += 1;
-                            console.log("pedaladas blue clicadas:", pedaladas_blue_clicadas);
-
-                        }
-                        if (color_main == 'rgb(247, 195, 37)') {
-
-                            lineClicked(this, 'colors_yellow_current', 'colors_yellow');
-                            pedaladas_yellow_clicadas += 1;
-                            console.log("pedaladas yellow clicadas:", pedaladas_yellow_clicadas);
-
-                        }
-                        if (color_main == 'rgb(47, 177, 156)') {
-
-                            lineClicked(this, 'colors_green_current', 'colors_green');
-                            pedaladas_green_clicadas += 1;
-                            console.log("pedaladas green clicadas:", pedaladas_green_clicadas);
-
-                        }
-                        if (color_main == 'rgb(115, 15, 195)') {
-
-                            lineClicked(this, 'colors_purple_current', 'colors_purple');
-                            pedaladas_purple_clicadas += 1;
-                            console.log("pedaladas purple clicadas:", pedaladas_purple_clicadas);
-
-                        }
-                    } else {
-                        enableClickLineTrue(this);
                     }
+                    if (color_main == 'rgb(44, 136, 217)') {
+
+                        lineClicked(this, 'colors_blue_current', 'colors_blue');
+                        pedaladas_blue_clicadas += 1;
+                        console.log("pedaladas blue clicadas:", pedaladas_blue_clicadas);
+
+                    }
+                    if (color_main == 'rgb(247, 195, 37)') {
+
+                        lineClicked(this, 'colors_yellow_current', 'colors_yellow');
+                        pedaladas_yellow_clicadas += 1;
+                        console.log("pedaladas yellow clicadas:", pedaladas_yellow_clicadas);
+
+                    }
+                    if (color_main == 'rgb(47, 177, 156)') {
+
+                        lineClicked(this, 'colors_green_current', 'colors_green');
+                        pedaladas_green_clicadas += 1;
+                        console.log("pedaladas green clicadas:", pedaladas_green_clicadas);
+
+                    }
+                    if (color_main == 'rgb(115, 15, 195)') {
+
+                        lineClicked(this, 'colors_purple_current', 'colors_purple');
+                        pedaladas_purple_clicadas += 1;
+                        console.log("pedaladas purple clicadas:", pedaladas_purple_clicadas);
+
+                    }
+                } else {
+                    enableClickLineTrue(this);
                 }
+
             });
 
     }
@@ -116,8 +114,7 @@
         d3.select(line)
             .attr("line_clicked", 'false')
             .attr("color_selected", 'false');
-
-
+        adjustHeightLine('#' + $(line).attr("id"));
         pedaladas_clicadas -= 1;
         remove_pedaladas_barChart(line); // Removendo pedalada do barchart
         colors_remaining = store.session.get(key);
@@ -244,11 +241,30 @@
             .style('border', '0.1px solid ' + color);
     }
 
+    function adjustHeightBox(line, over) {
+
+        if (switchToggle == 'overview') {
+            let parent = '#' + $(line).parent().attr('id');
+            //console.log(parent);
+            let height_box = parseInt(d3.select(parent).style('height').replace('px', ''));
+            if (over) {
+                d3.select(parent).style('height', ((height_box + 13) + 'px'));
+            } else {
+                d3.select(parent).style('height', ((height_box - 13) + 'px'));
+            }
+        }
+    }
+
     function lineOver(line) {
-        changeColorLine(line, background_lens_focus)
+        changeColorLine(line, background_lens_focus);
+        applyHeightItem(line);
+        adjustHeightBox(line, true);
     }
 
     function lineOut(line) {
-        changeColorLine(line, background_lens)
+        changeColorLine(line, background_lens);
+        adjustHeightLine(line);
+        adjustHeightBox(line, false);
+
     }
 </script>

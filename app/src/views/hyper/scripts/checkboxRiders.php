@@ -46,12 +46,10 @@
     function click_handler() {
 
         let $this = $(this);
-        let rider = $this.attr("id");
 
-        // converte um HTMLElement para um objeto jQuery
         if ($this.is(':checked')) {
 
-            storeDistance(rider).then(() => {
+            storeDistance($this.attr("id")).then(() => {
                 updateSlider(selected);
             });
 
@@ -61,9 +59,9 @@
         }
 
         if ($this.is(':not(:checked)')) {
-            let value = $this.attr("name");
             selected = arrayRemove(selected, $this.attr("name"))
             updateSlider(selected);
+            updateCacheBarChart($this.attr("name"))
             getColor($(this));
             // console.log(selected);
         }

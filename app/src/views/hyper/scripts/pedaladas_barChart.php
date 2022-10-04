@@ -56,9 +56,13 @@
 
     function removeBarChart() {
 
-        let heightBarChart = calculateHeightBarChart() - 55;
         $('#pedaladas_barChart_card').hide();
         d3.select('#pedaladas_barChart').remove();
+
+    }
+
+    function setHeightChart() {
+        let heightBarChart = calculateHeightBarChart() - 55;
         d3.select('#pedaladas_barChart_body')
             .append('canvas')
             .attr("id", 'pedaladas_barChart')
@@ -99,6 +103,19 @@
         return background;
     }
 
+    function updateCacheBarChart(rider) {
+
+        let pedaladas_barChart = store.session.get('pedaladas_barChart');
+
+        if (pedaladas_barChart.length > 0) {
+
+            let idRider = rider.replace(/[^0-9]/g, '');
+            pedaladas_barChart = pedaladas_barChart.filter(item => item.rider !== idRider)
+            store.session.set('pedaladas_barChart', pedaladas_barChart);
+            update_barChart();
+        }
+    }
+
     function update_barChart() {
 
         console.log('Atualizando bar chart');
@@ -111,6 +128,7 @@
         }
 
         removeBarChart();
+        setHeightChart();
         $('#pedaladas_barChart_card').show();
 
         const ctx = document.getElementById('pedaladas_barChart');
@@ -131,6 +149,7 @@
             options: {
                 maintainAspectRatio: false,
                 indexAxis: 'x',
+                responsive: true,
                 plugins: {
                     legend: {
                         display: false,

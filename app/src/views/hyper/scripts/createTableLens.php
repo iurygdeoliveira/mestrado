@@ -41,16 +41,15 @@
 
         // Desenhando linhas
         if (switchToggle == 'item') {
-            drawItens(index, color, pedaladas_selected, maxDistanceRider, rider, 6, 1, 15).then(() => {
+            drawItens(index, color, pedaladas_selected, maxDistanceRider, rider, padding_item, margin_item, 15).then(() => {
                 animationTableLens();
             });
         }
 
         if (switchToggle == 'overview') {
-            drawItens(index, color, pedaladas_selected, maxDistanceRider, rider, 0, 0, 2).then(() => {
+            drawItens(index, color, pedaladas_selected, maxDistanceRider, rider, padding_overview, margin_overview, 2).then(() => {
                 animationTableLens();
             });
-            //drawOverview(index, color, pedaladas_selected, maxDistanceRider, rider);
         }
 
     }
@@ -60,7 +59,7 @@
         return parseFloat((100 * distance) / distanceMaxRider);
     }
 
-    function drawLines(box, color, rider, distance_pedalada, id_pedalada, maxDistanceRider, padding, marginBottom) {
+    function drawLines(box, color, rider, distance_pedalada, id_pedalada, maxDistanceRider, padding, margin) {
 
         let tamLine = widthLine(distance_pedalada, maxDistanceRider);
 
@@ -76,8 +75,9 @@
             .style('display', 'block')
             .style('width', tamLine + '%')
             .style('background-color', background_lens)
-            .style('padding', padding + 'px')
-            .style('margin-bottom', marginBottom + 'px')
+            .style('padding', padding)
+            .style('margin-bottom', margin)
+            .style('margin-top', margin)
             .style('border', '0.1px solid ' + background_lens);
     }
 
@@ -87,14 +87,12 @@
             .style('height', ((count * fator) + 17) + 'px');
     }
 
-    async function drawItens(index, color, pedaladas, maxDistanceRider, rider, padding, marginBottom, factor) {
+    async function drawItens(index, color, pedaladas, maxDistanceRider, rider, padding, margin, factor) {
 
         let box = 'table_lens_box_' + index;
         let distance_pedalada = 0;
         let id_pedalada = 0;
         let count = 0;
-        // let padding = 6;
-        // let marginBottom = 1;
         for (; count < pedaladas.length; count++) {
 
             distance_pedalada = pedaladas[count].distance_haversine;
@@ -107,41 +105,13 @@
                 id_pedalada,
                 maxDistanceRider,
                 padding,
-                marginBottom
+                margin
             );
         }
 
         resizeHeight(index, count, factor);
 
     }
-
-    // function drawOverview(index, color, pedaladas, maxDistanceRider, rider) {
-
-    //     let box = 'table_lens_box_' + index;
-    //     let distance_pedalada = 0;
-    //     let id_pedalada = 0;
-    //     let count = 0;
-    //     let padding = 0;
-    //     let marginBottom = 0;
-    //     for (; count < pedaladas.length; count++) {
-
-    //         distance_pedalada = pedaladas[count].distance_haversine;
-    //         id_pedalada = pedaladas[count].id;
-    //         drawLines(
-    //             box,
-    //             color,
-    //             rider,
-    //             distance_pedalada,
-    //             id_pedalada,
-    //             maxDistanceRider,
-    //             padding,
-    //             marginBottom
-    //         );
-    //     }
-
-    //     resizeHeight(index, count, 2);
-
-    // }
 
     function arraySort(mode, pedaladas) {
 
