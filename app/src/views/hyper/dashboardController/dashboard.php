@@ -11,9 +11,11 @@
 <?php $this->insert("../scripts/updateSlider") ?>
 <?php $this->insert("../scripts/updateButtons") ?>
 <?php $this->insert("../scripts/checkboxRiders") ?>
-<?php $this->insert("../scripts/createTableLens") ?>
-<?php $this->insert("../scripts/animationTableLens") ?>
+<?php $this->insert("../chartTableLens/js_createTableLens") ?>
+<?php $this->insert("../chartTableLens/js_animationTableLens") ?>
 <?php $this->insert("../scripts/verPedaladas") ?>
 <?php $this->insert("../scripts/enableTooltips") ?>
-<?php $this->insert("../scripts/pedaladas_barChart") ?>
+<?php $this->insert("../chartBar/js_barChart") ?>
+<?php $this->insert("../chartMap/js_mapChart") ?>
+<?php $this->insert("../scripts/generateMultivis") ?>
 <?php $this->insert("../scripts/totalStorage") ?>

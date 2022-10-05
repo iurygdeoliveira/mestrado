@@ -1,5 +1,5 @@
 <!-- ========== Left Sidebar Start ========== -->
-<div class="leftside-menu p-0">
+<div class="leftside-menu p-0" id="contentSidebar" style="position:fixed">
 
     <div class="h-100" id="leftside-menu-container" data-simplebar>
 
@@ -17,7 +17,7 @@
             </li>
             <li class="side-nav-item" id="barChart">
                 <div class="side-nav-link pe-2 ps-2 pt-0">
-                    <?php $this->insert("../leftsidebar/barChart") ?>
+                    <?php $this->insert("../chartBar/html_barChart") ?>
                 </div>
             </li>
             <li class="side-nav-item" id="multiVis">

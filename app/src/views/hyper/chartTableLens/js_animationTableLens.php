@@ -33,7 +33,7 @@
 
                     let pedalada_clicada = d3.select(this).attr("id").split("_");
                     // Obtendo cores dos ciclistas dos checkbox
-                    let color_main = d3.select(this).attr("color_main");
+                    let color_main = $(this).parent().css('border-top-color');
                     let color_current = '';
 
                     if (color_main == 'rgb(211, 69, 91)') {
@@ -248,9 +248,9 @@
             //console.log(parent);
             let height_box = parseInt(d3.select(parent).style('height').replace('px', ''));
             if (over) {
-                d3.select(parent).style('height', ((height_box + 13) + 'px'));
+                d3.select(parent).style('height', ((height_box + 15) + 'px'));
             } else {
-                d3.select(parent).style('height', ((height_box - 13) + 'px'));
+                d3.select(parent).style('height', ((height_box - 15) + 'px'));
             }
         }
     }

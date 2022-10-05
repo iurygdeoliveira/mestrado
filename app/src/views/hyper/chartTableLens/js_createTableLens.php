@@ -26,9 +26,7 @@
         for (var i = 0; i < pedaladas.length; i++) {
             if ((pedaladas[i].distance_haversine > range_min) && (pedaladas[i].distance_haversine < range_max)) {
                 pedaladas_selected.push(pedaladas[i]);
-
             }
-
         }
 
         store.session.set(rider + '_selected', {
@@ -66,8 +64,7 @@
         d3.select('#' + box)
             .append('div')
             .attr("id", rider + "_pedalada_" + id_pedalada)
-            .attr("box", box)
-            .attr("color_main", color)
+            .attr("rider", rider)
             .attr("line_clicked", 'false')
             .attr("color_selected", 'false')
             .attr("distance", distance_pedalada)
@@ -85,6 +82,7 @@
 
         d3.select('#table_lens_box_' + index)
             .style('height', ((count * fator) + 17) + 'px');
+
     }
 
     async function drawItens(index, color, pedaladas, maxDistanceRider, rider, padding, margin, factor) {

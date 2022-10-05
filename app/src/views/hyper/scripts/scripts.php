@@ -7,3 +7,4 @@
 <script src="<?= js('d3.v7.min.js') ?>"></script>
 <script src="<?= js('jquery.tipsy.min.js') ?>"></script>
 <script src="<?= js('chart.min.js') ?>"></script>
+<script src="<?= js('leaflet.js') ?>"></script>

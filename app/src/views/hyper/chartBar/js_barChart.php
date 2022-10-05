@@ -11,14 +11,9 @@
 
     function mount_pedalada_barChart(pedalada) {
 
-        let rider = d3.select(pedalada).attr('id').split("_");
-        rider = rider[0].replace(/[^0-9]/g, '')
-
         return {
-            'rider': rider,
             'id': d3.select(pedalada).attr('id'),
-            'box': d3.select(pedalada).attr('box'),
-            'color_main': d3.select(pedalada).attr('color_main'),
+            'rider': d3.select(pedalada).attr('rider'),
             'line_clicked': d3.select(pedalada).attr('line_clicked'),
             'color_selected': d3.select(pedalada).attr('color_selected'),
             'distance': parseFloat(d3.select(pedalada).attr('distance')),
@@ -47,7 +42,6 @@
 
     function calculateHeightBarChart() {
 
-        let heightWindow = $(window).height();
         let heightChooseCyclist = $('#choose_cyclist').height();
         let heightSlider = $('#slider').height();
         let heightMultiVis = $('#multiVis').height();
@@ -109,9 +103,10 @@
 
         if (pedaladas_barChart.length > 0) {
 
-            let idRider = rider.replace(/[^0-9]/g, '');
-            pedaladas_barChart = pedaladas_barChart.filter(item => item.rider !== idRider)
+            console.log("pedaladas barchart", pedaladas_barChart);
+            pedaladas_barChart = pedaladas_barChart.filter(item => item.rider !== rider)
             store.session.set('pedaladas_barChart', pedaladas_barChart);
+            console.log(pedaladas_barChart);
             update_barChart();
         }
     }
@@ -121,15 +116,11 @@
         console.log('Atualizando bar chart');
 
         // Atualizando tooltip button tablelens
-        if (has_pedaladas_barChart()) {
-            d3.select("#search_rides").attr("title", "See Table Lens");
-        } else {
-            d3.select("#search_rides").attr("title", "Generate Table Lens");
-        }
 
         removeBarChart();
         setHeightChart();
         $('#pedaladas_barChart_card').show();
+        updateButtonMultivis();
 
         const ctx = document.getElementById('pedaladas_barChart');
         const data = {
@@ -177,6 +168,5 @@
             }
         });
 
-        totalStorage(); // Monitorando Storage
     }
 </script>

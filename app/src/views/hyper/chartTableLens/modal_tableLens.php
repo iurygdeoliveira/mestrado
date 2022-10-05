@@ -1,4 +1,4 @@
-<div id="modalTableLens" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fullWidthModalLabel" aria-hidden="true">
+<div id="modalTableLens" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="fullWidthModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-full-width">
         <div class="modal-content h-100">
             <div class="modal-header">
@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fechar</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

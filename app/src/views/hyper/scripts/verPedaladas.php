@@ -1,4 +1,10 @@
 <script>
+    function resizeModalTableLens() {
+        d3.select("#modalTableLens")
+            .style('max-width', widthCharts + 'px')
+            .style('left', widthSidebar + 'px');
+    }
+
     function createLabels() {
 
         for (let count = 0; count < selected.length; count++) {
@@ -23,6 +29,7 @@
             d3.select('#table_lens_box').append('div')
                 .attr("id", "table_lens_box_" + count)
                 .attr("class", "col mx-1 p-1 justify-content-center")
+                .attr("rider", selected[count])
                 .style('background-color', 'rgb(255, 255, 255)')
                 .style('border', '3px solid ' + color)
                 .style('border-radius', '0.25rem');
@@ -34,6 +41,7 @@
 
         createLabels();
         createBox();
+        resizeModalTableLens();
     }
 
     function removeTableLens() {
@@ -70,15 +78,17 @@
                 createTableLens(pedaladas, count, rider).then(() => {
 
                     if (has_pedaladas_barChart()) {
-                        applyStateBarChar(rider, count);
+                        applyStateBarChar(d3.select("#table_lens_box_" + count).attr('rider'));
                     }
                 });
             }
             enableTooltipsLine();
 
         });
-    }
 
+        updateButtonSearchRiders(selected, true, false, false)
+
+    }
 
     function applyHeightItem(line) {
         d3.select(line)
@@ -112,17 +122,17 @@
 
     }
 
-    function applyStateBarChar(rider, count) {
-        let box = 'table_lens_box_' + count;
-        let pedaladas_box = arrayExtract(store.session.get('pedaladas_barChart'), box);
+    function applyStateBarChar(rider) {
+
+        let pedaladas_box = store.session.get('pedaladas_barChart');
 
         pedaladas_box.forEach(element => {
 
             d3.select('#' + element.id)
-                .attr("color_main", element.color_main)
                 .attr("line_clicked", element.line_clicked)
                 .attr("color_selected", element.color_selected)
                 .attr("distance", element.distance)
+                .attr("rider", element.rider)
                 .attr("title", element.distance.toFixed(2) + " KM")
                 .attr("style", element.style);
 
@@ -132,16 +142,22 @@
         });
 
         if (switchToggle == 'overview') {
-            let height_box = parseInt(d3.select('#' + box).style('height').replace('px', ''));
-            d3.select('#' + box).style('height', (height_box + (pedaladas_box.length * 13)) + 'px')
+            let box = extractBox(pedaladas_box, rider);
+            if (box.length > 0) {
+                let element = box[0];
+                let parent = $("#" + element.id).parent().attr('id');
+                let height_box = parseInt(d3.select('#' + parent).style('height').replace('px', ''));
+                d3.select('#' + parent).style('height', (height_box + (box.length * 14)) + 'px')
+            }
+
         }
 
     }
 
-    function arrayExtract(arr, value) {
+    function extractBox(arr, value) {
 
         return arr.filter(function(ele) {
-            return ele.box === value;
+            return ele.rider === value;
         });
     }
 </script>

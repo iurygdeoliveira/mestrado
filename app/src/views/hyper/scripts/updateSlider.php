@@ -19,6 +19,25 @@
 
         updatingSlider();
 
+        d3.selectAll('.ui-slider-handle').on('mouseup', function() {
+            updateButtonSearchRiders(selected, false, true, false);
+
+            //if (store.session.get('pedaladas_barChart').length > 0) {
+            //update_barChart();
+            //}
+            removeBarChart();
+            store.session.set('pedaladas_barChart', []);
+            pedaladas_red_clicadas = 0;
+            pedaladas_blue_clicadas = 0;
+            pedaladas_yellow_clicadas = 0;
+            pedaladas_green_clicadas = 0;
+            pedaladas_purple_clicadas = 0;
+
+            verPedaladas().then(() => {
+                updateButtonSearchRiders(selected, true, false, false);
+            });
+            d3.select('#search_rides').attr('title', 'See Table Lens');
+        });
     }
 
     function updatingSlider() {

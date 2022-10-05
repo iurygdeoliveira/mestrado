@@ -17,6 +17,7 @@
     <link href="<?= css('app-dark.min.css') ?>" rel="stylesheet" type="text/css" id="dark-style" />
     <link href="<?= css('jquery-ui.min.css') ?>" rel="stylesheet" type="text/css" />
     <link href="<?= css('jquery.tipsy.css') ?>" rel="stylesheet" type="text/css" />
+    <link href="<?= css('leaflet.css') ?>" rel="stylesheet" type="text/css" />
 
     <style>
         .modal-backdrop {

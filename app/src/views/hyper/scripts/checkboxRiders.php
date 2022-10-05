@@ -49,13 +49,16 @@
 
         if ($this.is(':checked')) {
 
+            updateButtonSearchRiders(selected, false, true, false);
             storeDistance($this.attr("id")).then(() => {
                 updateSlider(selected);
+                verPedaladas();
+                updateButtonSearchRiders(selected, true, false, false);
             });
 
             selected.push($this.attr("name"));
-            $(this).css('background-color', colors.shift())
-            //console.log(colors);
+            $(this).css('background-color', colors.shift());
+
         }
 
         if ($this.is(':not(:checked)')) {
@@ -63,7 +66,12 @@
             updateSlider(selected);
             updateCacheBarChart($this.attr("name"))
             getColor($(this));
-            // console.log(selected);
+            updatePedaladasClicked();
+            updateButtonSearchRiders(selected, false, true, false);
+            verPedaladas().then(() => {
+                updateButtonSearchRiders(selected, true, false, false);
+            });
+
         }
 
         // Atualizando checkbox
@@ -76,9 +84,14 @@
         if (selected.length <= 0) {
             removeBarChart();
             store.session.set('pedaladas_barChart', []);
+            pedaladas_red_clicadas = 0;
+            pedaladas_blue_clicadas = 0;
+            pedaladas_yellow_clicadas = 0;
+            pedaladas_green_clicadas = 0;
+            pedaladas_purple_clicadas = 0;
+            d3.select('#search_rides').attr('title', 'Generate Table Lens');
         }
-
-        updateButtonSearchRiders(selected, false, false, false, false);
+        updateButtonMultivis();
     }
 
     function arrayRemove(arr, value) {
@@ -116,5 +129,31 @@
 
     function getColor(element) {
         colors.push(element.css('background-color'));
+    }
+
+    function updatePedaladasClicked() {
+        // console.log(colors);
+
+        colors.forEach(element => {
+
+            switch (element) {
+                case 'rgb(211, 69, 91)':
+                    pedaladas_red_clicadas = 0;
+                    break;
+                case 'rgb(44, 136, 217)':
+                    pedaladas_blue_clicadas = 0;
+                    break;
+                case 'rgb(247, 195, 37)':
+                    pedaladas_yellow_clicadas = 0;
+                    break;
+                case 'rgb(47, 177, 156)':
+                    pedaladas_green_clicadas = 0;
+                    break;
+                case 'rgb(115, 15, 195)':
+                    pedaladas_purple_clicadas = 0;
+                    break;
+            }
+        });
+
     }
 </script>

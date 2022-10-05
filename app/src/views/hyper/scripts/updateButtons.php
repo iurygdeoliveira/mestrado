@@ -32,4 +32,15 @@
         }
 
     }
+
+    function updateButtonMultivis() {
+
+        let pedaladas_barChart = store.session.get('pedaladas_barChart');
+
+        if (pedaladas_barChart.length > 0) {
+            document.getElementById('buttonMultivis').disabled = false;
+        } else {
+            document.getElementById('buttonMultivis').disabled = true;
+        }
+    }
 </script>

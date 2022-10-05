@@ -1,5 +1,4 @@
 <script>
-    // Obter distância com o passar do mouse
     async function storeDistance(rider) {
 
         if (!store.session.has(rider)) {
