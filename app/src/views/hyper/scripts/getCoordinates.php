@@ -16,7 +16,8 @@
             'rider': pedalada.rider,
             'distance': pedalada.distance,
             'pointInitial': await getPointInitial(pedalada.rider, id),
-            'bbox': await getBbox(pedalada.rider, id)
+            'bbox': await getBbox(pedalada.rider, id),
+            'centroid': await getCentroid(pedalada.rider, id)
         };
     }
 
@@ -70,6 +71,36 @@
         data.append('id', id);
 
         return await axios.post('<?= $this->e($url_getBbox) ?>', data)
+            .then(function(res) {
+
+                if (res.data.status === true) {
+                    //console.log(res.data.message);
+                    return res.data.response;
+                }
+
+                if (res.data.status === false) {
+                    // console.log(res.data.message);
+                    return -1;
+                }
+
+            })
+            .catch(function(error) {
+                console.log("Erro");
+                console.log(error);
+                console.log(error.res.data);
+                console.log(error.res.status);
+                console.log(error.res.headers);
+                return -1;
+            });
+    }
+
+    async function getCentroid(rider, id) {
+
+        var data = new FormData();
+        data.append('rider', rider);
+        data.append('id', id);
+
+        return await axios.post('<?= $this->e($url_getCentroid) ?>', data)
             .then(function(res) {
 
                 if (res.data.status === true) {

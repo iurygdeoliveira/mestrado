@@ -7,4 +7,5 @@ $router->post('/maxDistance', 'src\controllers\dashboardController::maxDistance'
 $router->post('/searchRiders', 'src\controllers\dashboardController::searchRiders');
 $router->post('/pointInitial', 'src\controllers\dashboardController::pointInitial');
 $router->post('/boundingBox', 'src\controllers\dashboardController::bbox');
-$router->post('/coordinates', 'src\controllers\dashboardController:coordinates');
+$router->post('/coordinates', 'src\controllers\dashboardController::coordinates');
+$router->post('/centroid', 'src\controllers\dashboardController::centroid');

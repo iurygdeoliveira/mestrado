@@ -30,10 +30,14 @@ class dashboardController extends Controller
     {
         // Dados para renderização no template
         $data = $this->dataTheme('Dashboard');
-        $data += ['url_maxDistance' => url('maxDistance')];
-        $data += ['url_search_riders' => url('searchRiders')];
-        $data += ['url_getPointInitial' => url('pointInitial')];
-        $data += ['url_getBbox' => url('boundingBox')];
+        $data += [
+            'url_maxDistance' => url('maxDistance'),
+            'url_search_riders' => url('searchRiders'),
+            'url_getPointInitial' => url('pointInitial'),
+            'url_getBbox' => url('boundingBox'),
+            'url_getCentroid' => url('centroid')
+        ];
+
         $this->view->addData($data, '../theme/theme');
         $this->view->addData($data, '../scripts/scripts');
         $this->view->addData($data, '../scripts/getCoordinates');
@@ -72,6 +76,19 @@ class dashboardController extends Controller
         $result = $this->rider->getBbox();
 
         return $this->responseJson(true, "Bounding Box encontrado", $result);
+    }
+
+    public function centroid(): Response
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+
+        // Obtendo dados do dataset
+        $this->rider = new Coordinates($request->rider, $request->id);
+        $result = $this->rider->getCentroid();
+
+        return $this->responseJson(true, "Centroid encontrado", $result);
     }
 
     public function pointInitial(): Response

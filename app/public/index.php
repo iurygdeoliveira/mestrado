@@ -14,12 +14,9 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(CONF_DOTENV);
 $dotenv->load();
 
-// $m = new Cache();
-// $m->addServer('memcached', 11211);
 
 if (CONF_DEV_MOD) {
     showErrors();
-    // cacheStats($m);
 }
 
 $session = new Session(); // Inicia a sessão

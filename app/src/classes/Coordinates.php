@@ -24,19 +24,16 @@ class Coordinates
         $this->ride = (new rideBD())->bootstrap($id[0], $activityID);
     }
 
-
     public function getBbox()
     {
 
-        $bbox = explode("|", $this->ride->data()->bbox);
+        return $this->ride->bbox;
+    }
 
-        $result = [
-            'north' => explode(" ", $bbox[0])[1],
-            'south' => explode(" ", $bbox[1])[1],
-            'east' => explode(" ", $bbox[2])[1],
-            'west' => explode(" ", $bbox[3])[1],
-        ];
-        return $result;
+    public function getCentroid()
+    {
+
+        return $this->ride->centroid;
     }
 
     public function sendBbox(string $bbox, string $centroid)

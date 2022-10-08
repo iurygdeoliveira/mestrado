@@ -11,40 +11,46 @@
         d3.select('#pedaladas_mapChart').remove();
     }
 
-    function parseBbox(bbox) {
-        return [
-            parseFloat(parseFloat(bbox.north).toFixed(4)),
-            parseFloat(parseFloat(bbox.east).toFixed(4)),
-            parseFloat(parseFloat(bbox.south).toFixed(4)),
-            parseFloat(parseFloat(bbox.west).toFixed(4))
-        ]
-    }
 
     // Calculando o centroid de cada bounding box das pedaladas selecionadas
-    function calculateBboxCenter(bbox) {
+    function limitTamString(value, tam) {
 
-        let centroid = []
-        bbox.forEach(element => {
-            console.log(element);
-            let polygon = turf.polygon([element]);
-            centroid.push(turf.centroid(polygon));
-        });
-        return centroid;
+        if (value.lenght > tam) {
+            return value.substring(0, 13);
+        }
+        return value;
+    }
+
+    function parseCentroid(centroid) {
+
+        console.log(centroid);
+        let aux1 = centroid.replace('[', '').replace(']', '');
+        //centroid = aux1.split(',');
+        let aux2 = aux1.split(',');
+
+        aux2[0] = parseFloat(limitTamString(aux2[0], 14));
+        aux2[1] = parseFloat(limitTamString(aux2[1], 14));
+        return aux2;
     }
 
     function calculateMapCenter() {
 
         let pedaladas_mapChart = store.session.get('pedaladas_mapChart');
 
-        let bbox = [];
+        let centroids = [];
         pedaladas_mapChart.forEach(element => {
-            bbox.push(parseBbox(element.bbox))
+            centroids.push(parseCentroid(element.centroid))
         });
-        let polygonCentroid = calculateBboxCenter(bbox);
-        let centroid = turf.centroid(polygonCentroid);
+        console.log('Centroids', centroids)
+        if (centroids.length > 1) {
+            let lineCentroid = turf.lineString(centroids);
+            let bboxCentroid = turf.bbox(lineCentroid);
+            let polygonCentroid = turf.bboxPolygon(bboxCentroid);
+            return turf.centroid(polygonCentroid).geometry.coordinates;
+        } else {
+            return centroids[0];
+        }
 
-        console.log(bbox);
-        console.log(polygonCentroid);
     }
 
     function createMapChart() {
@@ -59,7 +65,7 @@
             let maxZoom;
             let layer = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
 
-            var map = L.map('pedaladas_mapChart').setView([51.505, -0.09], zoomInitial);
+            var map = L.map('pedaladas_mapChart').setView(mapCenter, zoomInitial);
             var tiles = L.tileLayer(layer, {
                 maxZoom: 19,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -73,7 +79,8 @@
         let aux = extractPedalada(store.session.get('pedaladas_coordinates'), element);
         return {
             'point': aux[0].pointInitial,
-            'bbox': aux[0].bbox
+            'bbox': aux[0].bbox,
+            'centroid': aux[0].centroid
         };
 
     }
@@ -93,7 +100,8 @@
                     'color_selected': element.color_selected,
                     'distance': element.distance,
                     'pointInitial': coordinates.point,
-                    'bbox': coordinates.bbox
+                    'bbox': coordinates.bbox,
+                    'centroid': coordinates.centroid
                 });
             }
         });
