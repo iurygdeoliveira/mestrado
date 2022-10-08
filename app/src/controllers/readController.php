@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace src\controllers;
 
-use src\traits\Datasets;
 use src\traits\responseJson;
 use src\traits\Csv;
 use src\core\View;
 use src\core\Controller;
 use src\classes\LoadRide;
+use src\classes\Coordinates;
 use src\models\rideBD;
 use Laminas\Diactoros\Response;
+use stdClass;
 
 
 class readController extends Controller
 {
-    use Datasets, responseJson, Csv;
+    use responseJson, Csv;
 
+    private $ride;
     private $riders; // Recebe os dados dos ciclistas
 
     public View $view; // Responsavel por renderizar a view home
@@ -25,7 +27,23 @@ class readController extends Controller
     public function __construct()
     {
         $this->view = new View(__DIR__, get_class($this));
-        $this->riders = $this->datasets();
+        $this->riders = $this->totalRiders();
+    }
+
+    public function totalRiders()
+    {
+        $riders = [];
+
+        for ($i = 1; $i <= 19; $i++) {
+
+            $this->ride = (new rideBD())->bootstrap("$i");
+            $rider = new stdClass();
+            $rider->name = "$i";
+            $rider->table = "rider$i";
+            $rider->atividade = $this->ride->getRowsNumber();
+            array_push($riders, $rider);
+        }
+        return ['riders' => $riders];
     }
 
     private function metaData(): array
@@ -41,8 +59,7 @@ class readController extends Controller
 
         $data = [
             'totalCiclistas' => 19,
-            'totalAtividades' => $totalAtividades,
-            'totalDatasets' => 4
+            'totalAtividades' => $totalAtividades
         ];
 
         return $data;
@@ -111,7 +128,8 @@ class readController extends Controller
 
         // dados para renderização em read_table 
         $data = ['riders' => $this->riders['riders']];
-        $data += ['url' => url('readData')];
+        $data += ['url_getBbox' => url('bbox')];
+        $data += ['url_sendBbox' => url('sendBbox')];
         $this->view->addData($data, 'read_table');
 
         $response = new Response();
@@ -130,8 +148,8 @@ class readController extends Controller
         $request = (object)getRequest()->getParsedBody();
 
         // Obtendo dados do dataset
-        $this->ride = new LoadRide($request->dataset, $request->rider, $request->atividade);
-        $result = $this->ride->extractData($request->dataset . $request->atividade);
+        $this->ride = new LoadRide($request->rider, $request->atividade);
+        $result = $this->ride->extractData();
 
         // Se result for true, então o dataset/atividade já foram extraídos
         // Se result for diferentes de true, retorna a mensagem de erros
@@ -140,5 +158,40 @@ class readController extends Controller
         }
 
         return $this->responseJson(false, $result, null);
+    }
+
+    public function bbox(): Response
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+
+        // Obtendo dados do dataset
+        $this->ride = new Coordinates($request->rider, $request->atividade);
+        $result = $this->ride->getCoordinates();
+
+        if ($result) {
+            return $this->responseJson(true, "Coordenadas encontradas", $result);
+        } else {
+            return $this->responseJson(false, "Problema nas Coordenadas", $result);
+        }
+    }
+
+    public function sendBbox(): Response
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+
+        // Obtendo dados do dataset
+
+        $this->ride = new Coordinates($request->rider, $request->atividade);
+        $result = $this->ride->sendBbox($request->bbox, $request->centroid);
+
+        if ($result) {
+            return $this->responseJson(true, "Coordenadas salvas no BD", $result);
+        } else {
+            return $this->responseJson(false, "Problema em salvar as coordenadas no BD", $result);
+        }
     }
 }

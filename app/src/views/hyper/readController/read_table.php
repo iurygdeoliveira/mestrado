@@ -12,7 +12,7 @@
         <?php foreach ($riders as $rider) : ?>
             <tr>
                 <td class='col-1 text-center'>
-                    <a href="#" data-bs-container="#tooltip-container" data-bs-toggle="tooltip" title='<?= $this->e($rider->dataset) ?>'>
+                    <a href="#" data-bs-container="#tooltip-container" data-bs-toggle="tooltip" title='<?= $this->e($rider->table) ?>'>
                         <?= $this->e($rider->name) ?>
                     </a>
                 </td>
@@ -29,19 +29,19 @@
                 </td>
                 <td class='col-2'>
                     <div class="d-grid">
-                        <button type="button" class="btn btn-primary" id='<?= 'button_carregar_' . $this->e($rider->name) ?>' onclick="extractActivities('<?= $this->e($rider->name) ?>', '<?= $this->e($rider->dataset) ?>', '<?= $this->e($rider->atividade) ?>','<?= $this->e($url) ?>')">Extrair Valores</button>
+                        <button type="button" class="btn btn-primary" id='<?= 'button_carregar_' . $this->e($rider->name) ?>' onclick="generateBbox('<?= $this->e($rider->name) ?>', '<?= $this->e($rider->table) ?>', '<?= $this->e($rider->atividade) ?>','<?= $this->e($url_getBbox) ?>','<?= $this->e($url_sendBbox) ?>')">Gerar Bounding Box</button>
                     </div>
                     <div class="d-grid">
                         <button class="btn btn-primary" type="button" id='<?= 'button_loading_' . $this->e($rider->name) ?>' style="display: none;">
                             <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                            Extraindo...
+                            Gerando...
                         </button disabled>
                     </div>
                     <div class="d-grid">
                         <button type="button" id='<?= 'button_success_' . $this->e($rider->name) ?>' class="btn btn-success" style="display: none;">Sucesso</button disabled>
                     </div>
                     <div class="d-grid">
-                        <button type="button" id='<?= 'button_danger_' . $this->e($rider->name) ?>' class="btn btn-danger" style="display: none;" onclick="extractActivities('<?= $this->e($rider->name) ?>', '<?= $this->e($rider->dataset) ?>', '<?= $this->e($rider->atividade) ?>','<?= $this->e($url) ?>')">Erro (Tentar novamente) </button>
+                        <button type="button" id='<?= 'button_danger_' . $this->e($rider->name) ?>' class="btn btn-danger" style="display: none;" onclick="generateBbox('<?= $this->e($rider->name) ?>', '<?= $this->e($rider->table) ?>', '<?= $this->e($rider->atividade) ?>','<?= $this->e($url_getBbox) ?>','<?= $this->e($url_sendBbox) ?>')">Erro (Tentar novamente) </button>
                     </div>
                 </td>
             </tr>

@@ -6,16 +6,16 @@
 <!-- /End-bar -->
 
 <?php $this->insert("../scripts/scripts") ?>
-<?php $this->insert("../scripts/variablesGlobais") ?>
+<?php $this->insert("../scripts/globalVariables") ?>
 <?php $this->insert("../scripts/getDistances") ?>
+<?php $this->insert("../scripts/getCoordinates") ?>
 <?php $this->insert("../scripts/updateSlider") ?>
 <?php $this->insert("../scripts/updateButtons") ?>
 <?php $this->insert("../scripts/checkboxRiders") ?>
 <?php $this->insert("../chartTableLens/js_createTableLens") ?>
 <?php $this->insert("../chartTableLens/js_animationTableLens") ?>
-<?php $this->insert("../scripts/verPedaladas") ?>
+<?php $this->insert("../chartTableLens/js_skeletonTableLens") ?>
 <?php $this->insert("../scripts/enableTooltips") ?>
 <?php $this->insert("../chartBar/js_barChart") ?>
 <?php $this->insert("../chartMap/js_mapChart") ?>
-<?php $this->insert("../scripts/generateMultivis") ?>
 <?php $this->insert("../scripts/totalStorage") ?>

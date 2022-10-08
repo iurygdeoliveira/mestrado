@@ -91,7 +91,6 @@
             pedaladas_purple_clicadas = 0;
             d3.select('#search_rides').attr('title', 'Generate Table Lens');
         }
-        updateButtonMultivis();
     }
 
     function arrayRemove(arr, value) {

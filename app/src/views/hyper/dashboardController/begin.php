@@ -30,6 +30,7 @@
                             <div class="row p-0 m-0" id="networkChart">
                             </div>
                             <div class="row p-0 m-0" id="mapChart">
+                                <div class="p-0 m-0" id="pedaladas_mapChart"></div>
                             </div>
                         </div>
                     </div>

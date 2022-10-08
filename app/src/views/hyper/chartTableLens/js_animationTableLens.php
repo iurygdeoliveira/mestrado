@@ -31,45 +31,37 @@
                 // Desabilitar click nas linhas falsas para travar animação
                 if (disableClickLineFalse(this)) {
 
-                    let pedalada_clicada = d3.select(this).attr("id").split("_");
+                    //let pedalada_clicada = d3.select(this).attr("id").split("_");
                     // Obtendo cores dos ciclistas dos checkbox
                     let color_main = $(this).parent().css('border-top-color');
                     let color_current = '';
 
-                    if (color_main == 'rgb(211, 69, 91)') {
-
-                        lineClicked(this, 'colors_red_current', 'colors_red');
-                        pedaladas_red_clicadas += 1;
-                        console.log("pedaladas red clicadas:", pedaladas_red_clicadas);
-
-                    }
-                    if (color_main == 'rgb(44, 136, 217)') {
-
-                        lineClicked(this, 'colors_blue_current', 'colors_blue');
-                        pedaladas_blue_clicadas += 1;
-                        console.log("pedaladas blue clicadas:", pedaladas_blue_clicadas);
-
-                    }
-                    if (color_main == 'rgb(247, 195, 37)') {
-
-                        lineClicked(this, 'colors_yellow_current', 'colors_yellow');
-                        pedaladas_yellow_clicadas += 1;
-                        console.log("pedaladas yellow clicadas:", pedaladas_yellow_clicadas);
-
-                    }
-                    if (color_main == 'rgb(47, 177, 156)') {
-
-                        lineClicked(this, 'colors_green_current', 'colors_green');
-                        pedaladas_green_clicadas += 1;
-                        console.log("pedaladas green clicadas:", pedaladas_green_clicadas);
-
-                    }
-                    if (color_main == 'rgb(115, 15, 195)') {
-
-                        lineClicked(this, 'colors_purple_current', 'colors_purple');
-                        pedaladas_purple_clicadas += 1;
-                        console.log("pedaladas purple clicadas:", pedaladas_purple_clicadas);
-
+                    switch (color_main) {
+                        case 'rgb(211, 69, 91)':
+                            lineClicked(this, 'colors_red_current', 'colors_red');
+                            pedaladas_red_clicadas += 1;
+                            console.log("pedaladas red clicadas:", pedaladas_red_clicadas);
+                            break;
+                        case 'rgb(44, 136, 217)':
+                            lineClicked(this, 'colors_blue_current', 'colors_blue');
+                            pedaladas_blue_clicadas += 1;
+                            console.log("pedaladas blue clicadas:", pedaladas_blue_clicadas);
+                            break;
+                        case 'rgb(247, 195, 37)':
+                            lineClicked(this, 'colors_yellow_current', 'colors_yellow');
+                            pedaladas_yellow_clicadas += 1;
+                            console.log("pedaladas yellow clicadas:", pedaladas_yellow_clicadas);
+                            break;
+                        case 'rgb(47, 177, 156)':
+                            lineClicked(this, 'colors_green_current', 'colors_green');
+                            pedaladas_green_clicadas += 1;
+                            console.log("pedaladas green clicadas:", pedaladas_green_clicadas);
+                            break;
+                        case 'rgb(115, 15, 195)':
+                            lineClicked(this, 'colors_purple_current', 'colors_purple');
+                            pedaladas_purple_clicadas += 1;
+                            console.log("pedaladas purple clicadas:", pedaladas_purple_clicadas);
+                            break;
                     }
                 } else {
                     enableClickLineTrue(this);

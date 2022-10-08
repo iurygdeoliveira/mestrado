@@ -1,23 +1,12 @@
 <script>
-    // Obtendo dimensões de janela 
-    let heightWindow = $(window).height();
-    let widthWindow = $(window).width();
-    let widthSidebar = $('#contentSidebar').width();
-    d3.select('#contentSidebar').style('min-width', widthSidebar + 'px');
-    let widthCharts = $('#contentCharts').width();
-    console.log("Largura Janela: ", widthWindow, "Largura sidebar: ", widthSidebar, "Largura Charts: ", widthCharts);
-    $(window).on('resize', function() {
-        widthWindow = $(this).width();
-        widthSidebar = $('#contentSidebar').width();
-        widthCharts = $('#contentCharts').width();
-        heightWindow = $(this).height();
-        update_barChart();
-        resizeMapChart();
-        resizeModalTableLens();
-    });
-
     // Cores utilizadas no checkbox riders
-    let colors = ['rgb(211, 69, 91)', 'rgb(44, 136, 217)', 'rgb(247, 195, 37)', 'rgb(47, 177, 156)', 'rgb(115, 15, 195)'];
+    let colors = [
+        'rgb(211, 69, 91)',
+        'rgb(44, 136, 217)',
+        'rgb(247, 195, 37)',
+        'rgb(47, 177, 156)',
+        'rgb(115, 15, 195)'
+    ];
     let switchToggle = 'overview';
     let switchOrder = 'descending';
     let selected = []; // Array com o nome dos ciclistas selecionados
@@ -58,9 +47,4 @@
 
     store.session.set('colors_purple', ['rgb(115, 15, 195)', 'rgb(78,10,133)', 'rgb(218, 179, 249)']);
     store.session.set('colors_purple_current', ['rgb(115, 15, 195)', 'rgb(78,10,133)', 'rgb(218, 179, 249)']);
-
-
-    // *********************************************
-    // Constantes utilizadas em pedaladas_barChart
-    store.session.set('pedaladas_barChart', []);
 </script>

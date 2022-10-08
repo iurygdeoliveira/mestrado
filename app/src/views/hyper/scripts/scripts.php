@@ -8,3 +8,5 @@
 <script src="<?= js('jquery.tipsy.min.js') ?>"></script>
 <script src="<?= js('chart.min.js') ?>"></script>
 <script src="<?= js('leaflet.js') ?>"></script>
+<script src="<?= js('turf.min.js') ?>"></script>
+<script src="<?= js('dexie.min.js') ?>"></script>

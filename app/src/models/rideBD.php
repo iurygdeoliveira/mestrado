@@ -28,8 +28,8 @@ class rideBD extends Model
 
             if ($data instanceof rideBD) {
                 $data->table = "rider" . $riderID;
-                return $data;
             }
+            return $data;
         } else {
             return $this;
         }

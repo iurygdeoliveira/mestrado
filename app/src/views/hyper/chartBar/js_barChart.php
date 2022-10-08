@@ -26,8 +26,9 @@
         let pedalada_barChart = mount_pedalada_barChart(pedalada);
         store.session.add('pedaladas_barChart', pedalada_barChart);
         //console.log(store.session.get('pedaladas_barChart'));
-
-        update_barChart();
+        storeCoordinates(pedalada_barChart).then(() => {
+            update_barChart();
+        });
     }
 
     function remove_pedaladas_barChart(pedalada) {
@@ -44,8 +45,7 @@
 
         let heightChooseCyclist = $('#choose_cyclist').height();
         let heightSlider = $('#slider').height();
-        let heightMultiVis = $('#multiVis').height();
-        return parseInt(heightWindow - heightChooseCyclist - heightMultiVis - heightSlider);
+        return parseInt(heightWindow - heightChooseCyclist - heightSlider);
     }
 
     function removeBarChart() {
@@ -56,7 +56,7 @@
     }
 
     function setHeightChart() {
-        let heightBarChart = calculateHeightBarChart() - 55;
+        let heightBarChart = calculateHeightBarChart() - adjustHeightBarChar;
         d3.select('#pedaladas_barChart_body')
             .append('canvas')
             .attr("id", 'pedaladas_barChart')
@@ -111,17 +111,7 @@
         }
     }
 
-    function update_barChart() {
-
-        console.log('Atualizando bar chart');
-
-        // Atualizando tooltip button tablelens
-
-        removeBarChart();
-        setHeightChart();
-        $('#pedaladas_barChart_card').show();
-        updateButtonMultivis();
-
+    async function create_BarChart() {
         const ctx = document.getElementById('pedaladas_barChart');
         const data = {
             labels: mountLabels(),
@@ -167,6 +157,16 @@
                 }
             }
         });
+    }
+
+    async function update_barChart() {
+
+        console.log('Atualizando bar chart');
+        removeBarChart();
+        setHeightChart();
+        $('#pedaladas_barChart_card').show();
+        create_BarChart();
+        updateMapChart(store.session.get('pedaladas_barChart'));
 
     }
 </script>

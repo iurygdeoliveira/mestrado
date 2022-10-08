@@ -11,7 +11,7 @@ use src\traits\Validate;
 use src\traits\Url;
 use src\traits\responseJson;
 use src\classes\Distance;
-use src\classes\Pedalada;
+use src\classes\Coordinates;
 
 class dashboardController extends Controller
 {
@@ -32,10 +32,13 @@ class dashboardController extends Controller
         $data = $this->dataTheme('Dashboard');
         $data += ['url_maxDistance' => url('maxDistance')];
         $data += ['url_search_riders' => url('searchRiders')];
+        $data += ['url_getPointInitial' => url('pointInitial')];
+        $data += ['url_getBbox' => url('boundingBox')];
         $this->view->addData($data, '../theme/theme');
         $this->view->addData($data, '../scripts/scripts');
+        $this->view->addData($data, '../scripts/getCoordinates');
         $this->view->addData($data, '../scripts/getDistances');
-        $this->view->addData($data, '../scripts/verPedaladas');
+
 
         $response = new Response();
         $response->getBody()->write(
@@ -43,6 +46,45 @@ class dashboardController extends Controller
         );
 
         return $response;
+    }
+
+    public function coordinates(): Response
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+
+        // Obtendo dados do dataset
+        $this->rider = new Coordinates($request->rider, $request->id);
+        $result = $this->rider->getCoordinates();
+
+        return $this->responseJson(true, "Coordenadas encontradas", $result);
+    }
+
+    public function bbox(): Response
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+
+        // Obtendo dados do dataset
+        $this->rider = new Coordinates($request->rider, $request->id);
+        $result = $this->rider->getBbox();
+
+        return $this->responseJson(true, "Bounding Box encontrado", $result);
+    }
+
+    public function pointInitial(): Response
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+
+        // Obtendo dados do dataset
+        $this->rider = new Coordinates($request->rider, $request->id);
+        $result = $this->rider->getPointInitial();
+
+        return $this->responseJson(true, "Coordenada Inicial encontrada", $result);
     }
 
     public function maxDistance(): Response
@@ -57,6 +99,7 @@ class dashboardController extends Controller
 
         return $this->responseJson(true, "Distância máxima do $request->rider encontrada", $result);
     }
+
 
     public function searchRiders(): Response
     {

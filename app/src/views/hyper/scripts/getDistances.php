@@ -7,7 +7,6 @@
                 distances: await getDistances(rider),
             });
             return;
-
         }
 
         if (store.session.get(rider).maxDistance <= 0) {

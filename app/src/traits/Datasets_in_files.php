@@ -8,7 +8,7 @@ namespace src\traits;
 use stdClass;
 use src\traits\GetNames;
 
-trait Datasets
+trait Datasets_in_files
 {
     use GetNames;
 

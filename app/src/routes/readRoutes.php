@@ -8,3 +8,4 @@ $router->get('/preprocessar', 'src\controllers\readController::preprocessar');
 $router->post('/preprocessarData', 'src\controllers\readController::preprocessarData');
 $router->post('/exportCSV', 'src\controllers\readController::exportCSV');
 $router->post('/bbox', 'src\controllers\readController::bbox');
+$router->post('/sendBbox', 'src\controllers\readController::sendBbox');
