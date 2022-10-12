@@ -61,20 +61,24 @@
 
     async function verPedaladas() {
 
-        console.log("Ciclistas Selecionados");
+        console.group("Ciclistas selecionados ...");
         console.log(selected);
+        console.groupEnd();
 
         // Limpando conteudo dos svg's
-        console.log('Criando esqueleto do table lens');
+        console.group("Table lens ...");
+        console.log("Criando esqueleto do table lens ...");
         removeTableLens();
         createSkeleton().then(() => {
 
-            console.log('Criando table lens');
+
+            console.log("Criando table lens ...");
+            console.groupEnd();
+
             for (let count = 0; count < selected.length; count++) {
 
                 let pedaladas = store.session.get(selected[count]).distances;
                 let rider = selected[count];
-
                 createTableLens(pedaladas, count, rider).then(() => {
 
                     if (has_pedaladas_barChart()) {

@@ -95,13 +95,25 @@ class Coordinates
         $lon = array_map($slice, $longitudes);
 
         if (count($lat) == count($lon)) {
-            $data = [];
+            $points = [];
 
             // Quantidade de requisições para o Google elevation API
             // deve ser até 6000 por minuto
             foreach ($lat as $key => $value) {
-                array_push($data, $lat[$key] . "|" . $lon[$key]);
+                array_push($points, $lat[$key] . "|" . $lon[$key]);
             }
+
+            $pointInicial = $this->ride->data()->latitude_inicial . "|" . $this->ride->data()->longitude_inicial;
+            $pointFinal = end($points);
+            $data = [
+                'pointInitial' => $pointInicial,
+                'pointFinal' => $pointFinal,
+                'points' => $points,
+                'points_percentage' => $this->ride->data()->coordinates_percentage,
+                'centroid' => $this->ride->data()->centroid,
+                'elevation' => $this->ride->data()->elevation_google,
+                'elevation_percentage' => $this->ride->data()->elevation_percentage,
+            ];
 
             set_time_limit(30);
             return $data;

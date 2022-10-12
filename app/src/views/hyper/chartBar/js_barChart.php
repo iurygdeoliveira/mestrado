@@ -26,9 +26,12 @@
         let pedalada_barChart = mount_pedalada_barChart(pedalada);
         store.session.add('pedaladas_barChart', pedalada_barChart);
         //console.log(store.session.get('pedaladas_barChart'));
-        storeCoordinates(pedalada_barChart).then(() => {
+
+        storeCoordinates(pedalada_barChart).then((res) => {
+            console.log('Primary Key: ', res);
             update_barChart();
         });
+
     }
 
     function remove_pedaladas_barChart(pedalada) {
@@ -103,7 +106,7 @@
 
         if (pedaladas_barChart.length > 0) {
 
-            console.log("pedaladas barchart", pedaladas_barChart);
+            //console.log("pedaladas barchart", pedaladas_barChart);
             pedaladas_barChart = pedaladas_barChart.filter(item => item.rider !== rider)
             store.session.set('pedaladas_barChart', pedaladas_barChart);
             console.log(pedaladas_barChart);
@@ -159,14 +162,20 @@
         });
     }
 
-    async function update_barChart() {
+    async function update_barChart(resolvedFlag) {
 
-        console.log('Atualizando bar chart');
+        console.group("BarChart ...");
+        console.log("Atualizando BarChart ...");
         removeBarChart();
         setHeightChart();
         $('#pedaladas_barChart_card').show();
         create_BarChart();
-        updateMapChart(store.session.get('pedaladas_barChart'));
+        console.groupEnd();
+        mount_pedaladas_mapChart(store.session.get('pedaladas_barChart')).then((res) => {
+            pedaladas_mapChart = res;
+            console.log("Atualizando Mapchart");
+            updateMapChart();
+        });
 
     }
 </script>

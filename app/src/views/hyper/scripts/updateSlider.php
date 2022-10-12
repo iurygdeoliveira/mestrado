@@ -2,7 +2,8 @@
     function updateSlider(selected) {
 
         distances = [];
-        console.log("Atualizando o slider");
+        console.group("Atualizando slider ...");
+        console.groupEnd();
 
         // Atualizando distancias
         selected.forEach(rider => {

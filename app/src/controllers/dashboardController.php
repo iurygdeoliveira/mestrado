@@ -33,9 +33,7 @@ class dashboardController extends Controller
         $data += [
             'url_maxDistance' => url('maxDistance'),
             'url_search_riders' => url('searchRiders'),
-            'url_getPointInitial' => url('pointInitial'),
-            'url_getBbox' => url('boundingBox'),
-            'url_getCentroid' => url('centroid')
+            'url_getCoordinates' => url('coordinates')
         ];
 
         $this->view->addData($data, '../theme/theme');

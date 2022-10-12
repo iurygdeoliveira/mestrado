@@ -1,4 +1,8 @@
 <script>
+    // ***********************************************************
+    // Constantes utilizadas no tables lens modo itens
+    // ***********************************************************
+
     // Cores utilizadas no checkbox riders
     let colors = [
         'rgb(211, 69, 91)',
@@ -13,8 +17,9 @@
     let distances = [];
     let maxDistance = -1; // Distância maxima entre todas as pedaladas selecionadas
 
-    // ************************************************
+    // ***********************************************************
     // Constantes e variáveis utilizadas no tables lens modo itens
+    // ***********************************************************
 
     // Controle da quantidade de linhas clicadas de cada ciclista
     let pedaladas_red_clicadas = 0;

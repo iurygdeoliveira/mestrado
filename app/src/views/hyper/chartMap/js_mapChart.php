@@ -16,26 +16,22 @@
     function limitTamString(value, tam) {
 
         if (value.lenght > tam) {
-            return value.substring(0, 13);
+            return value.substring(0, 9);
         }
         return value;
     }
 
     function parseCentroid(centroid) {
 
-        console.log(centroid);
         let aux1 = centroid.replace('[', '').replace(']', '');
-        //centroid = aux1.split(',');
         let aux2 = aux1.split(',');
 
-        aux2[0] = parseFloat(limitTamString(aux2[0], 14));
-        aux2[1] = parseFloat(limitTamString(aux2[1], 14));
+        aux2[0] = parseFloat(limitTamString(aux2[0], 10));
+        aux2[1] = parseFloat(limitTamString(aux2[1], 10));
         return aux2;
     }
 
     function calculateMapCenter() {
-
-        let pedaladas_mapChart = store.session.get('pedaladas_mapChart');
 
         let centroids = [];
         pedaladas_mapChart.forEach(element => {
@@ -63,59 +59,59 @@
             let zoomInitial = 5;
             let minZoom;
             let maxZoom;
-            let layer = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
 
             var map = L.map('pedaladas_mapChart').setView(mapCenter, zoomInitial);
-            var tiles = L.tileLayer(layer, {
+            var tiles = L.tileLayer(layerMap, {
                 maxZoom: 19,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
 
+            var marker = L.marker(mapCenter).addTo(map);
+
         });
     }
 
-    function setCoordinates(element) {
+    async function mount_pedaladas_mapChart(pedaladas_barChart) {
 
-        let aux = extractPedalada(store.session.get('pedaladas_coordinates'), element);
-        return {
-            'point': aux[0].pointInitial,
-            'bbox': aux[0].bbox,
-            'centroid': aux[0].centroid
-        };
+        console.group("MapChart ...");
+        console.log("Montando pedaladas mapChart ...");
+        // resolvedFlag = false;
+        aux = [];
 
-    }
+        for (const pedalada_current of pedaladas_barChart) {
 
-    function mount_pedaladas_mapChart(pedaladas_barChart) {
+            if (pedalada_current.line_clicked == 'true') {
+                const result = await new Dexie(pedalada_current.rider).open()
+                    .then(async function(db) {
 
-        let aux = [];
+                        return await getCoordinates_in_DB(db, pedalada_current).then((coordinates) => {
+                            console.log("Retorno da consulta ao indexedDB: ", coordinates);
+                            return coordinates;
+                        }); // getCoordinates_in_DB
+                    }); // new Dexie
 
-        pedaladas_barChart.forEach(element => {
-
-            if (element.line_clicked == 'true') {
-
-                let coordinates = setCoordinates(element);
                 aux.push({
-                    'id': element.id,
-                    'rider': element.rider,
-                    'color_selected': element.color_selected,
-                    'distance': element.distance,
-                    'pointInitial': coordinates.point,
-                    'bbox': coordinates.bbox,
-                    'centroid': coordinates.centroid
-                });
+                    'id': pedalada_current.id,
+                    'rider': pedalada_current.rider,
+                    'color_selected': pedalada_current.color_selected,
+                    'distance': pedalada_current.distance,
+                    'pointInitial': result[0].pointInitial,
+                    'pointFinal': result[0].pointFinal,
+                    'points': result[0].points,
+                    'centroid': result[0].centroid
+                }); // pedaladas_mapChart.push
             }
-        });
-
-        return aux;
+        }
+        return await aux;
     }
 
-    async function updateMapChart(pedaladas_barChart) {
+    async function updateMapChart() {
 
-        store.session.set('pedaladas_mapChart', mount_pedaladas_mapChart(pedaladas_barChart));
-        console.log('Atualizando map Chart');
-        console.log('Pedaladas map Chart armazenadas', store.session.get('pedaladas_mapChart'));
+        console.log('Pedaladas mapChart armazenadas', pedaladas_mapChart);
         removeMapChart();
         createMapChart();
+        console.groupEnd();
         totalStorage(); // Monitorando Storage
+
     }
 </script>
