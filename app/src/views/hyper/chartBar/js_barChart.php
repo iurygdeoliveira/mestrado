@@ -27,8 +27,10 @@
         store.session.add('pedaladas_barChart', pedalada_barChart);
         //console.log(store.session.get('pedaladas_barChart'));
 
+        updateButtonSearchRiders(selected, false, true, false);
         storeCoordinates(pedalada_barChart).then((res) => {
             console.log('Primary Key: ', res);
+            updateButtonSearchRiders(selected, true, false, false)
             update_barChart();
         });
 
@@ -169,13 +171,9 @@
         removeBarChart();
         setHeightChart();
         $('#pedaladas_barChart_card').show();
-        create_BarChart();
-        console.groupEnd();
-        mount_pedaladas_mapChart(store.session.get('pedaladas_barChart')).then((res) => {
-            pedaladas_mapChart = res;
-            console.log("Atualizando Mapchart");
+        create_BarChart().then(() => {
+            console.groupEnd();
             updateMapChart();
         });
-
     }
 </script>

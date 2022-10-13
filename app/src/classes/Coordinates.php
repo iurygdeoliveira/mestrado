@@ -106,6 +106,7 @@ class Coordinates
             $pointInicial = $this->ride->data()->latitude_inicial . "|" . $this->ride->data()->longitude_inicial;
             $pointFinal = end($points);
             $data = [
+                'datetime' => $this->ride->data()->datetime,
                 'pointInitial' => $pointInicial,
                 'pointFinal' => $pointFinal,
                 'points' => $points,
@@ -113,6 +114,10 @@ class Coordinates
                 'centroid' => $this->ride->data()->centroid,
                 'elevation' => $this->ride->data()->elevation_google,
                 'elevation_percentage' => $this->ride->data()->elevation_percentage,
+                'address' => $this->ride->data()->address_openstreetmap,
+                'time' => $this->ride->data()->time_avg,
+                'speed' => $this->ride->data()->speed_avg,
+                'heartrate' => $this->ride->data()->heartrate_avg,
             ];
 
             set_time_limit(30);
