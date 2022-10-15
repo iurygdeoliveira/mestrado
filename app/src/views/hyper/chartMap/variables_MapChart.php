@@ -16,9 +16,11 @@
                         'points,' +
                         'centroid,' +
                         'elevation,' +
+                        'elevation_AVG,' +
                         'elevation_percentage,' +
                         'address,' +
                         'time,' +
+                        'time_in_hours,' +
                         'speed,' +
                         'heartrate'
                 });
@@ -42,5 +44,4 @@
     let minZoom = 0;
     let maxZoom = 20;
     let map = false;
-    let defineMapFlag = false;
 </script>

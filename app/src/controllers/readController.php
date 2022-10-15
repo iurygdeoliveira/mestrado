@@ -37,6 +37,7 @@ class readController extends Controller
         for ($i = 1; $i <= 19; $i++) {
 
             $this->ride = (new rideBD())->bootstrap("$i");
+
             $rider = new stdClass();
             $rider->name = "$i";
             $rider->table = "rider$i";
@@ -130,6 +131,7 @@ class readController extends Controller
         $data = ['riders' => $this->riders['riders']];
         $data += ['url_getBbox' => url('bbox')];
         $data += ['url_sendBbox' => url('sendBbox')];
+        $data += ['url_identifyFiles' => url('identifyFiles')];
         $this->view->addData($data, 'read_table');
 
         $response = new Response();
@@ -175,6 +177,50 @@ class readController extends Controller
         } else {
             return $this->responseJson(false, "Problema nas Coordenadas", $result);
         }
+    }
+
+    public function identifyFiles(): Response
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+
+        // Obtendo dados do dataset
+        $this->ride = new LoadRide($request->rider, $request->atividade);
+
+        $result = match ($request->rider) {
+            'rider1' => $this->ride->identifyFiles(CONF_RIDER1_DATASET1),
+            'rider2' => $this->ride->identifyFiles(CONF_RIDER2_DATASET1),
+            'rider3' => $this->ride->identifyFiles(CONF_RIDER3_DATASET1),
+            'rider4' => $this->ride->identifyFiles(CONF_RIDER4_DATASET1),
+            'rider5' => $this->ride->identifyFiles(CONF_RIDER7_DATASET1),
+            'rider6' => $this->ride->identifyFiles(CONF_RIDER1_DATASET2),
+            'rider7' => $this->ride->identifyFiles(CONF_RIDER2_DATASET2),
+            'rider8' => $this->ride->identifyFiles(CONF_RIDER3_DATASET2),
+            'rider9' => $this->ride->identifyFiles(CONF_RIDER5_DATASET2),
+            'rider10' => $this->ride->identifyFiles(CONF_RIDER6_DATASET2),
+            'rider11' => $this->ride->identifyFiles(CONF_RIDER1_DATASET3),
+            'rider12' => $this->ride->identifyFiles(CONF_RIDER3_DATASET3),
+            'rider13' => $this->ride->identifyFiles(CONF_RIDER6_DATASET3),
+            'rider14' => $this->ride->identifyFiles(CONF_RIDER7_DATASET3),
+            'rider15' => $this->ride->identifyFiles(CONF_RIDER8_DATASET3),
+            'rider16' => $this->ride->identifyFiles(CONF_RIDER10_DATASET3),
+            'rider17' => $this->ride->identifyFiles(CONF_RIDER12_DATASET3),
+            'rider18' => $this->ride->identifyFiles(CONF_RIDER13_DATASET3),
+            'rider19' => $this->ride->identifyFiles(CONF_RIDER14_DATASET3),
+        };
+
+        // Se result for true, então o dataset/atividade já foram extraídos
+        // Se result for diferentes de true, retorna a mensagem de erros
+        if ($result === true) {
+            return $this->responseJson(
+                true,
+                "Path da $request->atividade salva: ",
+                "sem retorno de dados"
+            );
+        }
+
+        return $this->responseJson(false, $result, null);
     }
 
     public function sendBbox(): Response

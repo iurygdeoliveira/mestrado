@@ -29,7 +29,7 @@
                 </td>
                 <td class='col-2'>
                     <div class="d-grid">
-                        <button type="button" class="btn btn-primary" id='<?= 'button_carregar_' . $this->e($rider->name) ?>' onclick="generateBbox('<?= $this->e($rider->name) ?>', '<?= $this->e($rider->table) ?>', '<?= $this->e($rider->atividade) ?>','<?= $this->e($url_getBbox) ?>','<?= $this->e($url_sendBbox) ?>')">Gerar Bounding Box</button>
+                        <button type="button" class="btn btn-primary" id='<?= 'button_carregar_' . $this->e($rider->name) ?>' onclick="identifyFiles('<?= $this->e($rider->name) ?>', '<?= $this->e($rider->table) ?>', '<?= $this->e($rider->atividade) ?>','<?= $this->e($url_identifyFiles) ?>')">identifyFiles</button>
                     </div>
                     <div class="d-grid">
                         <button class="btn btn-primary" type="button" id='<?= 'button_loading_' . $this->e($rider->name) ?>' style="display: none;">
@@ -41,7 +41,7 @@
                         <button type="button" id='<?= 'button_success_' . $this->e($rider->name) ?>' class="btn btn-success" style="display: none;">Sucesso</button disabled>
                     </div>
                     <div class="d-grid">
-                        <button type="button" id='<?= 'button_danger_' . $this->e($rider->name) ?>' class="btn btn-danger" style="display: none;" onclick="generateBbox('<?= $this->e($rider->name) ?>', '<?= $this->e($rider->table) ?>', '<?= $this->e($rider->atividade) ?>','<?= $this->e($url_getBbox) ?>','<?= $this->e($url_sendBbox) ?>')">Erro (Tentar novamente) </button>
+                        <button type="button" id='<?= 'button_danger_' . $this->e($rider->name) ?>' class="btn btn-danger" style="display: none;" onclick="identifyFiles('<?= $this->e($rider->name) ?>', '<?= $this->e($rider->table) ?>', '<?= $this->e($rider->atividade) ?>','<?= $this->e($url_getBbox) ?>','<?= $this->e($url_sendBbox) ?>')">Erro (Tentar novamente) </button>
                     </div>
                 </td>
             </tr>

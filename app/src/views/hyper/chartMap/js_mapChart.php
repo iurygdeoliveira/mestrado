@@ -12,26 +12,6 @@
         d3.select('#pedaladas_mapChart').remove();
     }
 
-
-    async function getRecord(pedalada_current) {
-
-        return await new Dexie(pedalada_current.rider).open()
-            .then(async function(db) {
-
-                const result = await getCoordinates_in_DB(db, pedalada_current).then(async (result) => {
-                    console.log("Retorno da consulta ao indexedDB: ", result);
-                    if (!result) {
-                        console.log(`Pontos da Pedalada ${pedalada_current.id} não encontrados`);
-                        return await false;
-                    } else {
-                        return await result[0];
-                    }
-                }); // getCoordinates_in_DB
-                return await result;
-            });
-
-    }
-
     async function calculateMapCenter(pedaladas_barChart) {
 
         console.log("Calculando map center ...");
@@ -170,7 +150,6 @@
         map = await plotMarkles(store.session.get('pedaladas_barChart'), map);
         let centerMap = await calculateMapCenter(store.session.get('pedaladas_barChart'));
         console.groupEnd();
-        totalStorage(); // Monitorando Storage
 
     }
 </script>

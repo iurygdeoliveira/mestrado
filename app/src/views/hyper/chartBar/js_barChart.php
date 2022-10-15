@@ -60,7 +60,7 @@
 
     }
 
-    function setHeightChart() {
+    function createBoxBarChart() {
         let heightBarChart = calculateHeightBarChart() - adjustHeightBarChar;
         d3.select('#pedaladas_barChart_body')
             .append('canvas')
@@ -164,16 +164,17 @@
         });
     }
 
-    async function update_barChart(resolvedFlag) {
+    async function update_barChart() {
 
         console.group("BarChart ...");
         console.log("Atualizando BarChart ...");
         removeBarChart();
-        setHeightChart();
+        createBoxBarChart();
         $('#pedaladas_barChart_card').show();
-        create_BarChart().then(() => {
-            console.groupEnd();
-            updateMapChart();
+        console.groupEnd();
+        create_BarChart().then(async () => {
+            await updateMapChart();
+            await updateRadarChart();
         });
     }
 </script>
