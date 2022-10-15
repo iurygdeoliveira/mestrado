@@ -36,6 +36,7 @@
         createDB('rider' + index);
     }
 
+    //let layerMap = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
     let layerMap = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
     let initialZoom = 5;
     let minZoom = 0;

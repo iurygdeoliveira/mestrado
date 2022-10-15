@@ -27,8 +27,6 @@
                         <div class="container-fluid pe-0 ps-0">
                             <div class="row p-0 m-0" id="radarChart">
                             </div>
-                            <div class="row p-0 m-0" id="networkChart">
-                            </div>
                             <div class="row p-0 m-0" id="mapChart">
                                 <div class="p-0 m-0" id="pedaladas_mapChart"></div>
                             </div>
