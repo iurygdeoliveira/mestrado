@@ -16,6 +16,7 @@ class LoadRide
 {
 
     private $ride; // Estrutura para receber os dados da corrida e persistir no BD
+    private $info;
 
     use GetNames, responseJson;
 
@@ -37,6 +38,9 @@ class LoadRide
         }
         // Salvando dados da corrida no BD
 
+        $xmlString = file_get_contents($this->ride->path);
+        $this->info = new ExtractInfoGPX($xmlString);
+
         // if (empty($this->ride->creator)) {
         //     $this->ride->creator = $this->info->getCreator();
         // }
@@ -45,9 +49,13 @@ class LoadRide
         //     $this->ride->creator = $this->info->getNodes();
         // }
 
-        // if (empty($this->ride->datetime)) {
-        //     $this->ride->datetime = $this->info->getDateTime();
-        // }
+        if (!empty($this->ride->datetime)) {
+            //$this->ride->datetime = $this->info->getDateTime();
+            //$this->ride->time_total = $this->info->getTimeTotal();
+            $this->ride->time_history = $this->info->getTimeHistory();
+            //$this->ride->time_percentage = $this->info->getTimePercentage();
+            $this->ride->time_trackpoint = $this->info->getTimeTrackpoint($this->ride->time_history);
+        }
 
         // Latitudes
         // if (empty($this->ride->latitudes)) {
@@ -76,101 +84,88 @@ class LoadRide
         // }
 
         // if (
-        //     empty($this->ride->coordinates_percentage) &&
+        //     !empty($this->ride->coordinates_percentage) &&
         //     !empty($this->ride->latitudes) &&
         //     !empty($this->ride->longitudes)
         // ) {
-        //     $this->ride->coordinates_percentage = $this->info->getCoordinatesPercentage();
+        //    $this->ride->coordinates_percentage = $this->info->getCoordinatesPercentage();
+        //     $this->ride->total_coordinates = $this->info->getTotalCoordinates();
         // }
 
-        if (
-            !empty($this->ride->latitude_inicial) &&
-            !empty($this->ride->longitude_inicial)
-        ) {
+        // if (
+        //     !empty($this->ride->latitude_inicial) &&
+        //     !empty($this->ride->longitude_inicial)
+        // ) {
 
-            // if (empty($this->ride->address_openstreetmap)) {
-            //     $this->ride->address_openstreetmap = $this->info->getAddressOSM($this->ride->latitude_inicial, $this->ride->longitude_inicial);
-            // }
+        // if (empty($this->ride->address_google)) {
+        //     $this->ride->address_google = $this->info->getAddressGoogle($this->ride->latitude_inicial, $this->ride->longitude_inicial);
+        // }
 
-            // if (empty($this->ride->address_google)) {
-            //     $this->ride->address_google = $this->info->getAddressGoogle($this->ride->latitude_inicial, $this->ride->longitude_inicial);
-            // }
+        // if (empty($this->ride->address_bing)) {
+        //     $this->ride->address_bing = $this->info->getAddressBing($this->ride->latitude_inicial, $this->ride->longitude_inicial);
+        // }
 
-            // if (empty($this->ride->address_bing)) {
-            //     $this->ride->address_bing = $this->info->getAddressBing($this->ride->latitude_inicial, $this->ride->longitude_inicial);
-            // }
+        // if (!empty($this->ride->elevation_file)) {
+        //     $this->ride->elevation_file = $this->info->getElevationFile();
+        //     $this->ride->elevation_total_file = $this->info->getElevationTotal($this->ride->elevation_file);
+        //     $this->ride->elevation_avg_file = $this->info->getElevationAvg($this->ride->elevation_file);
+        //     $this->ride->elevation_percentage_file = $this->info->getPercentage($this->ride->elevation_file);
+        // }
 
-            // if (empty($this->ride->elevation_file)) {
-            //     $this->ride->elevation_file = $this->info->getElevationFile();
-            // }
+        // if (!empty($this->ride->elevation_google)) {
+        //     // $this->ride->elevation_google = $this->info->getElevationGoogle($this->ride->latitudes, $this->ride->longitudes);
+        //     $this->ride->elevation_total_google = $this->info->getElevationTotal($this->ride->elevation_google);
+        //     $this->ride->elevation_avg_google = $this->info->getElevationAvg($this->ride->elevation_google);
+        //     $this->ride->elevation_google_percentage = $this->info->getPercentage($this->ride->elevation_google);
+        // }
 
-            // if (empty($this->ride->elevation_google)) {
-            //     $this->ride->elevation_google = $this->info->getElevationGoogle($this->ride->latitudes, $this->ride->longitudes);
-            // }
+        // if (!empty($this->ride->elevation_bing)) {
+        //     //     $this->ride->elevation_bing = $this->info->getElevationBing($this->ride->latitudes, $this->ride->longitudes);
+        //     $this->ride->elevation_total_bing = $this->info->getElevationTotal($this->ride->elevation_bing);
+        //     $this->ride->elevation_avg_bing = $this->info->getElevationAvg($this->ride->elevation_bing);
+        //     $this->ride->elevation_bing_percentage = $this->info->getPercentage($this->ride->elevation_bing);
+        // }
+        // } else {
+        //     $this->ride->address_google = null;
+        //     $this->ride->address_bing = null;
+        //     $this->ride->bbox = null;
+        //     $this->ride->centroid = null;
+        //     $this->ride->coordinates_percentage = null;
+        //     $this->ride->total_coordinates = null;
+        //     $this->ride->elevation_file = null;
+        //     $this->ride->elevation_percentage_file = null;
+        //     $this->ride->elevation_avg_file = null;
+        //     $this->ride->elevation_google = null;
+        //     $this->ride->elevation_google_percentage = null;
+        //     $this->ride->elevation_avg_google = null;
+        //     $this->ride->elevation_bing = null;
+        //     $this->ride->elevation_bing_percentage = null;
+        //     $this->ride->elevation_avg_bing = null;
+        // }
 
-            // if (empty($this->ride->elevation_bing)) {
-            //     $this->ride->elevation_bing = $this->info->getElevationBing($this->ride->latitudes, $this->ride->longitudes);
-            // }
-        } else {
-            $this->ride->address_openstreetmap = null;
-            $this->ride->address_google = null;
-            $this->ride->address_bing = null;
-            $this->ride->bbox = null;
-            $this->ride->elevation_file = null;
-            $this->ride->elevation_google = null;
-            $this->ride->elevation_bing = null;
-        }
+        // $this->ride->distance_history_haversine = $this->info->getDistanceHistory();
+        // $this->ride->distance_haversine = $this->info->getDistance($this->ride->distance_history_haversine);
 
-        // $duration = $this->info->getDuration();
-        // $this->ride->duration_file = $duration->file;
-        // $this->ride->duration_php = $duration->php;
-        // $this->ride->time_percentage = $this->info->getTimePercentage();
-
-
-        // $distance = $this->info->getDistance();
-        // $this->ride->distance_file = $distance->file;
-        // $this->ride->distance_php = $distance->php;
-
-        // $speed = $this->info->getSpeed(
-        //     $distance,
-        //     $duration
+        $this->ride->speed_history = $this->info->getSpeedHistory(
+            $this->ride->distance_history_haversine,
+            $this->ride->time_trackpoint
+        );
+        // $this->ride->speed_avg = $this->info->getSpeedAVG(
+        //     $this->ride->distance_haversine,
+        //     $this->ride->time_total
         // );
-        // $this->ride->speed_file = $speed->file;
-        // $this->ride->speed_php = $speed->php;
-
-        // $cadence = $this->info->getCadence();
-        // $this->ride->cadence_file = $cadence->file;
-        // $this->ride->cadence_php = $cadence->php;
-        // $this->ride->cadence_percentage = $this->info->getCadencePercentage();
 
         // $heartrate = $this->info->getHeartRate();
-        // $this->ride->heartrate_file = $heartrate->file;
-        // $this->ride->heartrate_php = $heartrate->php;
+        // $this->ride->heartrate_history = $this->info->getHeartRateHistory();
+        // $this->ride->heartrate_avg = $this->info->getHeartrateAVG();
         // $this->ride->heartrate_percentage = $this->info->getHeartRatePercentage();
+        // $this->ride->total_heartrate = $this->info->getHeartRateTotal($this->ride->heartrate_history);
 
         // $temperature = $this->info->getTemperature();
         // $this->ride->temperature_file = $temperature->file;
         // $this->ride->temperature_php = $temperature->php;
         // $this->ride->temperature_percentage = $this->info->getTemperaturePercentage();
 
-        // $calories = $this->info->getCalories();
-        // $this->ride->calories_file = $calories->file;
-        // $this->ride->calories_php = $calories->php;
-        // $this->ride->calories_percentage = $this->info->getCaloriesPercentage();
-
-        // if (($this->ride->latitude_inicial != null) && ($this->ride->longitude_inicial != null)) {
-
-        //     $altitude = $this->info->getAltitude();
-        //     $this->ride->altitude_file = $altitude->file;
-        //     $this->ride->altitude_without_threshold_php = $altitude->without_threshold;
-        //     $this->ride->altitude_with_threshold_php = $altitude->with_threshold;
-        //     $this->ride->altitude_percentage = $this->info->getAltitudePercentage();
-        // } else {
-        //     $this->ride->altitude_file = null;
-        //     $this->ride->altitude_without_threshold_php = null;
-        //     $this->ride->altitude_with_threshold_php = null;
-        //     $this->ride->altitude_percentage = null;
-        // }
 
         // $this->ride->total_trackpoints = $this->info->getTotalTrackpoints();
 
@@ -197,28 +192,6 @@ class LoadRide
         return false;
     }
 
-    // public function readFile(string $file): bool|string
-    // {
-
-
-    //     $xml_string = file_get_contents($file . $extension);
-
-
-    //     //Extraindo estrutura de nós do arquivo
-    //     $this->info = match ($extension) {
-    //         ".gpx" => new ExtractInfoGPX($xml_string),
-    //         ".tcx" => new ExtractInfoTCX($xml_string)
-    //     };
-
-    //     $this->ride->nodes = $this->info->getNodes();
-
-    //     if ($this->ride->save()) {
-    //         return true;
-    //     } else {
-    //         return "Erro ao salvar no BD " . $this->ride->message();
-    //     }
-    // }
-
     public function identifyFiles(string $path)
     {
         set_time_limit(0);
@@ -242,13 +215,9 @@ class LoadRide
             }
 
             foreach ($fileNames as $key => $value) {
-                $xml_string = file_get_contents($path . $value);
-                $extension = pathinfo($value, PATHINFO_EXTENSION);
 
-                $info = match ($extension) {
-                    "gpx" => new ExtractInfoGPX($xml_string),
-                    "tcx" => new ExtractInfoTCX($xml_string)
-                };
+                $xmlString = file_get_contents($this->ride->path);
+                $info = new ExtractInfoGPX($xmlString);
 
                 if ($info->getDateTime() == $this->ride->data()->datetime) {
                     $this->ride->path = $path . $value;

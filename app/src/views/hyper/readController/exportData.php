@@ -1,5 +1,5 @@
 <script>
-    async function exportCSV(url, total) {
+    async function exportData(url, total) {
 
         $('#button_generate_csv').hide();
         $('#button_danger_csv').hide();

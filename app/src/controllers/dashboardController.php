@@ -41,7 +41,6 @@ class dashboardController extends Controller
         $this->view->addData($data, '../scripts/getCoordinates');
         $this->view->addData($data, '../scripts/getDistances');
 
-
         $response = new Response();
         $response->getBody()->write(
             $this->view->render(__FUNCTION__, [])

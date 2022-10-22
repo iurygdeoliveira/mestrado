@@ -19,13 +19,13 @@
                      </tr>
                      <tr>
                          <td class=' text-center col-3'>
-                             <button type="button" class="btn btn-primary" id='button_generate_csv' onclick="exportCSV('<?= $this->e($url_csv) ?>', '<?= $this->e($totalCiclistas) ?>')">Gerar CSV</button>
+                             <button type="button" class="btn btn-primary" id='button_generate_csv' onclick="exportData('<?= $this->e($url_export) ?>', '<?= $this->e($totalCiclistas) ?>')">Gerar CSV</button>
                              <button class="btn btn-primary" type="button" id='button_loading_csv' style="display: none;" disabled>
                                  <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
                                  Gerando ...
                              </button disabled>
                              <button type="button" id='button_success_csv' class="btn btn-success" style="display: none;" disabled>Concluido !</button>
-                             <button type="button" id='button_danger_csv' class="btn btn-danger" style="display: none;" onclick="exportCSV('<?= $this->e($url_csv) ?>', '<?= $this->e($totalCiclistas) ?>')">Erro (Tentar novamente) </button>
+                             <button type="button" id='button_danger_csv' class="btn btn-danger" style="display: none;" onclick="exportData('<?= $this->e($url_export) ?>', '<?= $this->e($totalCiclistas) ?>')">Erro (Tentar novamente) </button>
                          </td>
                          <td colspan="3" class='text-center'>Status:
                              <span class="progress">

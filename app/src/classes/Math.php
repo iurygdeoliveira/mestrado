@@ -64,6 +64,11 @@ class Math
         $num1 = new Decimal($num1);
         $num2 = new Decimal($num2);
 
+
+        if ($num2->isZero()) {
+            return '0';
+        }
+
         if ($precision) {
             return $num1->div($num2)->toFixed($precision);
         }
@@ -84,7 +89,7 @@ class Math
         $total = new Decimal($total);
 
         $parcial = $parcial->mul(100);
-        $result = $parcial->div($total);;
+        $result = $parcial->div($total);
         return $result->toFixed(2);
     }
 
@@ -113,6 +118,10 @@ class Math
      */
     public static function timeToHours(string $time): string
     {
+        if ($time == '0') {
+            return '0.00';
+        }
+
         $duration = explode(':', $time);
 
         $hours = new Decimal($duration[0]);
@@ -123,6 +132,26 @@ class Math
         $hours = $hours->add($seconds->div(3600));
 
         return $hours->__toString();
+    }
+
+    /**
+     * Converte time no formato `HH:MM:SS` para Segundos
+     *
+     * @param string $time Uma string no formato HH:MM:SS.
+     * @return string Total em segundos
+     */
+    public static function timeToSec(string $time): string
+    {
+        $duration = explode(':', $time);
+
+        $hours = new Decimal($duration[0]);
+        $minutes = new Decimal($duration[1]);
+        $seconds = new Decimal($duration[2]);
+
+        $seconds = $seconds->add($hours->mul(3600));
+        $seconds = $seconds->add($minutes->mul(60));
+
+        return $seconds->__toString();
     }
 
     /**

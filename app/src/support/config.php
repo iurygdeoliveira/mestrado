@@ -17,6 +17,9 @@ define("CONF_URL_ELEVATION_GOOGLE", "https://maps.googleapis.com/maps/api/elevat
 define("CONF_URL_ELEVATION_BING", "https://dev.virtualearth.net/REST/v1/Elevation/List?points=");
 define("CONF_URL_OPEN_STREET_MAP", "https://nominatim.openstreetmap.org");
 
+// ### API KEYS ###
+
+
 // ### DATES ###
 define("CONF_DATE_BR", "d/m/Y H:i:s");
 define("CONF_DATE_APP", "Y-m-d H:i:s");
@@ -33,8 +36,8 @@ define("CONF_SITE_AUTHOR", "Iury Gomes de Oliveira");
 // ### LOGS ###
 define("CONF_ERROR_LOG", __DIR__ . "/../storage/errors/");
 
-// ### LOGS ###
-define("CONF_CSV_RIDERS", __DIR__ . "/../storage/dataset_projeto_cyclevis/");
+define("CONF_CSV_RIDERS", __DIR__ . "/../storage/dataset_projeto_cyclevis/csv/");
+define("CONF_JSON_CYCLIST", __DIR__ . "/../storage/dataset_projeto_cyclevis/json/");
 
 // ### DOTENV ###
 define("CONF_DOTENV", "/var/www/html/");

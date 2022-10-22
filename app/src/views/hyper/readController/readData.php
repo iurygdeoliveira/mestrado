@@ -1,20 +1,18 @@
 <script>
-    async function extractActivities(rider, table, total, url) {
+    async function extractActivities(rider, table, total, url_readData) {
 
         $('#button_carregar_' + rider).hide();
         $('#button_danger_' + rider).hide();
         $('#button_loading_' + rider).show();
         var data = new FormData();
-        data.append('rider', rider);
-        data.append('table', table);
-        data.append('total', total);
+        data.append('rider', 'rider' + rider);
         data.append('atividade', 0);
 
         let index;
         for (index = 1; index <= parseInt(total); index++) {
 
             data.set('atividade', index);
-            await axios.post(url, data)
+            await axios.post(url_readData, data)
                 .then(function(response) {
 
                     if (response.data.status === true) {

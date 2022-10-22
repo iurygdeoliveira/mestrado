@@ -73,6 +73,28 @@ class Coordinates
         return $distances;
     }
 
+    public function getAddress(string $google, string $bing)
+    {
+
+        $addressGoogle = explode("|", $google);
+        $addressBing = explode("|", $bing);
+
+        $result = [
+            'country' => $addressGoogle[0],
+            'locality' => $addressGoogle[1]
+        ];
+
+        if (empty($result['country'])) {
+            $result['country'] = $addressBing[0];
+        }
+
+        if (empty($result['locality'])) {
+            $result['locality'] = $addressBing[1];
+        }
+
+        return $result;
+    }
+
     public function getCoordinates()
     {
         set_time_limit(0);
@@ -105,6 +127,11 @@ class Coordinates
 
             $pointInicial = $this->ride->data()->latitude_inicial . "|" . $this->ride->data()->longitude_inicial;
             $pointFinal = end($points);
+
+
+
+            $address = $this->getAddress($this->ride->data()->address_google, $this->ride->data()->address_bing);
+
             $data = [
                 'datetime' => $this->ride->data()->datetime,
                 'pointInitial' => $pointInicial,
@@ -115,7 +142,8 @@ class Coordinates
                 'elevation_points' => $this->ride->data()->elevation_google,
                 'elevation_percentage' => $this->ride->data()->elevation_percentage,
                 'elevation_avg' => $this->ride->data()->elevation_avg,
-                'address' => $this->ride->data()->address_openstreetmap,
+                'country' => $address['country'],
+                'locality' => $address['locality'],
                 'time' => $this->ride->data()->time_avg,
                 'speed' => $this->ride->data()->speed_avg,
                 'heartrate' => $this->ride->data()->heartrate_avg,

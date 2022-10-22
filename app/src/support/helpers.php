@@ -111,21 +111,27 @@ function showErrors()
     $whoops->register();
 }
 
-function dumpexit($var, $line, $file, $function)
+function dpexit($var)
 {
-    ini_set("xdebug.var_display_max_children", '-1');
-    ini_set("xdebug.var_display_max_data", '-1');
-    ini_set("xdebug.var_display_max_depth", '-1');
+    ini_set("xdebug.var_display_max_children", -1);
+    ini_set("xdebug.var_display_max_data", -1);
+    ini_set("xdebug.var_display_max_depth", -1);
 
     var_dump(
-        [
-            'function' => $function,
-            'file' => $file,
-            'line' => $line,
-            'var' => $var
-        ]
+        $var
     );
     exit;
+}
+
+function dp($var)
+{
+    ini_set("xdebug.var_display_max_children", -1);
+    ini_set("xdebug.var_display_max_data", -1);
+    ini_set("xdebug.var_display_max_depth", -1);
+
+    var_dump(
+        $var
+    );
 }
 
 /**

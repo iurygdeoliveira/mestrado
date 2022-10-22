@@ -7,4 +7,4 @@
 
 <?php $this->insert("../scripts/scripts") ?>
 <?php $this->insert("readData") ?>
-<?php $this->insert("exportCSV") ?>
+<?php $this->insert("exportData") ?>

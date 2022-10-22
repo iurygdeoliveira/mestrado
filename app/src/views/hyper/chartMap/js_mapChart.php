@@ -92,7 +92,15 @@
         let polyline;
         const promises = pedaladas_barChart.map(async (pedalada_current, idx) => {
             let result = await getRecord(pedalada_current);
-            let address = result.address.split("|")
+
+            if (result.country == '') {
+                result.country == 'not found'
+            }
+
+            if (result.locality == '') {
+                result.locality == 'not found'
+            }
+
             L.circle(result.pointInitial, {
                     color: pedalada_current.color_selected,
                     fillColor: pedalada_current.color_selected,
@@ -107,8 +115,8 @@
                     Distance: ${result.distance} KM<br>
                     Avg Speed: ${result.speed} KM/H<br>
                     Time: ${result.time} <br>
-                    Country: ${address[0]}<br>
-                    Locality: ${address[1]}
+                    Country: ${result.country}<br>
+                    Locality: ${result.locality}
                     `
                 ).addTo(map);
 
@@ -126,8 +134,8 @@
                 Distance: ${result.distance} KM<br>
                 Avg Speed: ${result.speed} KM/H<br>
                 Time: ${result.time} <br>
-                Country: ${address[0]}<br>
-                Locality: ${address[1]}
+                Country: ${result.country}<br>
+                Locality: ${result.locality}
                 `
             ).addTo(map);
 

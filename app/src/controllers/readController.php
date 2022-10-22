@@ -7,9 +7,11 @@ namespace src\controllers;
 use src\traits\responseJson;
 use src\traits\Csv;
 use src\core\View;
+use src\traits\Files;
 use src\core\Controller;
 use src\classes\LoadRide;
 use src\classes\Coordinates;
+use src\classes\Math;
 use src\models\rideBD;
 use Laminas\Diactoros\Response;
 use stdClass;
@@ -17,7 +19,7 @@ use stdClass;
 
 class readController extends Controller
 {
-    use responseJson, Csv;
+    use responseJson, Files, Csv;
 
     private $ride;
     private $riders; // Recebe os dados dos ciclistas
@@ -66,42 +68,171 @@ class readController extends Controller
         return $data;
     }
 
-    public function exportCSV(): Response
+    public function getAddress(string $google, string $bing)
     {
 
+        $addressGoogle = explode("|", $google);
+        $addressBing = explode("|", $bing);
+
+        $result = [
+            'country' => (isset($addressGoogle[0]) ? $addressGoogle[0] : null),
+            'locality' => (isset($addressGoogle[1]) ? $addressGoogle[1] : null)
+        ];
+
+        if (empty($result['country'])) {
+            $result['country'] = (isset($addressBing[0]) ? $addressBing[0] : null);
+        }
+
+        if (empty($result['locality'])) {
+            $result['locality'] = (isset($addressBing[1]) ? $addressBing[1] : null);
+        }
+
+        return $result;
+    }
+
+    public function createOverview(string $directoryPedal, stdClass $data)
+    {
+        $path = explode('..', $data->path);
+        $latitudes = explode('|', $data->latitudes);
+        $longitudes = explode('|', $data->longitudes);
+        $centroid = str_replace(['[', ']', ','], ['', '', '|'], $data->centroid);
+        $address = $this->getAddress($data->address_google, $data->address_bing);
+        $distance = explode(' ', $data->distance_haversine);
+        $speed = explode(' ', $data->speed_avg);
+        $elevationGps = explode(' ', $data->elevation_avg_file);
+        $elevationGoogle = explode(' ', $data->elevation_avg_google);
+        $elevationBing = explode(' ', $data->elevation_avg_bing);
+        $heartrate = explode(' ', $data->heartrate_avg);
+
+        $record = [
+            'pedal' => $data->id,
+            'path' => $path[1],
+            'creator' => $data->creator,
+            'coordinateInicial' => $data->latitude_inicial . '|' . $data->longitude_inicial,
+            'coordinateFinal' => end($latitudes) . '|' . end($longitudes),
+            'country' => $address['country'],
+            'locality' => $address['locality'],
+            'centroid' => $centroid,
+            'bbox' => $data->bbox,
+            'datetime' => $data->datetime,
+            'duration' => $data->time_total,
+            'distance' => $distance[0],
+            'elevation_gps' => $elevationGps[0],
+            'elevation_google' => $elevationGoogle[0],
+            'elevation_bing' => $elevationBing[0],
+            'speed_avg' => $speed[0],
+            'heartrate_avg' => $heartrate[0],
+            'temperature_avg' => $data->temperature_avg,
+            'trackpoints' => $data->total_trackpoints
+        ];
+
+        $result = $this->createJsonFile($directoryPedal . 'overview', $record);
+
+        if (is_numeric($result)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function createData(string $directoryPedal, string $index, string $data)
+    {
+
+        if (mb_substr($data, -1) == '|') {
+            $data = substr_replace($data, "", -1);
+        }
+
+        $record = [
+            $index => $data
+        ];
+
+        $result = $this->createJsonFile($directoryPedal . $index, $record);
+
+        if (is_numeric($result)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function exportData(): Response
+    {
+
+        set_time_limit(0);
         // Obtendo dados da requisição
+        $records = [];
         $request = (object)getRequest()->getParsedBody();
 
         // Buscando dados no BD
-        $rider = (new rideBD())->bootstrap(strval($request->id));
-        $total = $rider->getRowsNumber();
+        $table = (new rideBD())->bootstrap(strval($request->rider));
+        $rows = $table->getRowsNumber();
 
-        //Criando cabeçalho do arquivo CSV
-        if ($request->id == 1) {
-            $this->createCSV(
-                'dataset_iury_distances.csv',
-                ['rider', 'pedalada', 'datetime', 'distance(KM)', 'total_trackpoints'],
-                true,
-                'w'
+        // Criando diretorio
+        $directory = "Cyclist_" . $request->rider;
+        $this->createDirectory(CONF_JSON_CYCLIST, $directory);
+
+        for ($y = 1; $y <= intval($rows); $y++) {
+            # code...
+            $rider = (new rideBD())->bootstrap(strval($request->rider), strval($y));
+
+            $directoryPedal = $directory . DIRECTORY_SEPARATOR . "pedal$y";
+            $this->createDirectory(CONF_JSON_CYCLIST, $directoryPedal);
+
+            $this->createOverview(CONF_JSON_CYCLIST . $directoryPedal . DIRECTORY_SEPARATOR, $rider->data());
+
+            $this->createData(
+                CONF_JSON_CYCLIST . $directoryPedal . DIRECTORY_SEPARATOR,
+                'latitudes',
+                $rider->data()->latitudes
             );
-        }
 
-        // Criando linha do arquivo CSV
-        $records = [];
-        for ($i = 1; $i <= $total; $i++) {
+            $this->createData(
+                CONF_JSON_CYCLIST . $directoryPedal . DIRECTORY_SEPARATOR,
+                'longitudes',
+                $rider->data()->longitudes
+            );
 
-            $cycled = $rider->findById($i);
+            $this->createData(
+                CONF_JSON_CYCLIST . $directoryPedal . DIRECTORY_SEPARATOR,
+                'elevation_gps',
+                $rider->data()->elevation_file
+            );
 
-            $record = [
-                $cycled->data()->rider,
-                $cycled->data()->id,
-                $cycled->data()->datetime,
-                $cycled->data()->distance_haversine,
-                $cycled->data()->total_trackpoints
-            ];
+            $this->createData(
+                CONF_JSON_CYCLIST . $directoryPedal . DIRECTORY_SEPARATOR,
+                'elevation_google',
+                $rider->data()->elevation_google
+            );
 
-            $result = $this->createCSV('dataset_iury_distances.csv', $record, false, 'a');
-            array_push($records, $result);
+            $this->createData(
+                CONF_JSON_CYCLIST . $directoryPedal . DIRECTORY_SEPARATOR,
+                'elevation_bing',
+                $rider->data()->elevation_bing
+            );
+
+            $this->createData(
+                CONF_JSON_CYCLIST . $directoryPedal . DIRECTORY_SEPARATOR,
+                'time_history',
+                $rider->data()->time_history
+            );
+
+            $this->createData(
+                CONF_JSON_CYCLIST . $directoryPedal . DIRECTORY_SEPARATOR,
+                'distance_history',
+                $rider->data()->distance_history_haversine
+            );
+
+            $this->createData(
+                CONF_JSON_CYCLIST . $directoryPedal . DIRECTORY_SEPARATOR,
+                'speed_history',
+                $rider->data()->speed_history
+            );
+
+            $this->createData(
+                CONF_JSON_CYCLIST . $directoryPedal . DIRECTORY_SEPARATOR,
+                'heartrate_history',
+                $rider->data()->heartrate_history
+            );
         }
 
         // Se result for true, então o dataset/atividade já foram extraídos
@@ -110,7 +241,7 @@ class readController extends Controller
             return $this->responseJson(false, "Erro ao criar CSV do rider $request->id", null);
         }
 
-        return $this->responseJson(true, "CSV do rider $request->id concluído", "sem retorno de dados");
+        return $this->responseJson(true, "CSV do rider $request->rider concluído", "sem retorno de dados");
     }
 
 
@@ -124,11 +255,12 @@ class readController extends Controller
 
         // dados para renderização em metaData 
         $data = $this->metaData();
-        $data += ['url_csv' => url('exportCSV')];
+        $data += ['url_export' => url('exportData')];
         $this->view->addData($data, 'resumo');
 
         // dados para renderização em read_table 
         $data = ['riders' => $this->riders['riders']];
+        $data += ['url_readData' => url('readData')];
         $data += ['url_getBbox' => url('bbox')];
         $data += ['url_sendBbox' => url('sendBbox')];
         $data += ['url_identifyFiles' => url('identifyFiles')];

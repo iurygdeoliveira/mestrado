@@ -18,7 +18,8 @@
                         'elevation,' +
                         'elevation_AVG,' +
                         'elevation_percentage,' +
-                        'address,' +
+                        'country,' +
+                        'locality,' +
                         'time,' +
                         'time_in_hours,' +
                         'speed,' +
