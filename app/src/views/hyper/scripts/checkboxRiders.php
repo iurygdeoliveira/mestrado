@@ -1,4 +1,15 @@
 <script>
+    /**
+     * COLORS USED IN THE CYCLIST CHECKBOX
+     */
+    let colors = [
+        normalRed,
+        normalBlue,
+        normalYellow,
+        normalGreen,
+        normalPurple
+    ];
+
     $('#rider1').on('click', click_handler);
     $('#rider2').on('click', click_handler);
     $('#rider3').on('click', click_handler);
@@ -57,7 +68,8 @@
             });
 
             selected.push($this.attr("name"));
-            $(this).css('background-color', colors.shift());
+            d3.select(this).style('background-color', colors.shift());
+            //$(this).css('background-color', colors.shift());
 
         }
 
@@ -91,6 +103,7 @@
             pedaladas_purple_clicadas = 0;
             d3.select('#search_rides').attr('title', 'Generate Table Lens');
         }
+        console.log(colors);
     }
 
     function arrayRemove(arr, value) {
@@ -127,7 +140,7 @@
     }
 
     function getColor(element) {
-        colors.push(element.css('background-color'));
+        colors.push(d3.select(element).style('background-color'));
     }
 
     function updatePedaladasClicked() {
@@ -136,19 +149,19 @@
         colors.forEach(element => {
 
             switch (element) {
-                case 'rgb(211, 69, 91)':
+                case normalRed:
                     pedaladas_red_clicadas = 0;
                     break;
-                case 'rgb(44, 136, 217)':
+                case normalBlue:
                     pedaladas_blue_clicadas = 0;
                     break;
-                case 'rgb(247, 195, 37)':
+                case normalYellow:
                     pedaladas_yellow_clicadas = 0;
                     break;
-                case 'rgb(47, 177, 156)':
+                case normalGreen:
                     pedaladas_green_clicadas = 0;
                     break;
-                case 'rgb(115, 15, 195)':
+                case normalPurple:
                     pedaladas_purple_clicadas = 0;
                     break;
             }

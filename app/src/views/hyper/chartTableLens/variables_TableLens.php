@@ -3,14 +3,6 @@
     // Constantes utilizadas no tables lens modo itens
     // ***********************************************************
 
-    // Cores utilizadas no checkbox riders
-    let colors = [
-        'rgb(211, 69, 91)',
-        'rgb(44, 136, 217)',
-        'rgb(247, 195, 37)',
-        'rgb(47, 177, 156)',
-        'rgb(115, 15, 195)'
-    ];
     let switchToggle = 'overview';
     let switchOrder = 'descending';
     let selected = []; // Array com o nome dos ciclistas selecionados

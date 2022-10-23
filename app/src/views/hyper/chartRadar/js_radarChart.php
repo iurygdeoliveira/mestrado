@@ -1,37 +1,4 @@
 <script>
-    // function mountLabels() {
-
-    //     let pedaladas_barChart = store.session.get('pedaladas_barChart');
-    //     let labels = [];
-    //     pedaladas_barChart.forEach(element => {
-    //         labels.push('');
-    //     });
-
-    //     return labels;
-    // }
-
-    // function mountDistances() {
-
-    //     let pedaladas_barChart = store.session.get('pedaladas_barChart');
-    //     let distances = [];
-    //     pedaladas_barChart.forEach(element => {
-    //         distances.push(element.distance);
-    //     });
-
-    //     return distances;
-    // }
-
-    // function mountBackgroundColor() {
-
-    //     let pedaladas_barChart = store.session.get('pedaladas_barChart');
-    //     let background = [];
-    //     pedaladas_barChart.forEach(element => {
-    //         background.push(element.color_selected);
-    //     });
-
-    //     return background;
-    // }
-
     async function mountValues(pedalada) {
 
         let result = await getRecord(pedalada);

@@ -2,9 +2,13 @@
     async function storeDistance(rider) {
 
         if (!store.session.has(rider)) {
+            let distances = await getDistances(rider);
+
+            let maxDistance = (distances ? await getMaxDistance(distances) : null);
+
             store.session.set(rider, {
-                maxDistance: await getMaxDistance(rider),
-                distances: await getDistances(rider),
+                distances: distances,
+                maxDistance: maxDistance,
             });
             return;
         }
@@ -32,68 +36,66 @@
 
     }
 
-    async function getMaxDistance(rider) {
+    async function getMaxDistance(distances) {
 
-        console.log('Ainda não existe distância máxima para o ' + rider);
-        var data = new FormData();
-        data.set('rider', rider);
+        console.log(distances);
 
-        return await axios.post('<?= $this->e($url_maxDistance) ?>', data)
-            .then(function(res) {
+        // var data = new FormData();
+        // data.set('rider', rider);
 
-                if (res.data.status === true) {
-                    console.log(res.data.message);
-                    return res.data.response;
-                }
+        // return await axios.post(' //$this->e($url_maxDistance) ', data)
+        //     .then(function(res) {
 
-                if (res.data.status === false) {
-                    console.log(res.data.message);
-                    return -1;
-                }
+        //         if (res.data.status === true) {
+        //             console.log(res.data.message);
+        //             return res.data.response;
+        //         }
 
-            })
-            .catch(function(error) {
-                console.log("Erro");
-                console.log(error);
-                console.log(error.res.data);
-                console.log(error.res.status);
-                console.log(error.res.headers);
-                return -1;
-            });
-
-
+        //         if (res.data.status === false) {
+        //             console.log(res.data.message);
+        //             return -1;
+        //         }
+        //     })
+        //     .catch(function(error) {
+        //         console.log("Erro");
+        //         console.log(error);
+        //         console.log(error.res.data);
+        //         console.log(error.res.status);
+        //         console.log(error.res.headers);
+        //         return -1;
+        //     });
     }
 
-    async function getDistances(rider) {
+    async function getDistances(cyclist) {
 
 
-        console.log('Ainda não existe a distância das pedaladas do ' + rider);
-        var data = new FormData();
-        data.set('rider', rider);
+        console.log("Cyclist " + cyclist.replace(/[^0-9]/g, '') + " without distances");
+        let distances = await getDistancesGithub(cyclist);
+        return distances;
+        // var data = new FormData();
+        // data.set('rider', rider);
 
-        return await axios.post('<?= $this->e($url_search_riders) ?>', data)
-            .then(function(res) {
+        // return await axios.post(' $this->e($url_search_riders) ?>', data)
+        // .then(function(res) {
 
-                if (res.data.status === true) {
-                    console.log(res.data.message);
-                    return res.data.response;
-                }
+        //         if (res.data.status === true) {
+        //             console.log(res.data.message);
+        //             return res.data.response;
+        //         }
 
-                if (res.data.status === false) {
-                    console.log(res.data.message);
-                    return -1;
-                }
+        //         if (res.data.status === false) {
+        //             console.log(res.data.message);
+        //             return -1;
+        //         }
 
-            })
-            .catch(function(error) {
-                console.log("Erro");
-                console.log(error);
-                console.log(error.res.data);
-                console.log(error.res.status);
-                console.log(error.res.headers);
-                return -1;
-            });
-
-
+        //     })
+        //     .catch(function(error) {
+        //         console.log("Erro");
+        //         console.log(error);
+        //         console.log(error.res.data);
+        //         console.log(error.res.status);
+        //         console.log(error.res.headers);
+        //         return -1;
+        //     });
     }
 </script>

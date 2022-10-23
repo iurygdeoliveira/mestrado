@@ -37,27 +37,27 @@
                     let color_current = '';
 
                     switch (color_main) {
-                        case 'rgb(211, 69, 91)':
+                        case normalRed:
                             lineClicked(this, 'colors_red_current', 'colors_red');
                             pedaladas_red_clicadas += 1;
                             console.log("pedaladas red clicadas:", pedaladas_red_clicadas);
                             break;
-                        case 'rgb(44, 136, 217)':
+                        case normalBlue:
                             lineClicked(this, 'colors_blue_current', 'colors_blue');
                             pedaladas_blue_clicadas += 1;
                             console.log("pedaladas blue clicadas:", pedaladas_blue_clicadas);
                             break;
-                        case 'rgb(247, 195, 37)':
+                        case normalYellow:
                             lineClicked(this, 'colors_yellow_current', 'colors_yellow');
                             pedaladas_yellow_clicadas += 1;
                             console.log("pedaladas yellow clicadas:", pedaladas_yellow_clicadas);
                             break;
-                        case 'rgb(47, 177, 156)':
+                        case normalGreen:
                             lineClicked(this, 'colors_green_current', 'colors_green');
                             pedaladas_green_clicadas += 1;
                             console.log("pedaladas green clicadas:", pedaladas_green_clicadas);
                             break;
-                        case 'rgb(115, 15, 195)':
+                        case normalPurple:
                             lineClicked(this, 'colors_purple_current', 'colors_purple');
                             pedaladas_purple_clicadas += 1;
                             console.log("pedaladas purple clicadas:", pedaladas_purple_clicadas);
@@ -125,23 +125,23 @@
             let pedalada = $(line).attr("id").split("_");
             let color = $('#' + pedalada).attr('style').replace(";", "").replace("background-color: ", "");
 
-            if ((color == 'rgb(211, 69, 91)')) {
+            if ((color == normalRed)) {
                 pedaladas_red_clicadas = lineStateOriginal(line, 'colors_red_current', pedaladas_red_clicadas);
             }
 
-            if ((color == 'rgb(44, 136, 217)')) {
+            if ((color == normalBlue)) {
                 pedaladas_blue_clicadas = lineStateOriginal(line, 'colors_blue_current', pedaladas_blue_clicadas);
             }
 
-            if ((color == 'rgb(247, 195, 37)')) {
+            if ((color == normalYellow)) {
                 pedaladas_yellow_clicadas = lineStateOriginal(line, 'colors_yellow_current', pedaladas_yellow_clicadas);
             }
 
-            if ((color == 'rgb(47, 177, 156)')) {
+            if ((color == normalGreen)) {
                 pedaladas_green_clicadas = lineStateOriginal(line, 'colors_green_current', pedaladas_green_clicadas);
             }
 
-            if ((color == 'rgb(115, 15, 195)')) {
+            if ((color == normalPurple)) {
                 pedaladas_purple_clicadas = lineStateOriginal(line, 'colors_purple_current', pedaladas_purple_clicadas);
             }
         }
@@ -156,43 +156,43 @@
         let pedalada = $(line).attr("id").split("_");
         let color = $('#' + pedalada).attr('style').replace(";", "").replace("background-color: ", "");
 
-        if (($(line).attr("line_clicked") == 'false') && (color == 'rgb(211, 69, 91)') && (pedaladas_red_clicadas == 3)) {
+        if (($(line).attr("line_clicked") == 'false') && (color == normalRed) && (pedaladas_red_clicadas == 3)) {
             return false
         }
 
-        if (($(line).attr("line_clicked") == 'true') && (color == 'rgb(211, 69, 91)')) {
+        if (($(line).attr("line_clicked") == 'true') && (color == normalRed)) {
             return false
         }
 
-        if (($(line).attr("line_clicked") == 'false') && (color == 'rgb(44, 136, 217)') && (pedaladas_blue_clicadas == 3)) {
+        if (($(line).attr("line_clicked") == 'false') && (color == normalBlue) && (pedaladas_blue_clicadas == 3)) {
             return false
         }
 
-        if (($(line).attr("line_clicked") == 'true') && (color == 'rgb(44, 136, 217)')) {
+        if (($(line).attr("line_clicked") == 'true') && (color == normalBlue)) {
             return false
         }
 
-        if (($(line).attr("line_clicked") == 'false') && (color == 'rgb(247, 195, 37)') && (pedaladas_yellow_clicadas == 3)) {
+        if (($(line).attr("line_clicked") == 'false') && (color == normalYellow) && (pedaladas_yellow_clicadas == 3)) {
             return false
         }
 
-        if (($(line).attr("line_clicked") == 'true') && (color == 'rgb(247, 195, 37)')) {
+        if (($(line).attr("line_clicked") == 'true') && (color == normalYellow)) {
             return false
         }
 
-        if (($(line).attr("line_clicked") == 'false') && (color == 'rgb(47, 177, 156)') && (pedaladas_green_clicadas == 3)) {
+        if (($(line).attr("line_clicked") == 'false') && (color == normalGreen) && (pedaladas_green_clicadas == 3)) {
             return false
         }
 
-        if (($(line).attr("line_clicked") == 'true') && (color == 'rgb(47, 177, 156)')) {
+        if (($(line).attr("line_clicked") == 'true') && (color == normalGreen)) {
             return false
         }
 
-        if (($(line).attr("line_clicked") == 'false') && (color == 'rgb(115, 15, 195)') && (pedaladas_purple_clicadas == 3)) {
+        if (($(line).attr("line_clicked") == 'false') && (color == normalPurple) && (pedaladas_purple_clicadas == 3)) {
             return false
         }
 
-        if (($(line).attr("line_clicked") == 'true') && (color == 'rgb(115, 15, 195)')) {
+        if (($(line).attr("line_clicked") == 'true') && (color == normalPurple)) {
             return false
         }
 
@@ -204,23 +204,23 @@
         let pedalada = $(line).attr("id").split("_");
         let color = $('#' + pedalada).attr('style').replace(";", "").replace("background-color: ", "");
 
-        if ((color == 'rgb(211, 69, 91)') && (pedaladas_red_clicadas == 3)) {
+        if ((color == normalRed) && (pedaladas_red_clicadas == 3)) {
             return false
         }
 
-        if ((color == 'rgb(44, 136, 217)') && (pedaladas_blue_clicadas == 3)) {
+        if ((color == normalBlue) && (pedaladas_blue_clicadas == 3)) {
             return false
         }
 
-        if ((color == 'rgb(247, 195, 37)') && (pedaladas_yellow_clicadas == 3)) {
+        if ((color == normalBlue) && (pedaladas_yellow_clicadas == 3)) {
             return false
         }
 
-        if ((color == 'rgb(47, 177, 156)') && (pedaladas_green_clicadas == 3)) {
+        if ((color == normalGreen) && (pedaladas_green_clicadas == 3)) {
             return false
         }
 
-        if ((color == 'rgb(115, 15, 195)') && (pedaladas_purple_clicadas == 3)) {
+        if ((color == normalPurple) && (pedaladas_purple_clicadas == 3)) {
             return false
         }
 
