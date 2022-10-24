@@ -21,67 +21,70 @@
         return await executeRequest(path);
     }
 
-    function extractPathFile(arr, value) {
-
-        let element = arr.filter(function(ele) {
-            if (ele.name === value) {
-                return ele;
-            };
-        });
-
-        return element[0].path;
-    }
-
-    async function mountArrayUrls(distances) {
-
-        let arrayUrls = [];
-        const promises = distances.map(async (distance_current, idx) => {
-
-            let res2 = await getDataGithub(distance_current.path);
-            let overviewPath = extractPathFile(res2.data, 'overview.json');
-            let res3 = await getDataGithub(overviewPath);
-            arrayUrls.push(res3.data.download_url);
-        });
-
-        await Promise.all(promises);
-        return arrayUrls;
-    }
-
-    async function mountArrayDistances(arrayUrls) {
-
-        let arrayDistances = [];
-
-        const promises = arrayUrls.map(async (url_current, idx) => {
-
-            //console.log(url_current);
-            let data = await d3.json(url_current,
-                data => {
-                    return data
-                }
-            );
-
-            arrayDistances.push(parseFloat(data.distance));
-
-        });
-
-        await Promise.all(promises);
-
-        return arrayDistances;
-    }
-
     async function getDistancesGithub(cyclist) {
 
         let pathCyclist = "Cyclist_" + cyclist.replace(/[^0-9]/g, '');
 
-        let res1 = await getDataGithub(pathCyclist);
-        let distances = res1.data;
+        let response = await getDataGithub(pathCyclist + '/all_distances.json');
+        let distances_url = response.data.download_url;
 
-        let arrayUrls = await mountArrayUrls(distances);
+        let data = await d3.json(distances_url,
+            data => {
+                return data
+            }
+        );
 
-        let arrayDistances = await mountArrayDistances(arrayUrls);
-        console.log(arrayDistances);
+        let distances = data.all_distances.split("|");
+        distances = distances.map((element) => {
+            let aux = element.split(",");
+            let distance = aux[0].split(":");
+            let id = aux[1].split(":");
+            let data = {
+                'distance': parseFloat(distance[1]),
+                'id': parseFloat(id[1])
+            };
+            return data;
+        });
+        return distances;
+    }
 
-        return null;
+    function extractUrlDownload(arr, value) {
 
+        let element = arr.filter(function(ele) {
+            return ele.name === value;
+        });
+
+        return element[0].download_url;
+    }
+
+    async function getPedaladaGithub(cyclist, pedalada) {
+
+        let pathCyclist = "Cyclist_" + cyclist.replace(/[^0-9]/g, '') + '/';
+
+        let pedal = pedalada.split("_");
+        pedal = pedal[2];
+
+        let response = await getDataGithub(pathCyclist + 'pedal' + pedal);
+
+        let urls = [
+            extractUrlDownload(response.data, 'distance_history.json'),
+            extractUrlDownload(response.data, 'elevation_google.json'),
+            extractUrlDownload(response.data, 'heartrate_history.json'),
+            extractUrlDownload(response.data, 'speed_history.json'),
+            extractUrlDownload(response.data, 'time_history.json'),
+            extractUrlDownload(response.data, 'latitudes.json'),
+            extractUrlDownload(response.data, 'longitudes.json'),
+            extractUrlDownload(response.data, 'overview.json'),
+        ];
+
+        const promises = urls.map(async (url_current, idx) => {
+            return await d3.json(url_current,
+                data => {
+                    return data
+                }
+            );
+        });
+
+        return await Promise.all(promises);
     }
 </script>

@@ -2,7 +2,6 @@
     /**
      * WINDOW DIMENSIONS
      */
-
     let heightWindow = $(window).height();
     let widthWindow = $(window).width();
     let widthSidebar = $('#contentSidebar').width();
@@ -25,7 +24,6 @@
     /**
      * COLORS
      */
-
     const lightRed = 'rgb(216, 162, 169)'; // hsl(352, 41%, 74%)
     const normalRed = 'rgb(211, 69, 90)'; // hsl(351, 62%, 55%)
     const darkRed = 'rgb(116, 27, 40)'; // hsl(351, 62%, 28%)
@@ -46,7 +44,7 @@
     const normalPurple = 'rgb(162, 65, 241)'; // hsl(273, 86%, 60%)
     const darkPurple = 'rgb(83, 11, 142)'; // hsl(273, 86%, 30%)
 </script>
-
+<?php $this->insert("../scripts/cachePedaladas") ?>
 <?php $this->insert("../chartTableLens/variables_TableLens") ?>
 <?php $this->insert("../chartBar/variables_BarChart") ?>
 <?php $this->insert("../chartMap/variables_MapChart") ?>

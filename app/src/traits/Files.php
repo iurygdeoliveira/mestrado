@@ -11,10 +11,16 @@ use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToCheckExistence;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\UnableToCreateDirectory;
+use League\Flysystem\UnableToDeleteDirectory;
+use League\Flysystem\UnableToReadFile;
+use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\Visibility;
+use src\traits\GetNames;
 
 trait Files
 {
+
+    use GetNames;
 
     private function createAdpater(string $rootPath)
     {
@@ -45,6 +51,18 @@ trait Files
         }
     }
 
+    private function fileExists(string $rootPath, string $path)
+    {
+
+        $filesystem = $this->createAdpater($rootPath);
+
+        try {
+            return $filesystem->fileExists($path);
+        } catch (FilesystemException | UnableToCheckExistence $exception) {
+            return $exception;
+        }
+    }
+
     /**
      * @param string $directory Nome do diretorio que será criado 
      */
@@ -62,6 +80,26 @@ trait Files
             }
         } else {
             return "Directory Exist";
+        }
+    }
+
+    /**
+     * @param string $directory Nome do diretorio que será deletado
+     */
+    public function deleteDirectory(string $rootPath, string $path)
+    {
+
+        $filesystem = $this->createAdpater($rootPath);
+
+        if ($this->directoryExists($rootPath, $path)) {
+            try {
+                $filesystem->deleteDirectory($path);
+                return true;
+            } catch (FilesystemException | UnableToDeleteDirectory $exception) {
+                return $exception;
+            }
+        } else {
+            return "Directory don't exist";
         }
     }
 
@@ -84,6 +122,48 @@ trait Files
             );
         } catch (Exception $e) {
             return $e->getMessage();
+        }
+    }
+
+    /**
+     *
+     * @param string $filename Nome do arquivo JSON que será apagado
+     *  
+     */
+    public function deleteJsonFile(string $rootPath, string $path)
+    {
+
+        $filesystem = $this->createAdpater($rootPath);
+
+        if ($this->fileExists($rootPath, $path)) {
+            try {
+                //$filesystem->delete($path);
+                return $path;
+            } catch (FilesystemException | UnableToDeleteFile $exception) {
+                return $exception;
+            }
+        } else {
+            return "File don't exist";
+        }
+    }
+    /**
+     *
+     * @param string $filename Nome do arquivo JSON que será lido
+     *  
+     */
+    public function readJsonFile(string $rootPath, string $path)
+    {
+
+        $filesystem = $this->createAdpater($rootPath);
+
+        if ($this->fileExists($rootPath, $path)) {
+            try {
+                return $filesystem->read($path);
+            } catch (FilesystemException | UnableToReadFile $exception) {
+                return $exception;
+            }
+        } else {
+            return "File don't exist";
         }
     }
 }

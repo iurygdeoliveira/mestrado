@@ -59,7 +59,7 @@
 
     }
 
-    async function verPedaladas() {
+    async function tableLens() {
 
         console.group("Ciclistas selecionados ...");
         console.log(selected);
@@ -69,8 +69,7 @@
         console.group("Table lens ...");
         console.log("Criando esqueleto do table lens ...");
         removeTableLens();
-        createSkeleton().then(() => {
-
+        await createSkeleton().then(async () => {
 
             console.log("Criando table lens ...");
             console.groupEnd();
@@ -86,9 +85,9 @@
                     }
                 });
             }
-            enableTooltipsLine();
-
         });
+
+        await enableTooltipsLine();
 
         updateButtonSearchRiders(selected, true, false, false)
 

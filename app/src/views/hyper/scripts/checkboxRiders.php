@@ -39,7 +39,7 @@
             switchToggle = 'overview';
             console.log('Alternando Table Lens para modo: ' + switchToggle);
         }
-        verPedaladas();
+        tableLens();
     });
 
     $('#switchOrder').on('click', function() {
@@ -50,7 +50,7 @@
             switchOrder = 'descending';
             console.log('Alternando Table Lens para modo: ' + switchOrder);
         }
-        verPedaladas();
+        tableLens();
     });
 
     // Monitora os clicks do mouse nos checkbox dos ciclistas
@@ -63,13 +63,12 @@
             updateButtonSearchRiders(selected, false, true, false);
             storeDistance($this.attr("id")).then(() => {
                 updateSlider(selected);
-                verPedaladas();
+                tableLens();
                 updateButtonSearchRiders(selected, true, false, false);
             });
 
             selected.push($this.attr("name"));
             d3.select(this).style('background-color', colors.shift());
-            //$(this).css('background-color', colors.shift());
 
         }
 
@@ -80,7 +79,7 @@
             getColor($(this));
             updatePedaladasClicked();
             updateButtonSearchRiders(selected, false, true, false);
-            verPedaladas().then(() => {
+            tableLens().then(() => {
                 updateButtonSearchRiders(selected, true, false, false);
             });
 
@@ -103,7 +102,6 @@
             pedaladas_purple_clicadas = 0;
             d3.select('#search_rides').attr('title', 'Generate Table Lens');
         }
-        console.log(colors);
     }
 
     function arrayRemove(arr, value) {
@@ -140,7 +138,7 @@
     }
 
     function getColor(element) {
-        colors.push(d3.select(element).style('background-color'));
+        colors.push(element.css('background-color'));
     }
 
     function updatePedaladasClicked() {

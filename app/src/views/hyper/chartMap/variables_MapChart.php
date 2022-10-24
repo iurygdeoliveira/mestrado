@@ -1,43 +1,8 @@
 <script>
-    async function createDB(rider) {
-
-        Dexie.exists(rider).then(function(exists) {
-            if (!exists) {
-                console.log("Gerando estrutura de cache para o " + rider);
-                var db = new Dexie(rider);
-                db.version(1).stores({
-                    coordinates: '++id,' +
-                        'datetime,' +
-                        'rider,' +
-                        'distance,' +
-                        'pedaladaID,' +
-                        'pointInicial,' +
-                        'pointFinal,' +
-                        'points,' +
-                        'centroid,' +
-                        'elevation,' +
-                        'elevation_AVG,' +
-                        'elevation_percentage,' +
-                        'country,' +
-                        'locality,' +
-                        'time,' +
-                        'time_in_hours,' +
-                        'speed,' +
-                        'heartrate'
-                });
-                db.open();
-            }
-        });
-    }
-
     // *********************************************
     // Constantes utilizadas em pedaladas_mapChart
     // *********************************************
     let pedaladas_mapChart = [];
-
-    for (let index = 1; index <= 19; index++) {
-        createDB('rider' + index);
-    }
 
     //let layerMap = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
     let layerMap = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';

@@ -12,44 +12,47 @@
         let range_max = parseFloat($('#range-max').text());
         console.log("Tamanho Maximo:", range_max, "Tamanho mínimo:", range_min);
 
-        // Convertendo para formato numérico
-        pedaladas.forEach(element => {
-            element.distance_haversine = parseFloat(element.distance_haversine)
-        });
-
-        // Ordenando elementos
-        pedaladas = arraySort(switchOrder, pedaladas);
-        //console.log("Pedaladas:", pedaladas);
-
         // Delimitando pedaladas dentro da faixa de distância escolhida
         let pedaladas_selected = [];
         for (var i = 0; i < pedaladas.length; i++) {
-            if ((pedaladas[i].distance_haversine > range_min) && (pedaladas[i].distance_haversine < range_max)) {
-                pedaladas_selected.push(pedaladas[i]);
+            if ((pedaladas[i].distance >= range_min) && (pedaladas[i].distance <= range_max)) {
+                pedaladas_selected.push({
+                    'distance': pedaladas[i].distance,
+                    'id': pedaladas[i].id
+                });
             }
         }
+
+        // Ordenando elementos
+        pedaladas_selected = arraySort(switchOrder, pedaladas_selected);
 
         store.session.set(rider + '_selected', {
             pedaladas_selected
         });
 
-        // Obtendo maior pedaladas do ciclista
-        let maxDistanceRider = Math.max(...pedaladas_selected.map(obj => obj.distance_haversine));
-        //console.log("Maior Distância do ciclista", maxDistanceRider);
+        // Obtendo maior pedaladas entre as pedaladas limitadas pelo slider
+        let maxDistanceRider = await getMaxDistance(pedaladas_selected);
 
         // Desenhando linhas
+        let factor = 0;
         if (switchToggle == 'item') {
-            drawItens(index, color, pedaladas_selected, maxDistanceRider, rider, padding_item, margin_item, 15).then(() => {
-                animationTableLens();
-            });
+            drawItens(
+                    index, color, pedaladas_selected,
+                    maxDistanceRider, rider,
+                    padding_item, margin_item, 15)
+                .then(() => {
+                    animationTableLens();
+                });
         }
-
         if (switchToggle == 'overview') {
-            drawItens(index, color, pedaladas_selected, maxDistanceRider, rider, padding_overview, margin_overview, 2).then(() => {
-                animationTableLens();
-            });
+            drawItens(
+                    index, color, pedaladas_selected,
+                    maxDistanceRider, rider,
+                    padding_overview, margin_overview, 2)
+                .then(() => {
+                    animationTableLens();
+                });
         }
-
     }
 
     function widthLine(distance, distanceMaxRider) {
@@ -93,8 +96,9 @@
         let count = 0;
         for (; count < pedaladas.length; count++) {
 
-            distance_pedalada = pedaladas[count].distance_haversine;
+            distance_pedalada = pedaladas[count].distance;
             id_pedalada = pedaladas[count].id;
+
             drawLines(
                 box,
                 color,
@@ -116,10 +120,10 @@
         if (mode == 'descending') {
 
             pedaladas.sort(function(a, b) {
-                if (a.distance_haversine < b.distance_haversine) {
+                if (a.distance < b.distance) {
                     return 1;
                 }
-                if (a.distance_haversine > b.distance_haversine) {
+                if (a.distance > b.distance) {
                     return -1;
                 }
                 // a must be equal to b
@@ -131,10 +135,10 @@
         if (mode == 'ascending') {
 
             pedaladas.sort(function(a, b) {
-                if (a.distance_haversine > b.distance_haversine) {
+                if (a.distance > b.distance) {
                     return 1;
                 }
-                if (a.distance_haversine < b.distance_haversine) {
+                if (a.distance < b.distance) {
                     return -1;
                 }
                 // a must be equal to b

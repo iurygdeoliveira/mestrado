@@ -23,9 +23,6 @@
         d3.selectAll('.ui-slider-handle').on('mouseup', function() {
             updateButtonSearchRiders(selected, false, true, false);
 
-            //if (store.session.get('pedaladas_barChart').length > 0) {
-            //update_barChart();
-            //}
             removeBarChart();
             store.session.set('pedaladas_barChart', []);
             pedaladas_red_clicadas = 0;
@@ -34,7 +31,7 @@
             pedaladas_green_clicadas = 0;
             pedaladas_purple_clicadas = 0;
 
-            verPedaladas().then(() => {
+            tableLens().then(() => {
                 updateButtonSearchRiders(selected, true, false, false);
             });
             d3.select('#search_rides').attr('title', 'See Table Lens');
@@ -48,7 +45,7 @@
 
             d3.select("#distance")
                 .style("display", 'block');
-            distances = distances.map(Number);
+            //distances = distances.map(Number);
             maxDistance = distances.reduce(function(a, b) {
                 return Math.max(a, b)
             });

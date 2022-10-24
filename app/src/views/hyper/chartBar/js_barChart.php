@@ -25,10 +25,9 @@
 
         let pedalada_barChart = mount_pedalada_barChart(pedalada);
         store.session.add('pedaladas_barChart', pedalada_barChart);
-        //console.log(store.session.get('pedaladas_barChart'));
 
         updateButtonSearchRiders(selected, false, true, false);
-        storeCoordinates(pedalada_barChart).then((res) => {
+        storePedalada(pedalada_barChart).then((res) => {
             console.log('Primary Key: ', res);
             updateButtonSearchRiders(selected, true, false, false)
             update_barChart();

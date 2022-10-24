@@ -1,6 +1,6 @@
 <script>
     function enableTooltipsLine() {
-        $('div[line_clicked]').tipsy({
+        $("[line_clicked]").tipsy({
             arrowWidth: 10, //arrow css border-width + margin-(left|right), default is 5 + 5
             cls: null, //tipsy custom class
             duration: 150, //tipsy fadeIn, fadeOut duration

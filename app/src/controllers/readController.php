@@ -11,7 +11,6 @@ use src\traits\Files;
 use src\core\Controller;
 use src\classes\LoadRide;
 use src\classes\Coordinates;
-use src\classes\Math;
 use src\models\rideBD;
 use Laminas\Diactoros\Response;
 use stdClass;
@@ -244,6 +243,44 @@ class readController extends Controller
         return $this->responseJson(true, "CSV do rider $request->rider concluído", "sem retorno de dados");
     }
 
+    public function exportDistances()
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+        $distances = [];
+        $attribute = $request->attribute;
+
+        $pedal = $this->getFileNames(CONF_JSON_CYCLIST . $request->cyclist);
+
+        foreach ($pedal as $key => $value) {
+
+            $path = $request->cyclist . DIRECTORY_SEPARATOR . $value . DIRECTORY_SEPARATOR . 'overview.json';
+            $object = json_decode($this->readJsonFile(CONF_JSON_CYCLIST, $path));
+
+            if (isset($object->$attribute)) {
+
+                array_push($distances, "distance: {$object->$attribute}, id: " . str_replace('pedal', '', $value));
+            } else {
+                dp($path);
+                dpexit($object);
+            }
+        }
+
+        $reduce = function ($carry, $item) {
+            $carry .= $item . '|';
+            return $carry;
+        };
+
+        $this->createData(
+            CONF_JSON_CYCLIST . $request->cyclist . DIRECTORY_SEPARATOR,
+            'all_distances',
+            array_reduce($distances, $reduce)
+        );
+
+        return $this->responseJson(true, "Coordenadas encontradas", $distances);
+    }
+
 
     // Renderiza a view read
     public function read(): Response
@@ -353,6 +390,56 @@ class readController extends Controller
         }
 
         return $this->responseJson(false, $result, null);
+    }
+
+    private function deleteFiles(string $cyclist, string $attribute, int $limit)
+    {
+        $deleteFiles = [];
+
+        $pedal = $this->getFileNames(CONF_JSON_CYCLIST . $cyclist);
+
+        foreach ($pedal as $key => $value) {
+            $path = $cyclist . DIRECTORY_SEPARATOR . $value . DIRECTORY_SEPARATOR . 'overview.json';
+            $object = json_decode($this->readJsonFile(CONF_JSON_CYCLIST, $path));
+
+            if (isset($object->$attribute)) {
+                if (floatval($object->$attribute) < $limit) {
+                    $this->deleteDirectory(CONF_JSON_CYCLIST, $cyclist . DIRECTORY_SEPARATOR . $value);
+                    array_push($deleteFiles, $cyclist . DIRECTORY_SEPARATOR . $value);
+                }
+            } else {
+                dp($path);
+                dpexit($object);
+            }
+        }
+
+        return $deleteFiles;
+    }
+
+
+    public function deleteData(): Response
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+
+        $result = $this->deleteFiles($request->cyclist, $request->attribute, intval($request->value));
+
+        // Se result for true, então o dataset/atividade já foram extraídos
+        // Se result for diferentes de true, retorna a mensagem de erros
+        if ($result) {
+            return $this->responseJson(
+                true,
+                "Pedaladas do $request->cyclist excluídas",
+                $result
+            );
+        } else {
+            return $this->responseJson(
+                false,
+                "Pedaladas do $request->cyclist não excluídas",
+                $result
+            );
+        }
     }
 
     public function sendBbox(): Response
