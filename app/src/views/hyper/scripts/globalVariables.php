@@ -7,7 +7,7 @@
     let widthSidebar = $('#contentSidebar').width();
     d3.select('#contentSidebar').style('min-width', widthSidebar + 'px');
     let widthCharts = $('#contentCharts').width();
-    //console.log("Largura Janela: ", widthWindow, "Largura sidebar: ", widthSidebar, "Largura Charts: ", widthCharts);
+    console.log("Altura Janela: ", heightWindow, "Largura Janela: ", widthWindow);
     $(window).on('resize', function() {
 
         if (store.session.get('pedaladas_barChart').length > 0) {

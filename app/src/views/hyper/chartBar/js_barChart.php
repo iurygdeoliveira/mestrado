@@ -173,7 +173,7 @@
         console.groupEnd();
         create_BarChart().then(async () => {
             await updateMapChart();
-            await updateRadarChart();
+            // await updateRadarChart();
         });
     }
 </script>

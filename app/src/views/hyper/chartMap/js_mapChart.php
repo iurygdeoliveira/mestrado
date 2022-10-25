@@ -52,98 +52,126 @@
             .openOn(map);
     }
 
-    async function defineLayer(centerMap, zoom) {
+    function changeView(route) {
 
-        map = L.map('pedaladas_mapChart');
-        var tiles = L.tileLayer(layerMap, {
+        $("#pedaladas_mapChart").click(function(event) {
+
+            //console.log(event);
+            let element = new String(event.target.innerHTML);
+            //console.log(element.trim());
+
+            if (element.trim() == 'Distance') {
+                route.removeFrom(map);
+            }
+
+            if (element.trim() == 'Route') {
+                route.addTo(map);
+            }
+
+        });
+    }
+
+    async function defineLayer(centerMap, zoom, route) {
+
+
+        var routeLayer = L.tileLayer(layerMap, {
             minZoom: minZoom,
             maxZoom: maxZoom,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
+        });
+
+        var distanceLayer = L.tileLayer(layerMap, {
+            minZoom: minZoom,
+            maxZoom: maxZoom,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        });
+
+        const baseLayers = {
+            'Distance': distanceLayer,
+            'Route': routeLayer
+        };
+
+        map = L.map('pedaladas_mapChart', {
+            layers: [distanceLayer, routeLayer]
+        });
+
+        var layerControl = L.control.layers(baseLayers, null).addTo(map);
+        route.addTo(map);
+
+        changeView(route);
+
         map.on('click', onMapClick);
         return map;
 
 
     }
 
-    async function plotLines(pedaladas_barChart, map) {
-
-        console.log("Plotando linestring ...");
+    async function plotLines(pedaladas_barChart, route) {
 
         let polyline;
         const promises = pedaladas_barChart.map(async (pedalada_current, idx) => {
             let result = await getRecord(pedalada_current);
             polyline = L.polyline(result.points, {
-                color: pedalada_current.color_selected
-            }).addTo(map);
+                color: pedalada_current.color_selected,
+                dashArray: "15 15",
+                dashSpeed: 30
+            }).addTo(route);
         });
 
         await Promise.all(promises);
 
-        return polyline;
-
+        return route;
     }
 
 
-    async function plotMarkles(pedaladas_barChart, map) {
+    async function plotMarkles(pedaladas_barChart, route) {
 
-        console.log("Plotando Circles ...");
-
-        let polyline;
         const promises = pedaladas_barChart.map(async (pedalada_current, idx) => {
             let result = await getRecord(pedalada_current);
 
-            if (result.country == '') {
-                result.country == 'not found'
-            }
-
-            if (result.locality == '') {
-                result.locality == 'not found'
-            }
-
-            L.circle(result.pointInitial, {
+            var square = L.shapeMarker(result.pointInitial, {
                     color: pedalada_current.color_selected,
                     fillColor: pedalada_current.color_selected,
                     fillOpacity: 0.5,
-                    radius: 100
-                })
+                    shape: "square",
+                    radius: 5
+                }).addTo(route)
                 .bindPopup(
                     `<b>Start</b><br>
-                    Datetime: ${result.datetime}<br>
-                    Lat,Lon: ${result.pointInitial}<br>
-                    Avg Heartrate: ${result.heartrate} bpm<br>
-                    Distance: ${result.distance} KM<br>
-                    Avg Speed: ${result.speed} KM/H<br>
-                    Time: ${result.time} <br>
-                    Country: ${result.country}<br>
-                    Locality: ${result.locality}
-                    `
-                ).addTo(map);
-
-
-            L.circle(result.pointFinal, {
-                color: pedalada_current.color_selected,
-                fillColor: pedalada_current.color_selected,
-                fillOpacity: 0.5,
-                radius: 100
-            }).bindPopup(
-                `<b>Finish</b><br>
                 Datetime: ${result.datetime}<br>
-                Lat,Lon: ${result.pointFinal}<br>
-                Avg Heartrate: ${result.heartrate} bpm<br>
+                Lat,Lon: ${result.pointInitial}<br>
+                Avg Heartrate: ${result.heartrate_AVG} bpm<br>
                 Distance: ${result.distance} KM<br>
-                Avg Speed: ${result.speed} KM/H<br>
-                Time: ${result.time} <br>
+                Avg Speed: ${result.speed_AVG} KM/H<br>
+                Duration: ${result.duration} <br>
                 Country: ${result.country}<br>
                 Locality: ${result.locality}
                 `
-            ).addTo(map);
+                );
 
+            var triangle = L.shapeMarker(result.pointFinal, {
+                color: pedalada_current.color_selected,
+                fillColor: pedalada_current.color_selected,
+                fillOpacity: 0.5,
+                shape: "triangle",
+                radius: 5
+            }).addTo(route).bindPopup(
+                `<b>Start</b><br>
+                Datetime: ${result.datetime}<br>
+                Lat,Lon: ${result.pointInitial}<br>
+                Avg Heartrate: ${result.heartrate_AVG} bpm<br>
+                Distance: ${result.distance} KM<br>
+                Avg Speed: ${result.speed_AVG} KM/H<br>
+                Duration: ${result.duration} <br>
+                Country: ${result.country}<br>
+                Locality: ${result.locality}
+                `
+            );
         });
 
         await Promise.all(promises);
 
-        return map;
+        return route;
 
     }
 
@@ -153,9 +181,12 @@
         console.log("Atualizando MapChart ...");
 
         resizeMapChart();
-        let map = await defineLayer([0, 0], initialZoom);
-        let polyline = await plotLines(store.session.get('pedaladas_barChart'), map);
-        map = await plotMarkles(store.session.get('pedaladas_barChart'), map);
+
+        // Construindo camada route
+        let route = L.featureGroup();
+        route = await plotLines(store.session.get('pedaladas_barChart'), route);
+        route = await plotMarkles(store.session.get('pedaladas_barChart'), route);
+        let map = await defineLayer([0, 0], initialZoom, route);
         let centerMap = await calculateMapCenter(store.session.get('pedaladas_barChart'));
         console.groupEnd();
 
