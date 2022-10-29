@@ -5,6 +5,7 @@
     let heightWindow = $(window).height();
     let widthWindow = $(window).width();
     let widthSidebar = $('#contentSidebar').width();
+    let adjustHeightCharts = 1;
     d3.select('#contentSidebar').style('min-width', widthSidebar + 'px');
     let widthCharts = $('#contentCharts').width();
     console.log("Altura Janela: ", heightWindow, "Largura Janela: ", widthWindow);

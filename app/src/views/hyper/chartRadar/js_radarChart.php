@@ -30,7 +30,7 @@
         // heartrate, elevation, distance, duration, speed
         return [
             pedalada.heartrate_AVG,
-            parseFloat((pedalada.elevation_AVG / 1000).toFixed(2)),
+            pedalada.elevation_AVG,
             pedalada.temperature_AVG,
             pedalada.speed_AVG,
             await time_in_minutes(pedalada.duration)
@@ -48,7 +48,7 @@
         });
 
         await Promise.all(promisesValues);
-        console.log(values);
+
         return values;
 
     }
@@ -59,7 +59,6 @@
 
         let average = [];
         for (let count = 0; count < selected.length; count++) {
-            let color = $('#' + selected[count]).attr('style').replace(";", "").replace("background-color: ", "");
 
             let valuesRiders = values.filter(item => item.rider == selected[count]);
 
@@ -85,20 +84,21 @@
                 speed = parseFloat((speed / valuesRiders.length).toFixed(2));
                 duration = parseFloat((duration / valuesRiders.length).toFixed(2));
 
+                let color = $('#' + selected[count]).attr('style').replace(";", "").replace("background-color: ", "");
                 average.push({
-                    'label': "Cyclist " + selected[count].replace(/[^0-9]/g, ''),
-                    'data': [heartrate, elevation, temperature, speed, duration],
-                    'fill': false,
-                    'borderColor': color,
-                    'pointBackgroundColor': color,
-                    'pointBorderColor': '#fff',
-                    'pointHoverBackgroundColor': '#fff',
-                    'pointHoverBorderColor': color
+                    'name': "Cyclist " + selected[count].replace(/[^0-9]/g, ''),
+                    'value': [heartrate, elevation, temperature, speed, duration],
+                    lineStyle: {
+                        color: color
+                    },
+                    itemStyle: {
+                        color: color
+                    },
                 });
             }
         }
-        console.log(average);
         return average;
+
     }
 
 
@@ -121,52 +121,60 @@
         return parseInt(heightWindow / 2);
     }
 
-    async function createBoxRadarChart() {
-        let heightRadarChart = await calculateHeightRadarChart();
+    async function resizeRadarChart() {
+        let heightRadarChart = parseInt(heightWindow / 2) - adjustHeightCharts;
+        removeRadarChart();
         d3.select('#radarChart')
-            .append('canvas')
+            .append('div')
             .attr("id", 'pedaladas_radarChart')
-            .attr("height", heightRadarChart + 'px');
-
+            .style("height", heightRadarChart + 'px');
     }
+
 
     async function create_RadarChart() {
 
-        const ctx = document.getElementById('pedaladas_radarChart');
-        const data = {
-            labels: [
-                'Avg Heartrate (BPM)',
-                'Avg Elevation (Meters)',
-                'Avg Temperature (ºC)',
-                'Avg Speed (KM/H)',
-                'Duration (Minutes)',
-            ],
-            datasets: await mountDataSetsRadarChart(store.session.get('pedaladas_barChart'))
-        };
-        const myChart = new Chart(ctx, {
-            type: 'radar',
-            data,
-            options: {
-                scale: {
-                    ticks: {
-                        min: 0,
-                        max: 5
-                    }
-                },
-                maintainAspectRatio: false,
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                elements: {
-                    line: {
-                        borderWidth: 3
-                    }
-                }
-            },
+        var chartDom = document.getElementById('pedaladas_radarChart');
+        var myChart = echarts.init(chartDom, null, {
+            renderer: 'svg'
         });
+        var option;
+
+        option = {
+            tooltip: {
+                trigger: 'item',
+                position: 'right'
+            },
+            radar: {
+                indicator: [{
+                        name: 'Avg Heartrate (BPM)'
+                    },
+                    {
+                        name: 'Avg Elevation (Meters)'
+                    },
+                    {
+                        name: 'Avg Temperature (ºC)'
+                    },
+                    {
+                        name: 'Avg Speed (KM/H)'
+                    },
+                    {
+                        name: 'Duration (Minutes)'
+                    }
+                ]
+            },
+            series: [{
+                type: 'radar',
+                emphasis: {
+                    lineStyle: {
+                        width: 4
+                    }
+                },
+                // Heartrate, Elevation, Temperature, Speed, Duration
+                data: await mountDataSetsRadarChart(store.session.get('pedaladas_barChart'))
+            }]
+        };
+
+        option && myChart.setOption(option);
     }
 
     async function updateRadarChart() {
@@ -175,9 +183,10 @@
         console.log("Atualizando RadarChart ...");
 
         await removeRadarChart();
-        await createBoxRadarChart();
-        //$('#pedaladas_barChart_card').show();
+        await resizeRadarChart();
         await create_RadarChart();
+
+        //$('#pedaladas_barChart_card').show();
         console.groupEnd();
         totalStorage(); // Monitorando Storage
     }

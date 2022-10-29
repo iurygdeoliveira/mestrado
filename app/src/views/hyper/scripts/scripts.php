@@ -7,6 +7,7 @@
 <script src="<?= js('d3.v7.min.js') ?>"></script>
 <script src="<?= js('jquery.tipsy.min.js') ?>"></script>
 <script src="<?= js('chart.min.js') ?>"></script>
+<script src="<?= js('echarts.min.js') ?>"></script>
 <script src="<?= js('leaflet.js') ?>"></script>
 <script src="<?= js('leaflet-svg-shape-markers.min.js') ?>"></script>
 <script src="<?= js('L.Path.DashFlow.js') ?>"></script>

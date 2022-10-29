@@ -1,6 +1,6 @@
 <script>
     async function resizeMapChart() {
-        let heightMapChart = parseInt(heightWindow / 2);
+        let heightMapChart = parseInt(heightWindow / 2) - adjustHeightCharts;
         removeMapChart();
         d3.select('#mapChart').style('height', heightMapChart + 'px')
             .append('div')
