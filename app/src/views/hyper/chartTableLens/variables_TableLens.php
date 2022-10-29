@@ -30,18 +30,18 @@
     const background_lens = 'rgb(150,150,150)';
     const background_lens_focus = 'rgb(50,50,50)';
 
-    store.session.set('colors_red', ['rgb(211, 69, 91)', 'rgb(116, 27, 40)', 'rgb(239, 189, 196)']);
-    store.session.set('colors_red_current', ['rgb(211, 69, 91)', 'rgb(116, 27, 40)', 'rgb(239, 189, 196)']);
+    store.session.set('colors_red', [normalRed, darkRed, lightRed]);
+    store.session.set('colors_red_current', [normalRed, darkRed, lightRed]);
 
-    store.session.set('colors_blue', ['rgb(44, 136, 217)', 'rgb(22, 75, 121)', 'rgb(186, 216, 242)']);
-    store.session.set('colors_blue_current', ['rgb(44, 136, 217)', 'rgb(22, 75, 121)', 'rgb(186, 216, 242)']);
+    store.session.set('colors_blue', [normalBlue, darkBlue, lightBlue]);
+    store.session.set('colors_blue_current', [normalBlue, darkBlue, lightBlue]);
 
-    store.session.set('colors_yellow', ['rgb(247, 195, 37)', 'rgb(138, 105, 5)', 'rgb(252, 233, 176)']);
-    store.session.set('colors_yellow_current', ['rgb(247, 195, 37)', 'rgb(138, 105, 5)', 'rgb(252, 233, 176)']);
+    store.session.set('colors_yellow', [normalYellow, darkYellow, lightYellow]);
+    store.session.set('colors_yellow_current', [normalYellow, darkYellow, lightYellow]);
 
-    store.session.set('colors_green', ['rgb(47, 177, 156)', 'rgb(30, 113, 98)', 'rgb(191, 238, 229)']);
-    store.session.set('colors_green_current', ['rgb(47, 177, 156)', 'rgb(30, 113, 98)', 'rgb(191, 238, 229)']);
+    store.session.set('colors_green', [normalGreen, darkGreen, lightGreen]);
+    store.session.set('colors_green_current', [normalGreen, darkGreen, lightGreen]);
 
-    store.session.set('colors_purple', ['rgb(115, 15, 195)', 'rgb(78,10,133)', 'rgb(218, 179, 249)']);
-    store.session.set('colors_purple_current', ['rgb(115, 15, 195)', 'rgb(78,10,133)', 'rgb(218, 179, 249)']);
+    store.session.set('colors_purple', [normalPurple, darkPurple, lightPurple]);
+    store.session.set('colors_purple_current', [normalPurple, darkPurple, lightPurple]);
 </script>

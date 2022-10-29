@@ -6,6 +6,7 @@
             .append('div')
             .attr("id", 'pedaladas_mapChart')
             .attr('class', 'p-0 m-0');
+        controlRuler = null;
     }
 
     function removeMapChart() {
@@ -19,13 +20,11 @@
         let bounds;
 
         const promises = pedaladas_barChart.map(async (pedalada_current, idx) => {
-            let result = await getRecord(pedalada_current);
-            centroids.push(result.centroid);
+            centroids.push(pedalada_current.centroid);
         });
 
         await Promise.all(promises);
 
-        console.log("Centroids", centroids);
         switch (centroids.length) {
             case 0:
                 map.setView([0, 0], initialZoom);
@@ -42,17 +41,7 @@
         return map;
     }
 
-    function onMapClick(e) {
-
-        var popup = L.popup();
-
-        popup
-            .setLatLng(e.latlng)
-            .setContent("You clicked the map at <br>" + e.latlng.toString())
-            .openOn(map);
-    }
-
-    function changeView(route) {
+    async function changeView(route, distance, map) {
 
         $("#pedaladas_mapChart").click(function(event) {
 
@@ -61,17 +50,56 @@
             //console.log(element.trim());
 
             if (element.trim() == 'Distance') {
+                distance.addTo(map);
                 route.removeFrom(map);
+
+                if (controlRuler == null) {
+                    addControlRuler(map);
+                } else {
+                    controlRuler._container.hidden = false;
+                }
             }
 
             if (element.trim() == 'Route') {
                 route.addTo(map);
+                distance.removeFrom(map)
+                controlRuler._container.hidden = true;
             }
 
         });
     }
 
-    async function defineLayer(centerMap, zoom, route) {
+    function addControlRuler(map) {
+
+        var options = {
+            position: 'topright', // Leaflet control position option
+            circleMarker: { // Leaflet circle marker options for points used in this plugin
+                color: line_distance_color,
+                radius: 2
+            },
+            lineStyle: { // Leaflet polyline options for lines used in this plugin
+                color: line_distance_color,
+                dashArray: '1,6'
+            },
+            lengthUnit: { // You can use custom length units. Default unit is kilometers.
+                display: 'km', // This is the display value will be shown on the screen. Example: 'meters'
+                decimal: 2, // Distance result will be fixed to this value. 
+                factor: null, // This value will be used to convert from kilometers. Example: 1000 (from kilometers to meters)  
+                label: 'Distance:'
+            },
+            angleUnit: {
+                display: '&deg;', // This is the display value will be shown on the screen. Example: 'Gradian'
+                decimal: 2, // Bearing result will be fixed to this value.
+                factor: null, // This option is required to customize angle unit. Specify solid angle value for angle unit. Example: 400 (for gradian).
+                label: 'Bearing:'
+            }
+        };
+
+        controlRuler = L.control.ruler(options).addTo(map);
+
+    }
+
+    async function defineLayer(centerMap, zoom, route, distance) {
 
 
         var routeLayer = L.tileLayer(layerMap, {
@@ -96,11 +124,10 @@
         });
 
         var layerControl = L.control.layers(baseLayers, null).addTo(map);
+
         route.addTo(map);
+        await changeView(route, distance, map);
 
-        changeView(route);
-
-        map.on('click', onMapClick);
         return map;
 
 
@@ -110,11 +137,10 @@
 
         let polyline;
         const promises = pedaladas_barChart.map(async (pedalada_current, idx) => {
-            let result = await getRecord(pedalada_current);
-            polyline = L.polyline(result.points, {
+            polyline = L.polyline(pedalada_current.points, {
                 color: pedalada_current.color_selected,
-                dashArray: "15 15",
-                dashSpeed: 30
+                dashArray: "10 10",
+                dashSpeed: 35
             }).addTo(route);
         });
 
@@ -127,44 +153,43 @@
     async function plotMarkles(pedaladas_barChart, route) {
 
         const promises = pedaladas_barChart.map(async (pedalada_current, idx) => {
-            let result = await getRecord(pedalada_current);
 
-            var square = L.shapeMarker(result.pointInitial, {
+            var square = L.shapeMarker(pedalada_current.pointInitial, {
                     color: pedalada_current.color_selected,
                     fillColor: pedalada_current.color_selected,
                     fillOpacity: 0.5,
                     shape: "square",
-                    radius: 5
+                    radius: 10
                 }).addTo(route)
                 .bindPopup(
                     `<b>Start</b><br>
-                Datetime: ${result.datetime}<br>
-                Lat,Lon: ${result.pointInitial}<br>
-                Avg Heartrate: ${result.heartrate_AVG} bpm<br>
-                Distance: ${result.distance} KM<br>
-                Avg Speed: ${result.speed_AVG} KM/H<br>
-                Duration: ${result.duration} <br>
-                Country: ${result.country}<br>
-                Locality: ${result.locality}
+                Datetime: ${pedalada_current.datetime}<br>
+                Lat,Lon: ${pedalada_current.pointInitial}<br>
+                Avg Heartrate: ${pedalada_current.heartrate_AVG} bpm<br>
+                Distance: ${pedalada_current.distance} KM<br>
+                Avg Speed: ${pedalada_current.speed_AVG} KM/H<br>
+                Duration: ${pedalada_current.duration} <br>
+                Country: ${pedalada_current.country}<br>
+                Locality: ${pedalada_current.locality}
                 `
                 );
 
-            var triangle = L.shapeMarker(result.pointFinal, {
+            var triangle = L.shapeMarker(pedalada_current.pointFinal, {
                 color: pedalada_current.color_selected,
                 fillColor: pedalada_current.color_selected,
                 fillOpacity: 0.5,
                 shape: "triangle",
-                radius: 5
+                radius: 10
             }).addTo(route).bindPopup(
                 `<b>Start</b><br>
-                Datetime: ${result.datetime}<br>
-                Lat,Lon: ${result.pointInitial}<br>
-                Avg Heartrate: ${result.heartrate_AVG} bpm<br>
-                Distance: ${result.distance} KM<br>
-                Avg Speed: ${result.speed_AVG} KM/H<br>
-                Duration: ${result.duration} <br>
-                Country: ${result.country}<br>
-                Locality: ${result.locality}
+                Datetime: ${pedalada_current.datetime}<br>
+                Lat,Lon: ${pedalada_current.pointInitial}<br>
+                Avg Heartrate: ${pedalada_current.heartrate_AVG} bpm<br>
+                Distance: ${pedalada_current.distance} KM<br>
+                Avg Speed: ${pedalada_current.speed_AVG} KM/H<br>
+                Duration: ${pedalada_current.duration} <br>
+                Country: ${pedalada_current.country}<br>
+                Locality: ${pedalada_current.locality}
                 `
             );
         });
@@ -175,20 +200,51 @@
 
     }
 
+    async function plotDistance(pedaladas_barChart, distance) {
+
+        const promisesPoints = pedaladas_barChart.map(async (pedalada_current, idx) => {
+
+            var square = L.shapeMarker(pedalada_current.pointInitial, {
+                    color: pedalada_current.color_selected,
+                    fillColor: pedalada_current.color_selected,
+                    fillOpacity: 1,
+                    shape: "circle",
+                    radius: 10
+                }).addTo(distance)
+                .bindPopup(
+                    `<b>Start</b><br>
+                Datetime: ${pedalada_current.datetime}<br>
+                Lat,Lon: ${pedalada_current.pointInitial}<br>
+                Avg Heartrate: ${pedalada_current.heartrate_AVG} bpm<br>
+                Distance: ${pedalada_current.distance} KM<br>
+                Avg Speed: ${pedalada_current.speed_AVG} KM/H<br>
+                Duration: ${pedalada_current.duration} <br>
+                Country: ${pedalada_current.country}<br>
+                Locality: ${pedalada_current.locality}
+                `
+                );
+        });
+
+        await Promise.all(promisesPoints);
+
+        return distance;
+
+    }
+
     async function updateMapChart() {
 
         console.group("MapChart ...");
         console.log("Atualizando MapChart ...");
-
         resizeMapChart();
-
         // Construindo camada route
         let route = L.featureGroup();
+        let distance = L.featureGroup();
         route = await plotLines(store.session.get('pedaladas_barChart'), route);
         route = await plotMarkles(store.session.get('pedaladas_barChart'), route);
-        let map = await defineLayer([0, 0], initialZoom, route);
+        distance = await plotDistance(store.session.get('pedaladas_barChart'), distance);
+        let map = await defineLayer([0, 0], initialZoom, route, distance);
         let centerMap = await calculateMapCenter(store.session.get('pedaladas_barChart'));
         console.groupEnd();
-
+        totalStorage(); // Monitorando Storage
     }
 </script>

@@ -71,9 +71,9 @@
                     if (!result) {
                         console.log(`Armazenando dados da pedalada ${pedalada.id}`);
                         console.groupEnd();
-                        return await getPedaladaGithub(pedalada.rider, pedalada.id).then(async (res) => {
+                        await getPedaladaGithub(pedalada.rider, pedalada.id).then(async (res) => {
 
-                            return await db.table('pedaladas').add({
+                            await db.table('pedaladas').add({
                                 rider: pedalada.rider,
                                 pedal_id: pedalada.id,
                                 datetime: res[7].datetime,
@@ -95,11 +95,12 @@
                                 speed_history: await convertStringData(res[3].speed_history),
                                 time_history: res[4].time_history.split('|'),
                             });
-                        })
+                        });
+                        return await getPedaladaDB(db, pedalada);
                     } else {
                         console.log(`Dados da pedalada ${pedalada.id} já estão armazenadas`);
                         console.groupEnd();
-                        return result[0].id;
+                        return result;
                     }
                 });
             });

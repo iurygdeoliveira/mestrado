@@ -9,38 +9,61 @@
 
     }
 
-    function mount_pedalada_barChart(pedalada) {
+    async function mount_pedalada_barChart(pedalada) {
 
         return {
             'id': d3.select(pedalada).attr('id'),
             'rider': d3.select(pedalada).attr('rider'),
             'line_clicked': d3.select(pedalada).attr('line_clicked'),
             'color_selected': d3.select(pedalada).attr('color_selected'),
+            'style': d3.select(pedalada).attr('style'),
             'distance': parseFloat(d3.select(pedalada).attr('distance')),
-            'style': d3.select(pedalada).attr('style')
+            'pointInitial': null,
+            'pointFinal': null,
+            'points': null,
+            'datetime': null,
+            'heartrate_AVG': null,
+            'speed_AVG': null,
+            'duration': null,
+            'country': null,
+            'centroid': null
+
         };
     }
 
-    function push_pedaladas_barChart(pedalada) {
+    async function push_pedaladas_barChart(pedalada) {
 
-        let pedalada_barChart = mount_pedalada_barChart(pedalada);
-        store.session.add('pedaladas_barChart', pedalada_barChart);
+        let pedalada_barChart = await mount_pedalada_barChart(pedalada);
 
         updateButtonSearchRiders(selected, false, true, false);
-        storePedalada(pedalada_barChart).then((res) => {
-            console.log('Primary Key: ', res);
-            updateButtonSearchRiders(selected, true, false, false)
-            update_barChart();
-        });
+
+        let res = await storePedalada(pedalada_barChart);
+
+        pedalada_barChart.pointInitial = res[0].pointInitial;
+        pedalada_barChart.pointFinal = res[0].pointFinal;
+        pedalada_barChart.points = res[0].points;
+        pedalada_barChart.heartrate_AVG = res[0].heartrate_AVG;
+        pedalada_barChart.speed_AVG = res[0].speed_AVG;
+        pedalada_barChart.elevation_AVG = res[0].elevation_AVG;
+        pedalada_barChart.temperature_AVG = res[0].temperature_AVG;
+        pedalada_barChart.duration = res[0].duration;
+        pedalada_barChart.datetime = res[0].datetime;
+        pedalada_barChart.country = res[0].country;
+        pedalada_barChart.locality = res[0].locality;
+        pedalada_barChart.centroid = res[0].centroid;
+        store.session.add('pedaladas_barChart', pedalada_barChart);
+        updateButtonSearchRiders(selected, true, false, false)
+        update_barChart();
 
     }
 
-    function remove_pedaladas_barChart(pedalada) {
+    async function remove_pedaladas_barChart(pedal) {
 
-        let pedalada_barChart = mount_pedalada_barChart(pedalada);
-        let pedaladas_barChart = store.session.get('pedaladas_barChart');
-        pedaladas_barChart = pedaladas_barChart.filter(item => item.id !== pedalada_barChart.id)
-        store.session.set('pedaladas_barChart', pedaladas_barChart);
+        let pedalada_current = await mount_pedalada_barChart(pedal);
+        let pedaladas = store.session.get('pedaladas_barChart');
+        console.log(pedalada_current, pedal);
+        pedaladas = pedaladas.filter(item => item.id !== pedalada_current.id)
+        store.session.set('pedaladas_barChart', pedaladas);
         update_barChart();
 
     }
@@ -171,9 +194,9 @@
         createBoxBarChart();
         $('#pedaladas_barChart_card').show();
         console.groupEnd();
-        create_BarChart().then(async () => {
+        await create_BarChart().then(async () => {
             await updateMapChart();
-            // await updateRadarChart();
+            await updateRadarChart();
         });
     }
 </script>

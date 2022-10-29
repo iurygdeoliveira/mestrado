@@ -99,7 +99,7 @@
     function lineStateOriginal(line, key, pedaladas_clicadas) {
         let color_current = '';
         let colors_remaining = '';
-        //console.log("Desabilitando clicks no box do table lens");
+
         color_current = d3.select(line).attr("color_selected");
 
         changeColorLine('#' + $(line).attr("id"), background_lens);

@@ -16,7 +16,6 @@
             widthCharts = $('#contentCharts').width();
             heightWindow = $(this).height();
             update_barChart();
-            resizeMapChart();
             resizeModalTableLens();
         }
     });
