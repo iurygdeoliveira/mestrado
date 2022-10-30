@@ -142,7 +142,7 @@
         option = {
             tooltip: {
                 trigger: 'item',
-                position: 'right'
+                position: 'left'
             },
             radar: {
                 indicator: [{
@@ -188,6 +188,6 @@
 
         //$('#pedaladas_barChart_card').show();
         console.groupEnd();
-        totalStorage(); // Monitorando Storage
+
     }
 </script>

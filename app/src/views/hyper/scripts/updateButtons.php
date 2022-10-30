@@ -33,14 +33,28 @@
 
     }
 
-    // function updateButtonMultivis() {
+    function updateButtonMultivis(update = false) {
 
-    //     let pedaladas_barChart = store.session.get('pedaladas_barChart');
+        let pedaladas_barChart = store.session.get('pedaladas_barChart');
 
-    //     if (pedaladas_barChart.length > 0) {
-    //         document.getElementById('buttonMultivis').disabled = false;
-    //     } else {
-    //         document.getElementById('buttonMultivis').disabled = true;
-    //     }
-    // }
+        if (pedaladas_barChart.length > 0) {
+            document.getElementById('buttonMultivis').disabled = false;
+        } else {
+            document.getElementById('buttonMultivis').disabled = true;
+        }
+
+        if (update != 'void') {
+
+            if (update == true) {
+                $('#buttonUpdateMultivis').show();
+                $('#buttonGenerateMultivis').hide();
+            }
+
+            if (update == false) {
+                $('#buttonUpdateMultivis').hide();
+                $('#buttonGenerateMultivis').show();
+            }
+
+        }
+    }
 </script>

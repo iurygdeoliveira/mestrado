@@ -11,5 +11,5 @@
     let maxZoom = 20;
     let map = false;
     const line_distance_color = 'rgb(50,50,50)';
-    let controlRuler = null;
+    let betweenPoints = null;
 </script>

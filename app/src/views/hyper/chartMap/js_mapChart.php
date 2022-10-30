@@ -52,51 +52,14 @@
             if (element.trim() == 'Distance') {
                 distance.addTo(map);
                 route.removeFrom(map);
-
-                if (controlRuler == null) {
-                    addControlRuler(map);
-                } else {
-                    controlRuler._container.hidden = false;
-                }
             }
 
             if (element.trim() == 'Route') {
                 route.addTo(map);
-                distance.removeFrom(map)
-                controlRuler._container.hidden = true;
+                distance.removeFrom(map);
             }
 
         });
-    }
-
-    function addControlRuler(map) {
-
-        var options = {
-            position: 'topright', // Leaflet control position option
-            circleMarker: { // Leaflet circle marker options for points used in this plugin
-                color: line_distance_color,
-                radius: 2
-            },
-            lineStyle: { // Leaflet polyline options for lines used in this plugin
-                color: line_distance_color,
-                dashArray: '1,6'
-            },
-            lengthUnit: { // You can use custom length units. Default unit is kilometers.
-                display: 'km', // This is the display value will be shown on the screen. Example: 'meters'
-                decimal: 2, // Distance result will be fixed to this value. 
-                factor: null, // This value will be used to convert from kilometers. Example: 1000 (from kilometers to meters)  
-                label: 'Distance:'
-            },
-            angleUnit: {
-                display: '&deg;', // This is the display value will be shown on the screen. Example: 'Gradian'
-                decimal: 2, // Bearing result will be fixed to this value.
-                factor: null, // This option is required to customize angle unit. Specify solid angle value for angle unit. Example: 400 (for gradian).
-                label: 'Bearing:'
-            }
-        };
-
-        controlRuler = L.control.ruler(options).addTo(map);
-
     }
 
     async function defineLayer(centerMap, zoom, route, distance) {
@@ -200,7 +163,66 @@
 
     }
 
+    async function mountPopup(pedalada_current) {
+        return `<b>Start</b><br>
+                Datetime: ${pedalada_current.datetime}<br>
+                Lat,Lon: ${pedalada_current.pointInitial}<br>
+                Avg Heartrate: ${pedalada_current.heartrate_AVG} bpm<br>
+                Distance: ${pedalada_current.distance} KM<br>
+                Avg Speed: ${pedalada_current.speed_AVG} KM/H<br>
+                Duration: ${pedalada_current.duration} <br>
+                Country: ${pedalada_current.country}<br>
+                Locality: ${pedalada_current.locality}
+                `
+    }
+
+    async function plotDistanceBetweenPoints(event, distance, points, content) {
+
+        let pointCurrent = [];
+
+        pointCurrent.push(event.latlng.lat);
+        pointCurrent.push(event.latlng.lng);
+
+        points = points.filter(
+            item => (
+                (item[0] != pointCurrent[0]) && (item[1] != pointCurrent[1])
+            )
+        );
+
+        betweenPoints = L.featureGroup();
+
+        L.tooltip(pointCurrent, {
+                direction: 'right',
+                offset: [10, 0]
+            })
+            .setContent(content)
+            .addTo(betweenPoints);
+
+        points.forEach(element => {
+            L.polyline([element, pointCurrent], {
+                color: line_distance_color,
+                weight: 1
+            }).addTo(betweenPoints);
+
+            L.tooltip(element, {
+                    direction: 'left',
+                    offset: [-10, 0]
+                })
+                .setContent("Distance KM")
+                .addTo(betweenPoints);
+
+        });
+
+        betweenPoints.addTo(distance);
+
+    }
+
     async function plotDistance(pedaladas_barChart, distance) {
+
+        let points = [];
+        pedaladas_barChart.forEach(element => {
+            points.push(element.pointInitial);
+        });
 
         const promisesPoints = pedaladas_barChart.map(async (pedalada_current, idx) => {
 
@@ -211,18 +233,17 @@
                     shape: "circle",
                     radius: 10
                 }).addTo(distance)
-                .bindPopup(
-                    `<b>Start</b><br>
-                Datetime: ${pedalada_current.datetime}<br>
-                Lat,Lon: ${pedalada_current.pointInitial}<br>
-                Avg Heartrate: ${pedalada_current.heartrate_AVG} bpm<br>
-                Distance: ${pedalada_current.distance} KM<br>
-                Avg Speed: ${pedalada_current.speed_AVG} KM/H<br>
-                Duration: ${pedalada_current.duration} <br>
-                Country: ${pedalada_current.country}<br>
-                Locality: ${pedalada_current.locality}
-                `
-                );
+                .on(
+                    'mouseover',
+                    async function(event) {
+                        plotDistanceBetweenPoints(
+                            event, distance, points,
+                            await mountPopup(pedalada_current)
+                        );
+                    })
+                .on('mouseout', function(event) {
+                    betweenPoints.removeFrom(distance);
+                });
         });
 
         await Promise.all(promisesPoints);

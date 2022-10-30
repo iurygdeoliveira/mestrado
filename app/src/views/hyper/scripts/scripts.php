@@ -11,6 +11,5 @@
 <script src="<?= js('leaflet.js') ?>"></script>
 <script src="<?= js('leaflet-svg-shape-markers.min.js') ?>"></script>
 <script src="<?= js('L.Path.DashFlow.js') ?>"></script>
-<script src="<?= js('leaflet-ruler.js') ?>"></script>
 <script src="<?= js('turf.min.js') ?>"></script>
 <script src="<?= js('dexie.min.js') ?>"></script>

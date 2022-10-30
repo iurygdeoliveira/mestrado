@@ -4,5 +4,5 @@
     // *********************************************
     store.session.set('pedaladas_barChart', []);
     pedaladas_barChart = [];
-    const adjustHeightBarChar = 40;
+    const adjustHeightBarChar = 62;
 </script>

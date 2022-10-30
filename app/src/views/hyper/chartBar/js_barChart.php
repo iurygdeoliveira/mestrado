@@ -33,9 +33,11 @@
 
     async function push_pedaladas_barChart(pedalada) {
 
+
         let pedalada_barChart = await mount_pedalada_barChart(pedalada);
 
         updateButtonSearchRiders(selected, false, true, false);
+
 
         let res = await storePedalada(pedalada_barChart);
 
@@ -53,7 +55,12 @@
         pedalada_barChart.centroid = res[0].centroid;
         store.session.add('pedaladas_barChart', pedalada_barChart);
         updateButtonSearchRiders(selected, true, false, false)
-        update_barChart();
+
+        if (store.session.get('pedaladas_barChart').length > 0) {
+            update_barChart(true);
+        } else {
+            update_barChart(false);
+        }
 
     }
 
@@ -61,10 +68,9 @@
 
         let pedalada_current = await mount_pedalada_barChart(pedal);
         let pedaladas = store.session.get('pedaladas_barChart');
-        console.log(pedalada_current, pedal);
         pedaladas = pedaladas.filter(item => item.id !== pedalada_current.id)
         store.session.set('pedaladas_barChart', pedaladas);
-        update_barChart();
+        update_barChart(true);
 
     }
 
@@ -72,7 +78,7 @@
 
         let heightChooseCyclist = $('#choose_cyclist').height();
         let heightSlider = $('#slider').height();
-        return parseInt(heightWindow - heightChooseCyclist - heightSlider);
+        return parseInt(heightWindow - heightChooseCyclist - heightSlider - heightMultiVis);
     }
 
     function removeBarChart() {
@@ -186,17 +192,19 @@
         });
     }
 
-    async function update_barChart() {
+    async function update_barChart(buttonMultivis = false) {
 
         console.group("BarChart ...");
         console.log("Atualizando BarChart ...");
         removeBarChart();
-        createBoxBarChart();
-        $('#pedaladas_barChart_card').show();
         console.groupEnd();
-        await create_BarChart().then(async () => {
-            await updateMapChart();
-            await updateRadarChart();
-        });
+
+        updateButtonMultivis(buttonMultivis);
+
+        if (store.session.get('pedaladas_barChart').length > 0) {
+            createBoxBarChart();
+            $('#pedaladas_barChart_card').show();
+            await create_BarChart();
+        }
     }
 </script>
