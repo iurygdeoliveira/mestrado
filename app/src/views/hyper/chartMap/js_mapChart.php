@@ -6,7 +6,6 @@
             .append('div')
             .attr("id", 'pedaladas_mapChart')
             .attr('class', 'p-0 m-0');
-        controlRuler = null;
     }
 
     function removeMapChart() {
@@ -62,36 +61,42 @@
         });
     }
 
-    async function defineLayer(centerMap, zoom, route, distance) {
+    function mountTile() {
 
-
-        var routeLayer = L.tileLayer(layerMap, {
+        return L.tileLayer(layerMap, {
             minZoom: minZoom,
             maxZoom: maxZoom,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         });
 
-        var distanceLayer = L.tileLayer(layerMap, {
-            minZoom: minZoom,
-            maxZoom: maxZoom,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        });
+    }
+
+    async function defineLayer(centerMap, zoom, route, distance, heatmap) {
+
+
+        var routeLayer = mountTile();
+        var distanceLayer = mountTile();
+        var heatmapLayer = mountTile();
+
 
         const baseLayers = {
             'Distance': distanceLayer,
-            'Route': routeLayer
+            'Route': routeLayer,
+            'Heatmap': heatmapLayer
         };
 
         map = L.map('pedaladas_mapChart', {
-            layers: [distanceLayer, routeLayer]
+            fullscreenControl: true,
+            layers: [distanceLayer, routeLayer, heatmapLayer]
         });
 
         var layerControl = L.control.layers(baseLayers, null).addTo(map);
-
         route.addTo(map);
+
         await changeView(route, distance, map);
 
         return map;
+
 
 
     }
@@ -144,9 +149,9 @@
                 shape: "triangle",
                 radius: 10
             }).addTo(route).bindPopup(
-                `<b>Start</b><br>
+                `<b>Finish</b><br>
                 Datetime: ${pedalada_current.datetime}<br>
-                Lat,Lon: ${pedalada_current.pointInitial}<br>
+                Lat,Lon: ${pedalada_current.pointFinal}<br>
                 Avg Heartrate: ${pedalada_current.heartrate_AVG} bpm<br>
                 Distance: ${pedalada_current.distance} KM<br>
                 Avg Speed: ${pedalada_current.speed_AVG} KM/H<br>
@@ -176,7 +181,8 @@
                 `
     }
 
-    async function plotDistanceBetweenPoints(event, distance, points, content) {
+
+    async function plotDistanceBetweenPoints(event, distance, points) {
 
         let pointCurrent = [];
 
@@ -191,26 +197,28 @@
 
         betweenPoints = L.featureGroup();
 
-        L.tooltip(pointCurrent, {
-                direction: 'right',
-                offset: [10, 0]
-            })
-            .setContent(content)
-            .addTo(betweenPoints);
-
         points.forEach(element => {
-            L.polyline([element, pointCurrent], {
+            let polyline = L.polyline([element, pointCurrent], {
                 color: line_distance_color,
-                weight: 1
-            }).addTo(betweenPoints);
+                weight: 1,
+                position: 'auto'
+            });
 
-            L.tooltip(element, {
-                    direction: 'left',
-                    offset: [-10, 0]
-                })
-                .setContent("Distance KM")
+            var point1 = turf.point(pointCurrent);
+            var point2 = turf.point(element);
+            var midpoint = turf.midpoint(point1, point2);
+
+            var from = turf.point(pointCurrent);
+            var to = turf.point(element);
+
+            var distancePolyline = turf.distance(from, to);
+
+            var tooltip = L.tooltip()
+                .setLatLng(midpoint.geometry.coordinates)
+                .setContent(distancePolyline.toFixed(2) + ' KM')
                 .addTo(betweenPoints);
 
+            polyline.addTo(betweenPoints);
         });
 
         betweenPoints.addTo(distance);
@@ -231,14 +239,13 @@
                     fillColor: pedalada_current.color_selected,
                     fillOpacity: 1,
                     shape: "circle",
-                    radius: 10
+                    radius: 5
                 }).addTo(distance)
                 .on(
                     'mouseover',
                     async function(event) {
                         plotDistanceBetweenPoints(
-                            event, distance, points,
-                            await mountPopup(pedalada_current)
+                            event, distance, points
                         );
                     })
                 .on('mouseout', function(event) {
@@ -257,15 +264,16 @@
         console.group("MapChart ...");
         console.log("Atualizando MapChart ...");
         resizeMapChart();
-        // Construindo camada route
+
+        let pedaladas = store.session.get('pedaladas_barChart');
         let route = L.featureGroup();
         let distance = L.featureGroup();
-        route = await plotLines(store.session.get('pedaladas_barChart'), route);
-        route = await plotMarkles(store.session.get('pedaladas_barChart'), route);
-        distance = await plotDistance(store.session.get('pedaladas_barChart'), distance);
-        let map = await defineLayer([0, 0], initialZoom, route, distance);
-        let centerMap = await calculateMapCenter(store.session.get('pedaladas_barChart'));
+        let heatmap = L.featureGroup();
+        route = await plotLines(pedaladas, route);
+        route = await plotMarkles(pedaladas, route);
+        distance = await plotDistance(pedaladas, distance);
+        let map = await defineLayer([0, 0], initialZoom, route, distance, heatmap);
+        let centerMap = await calculateMapCenter(pedaladas);
         console.groupEnd();
-        totalStorage(); // Monitorando Storage
     }
 </script>

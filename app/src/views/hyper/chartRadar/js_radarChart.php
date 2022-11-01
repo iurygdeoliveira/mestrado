@@ -130,6 +130,32 @@
             .style("height", heightRadarChart + 'px');
     }
 
+    async function defineMaxValues(dataset) {
+
+        let maxHeartrate = [];
+        let maxElevation = [];
+        let maxTemperature = [];
+        let maxSpeed = [];
+        let maxDuration = [];
+        let maxValues = [];
+        dataset.forEach(element => {
+            maxHeartrate.push(element.value[0]);
+            maxElevation.push(element.value[1]);
+            maxTemperature.push(element.value[2]);
+            maxSpeed.push(element.value[3]);
+            maxDuration.push(element.value[4]);
+        });
+
+        maxValues.push(
+            Math.ceil(Math.max(...maxHeartrate.map(item => item))),
+            Math.ceil(Math.max(...maxElevation.map(item => item))),
+            Math.ceil(Math.max(...maxTemperature.map(item => item))),
+            Math.ceil(Math.max(...maxSpeed.map(item => item))),
+            Math.ceil(Math.max(...maxDuration.map(item => item)))
+        );
+
+        return maxValues;
+    }
 
     async function create_RadarChart() {
 
@@ -139,6 +165,9 @@
         });
         var option;
 
+        let dataset = await mountDataSetsRadarChart(store.session.get('pedaladas_barChart'));
+        let maxValues = await defineMaxValues(dataset);
+
         option = {
             tooltip: {
                 trigger: 'item',
@@ -146,19 +175,24 @@
             },
             radar: {
                 indicator: [{
-                        name: 'Avg Heartrate (BPM)'
+                        name: 'Avg Heartrate (BPM)',
+                        max: maxValues[0]
                     },
                     {
-                        name: 'Avg Elevation (Meters)'
+                        name: 'Avg Elevation (Meters)',
+                        max: maxValues[1]
                     },
                     {
-                        name: 'Avg Temperature (ºC)'
+                        name: 'Avg Temperature (ºC)',
+                        max: maxValues[2]
                     },
                     {
-                        name: 'Avg Speed (KM/H)'
+                        name: 'Avg Speed (KM/H)',
+                        max: maxValues[3]
                     },
                     {
-                        name: 'Duration (Minutes)'
+                        name: 'Duration (Minutes)',
+                        max: maxValues[4]
                     }
                 ]
             },
@@ -167,10 +201,13 @@
                 emphasis: {
                     lineStyle: {
                         width: 4
+                    },
+                    areaStyle: {
+                        opacity: 0.5
                     }
                 },
                 // Heartrate, Elevation, Temperature, Speed, Duration
-                data: await mountDataSetsRadarChart(store.session.get('pedaladas_barChart'))
+                data: dataset
             }]
         };
 

@@ -5,7 +5,6 @@
     let heightWindow = $(window).height();
     let widthWindow = $(window).width();
     let widthSidebar = $('#contentSidebar').width();
-    let heightMultiVis = $('#buttonMultivis').height();
     let adjustHeightCharts = 1;
     d3.select('#contentSidebar').style('min-width', widthSidebar + 'px');
     let widthCharts = $('#contentCharts').width();
@@ -18,8 +17,8 @@
             widthCharts = $('#contentCharts').width();
             heightWindow = $(this).height();
 
-
             update_barChart('void');
+            //generateMultiVis();
             resizeModalTableLens();
         }
     });

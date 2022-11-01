@@ -18,12 +18,7 @@
     <link href="<?= css('jquery-ui.min.css') ?>" rel="stylesheet" type="text/css" />
     <link href="<?= css('jquery.tipsy.css') ?>" rel="stylesheet" type="text/css" />
     <link href="<?= css('leaflet.css') ?>" rel="stylesheet" type="text/css" />
-
-    <style>
-        .modal-backdrop {
-            z-index: 2;
-        }
-    </style>
+    <link href="<?= css('leaflet.fullscreen.css') ?>" rel="stylesheet" type="text/css" />
 
 </head>
 

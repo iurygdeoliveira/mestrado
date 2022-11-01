@@ -78,6 +78,7 @@
 
         let heightChooseCyclist = $('#choose_cyclist').height();
         let heightSlider = $('#slider').height();
+        let heightMultiVis = $('#buttonMultivis').height();
         return parseInt(heightWindow - heightChooseCyclist - heightSlider - heightMultiVis);
     }
 
@@ -130,7 +131,7 @@
         return background;
     }
 
-    function updateCacheBarChart(rider) {
+    function updateCacheBarChart(rider, buttonMultivis) {
 
         let pedaladas_barChart = store.session.get('pedaladas_barChart');
 
@@ -140,7 +141,7 @@
             pedaladas_barChart = pedaladas_barChart.filter(item => item.rider !== rider)
             store.session.set('pedaladas_barChart', pedaladas_barChart);
             console.log(pedaladas_barChart);
-            update_barChart();
+            update_barChart(buttonMultivis);
         }
     }
 

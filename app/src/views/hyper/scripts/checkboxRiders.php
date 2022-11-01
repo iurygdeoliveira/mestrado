@@ -75,7 +75,7 @@
         if ($this.is(':not(:checked)')) {
             selected = arrayRemove(selected, $this.attr("name"))
             updateSlider(selected);
-            updateCacheBarChart($this.attr("name"))
+            updateCacheBarChart($this.attr("name"), true)
             getColor($(this));
             updatePedaladasClicked();
             updateButtonSearchRiders(selected, false, true, false);
