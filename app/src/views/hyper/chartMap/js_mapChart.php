@@ -306,6 +306,7 @@
         route = await plotMarkles(pedaladas, route);
         distance = await plotDistance(pedaladas, distance);
         heatmap = await plotHeatmap(pedaladas, heatmap);
+
         let map = await defineLayer([0, 0], initialZoom, route, distance, heatmap);
         let centerMap = await calculateMapCenter(pedaladas);
 

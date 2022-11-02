@@ -101,7 +101,6 @@
 
     }
 
-
     async function mountDataSetsRadarChart(pedaladas_barChart) {
 
         console.log("Montando dataset RadarChart ...");
