@@ -40,22 +40,30 @@
         return map;
     }
 
-    async function changeView(route, distance, map) {
+    async function changeView(route, distance, heatmap, map) {
 
         $("#pedaladas_mapChart").click(function(event) {
 
             //console.log(event);
             let element = new String(event.target.innerHTML);
-            //console.log(element.trim());
+            console.log(element.trim());
 
             if (element.trim() == 'Distance') {
                 distance.addTo(map);
                 route.removeFrom(map);
+                heatmap.removeFrom(map);
             }
 
             if (element.trim() == 'Route') {
                 route.addTo(map);
                 distance.removeFrom(map);
+                heatmap.removeFrom(map);
+            }
+
+            if (element.trim() == 'Heatmap') {
+                heatmap.addTo(map);
+                distance.removeFrom(map);
+                route.removeFrom(map);
             }
 
         });
@@ -78,26 +86,23 @@
         var distanceLayer = mountTile();
         var heatmapLayer = mountTile();
 
-
         const baseLayers = {
-            'Distance': distanceLayer,
+            'Heatmap': heatmapLayer,
             'Route': routeLayer,
-            'Heatmap': heatmapLayer
+            'Distance': distanceLayer
         };
 
         map = L.map('pedaladas_mapChart', {
             fullscreenControl: true,
-            layers: [distanceLayer, routeLayer, heatmapLayer]
+            layers: [heatmapLayer, routeLayer, distanceLayer]
         });
 
         var layerControl = L.control.layers(baseLayers, null).addTo(map);
-        route.addTo(map);
+        heatmap.addTo(map);
 
-        await changeView(route, distance, map);
+        await changeView(route, distance, heatmap, map);
 
         return map;
-
-
 
     }
 
@@ -259,6 +264,32 @@
 
     }
 
+    async function convertToObjectLatLng(points) {
+
+        latlng = [];
+
+        points.forEach(element => {
+            latlng.push(L.latLng(element));
+        });
+
+        return latlng;
+    }
+
+    async function plotHeatmap(pedaladas_barChart, heatmap) {
+
+        let heat;
+        const promisesPoints = pedaladas_barChart.map(async (pedalada_current, idx) => {
+
+            heat = L.heatLayer(await convertToObjectLatLng(pedalada_current.points));
+
+            heat.addTo(heatmap);
+        });
+
+        await Promise.all(promisesPoints);
+
+        return heatmap;
+    }
+
     async function updateMapChart() {
 
         console.group("MapChart ...");
@@ -266,13 +297,15 @@
         resizeMapChart();
 
         let pedaladas = store.session.get('pedaladas_barChart');
+
         let route = L.featureGroup();
         let distance = L.featureGroup();
         let heatmap = L.featureGroup();
+
         route = await plotLines(pedaladas, route);
         route = await plotMarkles(pedaladas, route);
         distance = await plotDistance(pedaladas, distance);
-        distance = await plotHeatmap(pedaladas, distance);
+        heatmap = await plotHeatmap(pedaladas, heatmap);
         let map = await defineLayer([0, 0], initialZoom, route, distance, heatmap);
         let centerMap = await calculateMapCenter(pedaladas);
 
