@@ -272,8 +272,45 @@
         route = await plotLines(pedaladas, route);
         route = await plotMarkles(pedaladas, route);
         distance = await plotDistance(pedaladas, distance);
+        distance = await plotHeatmap(pedaladas, distance);
         let map = await defineLayer([0, 0], initialZoom, route, distance, heatmap);
         let centerMap = await calculateMapCenter(pedaladas);
+
+        // map.on('baselayerchange', function(event) {
+
+        //     if (event.name == 'Distance') {
+
+        //         L.Control.MyControl = L.Control.extend({
+        //             onAdd: function(map) {
+
+        //                 var el = L.DomUtil.create('div', 'leaflet-bar my-control');
+        //                 el.innerHTML = 'Cyclist 1';
+        //                 return el;
+        //             },
+
+        //             onRemove: function(map) {
+        //                 map.on('baselayerchange', function(event) {
+
+        //                     if (event.name = 'Route') {
+        //                         console.log('apagar');
+        //                     }
+        //                 })
+        //             }
+        //         });
+
+        //         L.control.myControl = function(opts) {
+        //             return new L.Control.MyControl(opts);
+        //         }
+
+        //         L.control.myControl({
+        //             position: 'topright'
+        //         }).addTo(map);
+
+        //         var Layer = mountTile();
+        //         Layer.addTo(map);
+
+        //     }
+        // });
         console.groupEnd();
     }
 </script>

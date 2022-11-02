@@ -20,6 +20,18 @@
     <link href="<?= css('leaflet.css') ?>" rel="stylesheet" type="text/css" />
     <link href="<?= css('leaflet.fullscreen.css') ?>" rel="stylesheet" type="text/css" />
 
+    <!-- <style>
+        .leaflet-bar {
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+            border-radius: 5px;
+        }
+
+        .my-control {
+            background: #fff;
+            padding: 5px;
+        }
+    </style> -->
+
 </head>
 
 <body class="loading" data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
