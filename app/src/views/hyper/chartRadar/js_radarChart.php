@@ -26,7 +26,6 @@
 
     async function formatValues(pedalada) {
 
-        //let result = await getRecord(pedalada);
         // heartrate, elevation, distance, duration, speed
         return [
             pedalada.heartrate_AVG,

@@ -90,6 +90,7 @@
             disabledCheckBox();
         } else {
             enableCheckBox();
+            enableTipsyTooltip('#search_rides', 'right');
         }
 
         if (selected.length <= 0) {

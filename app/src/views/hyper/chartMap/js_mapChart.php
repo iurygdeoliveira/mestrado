@@ -40,34 +40,6 @@
         return map;
     }
 
-    async function changeView(route, distance, heatmap, map) {
-
-        $("#pedaladas_mapChart").click(function(event) {
-
-            //console.log(event);
-            let element = new String(event.target.innerHTML);
-            console.log(element.trim());
-
-            if (element.trim() == 'Distance') {
-                distance.addTo(map);
-                route.removeFrom(map);
-                heatmap.removeFrom(map);
-            }
-
-            if (element.trim() == 'Route') {
-                route.addTo(map);
-                distance.removeFrom(map);
-                heatmap.removeFrom(map);
-            }
-
-            if (element.trim() == 'Heatmap') {
-                heatmap.addTo(map);
-                distance.removeFrom(map);
-                route.removeFrom(map);
-            }
-
-        });
-    }
 
     function mountTile() {
 
@@ -79,7 +51,84 @@
 
     }
 
-    async function defineLayer(centerMap, zoom, route, distance, heatmap) {
+    async function addLayerDistance(map, route, distance, heatmap) {
+
+        var stateChangingButton = L.easyButton({
+            states: [{
+                stateName: 'see-distances', // name the state
+                icon: 'mdi mdi-18px mdi-map-marker-distance', // and define its properties
+                title: 'See distances', // like its title
+                onClick: function(btn, map) { // and its callback
+                    distance.addTo(map);
+                    route.removeFrom(map);
+                    heatmap.removeFrom(map);
+                    btn.state('see-distances'); // change state on click!
+                }
+            }]
+        });
+
+        stateChangingButton.addTo(map);
+    }
+
+    async function addLayerRoute(map, route, distance, heatmap) {
+
+        var stateChangingButton = L.easyButton({
+            states: [{
+                stateName: 'see-routes', // name the state
+                icon: 'mdi mdi-18px mdi-map-marker-path', // and define its properties
+                title: 'See Routes', // like its title
+                onClick: function(btn, map) { // and its callback
+                    route.addTo(map);
+                    distance.removeFrom(map);
+                    heatmap.removeFrom(map);
+                    btn.state('see-routes'); // change state on click!
+                }
+            }]
+        });
+
+        stateChangingButton.addTo(map);
+    }
+
+    async function addLayerHeatmap(map, route, distance, heatmap) {
+
+        var stateChangingButton = L.easyButton({
+            states: [{
+                stateName: 'see-heatmap', // name the state
+                icon: 'mdi mdi-18px mdi-temperature-celsius', // and define its properties
+                title: 'See Heatmap', // like its title
+                onClick: function(btn, map) { // and its callback
+                    heatmap.addTo(map);
+                    distance.removeFrom(map);
+                    route.removeFrom(map);
+                    btn.state('see-heatmap'); // change state on click!
+                }
+            }]
+        });
+
+        stateChangingButton.addTo(map);
+    }
+
+    async function enableTooltipMap() {
+
+        await enableTipsyTooltip(
+            ".easy-button-button.leaflet-bar-part.leaflet-interactive",
+            'right'
+        );
+        await enableTipsyTooltip(
+            ".leaflet-control-fullscreen-button.leaflet-bar-part",
+            'right'
+        );
+        await enableTipsyTooltip(
+            ".leaflet-control-zoom-in",
+            'right'
+        );
+        await enableTipsyTooltip(
+            ".leaflet-control-zoom-out",
+            'right'
+        );
+    }
+
+    async function defineLayer(route, distance, heatmap, pedaladas) {
 
 
         var routeLayer = mountTile();
@@ -87,20 +136,20 @@
         var heatmapLayer = mountTile();
 
         const baseLayers = {
-            'Heatmap': heatmapLayer,
+            'Distance': distanceLayer,
             'Route': routeLayer,
-            'Distance': distanceLayer
+            'Heatmap': heatmapLayer
         };
 
         map = L.map('pedaladas_mapChart', {
             fullscreenControl: true,
-            layers: [heatmapLayer, routeLayer, distanceLayer]
+            layers: [distanceLayer, routeLayer, heatmapLayer]
         });
 
-        var layerControl = L.control.layers(baseLayers, null).addTo(map);
-        heatmap.addTo(map);
-
-        await changeView(route, distance, heatmap, map);
+        await addLayerHeatmap(map, route, distance, heatmap);
+        await addLayerRoute(map, route, distance, heatmap);
+        await addLayerDistance(map, route, distance, heatmap);
+        await enableTooltipMap();
 
         return map;
 
@@ -306,45 +355,9 @@
         route = await plotMarkles(pedaladas, route);
         distance = await plotDistance(pedaladas, distance);
         heatmap = await plotHeatmap(pedaladas, heatmap);
-
-        let map = await defineLayer([0, 0], initialZoom, route, distance, heatmap);
+        let map = await defineLayer(route, distance, heatmap, pedaladas);
         let centerMap = await calculateMapCenter(pedaladas);
 
-        // map.on('baselayerchange', function(event) {
-
-        //     if (event.name == 'Distance') {
-
-        //         L.Control.MyControl = L.Control.extend({
-        //             onAdd: function(map) {
-
-        //                 var el = L.DomUtil.create('div', 'leaflet-bar my-control');
-        //                 el.innerHTML = 'Cyclist 1';
-        //                 return el;
-        //             },
-
-        //             onRemove: function(map) {
-        //                 map.on('baselayerchange', function(event) {
-
-        //                     if (event.name = 'Route') {
-        //                         console.log('apagar');
-        //                     }
-        //                 })
-        //             }
-        //         });
-
-        //         L.control.myControl = function(opts) {
-        //             return new L.Control.MyControl(opts);
-        //         }
-
-        //         L.control.myControl({
-        //             position: 'topright'
-        //         }).addTo(map);
-
-        //         var Layer = mountTile();
-        //         Layer.addTo(map);
-
-        //     }
-        // });
         console.groupEnd();
     }
 </script>

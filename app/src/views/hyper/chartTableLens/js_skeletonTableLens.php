@@ -87,7 +87,7 @@
             }
         });
 
-        await enableTooltipsLine();
+        await enableTipsyTooltip("[line_clicked]", 'bottom-center');
 
         updateButtonSearchRiders(selected, true, false, false)
 

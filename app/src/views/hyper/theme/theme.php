@@ -19,8 +19,9 @@
     <link href="<?= css('jquery.tipsy.css') ?>" rel="stylesheet" type="text/css" />
     <link href="<?= css('leaflet.css') ?>" rel="stylesheet" type="text/css" />
     <link href="<?= css('leaflet.fullscreen.css') ?>" rel="stylesheet" type="text/css" />
+    <link href="<?= css('leaflet-easy-button.css') ?>" rel="stylesheet" type="text/css" />
 
-    <!-- <style>
+    <style>
         .leaflet-bar {
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
             border-radius: 5px;
@@ -30,7 +31,7 @@
             background: #fff;
             padding: 5px;
         }
-    </style> -->
+    </style>
 
 </head>
 
