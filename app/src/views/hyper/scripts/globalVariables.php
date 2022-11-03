@@ -18,7 +18,7 @@
             heightWindow = $(this).height();
 
             update_barChart('void');
-            //generateMultiVis();
+            generateMultiVis();
             resizeModalTableLens();
         }
     });

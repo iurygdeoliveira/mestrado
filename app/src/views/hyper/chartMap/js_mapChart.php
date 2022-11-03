@@ -6,6 +6,7 @@
             .append('div')
             .attr("id", 'pedaladas_mapChart')
             .attr('class', 'p-0 m-0');
+        calculateMapCenter(store.session.get('pedaladas_barChart'));
     }
 
     function removeMapChart() {
@@ -68,6 +69,7 @@
         });
 
         stateChangingButton.addTo(map);
+
     }
 
     async function addLayerRoute(map, route, distance, heatmap) {
@@ -146,6 +148,7 @@
             layers: [distanceLayer, routeLayer, heatmapLayer]
         });
 
+        heatmap.addTo(map);
         await addLayerHeatmap(map, route, distance, heatmap);
         await addLayerRoute(map, route, distance, heatmap);
         await addLayerDistance(map, route, distance, heatmap);
@@ -235,13 +238,27 @@
                 `
     }
 
-
     async function plotDistanceBetweenPoints(event, distance, points) {
 
         let pointCurrent = [];
 
+        if (betweenPointsGroup != null) {
+            betweenPointsGroup.removeFrom(distance);
+            betweenPointsGroup = null;
+        }
+
+        betweenPointsGroup = L.featureGroup();
+
         pointCurrent.push(event.latlng.lat);
         pointCurrent.push(event.latlng.lng);
+
+        L.shapeMarker(pointCurrent, {
+            color: line_distance_color,
+            fillOpacity: 0,
+            shape: "circle",
+            radius: 11
+        }).addTo(betweenPointsGroup);
+        betweenPointsGroup.addTo(distance);
 
         points = points.filter(
             item => (
@@ -249,14 +266,14 @@
             )
         );
 
-        betweenPoints = L.featureGroup();
-
+        // Plotando distancias
         points.forEach(element => {
+
             let polyline = L.polyline([element, pointCurrent], {
                 color: line_distance_color,
-                weight: 1,
-                position: 'auto'
-            });
+                weight: 1
+            }).addTo(betweenPointsGroup);
+            betweenPointsGroup.addTo(distance);
 
             var point1 = turf.point(pointCurrent);
             var point2 = turf.point(element);
@@ -264,19 +281,14 @@
 
             var from = turf.point(pointCurrent);
             var to = turf.point(element);
-
             var distancePolyline = turf.distance(from, to);
 
-            var tooltip = L.tooltip()
+            var popupMap = L.popup()
                 .setLatLng(midpoint.geometry.coordinates)
                 .setContent(distancePolyline.toFixed(2) + ' KM')
-                .addTo(betweenPoints);
-
-            polyline.addTo(betweenPoints);
+                .addTo(betweenPointsGroup);
+            betweenPointsGroup.addTo(distance);
         });
-
-        betweenPoints.addTo(distance);
-
     }
 
     async function plotDistance(pedaladas_barChart, distance) {
@@ -288,23 +300,20 @@
 
         const promisesPoints = pedaladas_barChart.map(async (pedalada_current, idx) => {
 
-            var square = L.shapeMarker(pedalada_current.pointInitial, {
+            L.shapeMarker(pedalada_current.pointInitial, {
                     color: pedalada_current.color_selected,
                     fillColor: pedalada_current.color_selected,
                     fillOpacity: 1,
                     shape: "circle",
-                    radius: 5
+                    radius: 6
                 }).addTo(distance)
                 .on(
-                    'mouseover',
+                    'click',
                     async function(event) {
                         plotDistanceBetweenPoints(
                             event, distance, points
                         );
-                    })
-                .on('mouseout', function(event) {
-                    betweenPoints.removeFrom(distance);
-                });
+                    });
         });
 
         await Promise.all(promisesPoints);
@@ -344,6 +353,11 @@
         console.group("MapChart ...");
         console.log("Atualizando MapChart ...");
         resizeMapChart();
+
+        if (betweenPointsGroup != null) {
+            betweenPointsGroup.removeFrom(distance);
+            betweenPointsGroup = null;
+        }
 
         let pedaladas = store.session.get('pedaladas_barChart');
 
