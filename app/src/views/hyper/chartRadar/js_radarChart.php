@@ -1,16 +1,4 @@
 <script>
-    // async function time_in_hours(time) {
-
-    //     let hours = time.split(':');
-    //     hours[0] = parseInt(hours[0]);
-    //     hours[1] = parseInt(hours[1]);
-    //     hours[2] = parseInt(hours[2]);
-
-    //     hours[0] += parseFloat(hours[1] / 60);
-    //     hours[0] += parseFloat(hours[2] / 3600);
-    //     return parseFloat(hours[0].toFixed(2));
-
-    // }
     async function time_in_minutes(time) {
 
         let minutes = time.split(':');
@@ -36,10 +24,10 @@
         ];
     }
 
-    async function mountValues(pedaladas_barChart) {
+    async function mountValues(pedaladas) {
 
         let values = [];
-        const promisesValues = pedaladas_barChart.map(async (pedalada, idx) => {
+        const promisesValues = pedaladas.map(async (pedalada, idx) => {
             values.push({
                 'rider': pedalada.rider,
                 'values': await formatValues(pedalada)
@@ -100,23 +88,17 @@
 
     }
 
-    async function mountDataSetsRadarChart(pedaladas_barChart) {
+    async function mountDataSetsRadarChart(pedaladas) {
 
         console.log("Montando dataset RadarChart ...");
 
-        let values = await mountValues(pedaladas_barChart)
+        let values = await mountValues(pedaladas)
         return await mountAverage(values);
     }
-
 
     async function removeRadarChart() {
 
         d3.select('#pedaladas_radarChart').remove();
-    }
-
-    async function calculateHeightRadarChart() {
-
-        return parseInt(heightWindow / 2);
     }
 
     async function resizeRadarChart() {
@@ -158,15 +140,24 @@
     async function create_RadarChart() {
 
         var chartDom = document.getElementById('pedaladas_radarChart');
-        var myChart = echarts.init(chartDom, null, {
+        var myChart = await echarts.init(chartDom, null, {
             renderer: 'svg'
         });
         var option;
 
-        let dataset = await mountDataSetsRadarChart(store.session.get('pedaladas_barChart'));
+        let dataset = await mountDataSetsRadarChart(pedaladas_barChart);
         let maxValues = await defineMaxValues(dataset);
 
         option = {
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: {
+                        readOnly: false
+                    },
+                    saveAsImage: {}
+                }
+            },
             tooltip: {
                 trigger: 'item',
                 position: 'left'
@@ -177,7 +168,7 @@
                         max: maxValues[0]
                     },
                     {
-                        name: 'Avg Elevation (Meters)',
+                        name: 'Avg Elevation',
                         max: maxValues[1]
                     },
                     {
@@ -189,7 +180,7 @@
                         max: maxValues[3]
                     },
                     {
-                        name: 'Duration (Minutes)',
+                        name: 'Duration (Min)',
                         max: maxValues[4]
                     }
                 ]
@@ -217,11 +208,8 @@
         console.group("RadarChart ...");
         console.log("Atualizando RadarChart ...");
 
-        await removeRadarChart();
         await resizeRadarChart();
         await create_RadarChart();
-
-        //$('#pedaladas_barChart_card').show();
         console.groupEnd();
 
     }

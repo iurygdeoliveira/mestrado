@@ -19,6 +19,7 @@
 <?php $this->insert("../scripts/enableTooltips") ?>
 <?php $this->insert("../chartMap/js_mapChart") ?>
 <?php $this->insert("../chartRadar/js_radarChart") ?>
+<?php $this->insert("../chartStream/js_streamChart") ?>
 <?php $this->insert("../chartBar/js_barChart") ?>
 <?php $this->insert("../scripts/generateMultiVis") ?>
 <?php $this->insert("../scripts/totalStorage") ?>

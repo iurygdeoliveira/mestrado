@@ -25,8 +25,11 @@
                         'distance_history,' +
                         'elevation_history,' +
                         'heartrate_history,' +
+                        'heartrate_stream,' +
+                        'heartrate_stream_max,' +
                         'speed_history,' +
-                        'time_history'
+                        'time_history,' +
+                        'minute_history'
                 });
                 db.open();
             }

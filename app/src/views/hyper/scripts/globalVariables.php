@@ -11,7 +11,7 @@
     console.log("Altura Janela: ", heightWindow, "Largura Janela: ", widthWindow);
     $(window).on('resize', function() {
 
-        if (store.session.get('pedaladas_barChart').length > 0) {
+        if (pedaladas_barChart.length > 0) {
             widthWindow = $(this).width();
             widthSidebar = $('#contentSidebar').width();
             widthCharts = $('#contentCharts').width();
@@ -47,6 +47,6 @@
     const darkPurple = 'rgb(83, 11, 142)'; // hsl(273, 86%, 30%)
 </script>
 <?php $this->insert("../scripts/cachePedaladas") ?>
-<?php $this->insert("../chartTableLens/variables_TableLens") ?>
 <?php $this->insert("../chartBar/variables_BarChart") ?>
+<?php $this->insert("../chartTableLens/variables_TableLens") ?>
 <?php $this->insert("../chartMap/variables_MapChart") ?>

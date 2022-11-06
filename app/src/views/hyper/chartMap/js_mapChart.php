@@ -4,22 +4,20 @@
         removeMapChart();
         d3.select('#mapChart').style('height', heightMapChart + 'px')
             .append('div')
-            .attr("id", 'pedaladas_mapChart')
-            .attr('class', 'p-0 m-0');
-        calculateMapCenter(store.session.get('pedaladas_barChart'));
+            .attr("id", 'pedaladas_mapChart');
     }
 
     function removeMapChart() {
         d3.select('#pedaladas_mapChart').remove();
     }
 
-    async function calculateMapCenter(pedaladas_barChart) {
+    async function calculateMapCenter(pedaladas) {
 
         console.log("Calculando map center ...");
         let centroids = [];
         let bounds;
 
-        const promises = pedaladas_barChart.map(async (pedalada_current, idx) => {
+        const promises = pedaladas.map(async (pedalada_current, idx) => {
             centroids.push(pedalada_current.centroid);
         });
 
@@ -158,10 +156,10 @@
 
     }
 
-    async function plotLines(pedaladas_barChart, route) {
+    async function plotLines(pedaladas, route) {
 
         let polyline;
-        const promises = pedaladas_barChart.map(async (pedalada_current, idx) => {
+        const promises = pedaladas.map(async (pedalada_current, idx) => {
             polyline = L.polyline(pedalada_current.points, {
                 color: pedalada_current.color_selected,
                 dashArray: "10 10",
@@ -174,10 +172,9 @@
         return route;
     }
 
+    async function plotMarkles(pedaladas, route) {
 
-    async function plotMarkles(pedaladas_barChart, route) {
-
-        const promises = pedaladas_barChart.map(async (pedalada_current, idx) => {
+        const promises = pedaladas.map(async (pedalada_current, idx) => {
 
             var square = L.shapeMarker(pedalada_current.pointInitial, {
                     color: pedalada_current.color_selected,
@@ -291,14 +288,14 @@
         });
     }
 
-    async function plotDistance(pedaladas_barChart, distance) {
+    async function plotDistance(pedaladas, distance) {
 
         let points = [];
-        pedaladas_barChart.forEach(element => {
+        pedaladas.forEach(element => {
             points.push(element.pointInitial);
         });
 
-        const promisesPoints = pedaladas_barChart.map(async (pedalada_current, idx) => {
+        const promisesPoints = pedaladas.map(async (pedalada_current, idx) => {
 
             L.shapeMarker(pedalada_current.pointInitial, {
                     color: pedalada_current.color_selected,
@@ -333,10 +330,10 @@
         return latlng;
     }
 
-    async function plotHeatmap(pedaladas_barChart, heatmap) {
+    async function plotHeatmap(pedaladas, heatmap) {
 
         let heat;
-        const promisesPoints = pedaladas_barChart.map(async (pedalada_current, idx) => {
+        const promisesPoints = pedaladas.map(async (pedalada_current, idx) => {
 
             heat = L.heatLayer(await convertToObjectLatLng(pedalada_current.points));
 
@@ -352,25 +349,23 @@
 
         console.group("MapChart ...");
         console.log("Atualizando MapChart ...");
-        resizeMapChart();
+        await resizeMapChart();
 
         if (betweenPointsGroup != null) {
             betweenPointsGroup.removeFrom(distance);
             betweenPointsGroup = null;
         }
 
-        let pedaladas = store.session.get('pedaladas_barChart');
-
         let route = L.featureGroup();
         let distance = L.featureGroup();
         let heatmap = L.featureGroup();
 
-        route = await plotLines(pedaladas, route);
-        route = await plotMarkles(pedaladas, route);
-        distance = await plotDistance(pedaladas, distance);
-        heatmap = await plotHeatmap(pedaladas, heatmap);
-        let map = await defineLayer(route, distance, heatmap, pedaladas);
-        let centerMap = await calculateMapCenter(pedaladas);
+        route = await plotLines(pedaladas_barChart, route);
+        route = await plotMarkles(pedaladas_barChart, route);
+        distance = await plotDistance(pedaladas_barChart, distance);
+        heatmap = await plotHeatmap(pedaladas_barChart, heatmap);
+        let map = await defineLayer(route, distance, heatmap, pedaladas_barChart);
+        let centerMap = await calculateMapCenter(pedaladas_barChart);
 
         console.groupEnd();
     }

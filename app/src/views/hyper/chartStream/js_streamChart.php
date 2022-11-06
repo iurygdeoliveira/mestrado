@@ -1,59 +1,257 @@
 <script>
-    var chartDom = document.getElementById('main');
-    var myChart = echarts.init(chartDom, null, {
-        renderer: 'svg'
-    });
-    var option;
+    async function resizeStreamChart() {
 
-    option = {
-        title: {
-            show: true,
-            text: 'Heartrate'
-        },
-        legend: {
-            data: ['DQ', 'TY'],
-            align: 'auto'
-        },
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'cross',
-                lineStyle: {
-                    color: 'rgba(0,0,0,0.2)',
-                    width: 1
-                }
-            }
-        },
-        singleAxis: {
-            top: 0,
-            bottom: 400, // height chart
-            splitLine: {
+        let heightStreamChart = parseInt(heightWindow / 3) - adjustHeightCharts;
+        removeStreamChart();
+        d3.select('#streamHeartrate')
+            .append('div')
+            .attr("id", 'pedaladas_heartrate')
+            .style("height", heightStreamChart + 'px');
+
+        d3.select('#streamElevation')
+            .append('div')
+            .attr("id", 'pedaladas_elevation')
+            .style("height", heightStreamChart + 'px');
+
+        d3.select('#streamSpeed')
+            .append('div')
+            .attr("id", 'pedaladas_Speed')
+            .style("height", heightStreamChart + 'px');
+    }
+
+    async function removeStreamChart() {
+
+        d3.select('#pedaladas_heartrate').remove();
+        d3.select('#pedaladas_elevation').remove();
+        d3.select('#pedaladas_speed').remove();
+
+    }
+
+    async function create_StreamChart(stream, title, legends, color, data, max) {
+
+        var chartDom = document.getElementById(stream);
+        var myChart = await echarts.init(chartDom, null, {
+            renderer: 'svg'
+        });
+        var option;
+
+        option = {
+            animation: true,
+            toolbox: {
                 show: true,
-                lineStyle: {
-                    type: 'dashed',
-                    opacity: 0.2
+                feature: {
+                    dataView: {
+                        readOnly: false
+                    },
+                    restore: {},
+                    saveAsImage: {}
                 }
-            }
-        },
-        color: ['rgb(211, 69, 90)', 'rgb(44, 136, 216)'],
-        series: [{
-            type: 'themeRiver',
-            label: {
-                show: false
             },
-            selectedMode: 'series',
-            data: [
-                [0, 0, 'DQ'],
-                [1, 1, 'DQ'],
-                [1.5, 50, 'DQ'],
-                [2, 10, 'DQ'],
-                [0, 0, 'TY'],
-                [1, 36, 'TY'],
-                [2, 3, 'TY'],
-                [4, 100, 'TY']
-            ]
-        }]
-    };
+            dataZoom: [{
+                type: 'inside', // this dataZoom component is dataZoom component of slider
+                startValue: 0
+            }],
+            tooltip: {
+                trigger: 'axis',
+                triggerOn: "mousemove",
+                alwaysShowContent: true,
+                axisPointer: {
+                    type: 'cross',
+                    lineStyle: {
+                        width: 2,
+                        type: 'solid'
+                    }
+                },
+                position: function(pt) {
+                    return [pt[0], pt[1]];
+                },
 
-    option && myChart.setOption(option);
+                formatter: function(params) {
+                    let text = '';
+                    let linebreak = 1
+                    params.forEach(element => {
+                        text +=
+                            ` ${element.marker} 
+                            ${element.value[0]} min | 
+                            ${element.value[1]} bpm&nbsp&nbsp`;
+
+                        linebreak += 1;
+
+                        if (linebreak > 2) {
+                            text += '<br>';
+                            linebreak = 1
+                        }
+                    });
+                    return text;
+                },
+                textStyle: {
+                    fontSize: 10,
+                    fontWeight: 'bold'
+                }
+            },
+            title: {
+                show: true,
+                text: `${title}: 0 to ${max} (bpm)`
+            },
+            singleAxis: {
+                type: 'value',
+                max: 'dataMax',
+                axisPointer: {
+                    snap: true,
+                    label: {
+                        show: true,
+                        formatter: function(params) {
+                            return echarts.format.addCommas(params.value);
+                        }
+                    },
+                    handle: {
+                        show: true
+                    }
+                },
+                top: 12,
+                bottom: 40,
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        type: 'solid',
+                        opacity: 1
+                    }
+                }
+            },
+            color: color,
+            series: [{
+                type: 'themeRiver',
+                data: data,
+                label: {
+                    show: false
+                },
+                emphasis: {
+                    disabled: true
+                }
+            }]
+        };
+
+        option && await myChart.setOption(option);
+    }
+
+    async function sortStream() {
+
+        let pedaladasGrouped = [];
+        // Ordenando pedaladas
+        for (let count = 0; count < selected.length; count++) {
+            pedaladasGrouped.push(pedaladas_barChart.filter(item => item.rider == selected[count]));
+        }
+
+        let pedalSort = [];
+        pedaladasGrouped.forEach(group => {
+            group.forEach(pedal => {
+                pedalSort.push(pedal);
+            });
+        });
+
+        return pedalSort;
+    }
+
+    async function mountLegend(pedalSort) {
+
+        let legend = [];
+        let label;
+        pedalSort.forEach(element => {
+            label = element.id.split("_");
+            legend.push('p' + label[2]);
+        });
+
+        return legend;
+    }
+
+    async function mountColor(pedalSort) {
+
+        let colorStream = [];
+        pedalSort.forEach(element => {
+            colorStream.push(element.color_selected);
+        });
+        return colorStream;
+    }
+
+    async function mountDataStream(pedalSort, type) {
+
+        let data = [];
+        let max = 0;
+
+        if (type == 'heartrate') {
+
+            pedalSort.forEach(element => {
+                data = data.concat(element.heartrate_stream);
+
+                if (element.heartrate_stream_max > max) {
+                    max = element.heartrate_stream_max;
+                }
+
+            });
+        }
+
+        if (type == 'elevation') {
+            pedalSort.forEach(element => {
+                data = data.concat(element.elevation_stream);
+            });
+        }
+
+        if (type == 'speed') {
+            pedalSort.forEach(element => {
+                data = data.concat(element.speed_stream);
+            });
+        }
+
+        return {
+            'max': max,
+            'data': data
+        };
+    }
+
+    async function updateStreamChart() {
+
+        console.group("StreamChart ...");
+        console.log("Atualizando StreamChart ...");
+
+        await resizeStreamChart();
+        let pedalSort = await sortStream();
+
+        console.log(pedalSort);
+
+        let legends = await mountLegend(pedalSort);
+        let colorStream = await mountColor(pedalSort);
+        let heartData = await mountDataStream(pedalSort, 'heartrate');
+        // let elevationData = await mountDataStream(pedalSort, 'elevation');
+        //let speedData = await mountDataStream(pedalSort, 'speed');
+
+        console.log(heartData);
+        //console.log(elevationData);
+        //console.log(speedData);
+
+        await create_StreamChart(
+            'pedaladas_heartrate',
+            'Heartrate',
+            legends,
+            colorStream,
+            heartData.data,
+            heartData.max
+        );
+
+        // await create_StreamChart(
+        //     'pedaladas_elevation',
+        //     'Elevation',
+        //     legends,
+        //     colorStream,
+        //     elevationData
+        // );
+
+        // await create_StreamChart(
+        //     'pedaladas_speed',
+        //     'Speed',
+        //     legends,
+        //     colorStream,
+        //     speedData
+        // );
+        console.groupEnd();
+    }
 </script>

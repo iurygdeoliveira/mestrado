@@ -1,7 +1,7 @@
 <script>
     function has_pedaladas_barChart() {
 
-        if (store.session.get('pedaladas_barChart').length > 0) {
+        if (pedaladas_barChart.length > 0) {
             return true;
         } else {
             return false;
@@ -12,51 +12,69 @@
     async function mount_pedalada_barChart(pedalada) {
 
         return {
-            'id': d3.select(pedalada).attr('id'),
-            'rider': d3.select(pedalada).attr('rider'),
-            'line_clicked': d3.select(pedalada).attr('line_clicked'),
+            'centroid': null,
             'color_selected': d3.select(pedalada).attr('color_selected'),
-            'style': d3.select(pedalada).attr('style'),
+            'country': null,
+            'datetime': null,
             'distance': parseFloat(d3.select(pedalada).attr('distance')),
+            'distance_history': null,
+            'duration': null,
+            'elevation_AVG': null,
+            'elevation_history': null,
+            'heartrate_AVG': null,
+            'heartrate_history': null,
+            'heartrate_stream': null,
+            'heartrate_stream_max': null,
+            'id': d3.select(pedalada).attr('id'),
+            'line_clicked': d3.select(pedalada).attr('line_clicked'),
+            'locality': null,
+            'minute_history': null,
+            'pedal_id': null,
             'pointInitial': null,
             'pointFinal': null,
             'points': null,
-            'datetime': null,
-            'heartrate_AVG': null,
+            'rider': d3.select(pedalada).attr('rider'),
             'speed_AVG': null,
-            'duration': null,
-            'country': null,
-            'centroid': null
-
+            'speed_history': null,
+            'style': d3.select(pedalada).attr('style'),
+            'temperature_AVG': null,
+            'time_history': null
         };
     }
 
     async function push_pedaladas_barChart(pedalada) {
 
 
-        let pedalada_barChart = await mount_pedalada_barChart(pedalada);
+        let push_barChart = await mount_pedalada_barChart(pedalada);
 
         updateButtonSearchRiders(selected, false, true, false);
 
+        let res = await storePedalada(push_barChart);
 
-        let res = await storePedalada(pedalada_barChart);
+        push_barChart.pointInitial = res[0].pointInitial;
+        push_barChart.pointFinal = res[0].pointFinal;
+        push_barChart.points = res[0].points;
+        push_barChart.heartrate_AVG = res[0].heartrate_AVG;
+        push_barChart.speed_AVG = res[0].speed_AVG;
+        push_barChart.elevation_AVG = res[0].elevation_AVG;
+        push_barChart.temperature_AVG = res[0].temperature_AVG;
+        push_barChart.duration = res[0].duration;
+        push_barChart.datetime = res[0].datetime;
+        push_barChart.country = res[0].country;
+        push_barChart.locality = res[0].locality;
+        push_barChart.centroid = res[0].centroid;
+        push_barChart.elevation_history = res[0].elevation_history;
+        push_barChart.heartrate_history = res[0].heartrate_history;
+        push_barChart.heartrate_stream = res[0].heartrate_stream;
+        push_barChart.heartrate_stream_max = res[0].heartrate_stream_max;
+        push_barChart.speed_history = res[0].speed_history;
+        push_barChart.minute_history = res[0].minute_history;
 
-        pedalada_barChart.pointInitial = res[0].pointInitial;
-        pedalada_barChart.pointFinal = res[0].pointFinal;
-        pedalada_barChart.points = res[0].points;
-        pedalada_barChart.heartrate_AVG = res[0].heartrate_AVG;
-        pedalada_barChart.speed_AVG = res[0].speed_AVG;
-        pedalada_barChart.elevation_AVG = res[0].elevation_AVG;
-        pedalada_barChart.temperature_AVG = res[0].temperature_AVG;
-        pedalada_barChart.duration = res[0].duration;
-        pedalada_barChart.datetime = res[0].datetime;
-        pedalada_barChart.country = res[0].country;
-        pedalada_barChart.locality = res[0].locality;
-        pedalada_barChart.centroid = res[0].centroid;
-        store.session.add('pedaladas_barChart', pedalada_barChart);
+        pedaladas_barChart.push(push_barChart);
+
         updateButtonSearchRiders(selected, true, false, false)
 
-        if (store.session.get('pedaladas_barChart').length > 0) {
+        if (pedaladas_barChart.length > 0) {
             update_barChart(true);
         } else {
             update_barChart(false);
@@ -67,9 +85,7 @@
     async function remove_pedaladas_barChart(pedal) {
 
         let pedalada_current = await mount_pedalada_barChart(pedal);
-        let pedaladas = store.session.get('pedaladas_barChart');
-        pedaladas = pedaladas.filter(item => item.id !== pedalada_current.id)
-        store.session.set('pedaladas_barChart', pedaladas);
+        pedaladas_barChart = pedaladas_barChart.filter(item => item.id !== pedalada_current.id);
         update_barChart(true);
 
     }
@@ -100,7 +116,6 @@
 
     function mountLabels() {
 
-        let pedaladas_barChart = store.session.get('pedaladas_barChart');
         let labels = [];
         pedaladas_barChart.forEach(element => {
             labels.push('');
@@ -111,7 +126,6 @@
 
     function mountDistances() {
 
-        let pedaladas_barChart = store.session.get('pedaladas_barChart');
         let distances = [];
         pedaladas_barChart.forEach(element => {
             distances.push(element.distance);
@@ -122,7 +136,6 @@
 
     function mountBackgroundColor() {
 
-        let pedaladas_barChart = store.session.get('pedaladas_barChart');
         let background = [];
         pedaladas_barChart.forEach(element => {
             background.push(element.color_selected);
@@ -133,14 +146,10 @@
 
     function updateCacheBarChart(rider, buttonMultivis) {
 
-        let pedaladas_barChart = store.session.get('pedaladas_barChart');
-
         if (pedaladas_barChart.length > 0) {
 
-            //console.log("pedaladas barchart", pedaladas_barChart);
             pedaladas_barChart = pedaladas_barChart.filter(item => item.rider !== rider)
-            store.session.set('pedaladas_barChart', pedaladas_barChart);
-            console.log(pedaladas_barChart);
+
             update_barChart(buttonMultivis);
         }
     }
@@ -178,7 +187,7 @@
                             label: function(context) {
                                 let label = context.dataset.label || '';
                                 if (context.parsed.y !== null) {
-                                    let pedaladas_barChart_tooltip = store.session.get('pedaladas_barChart');
+                                    let pedaladas_barChart_tooltip = pedaladas_barChart;
                                     let tooltip = pedaladas_barChart_tooltip.find(x => x.distance === context.parsed.y);
                                     label += tooltip.distance.toFixed(2) + ' KM';
                                 }
@@ -202,7 +211,7 @@
 
         updateButtonMultivis(buttonMultivis);
 
-        if (store.session.get('pedaladas_barChart').length > 0) {
+        if (pedaladas_barChart.length > 0) {
             createBoxBarChart();
             $('#pedaladas_barChart_card').show();
             await create_BarChart();

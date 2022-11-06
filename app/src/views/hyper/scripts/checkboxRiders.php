@@ -95,7 +95,7 @@
 
         if (selected.length <= 0) {
             removeBarChart();
-            store.session.set('pedaladas_barChart', []);
+            pedaladas_barChart = [];
             pedaladas_red_clicadas = 0;
             pedaladas_blue_clicadas = 0;
             pedaladas_yellow_clicadas = 0;

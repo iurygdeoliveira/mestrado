@@ -127,9 +127,7 @@
 
     function applyStateBarChar(rider) {
 
-        let pedaladas_box = store.session.get('pedaladas_barChart');
-
-        pedaladas_box.forEach(element => {
+        pedaladas_barChart.forEach(element => {
 
             d3.select('#' + element.id)
                 .attr("line_clicked", element.line_clicked)
@@ -145,7 +143,7 @@
         });
 
         if (switchToggle == 'overview') {
-            let box = extractBox(pedaladas_box, rider);
+            let box = extractBox(pedaladas_barChart, rider);
             if (box.length > 0) {
                 let element = box[0];
                 let parent = $("#" + element.id).parent().attr('id');
