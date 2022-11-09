@@ -233,12 +233,12 @@
         let legends = await mountLegend(pedalSort);
         let colorStream = await mountColor(pedalSort);
         let heartData = await mountDataStream(pedalSort, 'heartrate');
-        let elevationData = await mountDataStream(pedalSort, 'elevation');
-        let speedData = await mountDataStream(pedalSort, 'speed');
+        //let elevationData = await mountDataStream(pedalSort, 'elevation');
+        //let speedData = await mountDataStream(pedalSort, 'speed');
 
         console.log(heartData);
-        console.log(elevationData);
-        console.log(speedData);
+        //console.log(elevationData);
+        //console.log(speedData);
 
         await create_StreamChart(
             'pedaladas_heartrate',
@@ -250,25 +250,25 @@
             heartData.max
         );
 
-        await create_StreamChart(
-            'pedaladas_elevation',
-            'Elevation',
-            'meters',
-            legends,
-            colorStream,
-            elevationData.data,
-            elevationData.max
-        );
+        // await create_StreamChart(
+        //     'pedaladas_elevation',
+        //     'Elevation',
+        //     'meters',
+        //     legends,
+        //     colorStream,
+        //     elevationData.data,
+        //     elevationData.max
+        // );
 
-        await create_StreamChart(
-            'pedaladas_speed',
-            'Speed',
-            'KM/H',
-            legends,
-            colorStream,
-            speedData.data,
-            speedData.max,
-        );
+        // await create_StreamChart(
+        //     'pedaladas_speed',
+        //     'Speed',
+        //     'KM/H',
+        //     legends,
+        //     colorStream,
+        //     speedData.data,
+        //     speedData.max,
+        // );
         console.groupEnd();
     }
 </script>

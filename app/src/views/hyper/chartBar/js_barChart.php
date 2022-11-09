@@ -81,32 +81,6 @@
 
         pedaladas_barChart.push(push_barChart);
 
-
-        let sum = 0;
-        let meter = 0;
-        let position = [];
-        position.push(0);
-        let average = [];
-        let idx1 = 0;
-        let idx2 = 0;
-
-        for (; idx2 < res[0].distance_history.length; idx2++) {
-
-            sum += res[0].distance_history[idx2];
-            meter = sum * 1000;
-
-            if (meter >= 48) {
-                average.push({
-                    'distance': meter,
-                    'idx1': idx1,
-                    'idx2': idx2,
-                });
-                idx1 = idx2 + 1;
-                sum = 0;
-            }
-        }
-
-        console.log(average);
         updateButtonSearchRiders(selected, true, false, false)
 
         if (pedaladas_barChart.length > 0) {

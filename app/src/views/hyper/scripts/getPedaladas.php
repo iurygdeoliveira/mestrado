@@ -92,38 +92,80 @@
 
     }
 
-    async function createStream(time, attribute, pedal_id, avg) {
 
+    async function smooth(data, attribute) {
+
+
+
+    }
+
+    async function creatSegment(distance_history) {
+
+        let sum = 0;
+        let meter = 0;
+        let position = [];
+        position.push(0);
+        let segment = [];
+        let idx1 = 0;
+        let idx2 = 0;
+
+        for (; idx2 < distance_history.length; idx2++) {
+
+            sum += distance_history[idx2];
+            meter = sum * 1000;
+
+            if (meter >= 48) {
+                segment.push({
+                    'distance': meter,
+                    'idx1': idx1,
+                    'idx2': idx2,
+                });
+                idx1 = idx2 + 1;
+                sum = 0;
+            }
+        }
+
+        return segment;
+
+    }
+
+    async function createStream(segment, attribute, pedal_id, avg) {
 
         let stream = [];
-        let minute_history = time.minute_history;
-        let position = time.position;
         let max = 0;
+        let scale = 0;
+        let subarray;
 
-        for (let index = 0; index < minute_history.length; index++) {
+        console.log(segment);
+        console.log(attribute);
+        for (let index = 0; index < segment.length; index++, scale += 50) {
 
-            if (typeof attribute[position[index]] == 'number') {
-                stream.push(
-                    [
-                        minute_history[index],
-                        attribute[position[index]],
-                        pedal_id
-                    ]
-                );
+            if (segment[index].idx1 == segment[index].idx2) {
 
-                if (attribute[position[index]] > max) {
-                    max = attribute[position[index]];
-                }
+                subarray = segment[index].idx1;
 
             } else {
 
-                if (avg > max) {
-                    max = avg;
-                }
-                console.log(attribute[position[index]]);
-                stream.push([minute_history[index], avg, pedal_id]);
+                subarray = attribute.slice(
+                    segment[index].idx1,
+                    segment[index].idx2 + 1
+                );
             }
 
+            console.log(subarray);
+            let avg = math.mean(subarray);
+
+            stream.push(
+                [
+                    scale,
+                    avg,
+                    pedal_id
+                ]
+            );
+
+            if (avg > max) {
+                max = avg;
+            }
         }
 
         return {
@@ -157,14 +199,15 @@
                         console.groupEnd();
                         await getPedaladaGithub(pedalada.rider, pedalada.id).then(async (res) => {
 
-                            let minute_history = await convertTime(res[4].time_history.split('|'));
+                            let distance_history = await convertStringData(res[0].distance_history)
+                            let segment = await creatSegment(distance_history);
 
                             let heartrate_history = await convertStringData(res[2].heartrate_history);
                             let avg_heartrate = await parseFloat(
                                 limitTamString(res[7].heartrate_avg, 10)
                             );
                             let heartrateStream = await createStream(
-                                minute_history,
+                                segment,
                                 heartrate_history,
                                 pedalada.id,
                                 avg_heartrate);
@@ -173,21 +216,21 @@
                             let avg_elevation = await parseFloat(
                                 parseFloat(limitTamString(res[7].elevation_google, 10))
                             );
-                            let elevationStream = await createStream(
-                                minute_history,
-                                elevation_history,
-                                pedalada.id,
-                                avg_elevation);
+                            // let elevationStream = await createStream(
+                            //     minute_history,
+                            //     elevation_history,
+                            //     pedalada.id,
+                            //     avg_elevation);
 
                             let speed_history = await convertStringData(res[3].speed_history);
                             let avg_speed = await parseFloat(
                                 parseFloat(limitTamString(res[7].speed_avg, 10))
                             );
-                            let speedStream = await createStream(
-                                minute_history,
-                                speed_history,
-                                pedalada.id,
-                                avg_speed);
+                            // let speedStream = await createStream(
+                            //     minute_history,
+                            //     speed_history,
+                            //     pedalada.id,
+                            //     avg_speed);
 
                             await db.table('pedaladas').add({
                                 rider: pedalada.rider,
@@ -205,18 +248,18 @@
                                 pointInitial: await convertStringData(res[7].coordinateInicial),
                                 pointFinal: await convertStringData(res[7].coordinateFinal),
                                 points: await convertPoints(res[5].latitudes, res[6].longitudes),
-                                distance_history: await convertStringData(res[0].distance_history),
+                                distance_history: distance_history,
                                 elevation_history: elevation_history,
-                                elevation_stream_max: elevationStream.max,
-                                elevation_stream: elevationStream.stream,
+                                elevation_stream_max: null, //elevationStream.max,
+                                elevation_stream: null, //elevationStream.stream,
                                 heartrate_history: heartrate_history,
                                 heartrate_stream_max: heartrateStream.max,
                                 heartrate_stream: heartrateStream.stream,
                                 speed_history: speed_history,
-                                speed_stream_max: speedStream.max,
-                                speed_stream: speedStream.stream,
+                                speed_stream_max: null, //speedStream.max,
+                                speed_stream: null, //speedStream.stream,
                                 time_history: res[4].time_history.split('|'),
-                                minute_history: minute_history
+                                minute_history: await convertTime(res[4].time_history.split('|'))
                             });
                         });
                         return await getPedaladaDB(db, pedalada);

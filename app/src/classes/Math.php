@@ -51,6 +51,26 @@ class Math
     }
 
     /**
+     *multiplica dois números usando Decimal/Decimal.
+     *
+     *@param string num1 O primeiro número a ser somado.
+     *@param string num2 O segundo número a ser somado.
+     *@param int precision O número de casas decimais para arredondar.
+     *
+     *@return string O resultado da soma dos dois números.
+     */
+    public static function mul(string|int $num1, string|int $num2, int $precision = 0)
+    {
+        $num1 = new Decimal($num1);
+        $num2 = new Decimal($num2);
+
+        if ($precision) {
+            return $num1->mul($num2)->toFixed($precision);
+        }
+        return $num1->mul($num2)->__toString();
+    }
+
+    /**
      *Divide dois números usando Decimal/Decimal.
      *
      *@param string num1 O primeiro número a ser dividido.

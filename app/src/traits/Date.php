@@ -48,4 +48,15 @@ trait Date
 
         return $interval->format($differenceFormat);
     }
+
+    public function timeToHours(string $time): float
+    {
+
+        $aux = explode(":", $time);
+        $aux[0] = floatval($aux[0]);
+        $aux[1] = floatval($aux[1]) / 60;
+        $aux[2] = floatval($aux[2]) / 3600;
+
+        return $aux[0] + $aux[1] + $aux[2];
+    }
 }
