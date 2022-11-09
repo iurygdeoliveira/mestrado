@@ -24,10 +24,14 @@
                         'points,' +
                         'distance_history,' +
                         'elevation_history,' +
+                        'elevation_stream,' +
+                        'elevation_stream_max,' +
                         'heartrate_history,' +
                         'heartrate_stream,' +
                         'heartrate_stream_max,' +
                         'speed_history,' +
+                        'speed_stream,' +
+                        'speed_stream_max,' +
                         'time_history,' +
                         'minute_history'
                 });

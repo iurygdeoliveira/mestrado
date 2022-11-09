@@ -158,24 +158,45 @@
                         await getPedaladaGithub(pedalada.rider, pedalada.id).then(async (res) => {
 
                             let minute_history = await convertTime(res[4].time_history.split('|'));
-                            console.log(minute_history);
+
                             let heartrate_history = await convertStringData(res[2].heartrate_history);
-                            let avg_heartrate = await parseFloat(limitTamString(res[7].heartrate_avg, 10));
+                            let avg_heartrate = await parseFloat(
+                                limitTamString(res[7].heartrate_avg, 10)
+                            );
                             let heartrateStream = await createStream(
                                 minute_history,
                                 heartrate_history,
                                 pedalada.id,
                                 avg_heartrate);
 
-                            console.log(heartrateStream);
+                            let elevation_history = await convertStringData(res[1].elevation_google);
+                            let avg_elevation = await parseFloat(
+                                parseFloat(limitTamString(res[7].elevation_google, 10))
+                            );
+                            let elevationStream = await createStream(
+                                minute_history,
+                                elevation_history,
+                                pedalada.id,
+                                avg_elevation);
+
+                            let speed_history = await convertStringData(res[3].speed_history);
+                            let avg_speed = await parseFloat(
+                                parseFloat(limitTamString(res[7].speed_avg, 10))
+                            );
+                            let speedStream = await createStream(
+                                minute_history,
+                                speed_history,
+                                pedalada.id,
+                                avg_speed);
+
                             await db.table('pedaladas').add({
                                 rider: pedalada.rider,
                                 pedal_id: pedalada.id,
                                 datetime: res[7].datetime,
                                 country: res[7].country,
                                 locality: res[7].locality,
-                                elevation_AVG: parseFloat(limitTamString(res[7].elevation_google, 10)),
-                                speed_AVG: parseFloat(limitTamString(res[7].speed_avg, 10)),
+                                elevation_AVG: avg_elevation,
+                                speed_AVG: avg_speed,
                                 temperature_AVG: parseFloat(limitTamString(res[7].temperature_avg, 10)),
                                 heartrate_AVG: avg_heartrate,
                                 duration: res[7].duration,
@@ -185,11 +206,15 @@
                                 pointFinal: await convertStringData(res[7].coordinateFinal),
                                 points: await convertPoints(res[5].latitudes, res[6].longitudes),
                                 distance_history: await convertStringData(res[0].distance_history),
-                                elevation_history: await convertStringData(res[1].elevation_google),
+                                elevation_history: elevation_history,
+                                elevation_stream_max: elevationStream.max,
+                                elevation_stream: elevationStream.stream,
                                 heartrate_history: heartrate_history,
                                 heartrate_stream_max: heartrateStream.max,
                                 heartrate_stream: heartrateStream.stream,
-                                speed_history: await convertStringData(res[3].speed_history),
+                                speed_history: speed_history,
+                                speed_stream_max: speedStream.max,
+                                speed_stream: speedStream.stream,
                                 time_history: res[4].time_history.split('|'),
                                 minute_history: minute_history
                             });

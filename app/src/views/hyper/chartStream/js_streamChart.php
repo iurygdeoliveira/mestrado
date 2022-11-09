@@ -15,7 +15,7 @@
 
         d3.select('#streamSpeed')
             .append('div')
-            .attr("id", 'pedaladas_Speed')
+            .attr("id", 'pedaladas_speed')
             .style("height", heightStreamChart + 'px');
     }
 
@@ -27,7 +27,7 @@
 
     }
 
-    async function create_StreamChart(stream, title, legends, color, data, max) {
+    async function create_StreamChart(stream, title, scale, legends, color, data, max) {
 
         var chartDom = document.getElementById(stream);
         var myChart = await echarts.init(chartDom, null, {
@@ -53,8 +53,9 @@
             }],
             tooltip: {
                 trigger: 'axis',
-                triggerOn: "mousemove",
+                triggerOn: "none",
                 alwaysShowContent: true,
+                enterable: true,
                 axisPointer: {
                     type: 'cross',
                     lineStyle: {
@@ -73,7 +74,7 @@
                         text +=
                             ` ${element.marker} 
                             ${element.value[0]} min | 
-                            ${element.value[1]} bpm&nbsp&nbsp`;
+                            ${element.value[1]} bpm&nbsp;&nbsp;`;
 
                         linebreak += 1;
 
@@ -91,7 +92,7 @@
             },
             title: {
                 show: true,
-                text: `${title}: 0 to ${max} (bpm)`
+                text: `${title}: 0 to ${max} (${scale})`
             },
             singleAxis: {
                 type: 'value',
@@ -193,17 +194,28 @@
         if (type == 'elevation') {
             pedalSort.forEach(element => {
                 data = data.concat(element.elevation_stream);
+
+                if (element.elevation_stream_max > max) {
+                    max = element.elevation_stream_max;
+                }
+
             });
         }
 
         if (type == 'speed') {
+
             pedalSort.forEach(element => {
                 data = data.concat(element.speed_stream);
+
+                if (element.speed_stream_max > max) {
+                    max = element.speed_stream_max;
+                }
+
             });
         }
 
         return {
-            'max': max,
+            'max': parseInt(max),
             'data': data
         };
     }
@@ -221,37 +233,42 @@
         let legends = await mountLegend(pedalSort);
         let colorStream = await mountColor(pedalSort);
         let heartData = await mountDataStream(pedalSort, 'heartrate');
-        // let elevationData = await mountDataStream(pedalSort, 'elevation');
-        //let speedData = await mountDataStream(pedalSort, 'speed');
+        let elevationData = await mountDataStream(pedalSort, 'elevation');
+        let speedData = await mountDataStream(pedalSort, 'speed');
 
         console.log(heartData);
-        //console.log(elevationData);
-        //console.log(speedData);
+        console.log(elevationData);
+        console.log(speedData);
 
         await create_StreamChart(
             'pedaladas_heartrate',
             'Heartrate',
+            'bpm',
             legends,
             colorStream,
             heartData.data,
             heartData.max
         );
 
-        // await create_StreamChart(
-        //     'pedaladas_elevation',
-        //     'Elevation',
-        //     legends,
-        //     colorStream,
-        //     elevationData
-        // );
+        await create_StreamChart(
+            'pedaladas_elevation',
+            'Elevation',
+            'meters',
+            legends,
+            colorStream,
+            elevationData.data,
+            elevationData.max
+        );
 
-        // await create_StreamChart(
-        //     'pedaladas_speed',
-        //     'Speed',
-        //     legends,
-        //     colorStream,
-        //     speedData
-        // );
+        await create_StreamChart(
+            'pedaladas_speed',
+            'Speed',
+            'KM/H',
+            legends,
+            colorStream,
+            speedData.data,
+            speedData.max,
+        );
         console.groupEnd();
     }
 </script>

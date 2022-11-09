@@ -21,6 +21,8 @@
             'duration': null,
             'elevation_AVG': null,
             'elevation_history': null,
+            'elevation_stream': null,
+            'elevation_stream_max': null,
             'heartrate_AVG': null,
             'heartrate_history': null,
             'heartrate_stream': null,
@@ -36,10 +38,13 @@
             'rider': d3.select(pedalada).attr('rider'),
             'speed_AVG': null,
             'speed_history': null,
+            'speed_stream': null,
+            'speed_stream_max': null,
             'style': d3.select(pedalada).attr('style'),
             'temperature_AVG': null,
             'time_history': null
         };
+
     }
 
     async function push_pedaladas_barChart(pedalada) {
@@ -64,14 +69,44 @@
         push_barChart.locality = res[0].locality;
         push_barChart.centroid = res[0].centroid;
         push_barChart.elevation_history = res[0].elevation_history;
+        push_barChart.elevation_stream = res[0].elevation_stream;
+        push_barChart.elevation_stream_max = res[0].elevation_stream_max;
         push_barChart.heartrate_history = res[0].heartrate_history;
         push_barChart.heartrate_stream = res[0].heartrate_stream;
         push_barChart.heartrate_stream_max = res[0].heartrate_stream_max;
+        push_barChart.speed_stream = res[0].speed_stream;
+        push_barChart.speed_stream_max = res[0].speed_stream_max;
         push_barChart.speed_history = res[0].speed_history;
         push_barChart.minute_history = res[0].minute_history;
 
         pedaladas_barChart.push(push_barChart);
 
+
+        let sum = 0;
+        let meter = 0;
+        let position = [];
+        position.push(0);
+        let average = [];
+        let idx1 = 0;
+        let idx2 = 0;
+
+        for (; idx2 < res[0].distance_history.length; idx2++) {
+
+            sum += res[0].distance_history[idx2];
+            meter = sum * 1000;
+
+            if (meter >= 48) {
+                average.push({
+                    'distance': meter,
+                    'idx1': idx1,
+                    'idx2': idx2,
+                });
+                idx1 = idx2 + 1;
+                sum = 0;
+            }
+        }
+
+        console.log(average);
         updateButtonSearchRiders(selected, true, false, false)
 
         if (pedaladas_barChart.length > 0) {

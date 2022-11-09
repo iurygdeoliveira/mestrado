@@ -16,3 +16,4 @@
 <script src="<?= js('leaflet-easy-button.js') ?>"></script>
 <script src="<?= js('turf.min.js') ?>"></script>
 <script src="<?= js('dexie.min.js') ?>"></script>
+<script src="<?= js('math.js') ?>"></script>
