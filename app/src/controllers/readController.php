@@ -30,8 +30,8 @@ class readController extends Controller
 
     public function __construct()
     {
-        $this->view = new View(__DIR__, get_class($this));
-        $this->riders = $this->totalRiders();
+        //$this->view = new View(__DIR__, get_class($this));
+        //$this->riders = $this->totalRiders();
     }
 
     public function totalRiders()
@@ -126,6 +126,40 @@ class readController extends Controller
             'heartrate_avg' => $heartrate[0],
             'temperature_avg' => $data->temperature_avg,
             'trackpoints' => $data->total_trackpoints
+        ];
+
+        $result = $this->createJsonFile($directoryPedal . 'overview', $record);
+
+        if (is_numeric($result)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function fixOverview(string $directoryPedal, stdClass $data)
+    {
+
+        $record = [
+            'pedal' => $data->pedal,
+            'path' => $data->path,
+            'creator' => $data->creator,
+            'coordinateInicial' => $data->coordinateInicial,
+            'coordinateFinal' => $data->coordinateFinal,
+            'country' => $data->country,
+            'locality' => $data->locality,
+            'centroid' => $data->centroid,
+            'bbox' => $data->bbox,
+            'datetime' => $data->datetime,
+            'duration' => $data->duration,
+            'distance' => $data->distance,
+            'elevation_gps' => $data->elevation_gps,
+            'elevation_google' => $data->elevation_google,
+            'elevation_bing' => $data->elevation_bing,
+            'speed_avg' => $data->speed_avg,
+            'heartrate_avg' => $data->heartrate_avg,
+            'temperature_avg' => $data->temperature_avg,
+            'trackpoints' => $data->trackpoints
         ];
 
         $result = $this->createJsonFile($directoryPedal . 'overview', $record);
@@ -297,7 +331,6 @@ class readController extends Controller
         $pedal = $this->getFileNames(CONF_JSON_CYCLIST . $request->cyclist);
 
         // Fix value
-
         foreach ($pedal as $key => $file) {
 
             if ($file != 'all_distances.json') {
@@ -419,6 +452,370 @@ class readController extends Controller
         return $this->responseJson(true, "dados corrigidos", $outliers);
     }
 
+    public function fixHeartrate()
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+        $outliers = [];
+
+        $pedal = $this->getFileNames(CONF_JSON_CYCLIST . $request->cyclist);
+
+        // Fix value
+
+        foreach ($pedal as $key => $file) {
+
+            if ($file != 'all_distances.json') {
+
+
+                // Obtendo overview
+                $path =
+                    $request->cyclist .
+                    DIRECTORY_SEPARATOR .
+                    $file .
+                    DIRECTORY_SEPARATOR .
+                    'overview.json';
+
+                $overview = json_decode($this->readJsonFile(CONF_JSON_CYCLIST, $path));
+                $heartrateAvg = new Decimal($overview->heartrate_avg);
+
+                if ($heartrateAvg->compareTo(200) > 0) {
+                    $outlier = new stdClass();
+                    $outlier->file = $request->cyclist . DIRECTORY_SEPARATOR . $file;
+                    $outlier->heartrateAVG = $heartrateAvg->toFloat();
+                    array_push($outliers, $outlier);
+                }
+            }
+        }
+
+        return $this->responseJson(true, "dados corrigidos", $outliers);
+    }
+
+    public function fixID()
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+        $outliers = [];
+
+        $pedal = $this->getFileNames(CONF_JSON_CYCLIST . $request->cyclist);
+
+        // Fix value
+
+        foreach ($pedal as $key => $file) {
+
+            if ($file != 'all_distances.json') {
+
+
+                // Obtendo overview
+                $path =
+                    $request->cyclist .
+                    DIRECTORY_SEPARATOR .
+                    $file .
+                    DIRECTORY_SEPARATOR .
+                    'overview.json';
+
+                $overview = json_decode($this->readJsonFile(CONF_JSON_CYCLIST, $path));
+                $overview->pedal = $key;
+                $this->fixOverview(
+                    CONF_JSON_CYCLIST .
+                        $request->cyclist .
+                        DIRECTORY_SEPARATOR .
+                        $file .
+                        DIRECTORY_SEPARATOR,
+                    $overview
+                );
+            }
+        }
+
+        return $this->responseJson(true, "dados corrigidos", null);
+    }
+
+    public function readAttribute($cyclist, $path, $file)
+    {
+
+        $read =
+            $cyclist .
+            DIRECTORY_SEPARATOR .
+            $path .
+            DIRECTORY_SEPARATOR .
+            $file .
+            ".json";
+
+        $object = json_decode($this->readJsonFile(CONF_JSON_CYCLIST, $read));
+        return explode("|", $object->$file);
+    }
+
+    public function negativeTrackpoints(
+        Decimal $trackpoint,
+        int $idx,
+        string $file,
+        array $attribute,
+        int &$count
+    ) {
+
+        $object = new stdClass();
+
+        if ($trackpoint->isNegative()) {
+
+            $object->idx = $idx;
+            $object->pedal = $file;
+            $object->trackpoint = $attribute[$idx];
+            $count++;
+            return $object;
+        }
+        return null;
+    }
+
+    public function above(
+        Decimal $trackpoint,
+        int $idx,
+        string $file,
+        array $attribute,
+        int &$count,
+        string $value,
+        string $avg
+    ) {
+
+        $object = new stdClass();
+
+
+        if ($trackpoint->compareTo($value) >= 1) {
+
+            $object->idx = $idx;
+            $object->pedal = $file;
+            $object->trackpoint = $attribute[$idx];
+            $object->avg_by_trackpoint = $avg;
+            $count++;
+            return $object;
+        }
+        return null;
+    }
+
+    public function timeOutlier(int $idx, string $file, array $attribute, int &$count)
+    {
+
+        if (isset($attribute[$idx + 1])) {
+            $time1 = $this->timeToHours($attribute[$idx]);
+            $time2 = $this->timeToHours($attribute[$idx + 1]);
+
+            if ($time1 > $time2) {
+
+                $object = new stdClass();
+                $object->idx = $idx;
+                $object->time1 = $attribute[$idx];
+                $object->time2 = $attribute[$idx + 1];
+                $object->pedal = $file;
+                $count++;
+                return $object;
+            }
+        }
+        return null;
+    }
+
+
+    public function findOutliers()
+    {
+
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
+        // Obtendo dados da requisição
+
+        $geral = [];
+        for ($i = 1; $i <= 19; $i++) {
+
+            $request = new stdClass();
+            $request->cyclist = "Cyclist_$i";
+            $pedal = $this->getFileNames(CONF_JSON_CYCLIST . $request->cyclist);
+            $outliers = [];
+            $result = [];
+            foreach ($pedal as $key => $file) {
+
+                if ($file != 'all_distances.json') {
+
+                    //$attribute = $this->readAttribute($request->cyclist, $file, 'speed_history');
+                    $attribute = $this->readAttribute($request->cyclist, $file, 'distance_history');
+                    //$attribute = $this->readAttribute($request->cyclist, $file, 'heartrate_history');
+                    //$attribute = $this->readAttribute($request->cyclist, $file, 'elevation_google');
+                    //$attribute = $this->readAttribute($request->cyclist, $file, 'time_history');
+
+                    // Obtendo overview
+                    $path =
+                        $request->cyclist .
+                        DIRECTORY_SEPARATOR .
+                        $file .
+                        DIRECTORY_SEPARATOR .
+                        'overview.json';
+
+                    $overview = json_decode($this->readJsonFile(CONF_JSON_CYCLIST, $path));
+
+                    $trackpointOutlier = [];
+                    $count = 0;
+                    for ($idx = 0; $idx < count($attribute); $idx++) {
+
+                        $trackpoints = new Decimal($attribute[$idx]);
+
+                        //$object = $this->negativeTrackpoints($trackpoints, $idx, $file, $attribute, $count);
+                        $object = $this->above(
+                            $trackpoints,
+                            $idx,
+                            $file,
+                            $attribute,
+                            $count,
+                            '1',
+                            Math::div($overview->distance, $overview->trackpoints)
+                        );
+                        // $object = $this->timeOutlier(
+                        //     $idx,
+                        //     $file,
+                        //     $attribute,
+                        //     $count
+                        // );
+
+                        if ($object) {
+                            array_push($trackpointOutlier, $object);
+                        }
+
+                        // negative outliers speed
+                        // if ($idx > 0) {
+
+                        //     $object = $this->negativeDistances($speed_current, $idx, $file, $timeHistory, $distanceHistory, $speedHistory);
+                        //     $count++;
+                        //     array_push($outliers, $object);
+                        //     array_push($geral, $object);
+                        // }
+                    }
+
+                    $percentage = Math::porcentagem($count, $overview->trackpoints);
+                    if ((new Decimal($percentage))->compareTo(1) >= 0) {
+
+                        $object = new stdClass();
+                        $object->trackpoints = $overview->trackpoints;
+                        $object->percentage_trackpoints = Math::porcentagem($count, $overview->trackpoints);
+                        $object->total_outliers = $count;
+                        $object->distance = $overview->distance;
+                        $object->trackpointOutlier = $trackpointOutlier;
+
+                        $path =
+                            $request->cyclist .
+                            DIRECTORY_SEPARATOR .
+                            $file .
+                            DIRECTORY_SEPARATOR .
+                            'distance_outliers';
+
+                        $this->createJsonFile(CONF_JSON_CYCLIST . $path, [$object]);
+                        array_push($outliers, $file);
+                    } else {
+
+                        // $object = new stdClass();
+                        // $object->trackpoints = $overview->trackpoints;
+                        // $object->cyclist = $request->cyclist;
+                        // $object->pedal = $file;
+                        // $object->result = "0 resultados em $request->cyclist/$file";
+                        // //$object->outliers = $outliers;
+
+                        // array_unshift($geral, $object);
+
+                        $path =
+                            $request->cyclist .
+                            DIRECTORY_SEPARATOR .
+                            $file .
+                            DIRECTORY_SEPARATOR .
+                            'distance_outliers';
+
+                        $this->createJsonFile(CONF_JSON_CYCLIST . $path, ["0 resultados em $request->cyclist/$file"]);
+                    }
+                }
+            }
+
+            array_unshift($result, [
+                "Cyclist" => "$request->cyclist",
+                "total de pedaladas" => count($pedal),
+                "total de outliers" => count($outliers),
+                "restantes" => count($pedal) - count($outliers),
+                "porcentagem" => Math::porcentagem(count($outliers), count($pedal)),
+                "pedal" => $outliers
+            ]);
+
+            $path =
+                $request->cyclist .
+                'result';
+
+            $this->createJsonFile(CONF_JSON_CYCLIST . $path, $result);
+            array_push($geral, $result);
+        }
+
+        $total_pedaladas = 0;
+        $total_outliers = 0;
+        $total_restantes = 0;
+        foreach ($geral as $key => $value) {
+            $total_pedaladas += $value[0]['total de pedaladas'];
+            $total_outliers += $value[0]['total de outliers'];
+            $total_restantes += $value[0]['restantes'];
+        }
+
+        set_time_limit(30);
+        return $this->responseJson(true, "outliers", [
+            [
+                "total geral pedaladas" => $total_pedaladas,
+                "total geral outliers" => $total_outliers,
+                "total geral restantes" => $total_restantes
+            ],
+            $geral
+        ]);
+    }
+
+    public function countData()
+    {
+
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
+        // Obtendo dados da requisição
+
+        $geral = [];
+
+        $request = new stdClass();
+        $request->cyclist = "Cyclist_1";
+        //$request = (object)getRequest()->getParsedBody();
+        $pedal = $this->getFileNames(CONF_JSON_CYCLIST . $request->cyclist);
+        # code...
+        foreach ($pedal as $key => $file) {
+
+            if ($file != 'all_distances.json' && $file == 'pedal40') {
+
+                $distanceHistory = $this->readAttribute($request->cyclist, $file, 'distance_history');
+                dp(count($distanceHistory));
+
+                $elevation = $this->readAttribute($request->cyclist, $file, 'elevation_bing');
+                dp(count($elevation));
+
+                $elevation_google = $this->readAttribute($request->cyclist, $file, 'elevation_google');
+                dp(count($elevation_google));
+
+                $elevation_gps = $this->readAttribute($request->cyclist, $file, 'elevation_gps');
+                dp(count($elevation_gps));
+
+                $heartrate = $this->readAttribute($request->cyclist, $file, 'heartrate_history');
+                dp(count($heartrate));
+
+                $latitudes = $this->readAttribute($request->cyclist, $file, 'latitudes');
+                dp(count($latitudes));
+
+                $longitudes = $this->readAttribute($request->cyclist, $file, 'longitudes');
+                dp(count($longitudes));
+
+                $speedHistory = $this->readAttribute($request->cyclist, $file, 'speed_history');
+                dp(count($speedHistory));
+
+                $timeHistory = $this->readAttribute($request->cyclist, $file, 'time_history');
+                dp(count($timeHistory));
+            }
+        }
+
+        exit;
+        set_time_limit(30);
+        return $this->responseJson(true, "outliers gerados", $geral);
+    }
 
     // Renderiza a view read
     public function read(): Response
@@ -561,7 +958,15 @@ class readController extends Controller
         // Obtendo dados da requisição
         $request = (object)getRequest()->getParsedBody();
 
-        $result = $this->deleteFiles($request->cyclist, $request->attribute, intval($request->value));
+        $path = $request->cyclist . 'result.json';
+
+        $result = json_decode($this->readJsonFile(CONF_JSON_CYCLIST, $path));
+
+        foreach ($result[0]->pedal as $key => $value) {
+            $this->deleteDirectory(CONF_JSON_CYCLIST, $request->cyclist . DIRECTORY_SEPARATOR . $value);
+        }
+
+
 
         // Se result for true, então o dataset/atividade já foram extraídos
         // Se result for diferentes de true, retorna a mensagem de erros
@@ -596,5 +1001,110 @@ class readController extends Controller
         } else {
             return $this->responseJson(false, "Problema em salvar as coordenadas no BD", $result);
         }
+    }
+
+    public function createSegment()
+    {
+
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
+        // Obtendo dados da requisição
+
+        $geral = [];
+        $tam = 40;
+        // Para segmentos de 50 colocar 40   (15 outlier)
+        // Para segmentos de 100 colocar 90  (15 outlier)
+        // Para segmentos de 150 colocar 140 (15 outlier)
+
+        $count = 0;
+        for ($i = 15; $i <= 15; $i++) {
+            # code...
+            $request = new stdClass();
+            $request->cyclist = "Cyclist_$i";
+            $segment = [];
+            $avg_pedal = [];
+            $pedal = $this->getFileNames(CONF_JSON_CYCLIST . $request->cyclist);
+
+            foreach ($pedal as $key => $file) {
+
+                if ($file != 'all_distances.json') {
+
+                    //$attribute = $this->readAttribute($request->cyclist, $file, 'speed_history');
+                    $attribute = $this->readAttribute($request->cyclist, $file, 'distance_history');
+                    //$attribute = $this->readAttribute($request->cyclist, $file, 'heartrate_history');
+                    //$attribute = $this->readAttribute($request->cyclist, $file, 'elevation_google');
+
+
+                    // Obtendo overview
+                    $path =
+                        $request->cyclist .
+                        DIRECTORY_SEPARATOR .
+                        $file .
+                        DIRECTORY_SEPARATOR .
+                        'overview.json';
+
+                    $overview = json_decode($this->readJsonFile(CONF_JSON_CYCLIST, $path));
+
+                    $sum = new Decimal(0);
+                    $segment = [];
+                    $avg = [];
+                    $idx1 = 0;
+                    $idx2 = 0;
+
+                    for ($idx2 = 0; $idx2 < count($attribute); $idx2++) {
+
+                        $sum = $sum->add($attribute[$idx2]);
+                        $meter = $sum->mul(1000);
+
+                        //dp($sum);
+                        //dp($meter->toFloat());
+                        if ($meter->toFloat() >= $tam) {
+                            array_push(
+                                $segment,
+                                [
+                                    "avg" => $overview->distance,
+                                    "meter" => $meter->toFloat(),
+                                    "idx1" => $idx1,
+                                    "idx2" => $idx2,
+                                ]
+                            );
+
+                            array_push($avg, $meter->toString());
+                            $idx1 = $idx2 + 1;
+                            $sum = new Decimal(0);
+                        }
+                    }
+
+                    array_push($avg_pedal, [
+                        'cyclist' => $request->cyclist,
+                        'pedal' => $file,
+                        'avg' => Decimal::avg($avg)
+                    ]);
+                }
+            }
+
+
+            dp($avg_pedal);
+            $avg_cyclist = [];
+            foreach ($avg_pedal as $key => $value) {
+                array_push($avg_cyclist, $value['avg']);
+                //array_push($avg_cyclist, Decimal::avg($value['avg']));
+            }
+
+            array_push($geral, [
+                'cyclist' => $i,
+                'avg' => Decimal::avg($avg_cyclist)
+            ]);
+        }
+
+
+        dp($geral);
+        $resultado_final = [];
+        foreach ($geral as $key => $value) {
+            array_push($resultado_final, $value['avg']);
+        }
+        set_time_limit(30);
+        dpexit(Decimal::avg($resultado_final));
+        return $this->responseJson(true, "90 M", Decimal::avg($resultado_final));
     }
 }
