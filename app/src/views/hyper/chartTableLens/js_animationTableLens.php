@@ -26,7 +26,7 @@
                     }
                 }
             })
-            .on('click', function() {
+            .on('click', async function() {
 
                 // Desabilitar click nas linhas falsas para travar animação
                 if (disableClickLineFalse(this)) {
@@ -38,27 +38,27 @@
 
                     switch (color_main) {
                         case normalRed:
-                            lineClicked(this, 'colors_red_current', 'colors_red');
+                            await lineClicked(this, 'colors_red_current', 'colors_red');
                             pedaladas_red_clicadas += 1;
                             console.log("pedaladas red clicadas:", pedaladas_red_clicadas);
                             break;
                         case normalBlue:
-                            lineClicked(this, 'colors_blue_current', 'colors_blue');
+                            await lineClicked(this, 'colors_blue_current', 'colors_blue');
                             pedaladas_blue_clicadas += 1;
                             console.log("pedaladas blue clicadas:", pedaladas_blue_clicadas);
                             break;
                         case normalYellow:
-                            lineClicked(this, 'colors_yellow_current', 'colors_yellow');
+                            await lineClicked(this, 'colors_yellow_current', 'colors_yellow');
                             pedaladas_yellow_clicadas += 1;
                             console.log("pedaladas yellow clicadas:", pedaladas_yellow_clicadas);
                             break;
                         case normalGreen:
-                            lineClicked(this, 'colors_green_current', 'colors_green');
+                            await lineClicked(this, 'colors_green_current', 'colors_green');
                             pedaladas_green_clicadas += 1;
                             console.log("pedaladas green clicadas:", pedaladas_green_clicadas);
                             break;
                         case normalPurple:
-                            lineClicked(this, 'colors_purple_current', 'colors_purple');
+                            await lineClicked(this, 'colors_purple_current', 'colors_purple');
                             pedaladas_purple_clicadas += 1;
                             console.log("pedaladas purple clicadas:", pedaladas_purple_clicadas);
                             break;
@@ -71,7 +71,7 @@
 
     }
 
-    function lineClicked(pedalada, colors_current, colors) {
+    async function lineClicked(pedalada, colors_current, colors) {
         let aux = [];
 
         //console.log("color red");
@@ -81,7 +81,7 @@
         aux = store.session.get(colors_current); // Obtendo cores a serem utilizadas 
         color_current = aux.pop(); // Obtendo cor específica a ser utilizada
 
-        lineStateChange(pedalada, color_current);
+        await lineStateChange(pedalada, color_current);
 
         store.session.set(colors_current, aux);
 
@@ -89,7 +89,7 @@
         push_pedaladas_barChart(pedalada);
     }
 
-    function lineStateChange(line, color_current) {
+    async function lineStateChange(line, color_current) {
         changeColorLine('#' + $(line).attr("id"), color_current);
         d3.select(line)
             .attr("line_clicked", 'true')

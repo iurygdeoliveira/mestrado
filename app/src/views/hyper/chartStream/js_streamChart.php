@@ -37,6 +37,16 @@
 
         option = {
             animation: true,
+            legend: {
+                data: legends,
+                itemHeight: 12,
+                itemWidth: 12,
+                itemGap: 5,
+                left: '40%',
+                formatter: function(name) {
+                    return '';
+                }
+            },
             toolbox: {
                 show: true,
                 feature: {
@@ -48,8 +58,14 @@
                 }
             },
             dataZoom: [{
-                type: 'inside', // this dataZoom component is dataZoom component of slider
-                startValue: 0
+                type: 'slider', // this dataZoom component is dataZoom component of slider
+                startValue: 0,
+                top: 25,
+                height: 25,
+                minValueSpan: viewStream,
+                labelFormatter: function(value, valueStr) {
+                    return value.toFixed(2) + ` m`;
+                }
             }],
             tooltip: {
                 trigger: 'axis',
@@ -70,11 +86,13 @@
                 formatter: function(params) {
                     let text = '';
                     let linebreak = 1
+
+
                     params.forEach(element => {
                         text +=
                             ` ${element.marker} 
-                            ${element.value[0]} min | 
-                            ${element.value[1]} bpm&nbsp;&nbsp;`;
+                            ${element.value[0]} meters | 
+                            ${element.value[1]} ${scale}&nbsp;&nbsp;`;
 
                         linebreak += 1;
 
@@ -92,7 +110,10 @@
             },
             title: {
                 show: true,
-                text: `${title}: 0 to ${max} (${scale})`
+                text: `${title}: 0 to ${max} (${scale})`,
+                textStyle: {
+                    fontSize: 12
+                }
             },
             singleAxis: {
                 type: 'value',
@@ -109,8 +130,10 @@
                         show: true
                     }
                 },
-                top: 12,
+                top: 63,
                 bottom: 40,
+                name: 'm',
+                nameLocation: 'start',
                 splitLine: {
                     show: true,
                     lineStyle: {
@@ -123,11 +146,18 @@
             series: [{
                 type: 'themeRiver',
                 data: data,
+                boundaryGap: ['1%', '1%'],
                 label: {
                     show: false
                 },
                 emphasis: {
-                    disabled: true
+                    focus: 'self',
+                    label: {
+                        show: false
+                    },
+                    labelLine: {
+                        show: false
+                    }
                 }
             }]
         };
@@ -135,31 +165,12 @@
         option && await myChart.setOption(option);
     }
 
-    async function sortStream() {
-
-        let pedaladasGrouped = [];
-        // Ordenando pedaladas
-        for (let count = 0; count < selected.length; count++) {
-            pedaladasGrouped.push(pedaladas_barChart.filter(item => item.rider == selected[count]));
-        }
-
-        let pedalSort = [];
-        pedaladasGrouped.forEach(group => {
-            group.forEach(pedal => {
-                pedalSort.push(pedal);
-            });
-        });
-
-        return pedalSort;
-    }
 
     async function mountLegend(pedalSort) {
 
         let legend = [];
-        let label;
         pedalSort.forEach(element => {
-            label = element.id.split("_");
-            legend.push('p' + label[2]);
+            legend.push(element.id);
         });
 
         return legend;
@@ -172,6 +183,55 @@
             colorStream.push(element.color_selected);
         });
         return colorStream;
+    }
+
+
+    async function normalizeData(pedalSort) {
+
+        let tam = pedalSort[0].heartrate_stream.length;
+
+        pedalSort.forEach(element => {
+            if (element.heartrate_stream.length < tam) {
+                tam = element.heartrate_stream.length
+            }
+        });
+
+        for (let index = 0; index < pedalSort.length; index++) {
+            pedalSort[index].heartrate_stream = pedalSort[index].heartrate_stream.slice(
+                0,
+                tam + 1
+            );
+        }
+
+        tam = pedalSort[0].elevation_stream.length;
+        pedalSort.forEach(element => {
+            if (element.elevation_stream.length < tam) {
+                tam = element.elevation_stream.length
+            }
+        });
+
+        for (let index = 0; index < pedalSort.length; index++) {
+            pedalSort[index].elevation_stream = pedalSort[index].elevation_stream.slice(
+                0,
+                tam + 1
+            );
+        }
+
+        tam = pedalSort[0].speed_stream.length;
+        pedalSort.forEach(element => {
+            if (element.speed_stream.length < tam) {
+                tam = element.speed_stream.length
+            }
+        });
+
+        for (let index = 0; index < pedalSort.length; index++) {
+            pedalSort[index].speed_stream = pedalSort[index].speed_stream.slice(
+                0,
+                tam + 1
+            );
+        }
+
+        return pedalSort;
     }
 
     async function mountDataStream(pedalSort, type) {
@@ -187,7 +247,6 @@
                 if (element.heartrate_stream_max > max) {
                     max = element.heartrate_stream_max;
                 }
-
             });
         }
 
@@ -226,17 +285,18 @@
         console.log("Atualizando StreamChart ...");
 
         await resizeStreamChart();
-        let pedalSort = await sortStream();
 
-        console.log(pedalSort);
+        let pedalSort = await normalizeData(pedaladas_barChart);
 
         let legends = await mountLegend(pedalSort);
         let colorStream = await mountColor(pedalSort);
-        let heartData = await mountDataStream(pedalSort, 'heartrate');
-        //let elevationData = await mountDataStream(pedalSort, 'elevation');
-        //let speedData = await mountDataStream(pedalSort, 'speed');
 
-        console.log(heartData);
+        let heartData = await mountDataStream(pedalSort, 'heartrate');
+        let elevationData = await mountDataStream(pedalSort, 'elevation');
+        let speedData = await mountDataStream(pedalSort, 'speed');
+
+        //console.log(pedalSort);
+        //console.log(heartData);
         //console.log(elevationData);
         //console.log(speedData);
 
@@ -250,25 +310,25 @@
             heartData.max
         );
 
-        // await create_StreamChart(
-        //     'pedaladas_elevation',
-        //     'Elevation',
-        //     'meters',
-        //     legends,
-        //     colorStream,
-        //     elevationData.data,
-        //     elevationData.max
-        // );
+        await create_StreamChart(
+            'pedaladas_elevation',
+            'Elevation',
+            'meters',
+            legends,
+            colorStream,
+            elevationData.data,
+            elevationData.max
+        );
 
-        // await create_StreamChart(
-        //     'pedaladas_speed',
-        //     'Speed',
-        //     'KM/H',
-        //     legends,
-        //     colorStream,
-        //     speedData.data,
-        //     speedData.max,
-        // );
+        await create_StreamChart(
+            'pedaladas_speed',
+            'Speed',
+            'KM/H',
+            legends,
+            colorStream,
+            speedData.data,
+            speedData.max,
+        );
         console.groupEnd();
     }
 </script>

@@ -9,7 +9,7 @@
 
     }
 
-    async function mount_pedalada_barChart(pedalada) {
+    async function prepare_pedalada_barChart(pedalada) {
 
         return {
             'centroid': null,
@@ -47,14 +47,7 @@
 
     }
 
-    async function push_pedaladas_barChart(pedalada) {
-
-
-        let push_barChart = await mount_pedalada_barChart(pedalada);
-
-        updateButtonSearchRiders(selected, false, true, false);
-
-        let res = await storePedalada(push_barChart);
+    async function mount_pedalada_barChart(push_barChart, res) {
 
         push_barChart.pointInitial = res[0].pointInitial;
         push_barChart.pointFinal = res[0].pointFinal;
@@ -78,9 +71,18 @@
         push_barChart.speed_stream_max = res[0].speed_stream_max;
         push_barChart.speed_history = res[0].speed_history;
         push_barChart.minute_history = res[0].minute_history;
+        push_barChart.time_history = res[0].time_history;
 
+        return push_barChart;
+    }
+
+    async function push_pedaladas_barChart(pedalada) {
+
+        let push_barChart = await prepare_pedalada_barChart(pedalada);
+        updateButtonSearchRiders(selected, false, true, false);
+        let res = await storePedalada(push_barChart);
+        push_barChart = await mount_pedalada_barChart(push_barChart, res);
         pedaladas_barChart.push(push_barChart);
-
         updateButtonSearchRiders(selected, true, false, false)
 
         if (pedaladas_barChart.length > 0) {
@@ -211,6 +213,25 @@
         });
     }
 
+
+    async function sortBarChart() {
+
+        let pedaladasGrouped = [];
+        // Ordenando pedaladas
+        for (let count = 0; count < selected.length; count++) {
+            pedaladasGrouped.push(pedaladas_barChart.filter(item => item.rider == selected[count]));
+        }
+
+        let pedalSort = [];
+        pedaladasGrouped.forEach(group => {
+            group.forEach(pedal => {
+                pedalSort.push(pedal);
+            });
+        });
+
+        return pedalSort;
+    }
+
     async function update_barChart(buttonMultivis = false) {
 
         console.group("BarChart ...");
@@ -220,6 +241,7 @@
 
         updateButtonMultivis(buttonMultivis);
 
+        pedaladas_barChart = await sortBarChart();
         if (pedaladas_barChart.length > 0) {
             createBoxBarChart();
             $('#pedaladas_barChart_card').show();
