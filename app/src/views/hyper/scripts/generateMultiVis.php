@@ -1,18 +1,21 @@
 <script>
     async function generateMultiVis() {
 
+
         console.group("Gerando MultiVis");
-        console.groupEnd();
-
-
         if (pedaladas_barChart.length > 0) {
-
-            await updateMapChart();
-            await updateRadarChart();
-            await updateStreamChart();
-
+            await updateButtonMultivis(pedaladas_barChart, false, true, false);
+            await getRecord(pedaladas_barChart[0]);
+            await updateCharts();
+            await updateButtonMultivis(pedaladas_barChart, true, false, false);
         }
-        updateButtonMultivis(false);
         totalStorage(); // Monitorando Storage
+    }
+
+    async function updateCharts() {
+        await updateBarChart();
+        await updateMapChart();
+        await updateRadarChart();
+        //await updateStreamChart();
     }
 </script>

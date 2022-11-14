@@ -33,26 +33,34 @@
 
     }
 
-    function updateButtonMultivis(update = false) {
+    async function updateButtonMultivis(pedaladas, generate, loading, update) {
 
-        if (pedaladas_barChart.length > 0) {
-            document.getElementById('buttonMultivis').disabled = false;
+        if (pedaladas.length > 0) {
+            document.getElementById('buttonGenerateMultivis').disabled = false;
+            document.getElementById('buttonUpdateMultivis').disabled = false;
         } else {
-            document.getElementById('buttonMultivis').disabled = true;
+            document.getElementById('buttonGenerateMultivis').disabled = true;
+            document.getElementById('buttonUpdateMultivis').disabled = true;
         }
 
-        if (update != 'void') {
+        if (generate) {
+            console.log("multivis");
+            $('#buttonGenerateMultivis').show();
+            $('#buttonUpdateMultivis').hide();
+            $('#buttonLoadingMultivis').hide();
+        }
 
-            if (update == true) {
-                $('#buttonUpdateMultivis').show();
-                $('#buttonGenerateMultivis').hide();
-            }
+        if (loading) {
+            console.log("loading");
+            $('#buttonGenerateMultivis').hide();
+            $('#buttonUpdateMultivis').hide();
+            $('#buttonLoadingMultivis').show();
+        }
 
-            if (update == false) {
-                $('#buttonUpdateMultivis').hide();
-                $('#buttonGenerateMultivis').show();
-            }
-
+        if (update) {
+            $('#buttonGenerateMultivis').hide();
+            $('#buttonLoadingMultivis').hide();
+            $('#buttonUpdateMultivis').show();
         }
     }
 </script>

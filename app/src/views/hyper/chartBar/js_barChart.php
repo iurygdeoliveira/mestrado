@@ -30,7 +30,6 @@
             'id': d3.select(pedalada).attr('id'),
             'line_clicked': d3.select(pedalada).attr('line_clicked'),
             'locality': null,
-            'minute_history': null,
             'pedal_id': null,
             'pointInitial': null,
             'pointFinal': null,
@@ -70,7 +69,6 @@
         push_barChart.speed_stream = res[0].speed_stream;
         push_barChart.speed_stream_max = res[0].speed_stream_max;
         push_barChart.speed_history = res[0].speed_history;
-        push_barChart.minute_history = res[0].minute_history;
         push_barChart.time_history = res[0].time_history;
 
         return push_barChart;
@@ -84,40 +82,34 @@
         push_barChart = await mount_pedalada_barChart(push_barChart, res);
         pedaladas_barChart.push(push_barChart);
         updateButtonSearchRiders(selected, true, false, false)
-
-        if (pedaladas_barChart.length > 0) {
-            update_barChart(true);
-        } else {
-            update_barChart(false);
-        }
+        updateButtonMultivis(pedaladas_barChart, false, false, true);
 
     }
 
     async function remove_pedaladas_barChart(pedal) {
 
-        let pedalada_current = await mount_pedalada_barChart(pedal);
-        pedaladas_barChart = pedaladas_barChart.filter(item => item.id !== pedalada_current.id);
-        update_barChart(true);
+        pedaladas_barChart = pedaladas_barChart.filter(item => item.id !== pedal.id);
+        updateButtonMultivis(pedaladas_barChart, false, false, true);
 
     }
 
-    function calculateHeightBarChart() {
+    async function calculateHeightBarChart() {
 
         let heightChooseCyclist = $('#choose_cyclist').height();
         let heightSlider = $('#slider').height();
-        let heightMultiVis = $('#buttonMultivis').height();
+        let heightMultiVis = $('#buttonLoadingMultivis').height();
         return parseInt(heightWindow - heightChooseCyclist - heightSlider - heightMultiVis);
     }
 
-    function removeBarChart() {
+    async function removeBarChart() {
 
         $('#pedaladas_barChart_card').hide();
         d3.select('#pedaladas_barChart').remove();
 
     }
 
-    function createBoxBarChart() {
-        let heightBarChart = calculateHeightBarChart() - adjustHeightBarChar;
+    async function createBoxBarChart() {
+        let heightBarChart = await calculateHeightBarChart() - adjustHeightBarChar;
         d3.select('#pedaladas_barChart_body')
             .append('canvas')
             .attr("id", 'pedaladas_barChart')
@@ -158,10 +150,8 @@
     function updateCacheBarChart(rider, buttonMultivis) {
 
         if (pedaladas_barChart.length > 0) {
-
             pedaladas_barChart = pedaladas_barChart.filter(item => item.rider !== rider)
-
-            update_barChart(buttonMultivis);
+            updateButtonMultivis(pedaladas_barChart, false, false, true);
         }
     }
 
@@ -186,6 +176,12 @@
                 indexAxis: 'x',
                 responsive: true,
                 plugins: {
+                    title: {
+                        display: true,
+                        text: 'Distances',
+                        position: 'top',
+                        align: 'center'
+                    },
                     legend: {
                         display: false,
                     },
@@ -232,18 +228,15 @@
         return pedalSort;
     }
 
-    async function update_barChart(buttonMultivis = false) {
+    async function updateBarChart() {
 
         console.group("BarChart ...");
         console.log("Atualizando BarChart ...");
-        removeBarChart();
+        await removeBarChart();
         console.groupEnd();
-
-        updateButtonMultivis(buttonMultivis);
-
         pedaladas_barChart = await sortBarChart();
         if (pedaladas_barChart.length > 0) {
-            createBoxBarChart();
+            await createBoxBarChart();
             $('#pedaladas_barChart_card').show();
             await create_BarChart();
         }

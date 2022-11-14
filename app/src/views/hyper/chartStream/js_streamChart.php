@@ -279,12 +279,85 @@
         };
     }
 
+    async function creatSegment(distance_history) {
+
+        let sum = 0;
+        let meter = 0;
+        let segment = [];
+        let idx1 = 0;
+        let idx2 = 0;
+
+        for (; idx2 < distance_history.length; idx2++) {
+
+            sum += distance_history[idx2];
+            meter = parseFloat((sum * 1000).toFixed(2));
+
+            if (meter >= segmentStream) {
+                segment.push({
+                    'distance': meter,
+                    'idx1': idx1,
+                    'idx2': idx2,
+                });
+                idx1 = idx2 + 1;
+                sum = 0;
+            }
+        }
+
+        return segment;
+
+    }
+
+    async function createStream(segment, attribute, pedal_id, avg) {
+
+        let stream = [];
+        stream.push([0, 0, pedal_id]);
+        let max = 0;
+        let subarray;
+
+        for (let index = 0; index < segment.length; index++) {
+
+            subarray = attribute.slice(
+                segment[index].idx1,
+                segment[index].idx2 + 1
+            );
+
+            console.log(subarray);
+            let avg = math.format(
+                math.mean(subarray), {
+                    notation: 'fixed',
+                    precision: 2
+                });
+
+
+            stream.push(
+                [
+                    viewStream,
+                    parseFloat(avg),
+                    pedal_id
+                ]
+            );
+            viewStream += 100;
+
+            if (avg > max) {
+                max = parseFloat(avg);
+            }
+        }
+
+        viewStream = 100;
+        return {
+            'stream': stream,
+            'max': max
+        };
+    }
+
     async function updateStreamChart() {
 
         console.group("StreamChart ...");
         console.log("Atualizando StreamChart ...");
 
         await resizeStreamChart();
+
+
 
         let pedalSort = await normalizeData(pedaladas_barChart);
 

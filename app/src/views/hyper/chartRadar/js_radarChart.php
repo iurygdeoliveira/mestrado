@@ -148,7 +148,14 @@
         let dataset = await mountDataSetsRadarChart(pedaladas_barChart);
         let maxValues = await defineMaxValues(dataset);
 
+        // Montando legendas
+        let legends = [];
+        dataset.forEach(element => {
+            legends.push(element.name);
+        });
+
         option = {
+            animation: true,
             toolbox: {
                 show: true,
                 feature: {
@@ -158,17 +165,35 @@
                     saveAsImage: {}
                 }
             },
+            legend: {
+                data: legends,
+                itemHeight: 12,
+                itemWidth: 12,
+                itemGap: 5,
+                formatter: function(name) {
+                    return '';
+                }
+            },
+            title: {
+                show: true,
+                text: `Average Indicators`,
+                textStyle: {
+                    fontSize: 12
+                }
+            },
             tooltip: {
                 trigger: 'item',
                 position: 'left'
             },
             radar: {
+                nameGap: 7,
+                center: ['50%', '52%'],
                 indicator: [{
                         name: 'Avg Heartrate (BPM)',
                         max: maxValues[0]
                     },
                     {
-                        name: 'Avg Elevation',
+                        name: 'Avg Elevation (M)',
                         max: maxValues[1]
                     },
                     {

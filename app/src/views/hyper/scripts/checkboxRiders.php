@@ -101,7 +101,7 @@
             pedaladas_yellow_clicadas = 0;
             pedaladas_green_clicadas = 0;
             pedaladas_purple_clicadas = 0;
-            d3.select('#search_rides').attr('title', 'Generate Table Lens');
+            updateButtonMultivis(pedaladas_barChart, true, false, false);
         }
     }
 

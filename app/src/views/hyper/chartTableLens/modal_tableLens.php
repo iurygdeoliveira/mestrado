@@ -2,18 +2,27 @@
     <div class="modal-dialog modal-dialog-scrollable modal-full-width">
         <div class="modal-content h-100">
             <div class="modal-header">
-                <h4 class="modal-title text-dark" id="fullWidthModalLabel">Filters:</h4>
-                <div class="ms-2 me-2 text-dark">Overview</div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" style="background-color: rgb(90,90,90); background-image: url(<?= img('switch_toogle.svg') ?>);" role="switch" id="switchToggle">
+                <div class="container-fluid">
+                    <div class="row">
+                        <h4 class="modal-title text-dark text-center col-11">Select Pedal</h4>
+                        <button type="button" class="btn-close col-1" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="row">
+                        <div class="col-1 d-flex">
+                            <h5 class="modal-title text-dark pe-0" id="fullWidthModalLabel">Filters:</h5>
+                            <div class="ms-2 me-2 text-dark">Overview</div>
+                            <div class="d-inline form-check form-switch">
+                                <input class="form-check-input" type="checkbox" style="background-color: rgb(90,90,90); background-image: url(<?= img('switch_toogle.svg') ?>);" role="switch" id="switchToggle">
+                            </div>
+                            <div class="ms-1 me-2 text-dark">Item</div>
+                            <div class="ms-2 me-2 text-dark">Descending</div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" style="background-color: rgb(90,90,90); background-image: url(<?= img('switch_toogle.svg') ?>);" role="switch" id="switchOrder">
+                            </div>
+                            <div class="ms-1 me-2 text-dark">Ascending</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="ms-1 me-2 text-dark">Item</div>
-                <div class="ms-2 me-2 text-dark">Descending</div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" style="background-color: rgb(90,90,90); background-image: url(<?= img('switch_toogle.svg') ?>);" role="switch" id="switchOrder">
-                </div>
-                <div class="ms-1 me-2 text-dark">Ascending</div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body p-1">
                 <div class="container-fluid px-1 py-1">

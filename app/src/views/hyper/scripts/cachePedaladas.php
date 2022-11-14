@@ -32,8 +32,7 @@
                         'speed_history,' +
                         'speed_stream,' +
                         'speed_stream_max,' +
-                        'time_history,' +
-                        'minute_history'
+                        'time_history'
                 });
                 db.open();
             }

@@ -15,7 +15,7 @@
                     <?php $this->insert("../leftsidebar/slider") ?>
                 </div>
             </li>
-            <li class="side-nav-item">
+            <li class="side-nav-item" id="buttonMultivis">
                 <div class="side-nav-link pe-2 ps-2 pt-0 pb-0 d-grid">
                     <?php $this->insert("../leftsidebar/multiVis") ?>
                 </div>
