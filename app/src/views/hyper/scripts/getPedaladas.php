@@ -60,6 +60,38 @@
         }
     }
 
+    async function checkStreamNull(pedalada) {
+
+        let rider = pedalada.split("_");
+        return await new Dexie(rider[0]).open()
+            .then(async function(db) {
+
+                let result = await db.table('pedaladas')
+                    .where('pedal_id').equals(pedalada).toArray();
+                console.log(result[0].heartrate_stream == null);
+                return (result[0].heartrate_stream == null);
+            });
+    }
+
+    async function modifyPedalada(pedalada) {
+
+        let rider = pedalada.id.split("_");
+        return await new Dexie(rider[0]).open()
+            .then(async function(db) {
+
+                await db.table('pedaladas').where('pedal_id').equals(pedalada.id).modify(result => {
+
+                    result.elevation_stream = pedalada.elevation_stream;
+                    result.elevation_stream_max = pedalada.elevation_stream_max;
+                    result.heartrate_stream = pedalada.heartrate_stream;
+                    result.heartrate_stream_max = pedalada.heartrate_stream_max;
+                    result.speed_stream = pedalada.speed_stream;
+                    result.speed_stream_max = pedalada.speed_stream_max;
+                });
+            });
+    }
+
+
     async function storePedalada(pedalada) {
 
         return await new Dexie(pedalada.rider).open()
@@ -72,37 +104,6 @@
                         console.log(`Armazenando dados da pedalada ${pedalada.id}`);
                         console.groupEnd();
                         await getPedaladaGithub(pedalada.rider, pedalada.id).then(async (res) => {
-
-                            //let distance_history = await convertStringData(res[0].distance_history)
-                            //let segment = await creatSegment(distance_history);
-
-                            // let heartrate_history = await convertStringData(res[2].heartrate_history);
-                            // let avg_heartrate = await parseFloat(limitTamString(res[7].heartrate_avg, 10));
-                            // let heartrateStream = await createStream(
-                            //     segment,
-                            //     heartrate_history,
-                            //     pedalada.id,
-                            //     avg_heartrate);
-
-                            //let elevation_history = await convertStringData(res[1].elevation_google);
-                            // let avg_elevation = await parseFloat(
-                            //     parseFloat(limitTamString(res[7].elevation_google, 10))
-                            // );
-                            // let elevationStream = await createStream(
-                            //     segment,
-                            //     elevation_history,
-                            //     pedalada.id,
-                            //     avg_elevation);
-
-                            //let speed_history = await convertStringData(res[3].speed_history);
-                            // let avg_speed = await parseFloat(
-                            //     parseFloat(limitTamString(res[7].speed_avg, 10))
-                            // );
-                            // let speedStream = await createStream(
-                            //     segment,
-                            //     speed_history,
-                            //     pedalada.id,
-                            //     avg_speed);
 
                             await db.table('pedaladas').add({
                                 rider: pedalada.rider,

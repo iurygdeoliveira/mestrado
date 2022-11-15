@@ -142,7 +142,6 @@
         };
 
         map = L.map('pedaladas_mapChart', {
-            fullscreenControl: true,
             layers: [distanceLayer, routeLayer, heatmapLayer]
         });
 

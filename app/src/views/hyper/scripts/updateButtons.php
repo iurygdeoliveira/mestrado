@@ -44,14 +44,12 @@
         }
 
         if (generate) {
-            console.log("multivis");
             $('#buttonGenerateMultivis').show();
             $('#buttonUpdateMultivis').hide();
             $('#buttonLoadingMultivis').hide();
         }
 
         if (loading) {
-            console.log("loading");
             $('#buttonGenerateMultivis').hide();
             $('#buttonUpdateMultivis').hide();
             $('#buttonLoadingMultivis').show();

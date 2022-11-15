@@ -30,7 +30,6 @@
             'id': d3.select(pedalada).attr('id'),
             'line_clicked': d3.select(pedalada).attr('line_clicked'),
             'locality': null,
-            'pedal_id': null,
             'pointInitial': null,
             'pointFinal': null,
             'points': null,
@@ -56,6 +55,7 @@
         push_barChart.elevation_AVG = res[0].elevation_AVG;
         push_barChart.temperature_AVG = res[0].temperature_AVG;
         push_barChart.duration = res[0].duration;
+        push_barChart.distance_history = res[0].distance_history;
         push_barChart.datetime = res[0].datetime;
         push_barChart.country = res[0].country;
         push_barChart.locality = res[0].locality;

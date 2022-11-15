@@ -165,26 +165,24 @@
         option && await myChart.setOption(option);
     }
 
-
-    async function mountLegend(pedalSort) {
+    async function mountLegend(pedaladas) {
 
         let legend = [];
-        pedalSort.forEach(element => {
+        pedaladas.forEach(element => {
             legend.push(element.id);
         });
 
         return legend;
     }
 
-    async function mountColor(pedalSort) {
+    async function mountColor(pedaladas) {
 
         let colorStream = [];
-        pedalSort.forEach(element => {
+        pedaladas.forEach(element => {
             colorStream.push(element.color_selected);
         });
         return colorStream;
     }
-
 
     async function normalizeData(pedalSort) {
 
@@ -234,14 +232,92 @@
         return pedalSort;
     }
 
-    async function mountDataStream(pedalSort, type) {
+
+    async function creatSegment(pedalada) {
+
+
+        let segments = {};
+        segments[pedalada.id] = [];
+
+        let sum = 0;
+        let meter = 0;
+
+        for (let idx1 = 0, idx2 = 0; idx2 < pedalada.distance_history.length; idx2++) {
+
+            sum += pedalada.distance_history[idx2];
+            meter = parseFloat((sum * 1000).toFixed(2));
+
+            if (meter >= segmentStream) {
+
+                let segment = {
+                    'distance': meter,
+                    'idx1': idx1,
+                    'idx2': idx2
+                };
+                segments[pedalada.id].push(segment);
+                idx1 = idx2 + 1;
+                sum = 0;
+            }
+        }
+
+        return segments;
+
+    }
+
+
+    async function createStream(segment, attribute, pedal_id, avg) {
+
+        let stream = [];
+        stream.push([0, 0, pedal_id]);
+        let max = 0;
+        let subarray;
+        let size = viewStream;
+
+        for (let index = 0; index < segment.length; index++) {
+
+            subarray = attribute.slice(
+                segment[index].idx1,
+                segment[index].idx2 + 1
+            );
+
+            //console.log(subarray);
+            let avg = math.format(
+                math.mean(subarray), {
+                    notation: 'fixed',
+                    precision: 2
+                });
+
+
+            stream.push(
+                [
+                    size,
+                    parseFloat(avg),
+                    pedal_id
+                ]
+            );
+
+            size += viewStream;
+
+            if (avg > max) {
+                max = parseFloat(avg);
+            }
+        }
+
+        return {
+            'stream': stream,
+            'max': max
+        };
+    }
+
+    async function mountDataStream(pedaladas, type) {
 
         let data = [];
         let max = 0;
+        let stream = [];
 
         if (type == 'heartrate') {
 
-            pedalSort.forEach(element => {
+            pedaladas.forEach(element => {
                 data = data.concat(element.heartrate_stream);
 
                 if (element.heartrate_stream_max > max) {
@@ -251,7 +327,7 @@
         }
 
         if (type == 'elevation') {
-            pedalSort.forEach(element => {
+            pedaladas.forEach(element => {
                 data = data.concat(element.elevation_stream);
 
                 if (element.elevation_stream_max > max) {
@@ -263,7 +339,7 @@
 
         if (type == 'speed') {
 
-            pedalSort.forEach(element => {
+            pedaladas.forEach(element => {
                 data = data.concat(element.speed_stream);
 
                 if (element.speed_stream_max > max) {
@@ -279,75 +355,48 @@
         };
     }
 
-    async function creatSegment(distance_history) {
+    async function updatePedalada(pedaladas) {
 
-        let sum = 0;
-        let meter = 0;
-        let segment = [];
-        let idx1 = 0;
-        let idx2 = 0;
+        for (const element of pedaladas) {
 
-        for (; idx2 < distance_history.length; idx2++) {
+            if (await checkStreamNull(element.id)) {
 
-            sum += distance_history[idx2];
-            meter = parseFloat((sum * 1000).toFixed(2));
+                let segments = await creatSegment(element);
 
-            if (meter >= segmentStream) {
-                segment.push({
-                    'distance': meter,
-                    'idx1': idx1,
-                    'idx2': idx2,
-                });
-                idx1 = idx2 + 1;
-                sum = 0;
+                let heartStream = await createStream(
+                    segments[element.id],
+                    element.heartrate_history,
+                    element.id,
+                    element.heartrate_AVG
+                );
+
+                let elevationStream = await createStream(
+                    segments[element.id],
+                    element.elevation_history,
+                    element.id,
+                    element.elevation_AVG
+                );
+
+                let speedStream = await createStream(
+                    segments[element.id],
+                    element.speed_history,
+                    element.id,
+                    element.speed_AVG
+                );
+
+                element.heartrate_stream = heartStream.stream;
+                element.heartrate_stream_max = heartStream.max;
+                element.elevation_stream = elevationStream.stream;
+                element.elevation_stream_max = elevationStream.max;
+                element.speed_stream = speedStream.stream;
+                element.speed_stream_max = speedStream.max;
+
+                await modifyPedalada(element);
+
             }
         }
 
-        return segment;
-
-    }
-
-    async function createStream(segment, attribute, pedal_id, avg) {
-
-        let stream = [];
-        stream.push([0, 0, pedal_id]);
-        let max = 0;
-        let subarray;
-
-        for (let index = 0; index < segment.length; index++) {
-
-            subarray = attribute.slice(
-                segment[index].idx1,
-                segment[index].idx2 + 1
-            );
-
-            console.log(subarray);
-            let avg = math.format(
-                math.mean(subarray), {
-                    notation: 'fixed',
-                    precision: 2
-                });
-
-
-            stream.push(
-                [
-                    viewStream,
-                    parseFloat(avg),
-                    pedal_id
-                ]
-            );
-            viewStream += 100;
-
-            if (avg > max) {
-                max = parseFloat(avg);
-            }
-        }
-
-        viewStream = 100;
-        return {
-            'stream': stream,
-            'max': max
-        };
+        return pedaladas;
     }
 
     async function updateStreamChart() {
@@ -356,22 +405,21 @@
         console.log("Atualizando StreamChart ...");
 
         await resizeStreamChart();
+        //console.log(pedaladas_barChart);
+        //let pedalStream = await normalizeData(pedaladas_barChart);
 
+        let legends = await mountLegend(pedaladas_barChart);
+        let colorStream = await mountColor(pedaladas_barChart);
+        pedaladas_barchart = await updatePedalada(pedaladas_barChart);
 
-
-        let pedalSort = await normalizeData(pedaladas_barChart);
-
-        let legends = await mountLegend(pedalSort);
-        let colorStream = await mountColor(pedalSort);
-
-        let heartData = await mountDataStream(pedalSort, 'heartrate');
-        let elevationData = await mountDataStream(pedalSort, 'elevation');
-        let speedData = await mountDataStream(pedalSort, 'speed');
+        let heartData = await mountDataStream(pedaladas_barChart, 'heartrate');
+        let elevationData = await mountDataStream(pedaladas_barChart, 'elevation');
+        let speedData = await mountDataStream(pedaladas_barChart, 'speed');
 
         //console.log(pedalSort);
-        //console.log(heartData);
-        //console.log(elevationData);
-        //console.log(speedData);
+        // console.log(heartData);
+        // console.log(elevationData);
+        // console.log(speedData);
 
         await create_StreamChart(
             'pedaladas_heartrate',
@@ -402,6 +450,7 @@
             speedData.data,
             speedData.max,
         );
+
         console.groupEnd();
     }
 </script>
