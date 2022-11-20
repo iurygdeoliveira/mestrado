@@ -1,24 +1,25 @@
 <script>
-    function updateSlider(selected) {
+    async function updateSlider(selected) {
 
-        distances = [];
-        console.group("Atualizando slider ...");
+        let distanceSlider = [];
+        console.group("Update slider ...");
         console.groupEnd();
 
         // Atualizando distancias
-        selected.forEach(rider => {
-            //console.log(store.session.has(rider));
-            if (store.session.has(rider)) {
+        for (const rider of selected) {
 
-                if (store.session.get(rider).maxDistance <= 0) {
-                    console.log('Erro na distância máxima do' + rider);
+            let has = await hasDistanceCyclist(rider);
+            if (has) {
+                let maxDistance = await filterMaxDistance(rider);
+                if (maxDistance <= 0) {
+                    console.log('Error in the maximum distance of the cyclist' + rider);
                 } else {
-                    distances.push(store.session.get(rider).maxDistance);
+                    distanceSlider.push(maxDistance);
                 }
             }
-        });
+        }
 
-        updatingSlider();
+        updatingSlider(distanceSlider);
 
         d3.selectAll('.ui-slider-handle').on('mouseup', function() {
             updateButtonSearchRiders(selected, false, true, false);
@@ -38,15 +39,15 @@
         });
     }
 
-    function updatingSlider() {
+    function updatingSlider(distanceSlider) {
 
 
-        if (distances.length > 0) {
+        if (distanceSlider.length > 0) {
 
             d3.select("#distance")
                 .style("display", 'block');
             //distances = distances.map(Number);
-            maxDistance = distances.reduce(function(a, b) {
+            let maxDistance = distanceSlider.reduce(function(a, b) {
                 return Math.max(a, b)
             });
 

@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <div class="container-fluid">
                     <div class="row">
-                        <h4 class="modal-title text-dark text-center col-11">Select Pedal</h4>
+                        <h4 class="modal-title text-dark text-center col-11">Select Ride</h4>
                         <button type="button" class="btn-close col-1" data-bs-dismiss="modal" aria-hidden="true"></button>
                     </div>
                     <div class="row">

@@ -1,4 +1,8 @@
 <script>
+    /**
+     * CACHE DISTANCES
+     */
+    let distances = [];
     async function createDB(rider) {
 
         Dexie.exists(rider).then(function(exists) {

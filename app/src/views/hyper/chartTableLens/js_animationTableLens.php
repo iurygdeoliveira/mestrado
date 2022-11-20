@@ -212,7 +212,7 @@
             return false
         }
 
-        if ((color == normalBlue) && (pedaladas_yellow_clicadas == 3)) {
+        if ((color == normalYellow) && (pedaladas_yellow_clicadas == 3)) {
             return false
         }
 

@@ -1,17 +1,17 @@
 version: "3"
 
 services:
-    memcached:
-        image: 'memcached:alpine'
-        container_name: memcached
-        ports:
-            - 11211:11211
-        tty: true
-        restart: always
-        networks:
-            - mestrado
-        command:
-            ["memcached", "-m 2048"]
+    # memcached:
+    #     image: 'memcached:alpine'
+    #     container_name: memcached
+    #     ports:
+    #         - 11211:11211
+    #     tty: true
+    #     restart: always
+    #     networks:
+    #         - mestrado
+    #     command:
+    #         ["memcached", "-m 2048"]
 
     # json-server:
     #     build: ./docker/json-server
@@ -25,32 +25,32 @@ services:
     #     networks:
     #         - mestrado
 
-    mysql:
-        image: mysql:latest
-        container_name: mysql
-        restart: always
-        tty: true
-        ports:
-            - ${MYSQL_PORT}:3306
-        command:
-           - --default-authentication-plugin=mysql_native_password
-           - --collation-server=utf8mb4_general_ci
-           - --character-set-server=utf8mb4
-           - --sync-binlog=0
-           #2: mesmo que haja uma falha de energia ou falha do sistema, os dados estarão disponíveis no arquivo de log e poderão ser recuperados.
-           #0: caso haja uma falha de energia ou falha do sistema, todos os dados não liberados não serão recuperáveis, pois não são gravados no arquivo de log ou no disco armazenado.
-           - --innodb-flush-log-at-trx-commit=0 
-           - --innodb-io-capacity=1000
-           # 2x o valor de innodb_io_capacity
-           - --innodb-io-capacity-max=2000
-           - --innodb-flush-method=O_DIRECT
-           - --innodb-flush-sync=0
-           - --skip-innodb-doublewrite
-        volumes:
-            - ./docker/mysql/db:/var/lib/mysql/
-            - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
-        networks:
-            - mestrado
+    # mysql:
+    #     image: mysql:latest
+    #     container_name: mysql
+    #     restart: always
+    #     tty: true
+    #     ports:
+    #         - ${MYSQL_PORT}:3306
+    #     command:
+    #        - --default-authentication-plugin=mysql_native_password
+    #        - --collation-server=utf8mb4_general_ci
+    #        - --character-set-server=utf8mb4
+    #        - --sync-binlog=0
+    #        #2: mesmo que haja uma falha de energia ou falha do sistema, os dados estarão disponíveis no arquivo de log e poderão ser recuperados.
+    #        #0: caso haja uma falha de energia ou falha do sistema, todos os dados não liberados não serão recuperáveis, pois não são gravados no arquivo de log ou no disco armazenado.
+    #        - --innodb-flush-log-at-trx-commit=0 
+    #        - --innodb-io-capacity=1000
+    #        # 2x o valor de innodb_io_capacity
+    #        - --innodb-io-capacity-max=2000
+    #        - --innodb-flush-method=O_DIRECT
+    #        - --innodb-flush-sync=0
+    #        - --skip-innodb-doublewrite
+    #     volumes:
+    #         - ./docker/mysql/db:/var/lib/mysql/
+    #         - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    #     networks:
+    #         - mestrado
         
         # Estudar sobre esses comandos
     # command:

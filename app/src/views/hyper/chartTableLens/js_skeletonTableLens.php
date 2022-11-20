@@ -76,9 +76,7 @@
 
             for (let count = 0; count < selected.length; count++) {
 
-                console.log(selected[count]);
-                console.log(store.session.get(selected[count]));
-                let pedaladas = store.session.get(selected[count]).distances;
+                let pedaladas = await filterRides(selected[count]);
                 let rider = selected[count];
                 createTableLens(pedaladas, count, rider).then(() => {
 

@@ -233,82 +233,6 @@
     }
 
 
-    async function creatSegment(pedalada) {
-
-
-        let segments = {};
-        segments[pedalada.id] = [];
-
-        let sum = 0;
-        let meter = 0;
-
-        for (let idx1 = 0, idx2 = 0; idx2 < pedalada.distance_history.length; idx2++) {
-
-            sum += pedalada.distance_history[idx2];
-            meter = parseFloat((sum * 1000).toFixed(2));
-
-            if (meter >= segmentStream) {
-
-                let segment = {
-                    'distance': meter,
-                    'idx1': idx1,
-                    'idx2': idx2
-                };
-                segments[pedalada.id].push(segment);
-                idx1 = idx2 + 1;
-                sum = 0;
-            }
-        }
-
-        return segments;
-
-    }
-
-
-    async function createStream(segment, attribute, pedal_id, avg) {
-
-        let stream = [];
-        stream.push([0, 0, pedal_id]);
-        let max = 0;
-        let subarray;
-        let size = viewStream;
-
-        for (let index = 0; index < segment.length; index++) {
-
-            subarray = attribute.slice(
-                segment[index].idx1,
-                segment[index].idx2 + 1
-            );
-
-            //console.log(subarray);
-            let avg = math.format(
-                math.mean(subarray), {
-                    notation: 'fixed',
-                    precision: 2
-                });
-
-
-            stream.push(
-                [
-                    size,
-                    parseFloat(avg),
-                    pedal_id
-                ]
-            );
-
-            size += viewStream;
-
-            if (avg > max) {
-                max = parseFloat(avg);
-            }
-        }
-
-        return {
-            'stream': stream,
-            'max': max
-        };
-    }
-
     async function mountDataStream(pedaladas, type) {
 
         let data = [];
@@ -355,49 +279,6 @@
         };
     }
 
-    async function updatePedalada(pedaladas) {
-
-        for (const element of pedaladas) {
-
-            if (await checkStreamNull(element.id)) {
-
-                let segments = await creatSegment(element);
-
-                let heartStream = await createStream(
-                    segments[element.id],
-                    element.heartrate_history,
-                    element.id,
-                    element.heartrate_AVG
-                );
-
-                let elevationStream = await createStream(
-                    segments[element.id],
-                    element.elevation_history,
-                    element.id,
-                    element.elevation_AVG
-                );
-
-                let speedStream = await createStream(
-                    segments[element.id],
-                    element.speed_history,
-                    element.id,
-                    element.speed_AVG
-                );
-
-                element.heartrate_stream = heartStream.stream;
-                element.heartrate_stream_max = heartStream.max;
-                element.elevation_stream = elevationStream.stream;
-                element.elevation_stream_max = elevationStream.max;
-                element.speed_stream = speedStream.stream;
-                element.speed_stream_max = speedStream.max;
-
-                await modifyPedalada(element);
-
-            }
-        }
-
-        return pedaladas;
-    }
 
     async function updateStreamChart() {
 
@@ -410,7 +291,7 @@
 
         let legends = await mountLegend(pedaladas_barChart);
         let colorStream = await mountColor(pedaladas_barChart);
-        pedaladas_barchart = await updatePedalada(pedaladas_barChart);
+        //pedaladas_barchart = await updatePedalada(pedaladas_barChart);
 
         let heartData = await mountDataStream(pedaladas_barChart, 'heartrate');
         let elevationData = await mountDataStream(pedaladas_barChart, 'elevation');

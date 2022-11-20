@@ -17,8 +17,8 @@
             widthCharts = $('#contentCharts').width();
             heightWindow = $(this).height();
 
-            generateMultiVis();
             resizeModalTableLens();
+            generateMultiVis();
         }
     });
 

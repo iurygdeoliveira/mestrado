@@ -60,14 +60,14 @@
 
         if ($this.is(':checked')) {
 
+            selected.push($this.attr("name"));
             updateButtonSearchRiders(selected, false, true, false);
-            storeDistance($this.attr("id")).then(() => {
-                updateSlider(selected);
+            storeDistance($this.attr("id")).then(async () => {
+                await updateSlider(selected);
                 tableLens();
                 updateButtonSearchRiders(selected, true, false, false);
             });
 
-            selected.push($this.attr("name"));
             d3.select(this).style('background-color', colors.shift());
 
         }
@@ -106,7 +106,6 @@
     }
 
     function arrayRemove(arr, value) {
-
         return arr.filter(function(ele) {
             return ele != value;
         });

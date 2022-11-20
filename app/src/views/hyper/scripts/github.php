@@ -34,18 +34,18 @@
             }
         );
 
-        let distances = data.all_distances.split("|");
-        distances = distances.map((element) => {
+        let distances_current = data.all_distances.split("|");
+        distances_current = distances_current.map((element) => {
             let aux = element.split(",");
-            let distance = aux[0].split(":");
+            let distanceAux = aux[0].split(":");
             let id = aux[1].split(":");
             let data = {
-                'distance': parseFloat(distance[1]),
+                'distance': parseFloat(distanceAux[1]),
                 'id': parseFloat(id[1])
             };
             return data;
         });
-        return distances;
+        return distances_current;
     }
 
     function extractUrlDownload(arr, value) {

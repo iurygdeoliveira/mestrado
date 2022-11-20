@@ -129,12 +129,12 @@
 
     function mountDistances() {
 
-        let distances = [];
+        let distances_current = [];
         pedaladas_barChart.forEach(element => {
-            distances.push(element.distance);
+            distances_current.push(element.distance);
         });
 
-        return distances;
+        return distances_current;
     }
 
     function mountBackgroundColor() {

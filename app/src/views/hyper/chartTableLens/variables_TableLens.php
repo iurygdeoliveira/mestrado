@@ -6,7 +6,6 @@
     let switchToggle = 'overview';
     let switchOrder = 'descending';
     let selected = []; // Array com o nome dos ciclistas selecionados
-    let distances = [];
     let maxDistance = -1; // Distância maxima entre todas as pedaladas selecionadas
 
     // ***********************************************************

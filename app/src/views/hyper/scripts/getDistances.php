@@ -1,35 +1,37 @@
 <script>
     async function storeDistance(rider) {
 
-        if (!store.session.has(rider)) {
-            let distances = await getDistances(rider);
-            store.session.set(rider, {
-                distances: distances,
-                maxDistance: await getMaxDistance(distances),
+        if (!(await hasDistanceCyclist(rider))) {
+
+            let index = parseInt(rider.replace(/[^0-9]/g, ''));
+            let data = await getDistances(rider);
+
+            distances.push({
+                cyclist: index,
+                rides: data,
+                max: await getMaxDistance(data)
             });
-            return;
         }
 
-        if (store.session.get(rider).maxDistance <= 0) {
-            console.log('Erro na distância máxima do' + rider);
-            return;
+        console.log("Distances Actives:");
+        console.table(distances);
+    }
+
+    async function hasDistanceCyclist(cyclist) {
+
+        if (distances.length == 0) {
+            return false;
         }
 
-        if (store.session.get(rider).maxDistance > 0) {
-            console.log('Distância máxima do ' + rider + ' presente no storage');
-            return;
+        const found = await filterDistance(cyclist);
+
+        if (found == undefined) {
+            return false;
         }
 
-        if (store.session.get(rider).distances.length < 0) {
-            console.log('Erro na captura de distâncias do ' + rider);
-            return;
+        if ((typeof found === 'object') && (found !== null)) {
+            return true;
         }
-
-        if (store.session.get(rider).distances.length > 0) {
-            console.log('Distâncias do ' + rider + ' presente no storage');
-            return;
-        }
-
     }
 
     async function getMaxDistance(distances) {
@@ -39,7 +41,23 @@
     async function getDistances(cyclist) {
 
         console.log("Cyclist " + cyclist.replace(/[^0-9]/g, '') + " without distances");
-        let distances = await getDistancesGithub(cyclist);
-        return distances;
+        let distances_current = await getDistancesGithub(cyclist);
+        return distances_current;
+    }
+
+    async function filterMaxDistance(cyclist) {
+        let result = await filterDistance(cyclist);
+        return result.max;
+    }
+
+    async function filterDistance(cyclist) {
+        let index = parseInt(cyclist.replace(/[^0-9]/g, ''));
+        return distances.find(element => element.cyclist === index);
+    }
+
+    async function filterRides(cyclist) {
+
+        let result = await filterDistance(cyclist);
+        return result.rides;
     }
 </script>

@@ -10,7 +10,7 @@
         // Obtendo faixa de distância
         let range_min = parseFloat($('#range-min').text());
         let range_max = parseFloat($('#range-max').text());
-        console.log("Tamanho Maximo:", range_max, "Tamanho mínimo:", range_min);
+        console.log("Maximum distance:", range_max, "Minimum distance:", range_min);
 
         // Delimitando pedaladas dentro da faixa de distância escolhida
         let pedaladas_selected = [];

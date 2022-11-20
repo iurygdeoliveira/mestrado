@@ -8,8 +8,8 @@
 <?php $this->insert("../scripts/scripts") ?>
 <?php $this->insert("../scripts/github") ?>
 <?php $this->insert("../scripts/getPedaladas") ?>
-<?php $this->insert("../scripts/globalVariables") ?>
 <?php $this->insert("../scripts/getDistances") ?>
+<?php $this->insert("../scripts/globalVariables") ?>
 <?php $this->insert("../scripts/updateSlider") ?>
 <?php $this->insert("../scripts/updateButtons") ?>
 <?php $this->insert("../scripts/checkboxRiders") ?>
