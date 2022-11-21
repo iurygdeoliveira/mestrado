@@ -30,21 +30,26 @@
 
     }
 
+    async function createSubarray(attribute, iterator) {
+
+        return attribute.slice(
+            iterator.idx1,
+            iterator.idx2
+        );
+
+    }
+
     async function createStream(segment, attribute, pedal_id, avg) {
 
         let stream = [];
         stream.push([0, 0, pedal_id]);
         let max = 0;
-        let subarray;
+        let subarray = [];
         let size = viewStream;
 
-        for (let index = 0; index < segment.length; index++) {
+        for (const iterator of segment) {
 
-            subarray = attribute.slice(
-                segment[index].idx1,
-                segment[index].idx2 + 1
-            );
-
+            subarray = await createSubarray(attribute, iterator);
 
             if (subarray.length == 0) {
                 console.log(attribute);
@@ -56,8 +61,8 @@
                 math.mean(subarray), {
                     notation: 'fixed',
                     precision: 2
-                });
-
+                }
+            );
 
             stream.push(
                 [
@@ -72,6 +77,7 @@
             if (avg > max) {
                 max = parseFloat(avg);
             }
+
         }
 
         return {
