@@ -22,4 +22,3 @@
 <?php $this->insert("../chartStream/js_streamChart") ?>
 <?php $this->insert("../chartBar/js_barChart") ?>
 <?php $this->insert("../scripts/generateMultiVis") ?>
-<?php $this->insert("../scripts/totalStorage") ?>

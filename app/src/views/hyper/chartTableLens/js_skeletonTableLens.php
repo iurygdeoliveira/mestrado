@@ -61,17 +61,17 @@
 
     async function tableLens() {
 
-        console.group("Ciclistas selecionados ...");
+        console.group("Selected cyclists");
         console.log(selected);
         console.groupEnd();
 
         // Limpando conteudo dos svg's
         console.group("Table lens ...");
-        console.log("Criando esqueleto do table lens ...");
+        console.log("Creating skeleton for the table lens ...");
         removeTableLens();
         await createSkeleton().then(async () => {
 
-            console.log("Criando table lens ...");
+            console.log("Creating table lens ...");
             console.groupEnd();
 
             for (let count = 0; count < selected.length; count++) {
@@ -86,11 +86,7 @@
                 });
             }
         });
-
-        await enableTipsyTooltip("[line_clicked]", 'bottom-center');
-
         updateButtonSearchRiders(selected, true, false, false)
-
     }
 
     function applyHeightItem(line) {

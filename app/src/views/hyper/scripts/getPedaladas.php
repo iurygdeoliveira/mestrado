@@ -68,7 +68,13 @@
 
                 let result = await db.table('pedaladas')
                     .where('pedal_id').equals(pedalada).toArray();
-                console.log(result[0].heartrate_stream == null);
+
+                if (result[0].heartrate_stream == null) {
+                    console.log(`Ride stream ${pedalada} not calculated`);
+                } else {
+                    console.log(`Ride stream ${pedalada} is already calculated`);
+                }
+
                 return (result[0].heartrate_stream == null);
             });
     }
@@ -99,9 +105,10 @@
 
                 return await getPedaladaDB(db, pedalada).then(async (result) => {
                     console.group("storePedalada");
-                    console.log("Retorno da consulta ao indexedDB: ", result);
+                    console.log("Query return to indexedDB: ");
+                    (result == false ? console.log(result) : console.table(result));
                     if (!result) {
-                        console.log(`Armazenando dados da pedalada ${pedalada.id}`);
+                        console.log(`Storing ride data ${pedalada.id}`);
                         console.groupEnd();
                         await getPedaladaGithub(pedalada.rider, pedalada.id).then(async (res) => {
 
@@ -136,7 +143,7 @@
                         });
                         return await getPedaladaDB(db, pedalada);
                     } else {
-                        console.log(`Dados da pedalada ${pedalada.id} já estão armazenadas`);
+                        console.log(`${pedalada.id} ride data is already stored`);
                         console.groupEnd();
                         return result;
                     }
@@ -150,7 +157,7 @@
             .then(async function(db) {
 
                 const result = await getPedaladaDB(db, pedalada_current).then(async (result) => {
-                    console.log("Retorno da consulta ao indexedDB: ", result);
+                    console.log("Query return to indexedDB: ", result);
                     if (!result) {
                         console.log(`Pontos da Pedalada ${pedalada_current.id} não encontrados`);
                         return false;

@@ -230,10 +230,9 @@
 
     async function updateBarChart() {
 
-        console.group("BarChart ...");
-        console.log("Atualizando BarChart ...");
+        console.log("Update BarChart ...");
         await removeBarChart();
-        console.groupEnd();
+
         pedaladas_barChart = await sortBarChart();
         if (pedaladas_barChart.length > 0) {
             await createBoxBarChart();

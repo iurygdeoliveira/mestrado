@@ -42,8 +42,6 @@
 
     async function mountAverage(values) {
 
-        console.log("Mount Average ...");
-
         let average = [];
         for (let count = 0; count < selected.length; count++) {
 
@@ -89,8 +87,6 @@
     }
 
     async function mountDataSetsRadarChart(pedaladas) {
-
-        console.log("Montando dataset RadarChart ...");
 
         let values = await mountValues(pedaladas)
         return await mountAverage(values);
@@ -230,12 +226,8 @@
 
     async function updateRadarChart() {
 
-        console.group("RadarChart ...");
-        console.log("Atualizando RadarChart ...");
-
+        console.log("Update RadarChart ...");
         await resizeRadarChart();
         await create_RadarChart();
-        console.groupEnd();
-
     }
 </script>

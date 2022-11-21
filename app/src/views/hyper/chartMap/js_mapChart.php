@@ -13,7 +13,6 @@
 
     async function calculateMapCenter(pedaladas) {
 
-        console.log("Calculando map center ...");
         let centroids = [];
         let bounds;
 
@@ -55,7 +54,7 @@
         var stateChangingButton = L.easyButton({
             states: [{
                 stateName: 'see-distances', // name the state
-                icon: 'mdi mdi-18px mdi-map-marker-distance', // and define its properties
+                icon: 'mdi mdi-18px mdi-alpha-d-box', // and define its properties
                 title: 'See distances', // like its title
                 onClick: function(btn, map) { // and its callback
                     distance.addTo(map);
@@ -75,7 +74,7 @@
         var stateChangingButton = L.easyButton({
             states: [{
                 stateName: 'see-routes', // name the state
-                icon: 'mdi mdi-18px mdi-map-marker-path', // and define its properties
+                icon: 'mdi mdi-18px mdi-alpha-r-box', // and define its properties
                 title: 'See Routes', // like its title
                 onClick: function(btn, map) { // and its callback
                     route.addTo(map);
@@ -94,7 +93,7 @@
         var stateChangingButton = L.easyButton({
             states: [{
                 stateName: 'see-heatmap', // name the state
-                icon: 'mdi mdi-18px mdi-temperature-celsius', // and define its properties
+                icon: 'mdi mdi-18px mdi-alpha-h-box', // and define its properties
                 title: 'See Heatmap', // like its title
                 onClick: function(btn, map) { // and its callback
                     heatmap.addTo(map);
@@ -346,8 +345,7 @@
 
     async function updateMapChart() {
 
-        console.group("MapChart ...");
-        console.log("Atualizando MapChart ...");
+        console.log("Update MapChart ...");
         await resizeMapChart();
 
         if (betweenPointsGroup != null) {
@@ -365,7 +363,5 @@
         heatmap = await plotHeatmap(pedaladas_barChart, heatmap);
         let map = await defineLayer(route, distance, heatmap, pedaladas_barChart);
         let centerMap = await calculateMapCenter(pedaladas_barChart);
-
-        console.groupEnd();
     }
 </script>

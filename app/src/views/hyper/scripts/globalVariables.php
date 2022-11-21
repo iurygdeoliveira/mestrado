@@ -8,7 +8,7 @@
     let adjustHeightCharts = 1;
     d3.select('#contentSidebar').style('min-width', widthSidebar + 'px');
     let widthCharts = $('#contentCharts').width();
-    console.log("Altura Janela: ", heightWindow, "Largura Janela: ", widthWindow);
+
     $(window).on('resize', function() {
 
         if (pedaladas_barChart.length > 0) {
@@ -18,7 +18,7 @@
             heightWindow = $(this).height();
 
             resizeModalTableLens();
-            generateMultiVis();
+            updateButtonMultivis(pedaladas_barChart, false, false, true);
         }
     });
 
@@ -44,6 +44,11 @@
     const lightPurple = 'rgb(193, 146, 232)'; // hsl(273, 65%, 74%)
     const normalPurple = 'rgb(162, 65, 241)'; // hsl(273, 86%, 60%)
     const darkPurple = 'rgb(83, 11, 142)'; // hsl(273, 86%, 30%)
+
+    /**
+     * CYCLIST SELECTED
+     */
+    let selected = [];
 </script>
 <?php $this->insert("../scripts/cachePedaladas") ?>
 <?php $this->insert("../chartBar/variables_BarChart") ?>

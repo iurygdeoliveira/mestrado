@@ -21,16 +21,10 @@
 
         updatingSlider(distanceSlider);
 
-        d3.selectAll('.ui-slider-handle').on('mouseup', function() {
+        d3.selectAll('.ui-slider-handle').on('mouseup', async function() {
             updateButtonSearchRiders(selected, false, true, false);
 
-            removeBarChart();
-            pedaladas_barChart = [];
-            pedaladas_red_clicadas = 0;
-            pedaladas_blue_clicadas = 0;
-            pedaladas_yellow_clicadas = 0;
-            pedaladas_green_clicadas = 0;
-            pedaladas_purple_clicadas = 0;
+            await restartMultiVis();
 
             tableLens().then(() => {
                 updateButtonSearchRiders(selected, true, false, false);
@@ -46,13 +40,11 @@
 
             d3.select("#distance")
                 .style("display", 'block');
-            //distances = distances.map(Number);
+
             let maxDistance = distanceSlider.reduce(function(a, b) {
                 return Math.max(a, b)
             });
 
-            //console.log("Distâncias: ", distances);
-            //console.log("Maior Distância: ", maxDistance);
             d3.select("#range-max").text(maxDistance);
             updateRangeMax(maxDistance);
 
@@ -78,5 +70,21 @@
             }
         });
 
+    }
+
+    async function restartMultiVis() {
+
+        removeBarChart();
+        pedaladas_barChart = [];
+        pedaladas_red_clicadas = 0;
+        pedaladas_blue_clicadas = 0;
+        pedaladas_yellow_clicadas = 0;
+        pedaladas_green_clicadas = 0;
+        pedaladas_purple_clicadas = 0;
+        colors_red_current = [normalRed, darkRed, lightRed];
+        colors_blue_current = [normalBlue, darkBlue, lightBlue];
+        colors_yellow_current = [normalYellow, darkYellow, lightYellow];
+        colors_green_current = [normalGreen, darkGreen, lightGreen];
+        colors_purple_current = [normalPurple, darkPurple, lightPurple];
     }
 </script>

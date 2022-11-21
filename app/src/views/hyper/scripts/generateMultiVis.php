@@ -30,7 +30,6 @@
 
     }
 
-
     async function createStream(segment, attribute, pedal_id, avg) {
 
         let stream = [];
@@ -46,7 +45,13 @@
                 segment[index].idx2 + 1
             );
 
-            //console.log(subarray);
+
+            if (subarray.length == 0) {
+                console.log(attribute);
+                console.log(segment);
+                console.log(subarray);
+            }
+
             let avg = math.format(
                 math.mean(subarray), {
                     notation: 'fixed',
@@ -118,8 +123,7 @@
 
     async function generateMultiVis() {
 
-
-        console.group("Gerando MultiVis");
+        console.group("Generate MultiVis");
         if (pedaladas_barChart.length > 0) {
             await updateButtonMultivis(pedaladas_barChart, false, true, false);
             pedaladas_barchart = await updatePedalada(pedaladas_barChart);
@@ -129,6 +133,6 @@
             await updateRadarChart();
             await updateButtonMultivis(pedaladas_barChart, true, false, false);
         }
-        totalStorage(); // Monitorando Storage
+        console.groupEnd();
     }
 </script>

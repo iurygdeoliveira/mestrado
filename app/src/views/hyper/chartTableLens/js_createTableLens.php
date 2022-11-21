@@ -13,10 +13,10 @@
         console.log("Maximum distance:", range_max, "Minimum distance:", range_min);
 
         // Delimitando pedaladas dentro da faixa de distância escolhida
-        let pedaladas_selected = [];
+        let limitSelected = [];
         for (var i = 0; i < pedaladas.length; i++) {
             if ((pedaladas[i].distance >= range_min) && (pedaladas[i].distance <= range_max)) {
-                pedaladas_selected.push({
+                limitSelected.push({
                     'distance': pedaladas[i].distance,
                     'id': pedaladas[i].id
                 });
@@ -24,20 +24,16 @@
         }
 
         // Ordenando elementos
-        pedaladas_selected = arraySort(switchOrder, pedaladas_selected);
-
-        store.session.set(rider + '_selected', {
-            pedaladas_selected
-        });
+        limitSelected = await arraySort(switchOrder, limitSelected);
 
         // Obtendo maior pedaladas entre as pedaladas limitadas pelo slider
-        let maxDistanceRider = await getMaxDistance(pedaladas_selected);
+        let maxDistanceRider = await getMaxDistance(limitSelected);
 
         // Desenhando linhas
         let factor = 0;
         if (switchToggle == 'item') {
             drawItens(
-                    index, color, pedaladas_selected,
+                    index, color, limitSelected,
                     maxDistanceRider, rider,
                     padding_item, margin_item, 15)
                 .then(() => {
@@ -46,7 +42,7 @@
         }
         if (switchToggle == 'overview') {
             drawItens(
-                    index, color, pedaladas_selected,
+                    index, color, limitSelected,
                     maxDistanceRider, rider,
                     padding_overview, margin_overview, 2)
                 .then(() => {
@@ -115,7 +111,7 @@
 
     }
 
-    function arraySort(mode, pedaladas) {
+    async function arraySort(mode, pedaladas) {
 
         if (mode == 'descending') {
 

@@ -31,36 +31,54 @@
                 // Desabilitar click nas linhas falsas para travar animação
                 if (disableClickLineFalse(this)) {
 
-                    //let pedalada_clicada = d3.select(this).attr("id").split("_");
                     // Obtendo cores dos ciclistas dos checkbox
                     let color_main = $(this).parent().css('border-top-color');
-                    let color_current = '';
 
                     switch (color_main) {
                         case normalRed:
-                            await lineClicked(this, 'colors_red_current', 'colors_red');
+                            await lineClicked(
+                                this,
+                                colors_red_current,
+                                [normalRed, darkRed, lightRed]
+                            );
                             pedaladas_red_clicadas += 1;
-                            console.log("pedaladas red clicadas:", pedaladas_red_clicadas);
+                            console.log("clicked red rides:", pedaladas_red_clicadas);
                             break;
                         case normalBlue:
-                            await lineClicked(this, 'colors_blue_current', 'colors_blue');
+                            await lineClicked(
+                                this,
+                                colors_blue_current,
+                                [normalBlue, darkBlue, lightBlue]
+                            );
                             pedaladas_blue_clicadas += 1;
-                            console.log("pedaladas blue clicadas:", pedaladas_blue_clicadas);
+                            console.log("clicked blue rides:", pedaladas_blue_clicadas);
                             break;
                         case normalYellow:
-                            await lineClicked(this, 'colors_yellow_current', 'colors_yellow');
+                            await lineClicked(
+                                this,
+                                colors_yellow_current,
+                                [normalYellow, darkYellow, lightYellow]
+                            );
                             pedaladas_yellow_clicadas += 1;
-                            console.log("pedaladas yellow clicadas:", pedaladas_yellow_clicadas);
+                            console.log("clicked yellow rides:", pedaladas_yellow_clicadas);
                             break;
                         case normalGreen:
-                            await lineClicked(this, 'colors_green_current', 'colors_green');
+                            await lineClicked(
+                                this,
+                                colors_green_current,
+                                [normalGreen, darkGreen, lightGreen]
+                            );
                             pedaladas_green_clicadas += 1;
-                            console.log("pedaladas green clicadas:", pedaladas_green_clicadas);
+                            console.log("clicked green rides:", pedaladas_green_clicadas);
                             break;
                         case normalPurple:
-                            await lineClicked(this, 'colors_purple_current', 'colors_purple');
+                            await lineClicked(
+                                this,
+                                colors_purple_current,
+                                [normalPurple, darkPurple, lightPurple]
+                            );
                             pedaladas_purple_clicadas += 1;
-                            console.log("pedaladas purple clicadas:", pedaladas_purple_clicadas);
+                            console.log("clicked purple rides:", pedaladas_purple_clicadas);
                             break;
                     }
                 } else {
@@ -74,16 +92,14 @@
     async function lineClicked(pedalada, colors_current, colors) {
         let aux = [];
 
-        //console.log("color red");
-        if (store.session.get(colors_current).length == 0) {
-            store.session.set(colors_current, store.session.get(colors));
+        if (colors_current.length == 0) {
+            colors_current = colors;
         }
-        aux = store.session.get(colors_current); // Obtendo cores a serem utilizadas 
-        color_current = aux.pop(); // Obtendo cor específica a ser utilizada
+        // aux = store.session.get(colors_current); // Obtendo cores a serem utilizadas 
+        // color_current = aux.pop(); // Obtendo cor específica a ser utilizada
 
-        await lineStateChange(pedalada, color_current);
-
-        store.session.set(colors_current, aux);
+        // enviando cor especifica a ser aplicada na linha
+        await lineStateChange(pedalada, colors_current.pop());
 
         // Armazenando as pedaladas para o bar chart
         push_pedaladas_barChart(pedalada);
@@ -96,11 +112,9 @@
             .attr("color_selected", color_current);
     }
 
-    function lineStateOriginal(line, key, pedaladas_clicadas) {
-        let color_current = '';
-        let colors_remaining = '';
+    function lineStateOriginal(line, colors_current, pedaladas_clicadas) {
 
-        color_current = d3.select(line).attr("color_selected");
+        let color_current = d3.select(line).attr("color_selected");
 
         changeColorLine('#' + $(line).attr("id"), background_lens);
         d3.select(line)
@@ -109,40 +123,61 @@
         adjustHeightLine('#' + $(line).attr("id"));
         pedaladas_clicadas -= 1;
         remove_pedaladas_barChart(line); // Removendo pedalada do barchart
-        colors_remaining = store.session.get(key);
-        colors_remaining.push(color_current);
-        store.session.set(key, colors_remaining);
-        console.log(key + " clicadas:", pedaladas_clicadas);
-        console.log(key + " restantes:", store.session.get(key));
+
+        colors_current.push(color_current);
+
+        let color_parent = $(line).parent().css('border-top-color');
+        switch (color_parent) {
+            case normalRed:
+                colors_red_current = colors_current;
+                console.log("Red colors available:", colors_red_current);
+                break;
+            case normalBlue:
+                colors_blue_current = colors_current;
+                console.log("Blue colors available:", colors_blue_current);
+                break;
+            case normalYellow:
+                colors_yellow_current = colors_current;
+                console.log("Yellow colors available:", colors_yellow_current);
+                break;
+            case normalGreen:
+                colors_green_current = colors_current;
+                console.log("Green colors available:", colors_green_current);
+                break;
+            case normalPurple:
+                colors_purple_current = colors_current;
+                console.log("Purple colors available:", colors_purple_current);
+                break;
+        }
         return pedaladas_clicadas;
     }
 
     function enableClickLineTrue(line) {
 
         if ($(line).attr("line_clicked") == 'true') {
-            console.log("Habilitando clicks no box do table lens");
+            console.log("Enabling clicks in the table lens box");
 
             let pedalada = $(line).attr("id").split("_");
             let color = $('#' + pedalada).attr('style').replace(";", "").replace("background-color: ", "");
 
             if ((color == normalRed)) {
-                pedaladas_red_clicadas = lineStateOriginal(line, 'colors_red_current', pedaladas_red_clicadas);
+                pedaladas_red_clicadas = lineStateOriginal(line, colors_red_current, pedaladas_red_clicadas);
             }
 
             if ((color == normalBlue)) {
-                pedaladas_blue_clicadas = lineStateOriginal(line, 'colors_blue_current', pedaladas_blue_clicadas);
+                pedaladas_blue_clicadas = lineStateOriginal(line, colors_blue_current, pedaladas_blue_clicadas);
             }
 
             if ((color == normalYellow)) {
-                pedaladas_yellow_clicadas = lineStateOriginal(line, 'colors_yellow_current', pedaladas_yellow_clicadas);
+                pedaladas_yellow_clicadas = lineStateOriginal(line, colors_yellow_current, pedaladas_yellow_clicadas);
             }
 
             if ((color == normalGreen)) {
-                pedaladas_green_clicadas = lineStateOriginal(line, 'colors_green_current', pedaladas_green_clicadas);
+                pedaladas_green_clicadas = lineStateOriginal(line, colors_green_current, pedaladas_green_clicadas);
             }
 
             if ((color == normalPurple)) {
-                pedaladas_purple_clicadas = lineStateOriginal(line, 'colors_purple_current', pedaladas_purple_clicadas);
+                pedaladas_purple_clicadas = lineStateOriginal(line, colors_purple_current, pedaladas_purple_clicadas);
             }
         }
 
@@ -257,6 +292,5 @@
         changeColorLine(line, background_lens);
         adjustHeightLine(line);
         adjustHeightBox(line, false);
-
     }
 </script>

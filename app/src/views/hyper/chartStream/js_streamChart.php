@@ -80,7 +80,7 @@
                     }
                 },
                 position: function(pt) {
-                    return [pt[0], pt[1]];
+                    return [pt[0] + 10, pt[1]];
                 },
 
                 formatter: function(params) {
@@ -279,12 +279,9 @@
         };
     }
 
-
     async function updateStreamChart() {
 
-        console.group("StreamChart ...");
-        console.log("Atualizando StreamChart ...");
-
+        console.log("Update StreamChart ...");
         await resizeStreamChart();
         //console.log(pedaladas_barChart);
         //let pedalStream = await normalizeData(pedaladas_barChart);
@@ -331,7 +328,5 @@
             speedData.data,
             speedData.max,
         );
-
-        console.groupEnd();
     }
 </script>
