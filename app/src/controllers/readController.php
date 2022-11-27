@@ -438,7 +438,7 @@ class readController extends Controller
         set_time_limit(0);
         ini_set('memory_limit', '-1');
 
-        for ($i = 2; $i <= 2; $i++) {
+        for ($i = 2; $i <= 19; $i++) {
             # code...
 
             $results = json_decode($this->readJsonFile(CONF_JSON_CYCLIST, "Cyclist_{$i}result.json"));
@@ -451,44 +451,46 @@ class readController extends Controller
 
                 if ($file != 'all_distances.json') {
 
+
+                    $distanceHistory = $this->readAttribute($cyclist, $file, 'distance_history');
+                    $timeHistory = $this->readAttribute($cyclist, $file, 'time_history');
+
                     $path =
                         $cyclist .
                         DIRECTORY_SEPARATOR .
                         $file .
                         DIRECTORY_SEPARATOR .
-                        'distance_outliers.json';
+                        'overview.json';
 
-                    $distanceOutliers = json_decode($this->readJsonFile(CONF_JSON_CYCLIST, $path));
+                    $overview = json_decode($this->readJsonFile(CONF_JSON_CYCLIST, $path));
+                    dp($overview->speed_avg);
+                    $speedHistory = [];
 
-                    $distanceHistory = $this->readAttribute($cyclist, $file, 'distance_history');
-                    $timeHistory = $this->readAttribute($cyclist, $file, 'time_history');
-                    $speedHistory = $this->readAttribute($cyclist, $file, 'speed_history');
+                    foreach ($distanceHistory as $key => $value) {
 
-                    $outliers = $distanceOutliers[0]->trackpointOutlier;
+                        if ($key == 0) {
+                            array_push($speedHistory, '0');
+                        } else {
 
-                    foreach ($outliers as $key => $value) {
+                            $distance = new Decimal($value);
 
-                        dp($speedHistory[$value->idx]);
-                        $distance = new Decimal($distanceHistory[$value->idx]);
-                        dp($distance);
+                            $timeDiff = Math::sub(
+                                strval($this->timeToHours($timeHistory[$key])),
+                                strval($this->timeToHours($timeHistory[$key - 1])),
+                                20
+                            );
 
-                        $timeDiff = Math::sub(
-                            strval($this->timeToHours($timeHistory[$value->idx])),
-                            strval($this->timeToHours($timeHistory[$value->idx - 1])),
-                            20
-                        );
-
-                        $speedHistory[$value->idx] = Math::div(
-                            $distance->toString(),
-                            $timeDiff,
-                            20
-                        );
-                        dp($timeDiff);
-                        dp($value->idx);
-                        dp($speedHistory[$value->idx]);
-                        dpexit($speedHistory);
+                            $speed = Math::div(
+                                $distance->toString(),
+                                $timeDiff,
+                                20
+                            );
+                            array_push($speedHistory, $speed);
+                        }
                     }
 
+                    $overview->speed_avg = Decimal::avg($speedHistory)->toFixed(2);
+                    dp($overview->speed_avg);
 
                     $reduce = function ($carry, $item) {
                         $carry .= $item . '|';
@@ -496,11 +498,18 @@ class readController extends Controller
                     };
 
                     dp("Cyclist: $cyclist");
+                    dp("ride: $file");
                     dp(
                         $this->createData(
                             CONF_JSON_CYCLIST . $cyclist . DIRECTORY_SEPARATOR . $file . DIRECTORY_SEPARATOR,
                             'speed_history',
                             array_reduce($distanceHistory, $reduce)
+                        )
+                    );
+                    dp(
+                        $this->fixOverview(
+                            CONF_JSON_CYCLIST . $cyclist . DIRECTORY_SEPARATOR . $file . DIRECTORY_SEPARATOR,
+                            $overview
                         )
                     );
                 }
