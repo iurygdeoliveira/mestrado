@@ -106,7 +106,7 @@
                 return await getPedaladaDB(db, pedalada).then(async (result) => {
                     console.group("storePedalada");
                     console.log("Query return to indexedDB: ");
-                    (result == false ? console.log(result) : console.table(result));
+                    console.log(result);
                     if (!result) {
                         console.log(`Storing ride data ${pedalada.id}`);
                         console.groupEnd();

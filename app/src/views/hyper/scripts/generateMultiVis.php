@@ -55,6 +55,7 @@
                 console.log(attribute);
                 console.log(segment);
                 console.log(subarray);
+                console.log(iterator);
             }
 
             let avg = math.format(
@@ -85,6 +86,7 @@
             'max': max
         };
     }
+
     async function updatePedalada(pedaladas) {
 
         for (const element of pedaladas) {

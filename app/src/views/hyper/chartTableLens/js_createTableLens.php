@@ -7,33 +7,20 @@
         let color = $('#' + rider).attr('style').replace(";", "").replace("background-color: ", "");
         //console.log(color);
 
-        // Obtendo faixa de distância
-        let range_min = parseFloat($('#range-min').text());
-        let range_max = parseFloat($('#range-max').text());
-        console.log("Maximum distance:", range_max, "Minimum distance:", range_min);
-
         // Delimitando pedaladas dentro da faixa de distância escolhida
-        let limitSelected = [];
-        for (var i = 0; i < pedaladas.length; i++) {
-            if ((pedaladas[i].distance >= range_min) && (pedaladas[i].distance <= range_max)) {
-                limitSelected.push({
-                    'distance': pedaladas[i].distance,
-                    'id': pedaladas[i].id
-                });
-            }
-        }
+        let limit = await limitSelected(pedaladas);
 
         // Ordenando elementos
-        limitSelected = await arraySort(switchOrder, limitSelected);
+        limit = await arraySort(switchOrder, limit);
 
         // Obtendo maior pedaladas entre as pedaladas limitadas pelo slider
-        let maxDistanceRider = await getMaxDistance(limitSelected);
+        let maxDistanceRider = await getMaxDistance(limit);
 
         // Desenhando linhas
         let factor = 0;
         if (switchToggle == 'item') {
             drawItens(
-                    index, color, limitSelected,
+                    index, color, limit,
                     maxDistanceRider, rider,
                     padding_item, margin_item, 15)
                 .then(() => {
@@ -42,13 +29,37 @@
         }
         if (switchToggle == 'overview') {
             drawItens(
-                    index, color, limitSelected,
+                    index, color, limit,
                     maxDistanceRider, rider,
                     padding_overview, margin_overview, 2)
                 .then(() => {
                     animationTableLens();
                 });
         }
+    }
+
+    async function limitSelected(pedaladas) {
+
+        let limit = [];
+
+        // Obtendo faixa de distância
+        let range_min = parseFloat($('#range-min').text());
+        let range_max = parseFloat($('#range-max').text());
+        console.log("Maximum distance:", range_max, "Minimum distance:", range_min);
+
+        for (const iterator of pedaladas) {
+
+            if ((iterator.distance >= range_min) && (iterator.distance <= range_max)) {
+                limit.push({
+                    'distance': iterator.distance,
+                    'id': iterator.id
+                });
+            }
+
+        }
+
+
+        return limit;
     }
 
     function widthLine(distance, distanceMaxRider) {

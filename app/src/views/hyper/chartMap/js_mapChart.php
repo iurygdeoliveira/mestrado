@@ -41,15 +41,21 @@
 
     function mountTile() {
 
-        return L.tileLayer(layerMap, {
+        return L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.png', {
             minZoom: minZoom,
             maxZoom: maxZoom,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         });
 
+        // http://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}
+        // http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}
+        // http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.png
+        // http://{s}.google.com/vt/lyrs=pl&x={x}&y={y}&z={z}
+
     }
 
-    async function addLayerDistance(map, route, distance, heatmap) {
+
+    async function addLayerDistance(map, route, distance, analysis) {
 
         var stateChangingButton = L.easyButton({
             states: [{
@@ -59,7 +65,7 @@
                 onClick: function(btn, map) { // and its callback
                     distance.addTo(map);
                     route.removeFrom(map);
-                    heatmap.removeFrom(map);
+                    analysis.removeFrom(map);
                     btn.state('see-distances'); // change state on click!
                 }
             }]
@@ -69,7 +75,7 @@
 
     }
 
-    async function addLayerRoute(map, route, distance, heatmap) {
+    async function addLayerRoute(map, route, distance, analysis) {
 
         var stateChangingButton = L.easyButton({
             states: [{
@@ -79,7 +85,7 @@
                 onClick: function(btn, map) { // and its callback
                     route.addTo(map);
                     distance.removeFrom(map);
-                    heatmap.removeFrom(map);
+                    analysis.removeFrom(map);
                     btn.state('see-routes'); // change state on click!
                 }
             }]
@@ -88,18 +94,18 @@
         stateChangingButton.addTo(map);
     }
 
-    async function addLayerHeatmap(map, route, distance, heatmap) {
+    async function addLayerAnalysis(map, route, distance, analysis) {
 
         var stateChangingButton = L.easyButton({
             states: [{
-                stateName: 'see-heatmap', // name the state
-                icon: 'mdi mdi-18px mdi-alpha-h-box', // and define its properties
-                title: 'See Heatmap', // like its title
+                stateName: 'do-analysis', // name the state
+                icon: 'mdi mdi-18px mdi-alpha-a-box', // and define its properties
+                title: 'Do analysis', // like its title
                 onClick: function(btn, map) { // and its callback
-                    heatmap.addTo(map);
+                    analysis.addTo(map);
                     distance.removeFrom(map);
                     route.removeFrom(map);
-                    btn.state('see-heatmap'); // change state on click!
+                    btn.state('see-Analysis'); // change state on click!
                 }
             }]
         });
@@ -127,27 +133,28 @@
         );
     }
 
-    async function defineLayer(route, distance, heatmap, pedaladas) {
+    async function defineLayer(route, distance, analisys, pedaladas) {
 
 
         var routeLayer = mountTile();
         var distanceLayer = mountTile();
-        var heatmapLayer = mountTile();
+        //var heatmapLayer = mountTile();
 
         const baseLayers = {
             'Distance': distanceLayer,
-            'Route': routeLayer,
-            'Heatmap': heatmapLayer
+            'Route': routeLayer
+            //'Heatmap': heatmapLayer
         };
 
         map = L.map('pedaladas_mapChart', {
-            layers: [distanceLayer, routeLayer, heatmapLayer]
+            fullscreenControl: true,
+            layers: [distanceLayer, routeLayer]
         });
 
-        heatmap.addTo(map);
-        await addLayerHeatmap(map, route, distance, heatmap);
-        await addLayerRoute(map, route, distance, heatmap);
-        await addLayerDistance(map, route, distance, heatmap);
+        route.addTo(map);
+        //await addLayerHeatmap(map, route, distance, heatmap);
+        await addLayerRoute(map, route, distance, analisys);
+        await addLayerDistance(map, route, distance, analisys);
         await enableTooltipMap();
 
         return map;
@@ -328,20 +335,6 @@
         return latlng;
     }
 
-    async function plotHeatmap(pedaladas, heatmap) {
-
-        let heat;
-        const promisesPoints = pedaladas.map(async (pedalada_current, idx) => {
-
-            heat = L.heatLayer(await convertToObjectLatLng(pedalada_current.points));
-
-            heat.addTo(heatmap);
-        });
-
-        await Promise.all(promisesPoints);
-
-        return heatmap;
-    }
 
     async function updateMapChart() {
 
@@ -355,13 +348,13 @@
 
         let route = L.featureGroup();
         let distance = L.featureGroup();
-        let heatmap = L.featureGroup();
+        let analysis = L.featureGroup();
 
         route = await plotLines(pedaladas_barChart, route);
         route = await plotMarkles(pedaladas_barChart, route);
         distance = await plotDistance(pedaladas_barChart, distance);
-        heatmap = await plotHeatmap(pedaladas_barChart, heatmap);
-        let map = await defineLayer(route, distance, heatmap, pedaladas_barChart);
+        //heatmap = await plotHeatmap(pedaladas_barChart, heatmap);
+        let map = await defineLayer(route, distance, analysis, pedaladas_barChart);
         let centerMap = await calculateMapCenter(pedaladas_barChart);
     }
 </script>

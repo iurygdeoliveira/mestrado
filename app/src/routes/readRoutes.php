@@ -9,6 +9,8 @@ $router->post('/preprocessarData', 'src\controllers\readController::preprocessar
 $router->post('/exportData', 'src\controllers\readController::exportData');
 $router->post('/exportDistances', 'src\controllers\readController::exportDistances');
 $router->get('/fixSpeeds', 'src\controllers\readController::fixSpeeds');
+$router->get('/fixDistances', 'src\controllers\readController::fixDistances');
+$router->get('/fixDistanceTotal', 'src\controllers\readController::fixDistanceTotal');
 $router->get('/findOutliers', 'src\controllers\readController::findOutliers');
 $router->get('/createSegment', 'src\controllers\readController::createSegment');
 $router->get('/countData', 'src\controllers\readController::countData');
