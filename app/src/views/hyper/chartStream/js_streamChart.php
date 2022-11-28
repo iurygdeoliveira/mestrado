@@ -86,8 +86,6 @@
                 formatter: function(params) {
                     let text = '';
                     let linebreak = 1
-
-
                     params.forEach(element => {
                         text +=
                             ` ${element.marker} 

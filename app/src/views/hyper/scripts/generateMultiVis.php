@@ -1,7 +1,6 @@
 <script>
     async function creatSegment(pedalada) {
 
-
         let segments = {};
         segments[pedalada.id] = [];
 
@@ -49,29 +48,35 @@
 
         for (const iterator of segment) {
 
-            subarray = await createSubarray(attribute, iterator);
+            if (iterator.idx1 == iterator.idx2) {
 
-            if (subarray.length == 0) {
-                console.log(attribute);
-                console.log(segment);
-                console.log(subarray);
-                console.log(iterator);
+                stream.push(
+                    [
+                        size,
+                        parseFloat(attribute[iterator.idx1]),
+                        pedal_id
+                    ]
+                );
+
+            } else {
+
+                subarray = await createSubarray(attribute, iterator);
+
+                let avg = math.format(
+                    math.mean(subarray), {
+                        notation: 'fixed',
+                        precision: 2
+                    }
+                );
+
+                stream.push(
+                    [
+                        size,
+                        parseFloat(avg),
+                        pedal_id
+                    ]
+                );
             }
-
-            let avg = math.format(
-                math.mean(subarray), {
-                    notation: 'fixed',
-                    precision: 2
-                }
-            );
-
-            stream.push(
-                [
-                    size,
-                    parseFloat(avg),
-                    pedal_id
-                ]
-            );
 
             size += viewStream;
 

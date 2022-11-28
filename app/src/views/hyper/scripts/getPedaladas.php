@@ -97,6 +97,29 @@
             });
     }
 
+    async function elevationGain(elevation) {
+
+        console.log(elevation);
+        let data = [];
+        data.push(0);
+
+        for (let index = 1; index < elevation.length; index++) {
+
+            let diff = parseFloat(
+                math.format(
+                    math.subtract(elevation[index], elevation[index - 1]), {
+                        notation: 'fixed',
+                        precision: 2
+                    }
+                )
+            );
+
+            data.push(diff);
+        }
+
+        return data;
+
+    }
 
     async function storePedalada(pedalada) {
 
@@ -112,24 +135,32 @@
                         console.groupEnd();
                         await getPedaladaGithub(pedalada.rider, pedalada.id).then(async (res) => {
 
+                            elevation_history = await elevationGain(await convertStringData(res[1].elevation_google));
+                            // await parseFloat(limitTamString(res[7].elevation_google, 10))
                             await db.table('pedaladas').add({
                                 rider: pedalada.rider,
                                 pedal_id: pedalada.id,
                                 datetime: res[7].datetime,
                                 country: res[7].country,
                                 locality: res[7].locality,
-                                elevation_AVG: await parseFloat(parseFloat(limitTamString(res[7].elevation_google, 10))),
-                                speed_AVG: parseFloat(parseFloat(limitTamString(res[7].speed_avg, 10))),
-                                temperature_AVG: parseFloat(limitTamString(res[7].temperature_avg, 10)),
+                                elevation_AVG: parseFloat(
+                                    math.format(
+                                        math.mean(elevation_history), {
+                                            notation: 'fixed',
+                                            precision: 2
+                                        }
+                                    )),
+                                speed_AVG: await parseFloat(limitTamString(res[7].speed_avg, 10)),
+                                temperature_AVG: await parseFloat(limitTamString(res[7].temperature_avg, 10)),
                                 heartrate_AVG: await parseFloat(limitTamString(res[7].heartrate_avg, 10)),
                                 duration: res[7].duration,
-                                distance: parseFloat(limitTamString(res[7].distance, 10)),
+                                distance: await parseFloat(limitTamString(res[7].distance, 10)),
                                 centroid: await convertCentroid(res[7].centroid),
                                 pointInitial: await convertStringData(res[7].coordinateInicial),
                                 pointFinal: await convertStringData(res[7].coordinateFinal),
                                 points: await convertPoints(res[5].latitudes, res[6].longitudes),
                                 distance_history: await convertStringData(res[0].distance_history),
-                                elevation_history: await convertStringData(res[1].elevation_google),
+                                elevation_history: elevation_history,
                                 elevation_stream_max: null,
                                 elevation_stream: null,
                                 heartrate_history: await convertStringData(res[2].heartrate_history),
