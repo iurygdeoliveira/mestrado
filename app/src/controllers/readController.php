@@ -830,6 +830,72 @@ class readController extends Controller
         ]);
     }
 
+    public function findNotEquals()
+    {
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
+        // Obtendo dados da requisição
+
+        $result = [];
+        for ($i = 1; $i <= 19; $i++) {
+
+            $request = new stdClass();
+            $request->cyclist = "Cyclist_$i";
+            $pedal = $this->getFileNames(CONF_JSON_CYCLIST . $request->cyclist);
+            $outliers = [];
+            $count = 0;
+            foreach ($pedal as $key => $file) {
+
+                if ($file != 'all_distances.json') {
+
+                    $distanceHistory = $this->readAttribute($request->cyclist, $file, 'distance_history');
+                    $heartHistory = $this->readAttribute($request->cyclist, $file, 'heartrate_history');
+                    $elevationHistory = $this->readAttribute($request->cyclist, $file, 'elevation_google');
+                    $speedHistory = $this->readAttribute($request->cyclist, $file, 'speed_history');
+
+                    if (
+                        (count($heartHistory) < count($distanceHistory)) ||
+                        (count($elevationHistory) < count($distanceHistory)) ||
+                        (count($speedHistory) < count($distanceHistory))
+                    ) {
+                        $count++;
+                        array_push(
+                            $outliers,
+                            [
+                                'cyclist' =>  $request->cyclist,
+                                'file' =>  $file,
+                                'distance' => count($distanceHistory),
+                                'heart' => count($heartHistory),
+                                'elevation' => count($elevationHistory),
+                                'speed' => count($speedHistory)
+                            ]
+                        );
+                    }
+                }
+            }
+
+            if ($count > 0) {
+
+                array_push($result, [
+                    "Cyclist" => "$request->cyclist",
+                    "total de pedaladas" => count($pedal),
+                    "total de outliers" => count($outliers),
+                    "porcentagem de outliers" => Math::porcentagem(count($outliers), count($pedal)),
+                    "outliers" => $outliers
+                ]);
+
+                $path =
+                    $request->cyclist .
+                    'result';
+
+                $this->createJsonFile(CONF_JSON_CYCLIST . $path, $result);
+            }
+        }
+
+        set_time_limit(30);
+        return $this->responseJson(true, "outliers", $result);
+    }
+
     public function countData()
     {
 

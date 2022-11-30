@@ -8,22 +8,22 @@
             .attr("id", 'pedaladas_heartrate')
             .style("height", heightStreamChart + 'px');
 
-        d3.select('#streamElevation')
-            .append('div')
-            .attr("id", 'pedaladas_elevation')
-            .style("height", heightStreamChart + 'px');
-
         d3.select('#streamSpeed')
             .append('div')
             .attr("id", 'pedaladas_speed')
+            .style("height", heightStreamChart + 'px');
+
+        d3.select('#streamElevation')
+            .append('div')
+            .attr("id", 'pedaladas_elevation')
             .style("height", heightStreamChart + 'px');
     }
 
     async function removeStreamChart() {
 
         d3.select('#pedaladas_heartrate').remove();
-        d3.select('#pedaladas_elevation').remove();
         d3.select('#pedaladas_speed').remove();
+        d3.select('#pedaladas_elevation').remove();
 
     }
 
@@ -37,36 +37,14 @@
 
         option = {
             animation: true,
-            legend: {
-                data: legends,
-                itemHeight: 12,
-                itemWidth: 12,
-                itemGap: 5,
-                left: '40%',
-                formatter: function(name) {
-                    return '';
-                }
-            },
-            toolbox: {
+            color: color,
+            title: {
                 show: true,
-                feature: {
-                    dataView: {
-                        readOnly: false
-                    },
-                    restore: {},
-                    saveAsImage: {}
+                text: `${title}: 0 to ${max} (${scale})`,
+                textStyle: {
+                    fontSize: 12
                 }
             },
-            dataZoom: [{
-                type: 'slider', // this dataZoom component is dataZoom component of slider
-                startValue: 0,
-                top: 25,
-                height: 25,
-                minValueSpan: viewStream,
-                labelFormatter: function(value, valueStr) {
-                    return value.toFixed(2) + ` m`;
-                }
-            }],
             tooltip: {
                 trigger: 'axis',
                 triggerOn: "none",
@@ -79,8 +57,14 @@
                         type: 'solid'
                     }
                 },
-                position: function(pt) {
-                    return [pt[0] + 10, pt[1]];
+                position: function(pos, params, dom, rect, size) {
+                    // tooltip will be fixed on the right if mouse hovering on the left,
+                    // and on the left if hovering on the right.
+                    var obj = {
+                        top: 60
+                    };
+                    obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 5;
+                    return obj;
                 },
 
                 formatter: function(params) {
@@ -106,13 +90,36 @@
                     fontWeight: 'bold'
                 }
             },
-            title: {
+            toolbox: {
                 show: true,
-                text: `${title}: 0 to ${max} (${scale})`,
-                textStyle: {
-                    fontSize: 12
+                feature: {
+                    dataView: {
+                        readOnly: false
+                    },
+                    restore: {},
+                    saveAsImage: {}
                 }
             },
+            legend: {
+                data: legends,
+                itemHeight: 12,
+                itemWidth: 12,
+                itemGap: 5,
+                left: '40%',
+                formatter: function(name) {
+                    return '';
+                }
+            },
+            dataZoom: [{
+                type: 'slider', // this dataZoom component is dataZoom component of slider
+                startValue: 0,
+                top: 25,
+                height: 25,
+                minValueSpan: viewStream,
+                labelFormatter: function(value, valueStr) {
+                    return value.toFixed(2) + ` m`;
+                }
+            }],
             singleAxis: {
                 type: 'value',
                 max: 'dataMax',
@@ -140,7 +147,6 @@
                     }
                 }
             },
-            color: color,
             series: [{
                 type: 'themeRiver',
                 data: data,
@@ -235,7 +241,6 @@
 
         let data = [];
         let max = 0;
-        let stream = [];
 
         if (type == 'heartrate') {
 
@@ -281,21 +286,13 @@
 
         console.log("Update StreamChart ...");
         await resizeStreamChart();
-        //console.log(pedaladas_barChart);
-        //let pedalStream = await normalizeData(pedaladas_barChart);
 
         let legends = await mountLegend(pedaladas_barChart);
         let colorStream = await mountColor(pedaladas_barChart);
-        //pedaladas_barchart = await updatePedalada(pedaladas_barChart);
 
         let heartData = await mountDataStream(pedaladas_barChart, 'heartrate');
-        let elevationData = await mountDataStream(pedaladas_barChart, 'elevation');
         let speedData = await mountDataStream(pedaladas_barChart, 'speed');
-
-        //console.log(pedalSort);
-        // console.log(heartData);
-        // console.log(elevationData);
-        // console.log(speedData);
+        let elevationData = await mountDataStream(pedaladas_barChart, 'elevation');
 
         await create_StreamChart(
             'pedaladas_heartrate',
@@ -307,15 +304,6 @@
             heartData.max
         );
 
-        await create_StreamChart(
-            'pedaladas_elevation',
-            'Elevation',
-            'meters',
-            legends,
-            colorStream,
-            elevationData.data,
-            elevationData.max
-        );
 
         await create_StreamChart(
             'pedaladas_speed',
@@ -325,6 +313,16 @@
             colorStream,
             speedData.data,
             speedData.max,
+        );
+
+        await create_ElevationChart(
+            'pedaladas_elevation',
+            'Elevation',
+            'meters',
+            legends,
+            colorStream,
+            elevationData.data,
+            elevationData.max
         );
     }
 </script>

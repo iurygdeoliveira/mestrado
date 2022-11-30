@@ -18,11 +18,11 @@
                             <div class="row p-0 m-0" id="streamHeartrate">
                                 <div id="pedaladas_heartrate"></div>
                             </div>
-                            <div class="row p-0 m-0" id="streamElevation">
-                                <div id="pedaladas_elevation"></div>
-                            </div>
                             <div class="row p-0 m-0" id="streamSpeed">
                                 <div id="pedaladas_speed"></div>
+                            </div>
+                            <div class="row p-0 m-0" id="streamElevation">
+                                <div id="pedaladas_elevation"></div>
                             </div>
                         </div>
                     </div>

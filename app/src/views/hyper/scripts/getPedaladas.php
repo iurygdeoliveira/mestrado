@@ -99,7 +99,6 @@
 
     async function elevationGain(elevation) {
 
-        console.log(elevation);
         let data = [];
         data.push(0);
 

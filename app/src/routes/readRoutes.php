@@ -12,6 +12,7 @@ $router->get('/fixSpeeds', 'src\controllers\readController::fixSpeeds');
 $router->get('/fixDistances', 'src\controllers\readController::fixDistances');
 $router->get('/fixDistanceTotal', 'src\controllers\readController::fixDistanceTotal');
 $router->get('/findOutliers', 'src\controllers\readController::findOutliers');
+$router->get('/findNotEquals', 'src\controllers\readController::findNotEquals');
 $router->get('/createSegment', 'src\controllers\readController::createSegment');
 $router->get('/countData', 'src\controllers\readController::countData');
 $router->post('/smoothOutliers', 'src\controllers\readController::smoothOutliers');

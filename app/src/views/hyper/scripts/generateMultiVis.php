@@ -1,4 +1,15 @@
 <script>
+    async function minLengthAttribute(pedalada) {
+
+        let min = [];
+        min.push(pedalada.distance_history.length);
+        min.push(pedalada.elevation_history.length);
+        min.push(pedalada.heartrate_history.length);
+        min.push(pedalada.speed_history.length);
+
+        return Math.min(...min);
+    }
+
     async function creatSegment(pedalada) {
 
         let segments = {};
@@ -7,7 +18,9 @@
         let sum = 0;
         let meter = 0;
 
-        for (let idx1 = 0, idx2 = 0; idx2 < pedalada.distance_history.length; idx2++) {
+        let minAtribute = await minLengthAttribute(pedalada);
+
+        for (let idx1 = 0, idx2 = 0; idx2 < minAtribute; idx2++) {
 
             sum += pedalada.distance_history[idx2];
             meter = parseFloat((sum * 1000).toFixed(2));
@@ -43,7 +56,6 @@
         let stream = [];
         stream.push([0, 0, pedal_id]);
         let max = 0;
-        let subarray = [];
         let size = viewStream;
 
         for (const iterator of segment) {
@@ -58,15 +70,28 @@
                     ]
                 );
 
+                if (parseFloat(attribute[iterator.idx1]) > max) {
+                    max = parseFloat(attribute[iterator.idx1]);
+                }
+
             } else {
 
-                subarray = await createSubarray(attribute, iterator);
+                let subarray = await createSubarray(attribute, iterator);
 
-                let avg = math.format(
-                    math.mean(subarray), {
-                        notation: 'fixed',
-                        precision: 2
-                    }
+                if (subarray.length == 0) {
+                    console.log(pedal_id);
+                    console.table(iterator);
+                    console.log(subarray);
+                    console.log(attribute);
+                }
+
+                avg = parseFloat(
+                    math.format(
+                        math.mean(subarray), {
+                            notation: 'fixed',
+                            precision: 2
+                        }
+                    )
                 );
 
                 stream.push(
@@ -76,14 +101,12 @@
                         pedal_id
                     ]
                 );
-            }
 
+                if (avg > max) {
+                    max = avg;
+                }
+            }
             size += viewStream;
-
-            if (avg > max) {
-                max = parseFloat(avg);
-            }
-
         }
 
         return {
