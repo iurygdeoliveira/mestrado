@@ -86,7 +86,6 @@
         let maxStream = await getMaxStream(pedaladasGrouped);
         let series = await mountSeries(pedaladasGrouped);
 
-        console.log(series);
         var chartDom = document.getElementById(stream);
         var myChart = await echarts.init(chartDom, null, {
             renderer: 'svg'
@@ -105,6 +104,7 @@
             },
             tooltip: {
                 trigger: 'axis',
+                triggerOn: "none",
                 showContent: true,
                 alwaysShowContent: true,
                 enterable: true,
@@ -174,9 +174,8 @@
                 startValue: 0,
                 top: 25,
                 height: 25,
-                xAxisIndex: 0,
-                labelFormatter: function(value) {
-                    return value.toFixed(2) + ` m`;
+                labelFormatter: function(value, valueStr) {
+                    return valueStr + ` m`;
                 }
             }],
             grid: {
@@ -194,7 +193,15 @@
                     show: true,
                     onZero: false
                 },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        type: 'solid',
+                        opacity: 1
+                    }
+                },
                 data: maxStream,
+                splitNumber: 6,
                 axisPointer: {
                     snap: true,
                     label: {

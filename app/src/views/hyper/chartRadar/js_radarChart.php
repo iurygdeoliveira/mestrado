@@ -64,7 +64,7 @@
                 });
 
                 heartrate = parseFloat((heartrate / valuesRiders.length).toFixed(2));
-                elevation = parseFloat((elevation / valuesRiders.length).toFixed(2));
+                elevation = parseFloat((elevation / valuesRiders.length).toFixed(6));
                 temperature = parseFloat((temperature / valuesRiders.length).toFixed(2));
                 speed = parseFloat((speed / valuesRiders.length).toFixed(2));
                 duration = parseFloat((duration / valuesRiders.length).toFixed(2));
@@ -108,6 +108,7 @@
 
     async function defineMaxValues(dataset) {
 
+        console.log(dataset);
         let maxHeartrate = [];
         let maxElevation = [];
         let maxTemperature = [];
@@ -124,10 +125,11 @@
 
         maxValues.push(
             Math.ceil(Math.max(...maxHeartrate.map(item => item))),
-            Math.ceil(Math.max(...maxElevation.map(item => item))),
+            Math.max(...maxElevation.map(item => item)),
             Math.ceil(Math.max(...maxTemperature.map(item => item))),
             Math.ceil(Math.max(...maxSpeed.map(item => item))),
-            Math.ceil(Math.max(...maxDuration.map(item => item)))
+            Math.ceil(Math.max(...maxDuration.map(item => item))),
+            Math.min(...maxElevation.map(item => item))
         );
 
         return maxValues;
@@ -190,7 +192,8 @@
                     },
                     {
                         name: 'Avg Elevation (M)',
-                        max: maxValues[1]
+                        max: maxValues[1],
+                        min: maxValues[5]
                     },
                     {
                         name: 'Avg Temperature (ºC)',

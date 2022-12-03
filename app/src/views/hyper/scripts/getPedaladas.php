@@ -120,6 +120,14 @@
 
     }
 
+    async function elevationAVG(elevation) {
+
+        let sum = math.sum(elevation);
+        let avg = parseFloat((sum / elevation.length).toFixed(6))
+        console.log(avg);
+        return avg
+    }
+
     async function storePedalada(pedalada) {
 
         return await new Dexie(pedalada.rider).open()
@@ -135,6 +143,7 @@
                         await getPedaladaGithub(pedalada.rider, pedalada.id).then(async (res) => {
 
                             elevation_history = await elevationGain(await convertStringData(res[1].elevation_google));
+                            elevation_AVG = await elevationAVG(elevation_history);
                             // await parseFloat(limitTamString(res[7].elevation_google, 10))
                             await db.table('pedaladas').add({
                                 rider: pedalada.rider,
@@ -142,13 +151,7 @@
                                 datetime: res[7].datetime,
                                 country: res[7].country,
                                 locality: res[7].locality,
-                                elevation_AVG: parseFloat(
-                                    math.format(
-                                        math.mean(elevation_history), {
-                                            notation: 'fixed',
-                                            precision: 2
-                                        }
-                                    )),
+                                elevation_AVG: elevation_AVG,
                                 speed_AVG: await parseFloat(limitTamString(res[7].speed_avg, 10)),
                                 temperature_AVG: await parseFloat(limitTamString(res[7].temperature_avg, 10)),
                                 heartrate_AVG: await parseFloat(limitTamString(res[7].heartrate_avg, 10)),

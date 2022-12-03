@@ -188,55 +188,6 @@
         return colorStream;
     }
 
-    async function normalizeData(pedalSort) {
-
-        let tam = pedalSort[0].heartrate_stream.length;
-
-        pedalSort.forEach(element => {
-            if (element.heartrate_stream.length < tam) {
-                tam = element.heartrate_stream.length
-            }
-        });
-
-        for (let index = 0; index < pedalSort.length; index++) {
-            pedalSort[index].heartrate_stream = pedalSort[index].heartrate_stream.slice(
-                0,
-                tam + 1
-            );
-        }
-
-        tam = pedalSort[0].elevation_stream.length;
-        pedalSort.forEach(element => {
-            if (element.elevation_stream.length < tam) {
-                tam = element.elevation_stream.length
-            }
-        });
-
-        for (let index = 0; index < pedalSort.length; index++) {
-            pedalSort[index].elevation_stream = pedalSort[index].elevation_stream.slice(
-                0,
-                tam + 1
-            );
-        }
-
-        tam = pedalSort[0].speed_stream.length;
-        pedalSort.forEach(element => {
-            if (element.speed_stream.length < tam) {
-                tam = element.speed_stream.length
-            }
-        });
-
-        for (let index = 0; index < pedalSort.length; index++) {
-            pedalSort[index].speed_stream = pedalSort[index].speed_stream.slice(
-                0,
-                tam + 1
-            );
-        }
-
-        return pedalSort;
-    }
-
-
     async function mountDataStream(pedaladas, type) {
 
         let data = [];
