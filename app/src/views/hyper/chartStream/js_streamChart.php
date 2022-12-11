@@ -27,7 +27,7 @@
 
     }
 
-    async function create_StreamChart(stream, title, scale, legends, color, data, max) {
+    async function create_StreamChart(stream, title, scale, legends, color, data, max, min) {
 
         var chartDom = document.getElementById(stream);
         var myChart = await echarts.init(chartDom, null, {
@@ -40,7 +40,7 @@
             color: color,
             title: {
                 show: true,
-                text: `${title}: 0 to ${max} (${scale})`,
+                text: `${title}: ${min} to ${max} (${scale})`,
                 textStyle: {
                     fontSize: 12
                 }
@@ -58,6 +58,8 @@
                     }
                 },
                 position: function(pos, params, dom, rect, size) {
+
+                    plotMarkerHotline(params, scale);
                     // tooltip will be fixed on the right if mouse hovering on the left,
                     // and on the left if hovering on the right.
                     var obj = {
@@ -105,7 +107,7 @@
                 itemHeight: 12,
                 itemWidth: 12,
                 itemGap: 5,
-                left: '40%',
+                left: '50%',
                 formatter: function(name) {
                     return '';
                 }
@@ -191,16 +193,16 @@
     async function mountDataStream(pedaladas, type) {
 
         let data = [];
-        let max = 0;
+        let max = [];
+        let min = [];
 
         if (type == 'heartrate') {
 
             pedaladas.forEach(element => {
                 data = data.concat(element.heartrate_stream);
 
-                if (element.heartrate_stream_max > max) {
-                    max = element.heartrate_stream_max;
-                }
+                max.push(element.heartrate_stream_max);
+                min.push(element.heartrate_stream_min);
             });
         }
 
@@ -208,9 +210,8 @@
             pedaladas.forEach(element => {
                 data = data.concat(element.elevation_stream);
 
-                if (element.elevation_stream_max > max) {
-                    max = element.elevation_stream_max;
-                }
+                max.push(element.elevation_stream_max);
+                min.push(element.elevation_stream_min);
 
             });
         }
@@ -220,15 +221,15 @@
             pedaladas.forEach(element => {
                 data = data.concat(element.speed_stream);
 
-                if (element.speed_stream_max > max) {
-                    max = element.speed_stream_max;
-                }
+                max.push(element.speed_stream_max);
+                min.push(element.speed_stream_min);
 
             });
         }
 
         return {
-            'max': parseInt(max),
+            'max': Math.max(...max),
+            'min': Math.min(...min),
             'data': data
         };
     }
@@ -252,7 +253,8 @@
             legends,
             colorStream,
             heartData.data,
-            heartData.max
+            heartData.max,
+            heartData.min
         );
 
 
@@ -264,16 +266,18 @@
             colorStream,
             speedData.data,
             speedData.max,
+            speedData.min
         );
 
-        await create_ElevationChart(
+        await create_ElevationStream(
             'pedaladas_elevation',
             'Elevation',
             'meters',
             legends,
             colorStream,
             elevationData.data,
-            elevationData.max
+            elevationData.max,
+            elevationData.min
         );
     }
 </script>

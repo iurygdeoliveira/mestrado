@@ -21,6 +21,8 @@
     <link href="<?= css('leaflet.fullscreen.css') ?>" rel="stylesheet" type="text/css" />
     <link href="<?= css('leaflet-easy-button.css') ?>" rel="stylesheet" type="text/css" />
     <link href="<?= css('leaflet-elevation.min.css') ?>" rel="stylesheet" type="text/css" />
+    <link href="<?= css('fontawesome.css') ?>" rel="stylesheet" type="text/css" />
+    <link href="<?= css('leaflet-beautify-marker-icon.css') ?>" rel="stylesheet" type="text/css" />
 
 </head>
 

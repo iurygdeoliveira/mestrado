@@ -23,9 +23,7 @@
         let index = max.indexOf(value);
 
         pedaladasGrouped[index].forEach(element => {
-
             stream.push(element[0]);
-
         });
 
         return stream;
@@ -39,7 +37,7 @@
             let data = [];
 
             group.forEach(element => {
-                data.push(element[1]);
+                data.push(parseFloat(element[1].toFixed(2)));
             });
 
             series.push({
@@ -80,7 +78,7 @@
         // }]
     }
 
-    async function create_ElevationChart(stream, title, scale, legends, color, data, max) {
+    async function create_ElevationStream(stream, title, scale, legends, color, data, max, min) {
 
         let pedaladasGrouped = await ungroup(data, legends);
         let maxStream = await getMaxStream(pedaladasGrouped);
@@ -97,7 +95,7 @@
             color: color,
             title: {
                 show: true,
-                text: `${title}: 0 to ${max} (${scale})`,
+                text: `${title}: ${min} to ${max} (${scale})`,
                 textStyle: {
                     fontSize: 12
                 }
@@ -118,6 +116,7 @@
                 position: function(pos, params, dom, rect, size) {
                     // tooltip will be fixed on the right if mouse hovering on the left,
                     // and on the left if hovering on the right.
+                    plotMarkerHotline(params, scale);
                     var obj = {
                         top: 60
                     };
@@ -153,7 +152,7 @@
                 itemHeight: 12,
                 itemWidth: 12,
                 itemGap: 5,
-                left: '40%',
+                left: '50%',
                 icon: 'roundRect',
                 formatter: function(name) {
                     return '';

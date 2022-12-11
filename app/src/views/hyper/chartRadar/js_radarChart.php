@@ -108,7 +108,6 @@
 
     async function defineMaxValues(dataset) {
 
-        console.log(dataset);
         let maxHeartrate = [];
         let maxElevation = [];
         let maxTemperature = [];

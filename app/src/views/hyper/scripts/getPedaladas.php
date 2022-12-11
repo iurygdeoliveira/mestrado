@@ -89,10 +89,14 @@
 
                     result.elevation_stream = pedalada.elevation_stream;
                     result.elevation_stream_max = pedalada.elevation_stream_max;
+                    result.elevation_stream_min = pedalada.elevation_stream_min;
                     result.heartrate_stream = pedalada.heartrate_stream;
                     result.heartrate_stream_max = pedalada.heartrate_stream_max;
+                    result.heartrate_stream_min = pedalada.heartrate_stream_min;
                     result.speed_stream = pedalada.speed_stream;
                     result.speed_stream_max = pedalada.speed_stream_max;
+                    result.speed_stream_min = pedalada.speed_stream_min;
+                    result.map_point = pedalada.map_point;
                 });
             });
     }
@@ -108,7 +112,7 @@
                 math.format(
                     math.subtract(elevation[index], elevation[index - 1]), {
                         notation: 'fixed',
-                        precision: 2
+                        precision: 6
                     }
                 )
             );
@@ -124,7 +128,6 @@
 
         let sum = math.sum(elevation);
         let avg = parseFloat((sum / elevation.length).toFixed(6))
-        console.log(avg);
         return avg
     }
 
@@ -161,15 +164,19 @@
                                 pointInitial: await convertStringData(res[7].coordinateInicial),
                                 pointFinal: await convertStringData(res[7].coordinateFinal),
                                 points: await convertPoints(res[5].latitudes, res[6].longitudes),
+                                map_point: null,
                                 distance_history: await convertStringData(res[0].distance_history),
                                 elevation_history: elevation_history,
                                 elevation_stream_max: null,
+                                elevation_stream_min: null,
                                 elevation_stream: null,
                                 heartrate_history: await convertStringData(res[2].heartrate_history),
                                 heartrate_stream_max: null,
+                                heartrate_stream_min: null,
                                 heartrate_stream: null,
                                 speed_history: await convertStringData(res[3].speed_history),
                                 speed_stream_max: null,
+                                speed_stream_min: null,
                                 speed_stream: null,
                                 time_history: res[4].time_history.split('|')
                             });

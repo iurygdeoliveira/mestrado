@@ -23,21 +23,25 @@
             'elevation_history': null,
             'elevation_stream': null,
             'elevation_stream_max': null,
+            'elevation_stream_min': null,
             'heartrate_AVG': null,
             'heartrate_history': null,
             'heartrate_stream': null,
             'heartrate_stream_max': null,
+            'heartrate_stream_min': null,
             'id': d3.select(pedalada).attr('id'),
             'line_clicked': d3.select(pedalada).attr('line_clicked'),
             'locality': null,
             'pointInitial': null,
             'pointFinal': null,
             'points': null,
+            'map_point': null,
             'rider': d3.select(pedalada).attr('rider'),
             'speed_AVG': null,
             'speed_history': null,
             'speed_stream': null,
             'speed_stream_max': null,
+            'speed_stream_min': null,
             'style': d3.select(pedalada).attr('style'),
             'temperature_AVG': null,
             'time_history': null
@@ -50,6 +54,7 @@
         push_barChart.pointInitial = res[0].pointInitial;
         push_barChart.pointFinal = res[0].pointFinal;
         push_barChart.points = res[0].points;
+        push_barChart.map_point = res[0].map_point;
         push_barChart.heartrate_AVG = res[0].heartrate_AVG;
         push_barChart.speed_AVG = res[0].speed_AVG;
         push_barChart.elevation_AVG = res[0].elevation_AVG;
@@ -63,11 +68,14 @@
         push_barChart.elevation_history = res[0].elevation_history;
         push_barChart.elevation_stream = res[0].elevation_stream;
         push_barChart.elevation_stream_max = res[0].elevation_stream_max;
+        push_barChart.elevation_stream_min = res[0].elevation_stream_min;
         push_barChart.heartrate_history = res[0].heartrate_history;
         push_barChart.heartrate_stream = res[0].heartrate_stream;
         push_barChart.heartrate_stream_max = res[0].heartrate_stream_max;
+        push_barChart.heartrate_stream_min = res[0].heartrate_stream_min;
         push_barChart.speed_stream = res[0].speed_stream;
         push_barChart.speed_stream_max = res[0].speed_stream_max;
+        push_barChart.speed_stream_min = res[0].speed_stream_min;
         push_barChart.speed_history = res[0].speed_history;
         push_barChart.time_history = res[0].time_history;
 

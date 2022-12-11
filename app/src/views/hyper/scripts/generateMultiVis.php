@@ -10,7 +10,7 @@
         return Math.min(...min);
     }
 
-    async function creatSegment(pedalada) {
+    async function createSegment(pedalada) {
 
         let segments = {};
         segments[pedalada.id] = [];
@@ -51,11 +51,16 @@
 
     }
 
-    async function createStream(segment, attribute, pedal_id, avg) {
+    async function createStream(segment, attribute, pedal_id) {
 
         let stream = [];
+        let pos = [];
         stream.push([0, 0, pedal_id]);
-        let max = 0;
+        pos.push({
+            'axis': 0,
+            'index': 0
+        });
+        let maxMin = [];
         let size = viewStream;
 
         for (const iterator of segment) {
@@ -65,31 +70,22 @@
                 stream.push(
                     [
                         size,
-                        parseFloat(attribute[iterator.idx1]),
+                        parseFloat((attribute[iterator.idx1]).toFixed(6)),
                         pedal_id
                     ]
                 );
 
-                if (parseFloat(attribute[iterator.idx1]) > max) {
-                    max = parseFloat(attribute[iterator.idx1]);
-                }
+                maxMin.push(parseFloat((attribute[iterator.idx1]).toFixed(6)));
 
             } else {
 
                 let subarray = await createSubarray(attribute, iterator);
 
-                if (subarray.length == 0) {
-                    console.log(pedal_id);
-                    console.table(iterator);
-                    console.log(subarray);
-                    console.log(attribute);
-                }
-
-                avg = parseFloat(
+                let avg = parseFloat(
                     math.format(
                         math.mean(subarray), {
                             notation: 'fixed',
-                            precision: 2
+                            precision: 6
                         }
                     )
                 );
@@ -97,21 +93,25 @@
                 stream.push(
                     [
                         size,
-                        parseFloat(avg),
+                        avg,
                         pedal_id
                     ]
                 );
 
-                if (avg > max) {
-                    max = avg;
-                }
+                maxMin.push(avg);
             }
+            pos.push({
+                'axis': size,
+                'index': iterator.idx1
+            });
             size += viewStream;
         }
 
         return {
             'stream': stream,
-            'max': max
+            'max': Math.max(...maxMin),
+            'min': Math.min(...maxMin),
+            'map_point': pos
         };
     }
 
@@ -121,35 +121,36 @@
 
             if (await checkStreamNull(element.id)) {
 
-                let segments = await creatSegment(element);
+                let segments = await createSegment(element);
 
                 let heartStream = await createStream(
                     segments[element.id],
                     element.heartrate_history,
-                    element.id,
-                    element.heartrate_AVG
+                    element.id
                 );
 
                 let elevationStream = await createStream(
                     segments[element.id],
                     element.elevation_history,
-                    element.id,
-                    element.elevation_AVG
+                    element.id
                 );
 
                 let speedStream = await createStream(
                     segments[element.id],
                     element.speed_history,
-                    element.id,
-                    element.speed_AVG
+                    element.id
                 );
 
                 element.heartrate_stream = heartStream.stream;
                 element.heartrate_stream_max = heartStream.max;
+                element.heartrate_stream_min = heartStream.min;
+                element.map_point = heartStream.map_point;
                 element.elevation_stream = elevationStream.stream;
                 element.elevation_stream_max = elevationStream.max;
+                element.elevation_stream_min = elevationStream.min;
                 element.speed_stream = speedStream.stream;
                 element.speed_stream_max = speedStream.max;
+                element.speed_stream_min = speedStream.min;
                 await modifyPedalada(element);
             }
         }
@@ -164,9 +165,9 @@
             await updateButtonMultivis(pedaladas_barChart, false, true, false);
             pedaladas_barchart = await updatePedalada(pedaladas_barChart);
             await updateBarChart();
-            await updateStreamChart();
             await updateMapChart();
             await updateRadarChart();
+            await updateStreamChart();
             await updateButtonMultivis(pedaladas_barChart, true, false, false);
         }
         console.groupEnd();
