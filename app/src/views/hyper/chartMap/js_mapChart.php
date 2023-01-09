@@ -50,6 +50,7 @@
         // http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}
         // http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.png
         // http://{s}.google.com/vt/lyrs=pl&x={x}&y={y}&z={z}
+        // https://elevation-tiles-prod.s3.amazonaws.com/terrarium/${coords.z}/${coords.x}/${coords.y}.png
 
     }
 
@@ -168,7 +169,7 @@
             betweenPointsGroup.removeFrom(distanceMap);
             betweenPointsGroup = null;
         }
-        
+
         route = await plotLines(pedaladas_barChart, route);
         route = await plotMarkles(pedaladas_barChart, route);
         distanceMap = await plotDistance(pedaladas_barChart, distanceMap);
