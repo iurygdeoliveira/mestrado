@@ -205,4 +205,6 @@
 
         return hotline;
     }
+
+    // Escreva uma função utilizando php que  realize o cálculo da formula de haversine 
 </script>

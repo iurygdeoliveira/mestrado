@@ -13,7 +13,7 @@
             <div class="container-fluid">
                 <!-- start page title -->
                 <div class="row h-100">
-                    <div class="col-7 p-0" id="streamGraph">
+                    <div class="col-4 p-0" id="streamGraph">
                         <div class="container-fluid pe-0 ps-0">
                             <div class="row p-0 m-0" id="streamHeartrate">
                                 <div id="pedaladas_heartrate"></div>
@@ -26,7 +26,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-5 p-0">
+                    <div class="col-4 p-0">
                         <div class="container-fluid pe-0 ps-0">
                             <div class="row p-0 m-0" id="radarChart">
                                 <div id="pedaladas_radarChart"></div>
