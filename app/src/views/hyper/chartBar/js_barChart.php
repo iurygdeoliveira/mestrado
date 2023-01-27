@@ -21,14 +21,17 @@
             'duration': null,
             'elevation_AVG': null,
             'elevation_history': null,
+            'elevation_intensity': null,
             'elevation_stream': null,
             'elevation_stream_max': null,
             'elevation_stream_min': null,
             'heartrate_AVG': null,
             'heartrate_history': null,
+            'heartrate_intensity': null,
             'heartrate_stream': null,
             'heartrate_stream_max': null,
             'heartrate_stream_min': null,
+            'intensity': null,
             'id': d3.select(pedalada).attr('id'),
             'line_clicked': d3.select(pedalada).attr('line_clicked'),
             'locality': null,
@@ -39,6 +42,7 @@
             'rider': d3.select(pedalada).attr('rider'),
             'speed_AVG': null,
             'speed_history': null,
+            'speed_intensity': null,
             'speed_stream': null,
             'speed_stream_max': null,
             'speed_stream_min': null,
@@ -66,10 +70,12 @@
         push_barChart.locality = res[0].locality;
         push_barChart.centroid = res[0].centroid;
         push_barChart.elevation_history = res[0].elevation_history;
+        push_barChart.elevation_intensity = res[0].elevation_intensity;
         push_barChart.elevation_stream = res[0].elevation_stream;
         push_barChart.elevation_stream_max = res[0].elevation_stream_max;
         push_barChart.elevation_stream_min = res[0].elevation_stream_min;
         push_barChart.heartrate_history = res[0].heartrate_history;
+        push_barChart.heartrate_intensity = res[0].heartrate_intensity;
         push_barChart.heartrate_stream = res[0].heartrate_stream;
         push_barChart.heartrate_stream_max = res[0].heartrate_stream_max;
         push_barChart.heartrate_stream_min = res[0].heartrate_stream_min;
@@ -77,6 +83,8 @@
         push_barChart.speed_stream_max = res[0].speed_stream_max;
         push_barChart.speed_stream_min = res[0].speed_stream_min;
         push_barChart.speed_history = res[0].speed_history;
+        push_barChart.speed_intensity = res[0].speed_intensity;
+        push_barChart.intensity = res[0].intensity;
         push_barChart.time_history = res[0].time_history;
 
         return push_barChart;

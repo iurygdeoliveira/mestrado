@@ -88,14 +88,18 @@
                 await db.table('pedaladas').where('pedal_id').equals(pedalada.id).modify(result => {
 
                     result.elevation_stream = pedalada.elevation_stream;
+                    result.elevation_intensity = pedalada.elevation_intensity;
                     result.elevation_stream_max = pedalada.elevation_stream_max;
                     result.elevation_stream_min = pedalada.elevation_stream_min;
                     result.heartrate_stream = pedalada.heartrate_stream;
+                    result.heartrate_intensity = pedalada.heartrate_intensity;
                     result.heartrate_stream_max = pedalada.heartrate_stream_max;
                     result.heartrate_stream_min = pedalada.heartrate_stream_min;
                     result.speed_stream = pedalada.speed_stream;
+                    result.speed_intensity = pedalada.speed_intensity;
                     result.speed_stream_max = pedalada.speed_stream_max;
                     result.speed_stream_min = pedalada.speed_stream_min;
+                    result.intensity = pedalada.intensity;
                     result.map_point = pedalada.map_point;
                 });
             });
@@ -145,9 +149,11 @@
                         console.groupEnd();
                         await getPedaladaGithub(pedalada.rider, pedalada.id).then(async (res) => {
 
-                            elevation_history = await elevationGain(await convertStringData(res[1].elevation_google));
-                            elevation_AVG = await elevationAVG(elevation_history);
-                            // await parseFloat(limitTamString(res[7].elevation_google, 10))
+                            let elevation_history = await elevationGain(
+                                await convertStringData(res[1].elevation_google)
+                            );
+                            let elevation_AVG = await elevationAVG(elevation_history);
+
                             await db.table('pedaladas').add({
                                 rider: pedalada.rider,
                                 pedal_id: pedalada.id,
@@ -167,17 +173,21 @@
                                 map_point: null,
                                 distance_history: await convertStringData(res[0].distance_history),
                                 elevation_history: elevation_history,
+                                elevation_intensity: null,
                                 elevation_stream_max: null,
                                 elevation_stream_min: null,
                                 elevation_stream: null,
                                 heartrate_history: await convertStringData(res[2].heartrate_history),
+                                heartrate_intensity: null,
                                 heartrate_stream_max: null,
                                 heartrate_stream_min: null,
                                 heartrate_stream: null,
                                 speed_history: await convertStringData(res[3].speed_history),
+                                speed_intensity: null,
                                 speed_stream_max: null,
                                 speed_stream_min: null,
                                 speed_stream: null,
+                                intensity: null,
                                 time_history: res[4].time_history.split('|')
                             });
                         });

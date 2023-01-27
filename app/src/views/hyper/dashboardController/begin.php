@@ -28,6 +28,16 @@
                     </div>
                     <div class="col-4 p-0">
                         <div class="container-fluid pe-0 ps-0">
+                            <div class="row p-0 m-0" id="radarChart2">
+                                <div id="pedaladas_radarChart2"></div>
+                            </div>
+                            <div class="row p-0 m-0" id="heatmapChart">
+                                <div id="pedaladas_heatmapChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 p-0">
+                        <div class="container-fluid pe-0 ps-0">
                             <div class="row p-0 m-0" id="radarChart">
                                 <div id="pedaladas_radarChart"></div>
                             </div>

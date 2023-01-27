@@ -29,17 +29,21 @@
                         'map_point,' +
                         'distance_history,' +
                         'elevation_history,' +
+                        'elevation_intensity,' +
                         'elevation_stream,' +
                         'elevation_stream_max,' +
                         'elevation_stream_min,' +
                         'heartrate_history,' +
+                        'heartrate_intensity,' +
                         'heartrate_stream,' +
                         'heartrate_stream_max,' +
                         'heartrate_stream_min,' +
                         'speed_history,' +
+                        'speed_intensity,' +
                         'speed_stream,' +
                         'speed_stream_max,' +
                         'speed_stream_min,' +
+                        'intensity,' +
                         'time_history'
                 });
                 db.open();

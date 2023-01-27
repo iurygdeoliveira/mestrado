@@ -21,6 +21,7 @@
 <?php $this->insert("../chartMap/layer_distance") ?>
 <?php $this->insert("../chartMap/js_mapChart") ?>
 <?php $this->insert("../chartRadar/js_radarChart") ?>
+<?php $this->insert("../chartHeatmap/js_heatmapChart") ?>
 <?php $this->insert("../chartStream/js_streamChart") ?>
 <?php $this->insert("../chartStream/js_elevationStream") ?>
 <?php $this->insert("../chartBar/js_barChart") ?>

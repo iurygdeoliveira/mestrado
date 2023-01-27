@@ -54,4 +54,5 @@
 <?php $this->insert("../chartBar/variables_BarChart") ?>
 <?php $this->insert("../chartTableLens/variables_TableLens") ?>
 <?php $this->insert("../chartMap/variables_MapChart") ?>
+<?php $this->insert("../chartHeatmap/variables_heatmapChart") ?>
 <?php $this->insert("../chartStream/variables_StreamChart") ?>

@@ -115,6 +115,93 @@
         };
     }
 
+    async function calculateSpeedIntensity(speeds, max) {
+
+        let intensity = [];
+
+        for (const item of speeds) {
+
+            let number = parseFloat(
+                math.format(
+                    math.divide(item[1], max), {
+                        notation: 'fixed',
+                        precision: 1
+                    }
+                )
+            );
+
+            intensity.push((number < 0 ? number * (-1) : number));
+        }
+
+        return intensity;
+    }
+
+    async function calculateElevationIntensity(elevations, max, min) {
+
+        let intensity = [];
+
+        for (const item of elevations) {
+
+            let number = parseFloat(
+                math.format(
+                    math.divide(item[1] - min, max - min), {
+                        notation: 'fixed',
+                        precision: 1
+                    }
+                )
+            );
+
+            intensity.push((number < 0 ? number * (-1) : number));
+        }
+
+        return intensity;
+    }
+
+    async function calculateHeartrateIntensity(heartrate, max, min) {
+
+        let intensity = [];
+
+        for (const item of heartrate) {
+
+            let number = parseFloat(
+                math.format(
+                    math.divide(item[1] - min, max - min), {
+                        notation: 'fixed',
+                        precision: 1
+                    }
+                )
+            );
+
+            intensity.push((number < 0 ? number * (-1) : number));
+
+        }
+
+        return intensity;
+    }
+
+    async function calculateIntensity(speed, elevation, heartrate) {
+
+        let intensity = [];
+
+        for (let index = 0; index < speed.length; index++) {
+
+            intensity.push(
+                parseFloat(
+                    math.format(
+                        math.divide(speed[index] + elevation[index] + heartrate[index], 3), {
+                            notation: 'fixed',
+                            precision: 1
+                        }
+                    )
+                )
+            );
+
+        }
+
+        return intensity;
+    }
+
+
     async function updatePedalada(pedaladas) {
 
         for (const element of pedaladas) {
@@ -141,16 +228,29 @@
                     element.id
                 );
 
+                element.map_point = heartStream.map_point;
+
                 element.heartrate_stream = heartStream.stream;
                 element.heartrate_stream_max = heartStream.max;
                 element.heartrate_stream_min = heartStream.min;
-                element.map_point = heartStream.map_point;
+                element.heartrate_intensity = await calculateHeartrateIntensity(
+                    heartStream.stream, heartStream.max, heartStream.min
+                );
+
                 element.elevation_stream = elevationStream.stream;
                 element.elevation_stream_max = elevationStream.max;
                 element.elevation_stream_min = elevationStream.min;
+                element.elevation_intensity = await calculateElevationIntensity(
+                    elevationStream.stream, elevationStream.max, elevationStream.min
+                );
+
                 element.speed_stream = speedStream.stream;
                 element.speed_stream_max = speedStream.max;
                 element.speed_stream_min = speedStream.min;
+                element.speed_intensity = await calculateSpeedIntensity(speedStream.stream, speedStream.max);
+                element.intensity = await calculateIntensity(
+                    element.speed_intensity, element.elevation_intensity, element.heartrate_intensity
+                );
                 await modifyPedalada(element);
             }
         }
@@ -167,6 +267,7 @@
             await updateBarChart();
             await updateMapChart();
             await updateRadarChart();
+            await updateHeatmapChart();
             await updateStreamChart();
             await updateButtonMultivis(pedaladas_barChart, true, false, false);
         }
