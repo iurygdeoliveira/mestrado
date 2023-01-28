@@ -171,7 +171,7 @@
         option && await myChart.setOption(option);
     }
 
-    async function mountLegend(pedaladas) {
+    async function mountLegendStreamChart(pedaladas) {
 
         let legend = [];
         pedaladas.forEach(element => {
@@ -239,7 +239,7 @@
         console.log("Update StreamChart ...");
         await resizeStreamChart();
 
-        let legends = await mountLegend(pedaladas_barChart);
+        let legends = await mountLegendStreamChart(pedaladas_barChart);
         let colorStream = await mountColor(pedaladas_barChart);
 
         let heartData = await mountDataStream(pedaladas_barChart, 'heartrate');
