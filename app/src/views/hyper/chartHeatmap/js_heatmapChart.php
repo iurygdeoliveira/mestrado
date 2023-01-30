@@ -75,11 +75,8 @@
          const labelXAxis = await mountLabelxAxis(pedaladas_barChart[0].intensity);
          const labelYAxis = await mountLabelyAxis(pedaladas_barChart);
 
-         console.log(labelXAxis, labelYAxis);
-
          // prettier-ignore
          const data = await mountIntensityData(pedaladas_barChart);
-         console.log(data);
 
          option = {
              tooltip: {
@@ -113,16 +110,20 @@
                      show: true,
                  },
              },
+             dataZoom: [{
+                 type: 'slider' // this dataZoom component is dataZoom component of slider
+             }],
              visualMap: {
-                 min: 0,
-                 max: 1,
+                 type: 'piecewise',
+                 pieces: colorPieces,
+                 min: 0.0,
+                 max: 1.0,
                  calculable: true,
-                 orient: "horizontal",
-                 left: "center",
-                 bottom: "1%",
-                 inRange: {
-                     color: colorHeatmap,
-                 },
+                 orient: 'vertical',
+                 precision: 1,
+                 top: 'middle',
+                 align: 'left',
+                 right: '1'
              },
              series: [{
                  name: "Intensity",
@@ -140,6 +141,8 @@
                          shadowColor: "rgba(0, 0, 0, 0.5)",
                      },
                  },
+                 progressive: 1000,
+                 animation: false
              }, ],
          };
 

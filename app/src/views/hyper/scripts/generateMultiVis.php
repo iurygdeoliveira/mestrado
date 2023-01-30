@@ -266,9 +266,9 @@
             pedaladas_barchart = await updatePedalada(pedaladas_barChart);
             await updateBarChart();
             await updateMapChart();
-            await updateRadarChart();
-            await updateHeatmapChart();
             await updateStreamChart();
+            await updateHeatmapChart();
+            await updateRadarChartAVG();
             await updateButtonMultivis(pedaladas_barChart, true, false, false);
         }
         console.groupEnd();
