@@ -258,6 +258,14 @@
         return pedaladas;
     }
 
+    async function activeTriggerRadarCharts(avg) {
+
+        // avg.on('click', async function(params) {
+        //     colorizeData.push(params.name.replace("Cyclist ", 'rider'));
+        //     await updateRadarChartSingle();
+        // });
+
+    }
     async function generateMultiVis() {
 
         console.group("Generate MultiVis");
@@ -268,7 +276,9 @@
             await updateMapChart();
             await updateStreamChart();
             await updateHeatmapChart();
-            await updateRadarChartAVG();
+            let radarChartAVG = await updateRadarChartAVG();
+            await updateRadarChartSingle();
+            await activeTriggerRadarCharts(radarChartAVG);
             await updateButtonMultivis(pedaladas_barChart, true, false, false);
         }
         console.groupEnd();

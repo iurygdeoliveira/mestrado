@@ -224,12 +224,14 @@
         };
 
         option && myChart.setOption(option);
+
+        return myChart;
     }
 
     async function updateRadarChartAVG() {
 
         console.log("Update RadarChart AVG ...");
         await resizeRadarChartAVG();
-        await create_RadarChartAVG();
+        return await create_RadarChartAVG();
     }
 </script>

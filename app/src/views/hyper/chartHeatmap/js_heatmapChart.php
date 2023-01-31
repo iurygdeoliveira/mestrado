@@ -79,12 +79,19 @@
          const data = await mountIntensityData(pedaladas_barChart);
 
          option = {
+             title: {
+                 show: true,
+                 text: "Intensity",
+                 textStyle: {
+                     fontSize: 12
+                 }
+             },
              tooltip: {
                  position: "top",
              },
              grid: {
-                 height: "80%",
-                 top: "1%",
+                 height: "75%",
+                 top: "15%",
              },
              xAxis: {
                  type: "category",
@@ -110,8 +117,25 @@
                      show: true,
                  },
              },
+             toolbox: {
+                 show: true,
+                 feature: {
+                     dataView: {
+                         readOnly: false
+                     },
+                     restore: {},
+                     saveAsImage: {}
+                 }
+             },
              dataZoom: [{
-                 type: 'slider' // this dataZoom component is dataZoom component of slider
+                 type: 'slider',
+                 startValue: 0,
+                 top: 25,
+                 height: 25,
+                 minValueSpan: viewStream,
+                 labelFormatter: function(value, valueStr) {
+                     return value.toFixed(2) + ` m`;
+                 }
              }],
              visualMap: {
                  type: 'piecewise',

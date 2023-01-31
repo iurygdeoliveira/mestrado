@@ -1,5 +1,5 @@
 <script>
-    async function time_in_minutes(time) {
+    async function time_in_minutesSingle(time) {
 
         let minutes = time.split(':');
         minutes[0] = parseInt(minutes[0]);
@@ -12,7 +12,7 @@
 
     }
 
-    async function formatValues(pedalada) {
+    async function formatValuesSingle(pedalada) {
 
         // heartrate, elevation, distance, duration, speed
         return [
@@ -20,17 +20,17 @@
             pedalada.elevation_AVG,
             pedalada.temperature_AVG,
             pedalada.speed_AVG,
-            await time_in_minutes(pedalada.duration)
+            await time_in_minutesSingle(pedalada.duration)
         ];
     }
 
-    async function mountValues(pedaladas) {
+    async function prepareValuesSingle(pedaladas) {
 
         let values = [];
         const promisesValues = pedaladas.map(async (pedalada, idx) => {
             values.push({
-                'rider': pedalada.rider,
-                'values': await formatValues(pedalada)
+                'rider': pedalada.id,
+                'values': await formatValuesSingle(pedalada)
             });
         });
 
@@ -40,110 +40,138 @@
 
     }
 
-    async function mountAverage(values) {
+    async function checkColorClickedRadar(ride) {
 
-        let average = [];
-        for (let count = 0; count < selected.length; count++) {
 
-            let valuesRiders = values.filter(item => item.rider == selected[count]);
+        if (colorizeData.length > 0) {
 
-            if (valuesRiders.length > 0) {
+            let found = false;
 
-                heartrate = 0;
-                elevation = 0;
-                temperature = 0;
-                speed = 0;
-                duration = 0;
-
-                valuesRiders.forEach(element => {
-                    heartrate += element.values[0];
-                    elevation += element.values[1];
-                    temperature += element.values[2];
-                    speed += element.values[3];
-                    duration += element.values[4];
-                });
-
-                heartrate = parseFloat((heartrate / valuesRiders.length).toFixed(2));
-                elevation = parseFloat((elevation / valuesRiders.length).toFixed(6));
-                temperature = parseFloat((temperature / valuesRiders.length).toFixed(2));
-                speed = parseFloat((speed / valuesRiders.length).toFixed(2));
-                duration = parseFloat((duration / valuesRiders.length).toFixed(2));
-
-                let color = $('#' + selected[count]).attr('style').replace(";", "").replace("background-color: ", "");
-                average.push({
-                    'name': "Cyclist " + selected[count].replace(/[^0-9]/g, ''),
-                    'value': [heartrate, elevation, temperature, speed, duration],
-                    lineStyle: {
-                        color: color
-                    },
-                    itemStyle: {
-                        color: color
-                    },
-                });
+            for (const string of colorizeData) {
+                console.log(ride, string, ride.startsWith(string));
+                if (ride.includes(string)) {
+                    found = true;
+                    break;
+                }
             }
+
+            // console.log(pedaladas_barChart);
+            console.log(found);
+
+            if (found) {
+                return 'rgb(0,0,0)';
+            } else {
+                return unselectedColorRadar;
+            }
+        } else {
+
+            return unselectedColorRadar;
         }
-        return average;
+    }
+    async function getColorRadarChart(ride) {
+
+        let find = pedaladas_barChart.find(x => x.id === ride);
+        return find.color_selected;
+
 
     }
 
-    async function mountDataSetsRadarChart(pedaladas) {
+    async function mountValuesSingle(rides) {
 
-        let values = await mountValues(pedaladas)
-        return await mountAverage(values);
+        let data = [];
+
+        for (const item of rides) {
+
+            let heartrate = parseFloat((item.values[0]).toFixed(2));
+            let elevation = parseFloat((item.values[1]).toFixed(6));
+            let temperature = parseFloat((item.values[2]).toFixed(2));
+            let speed = parseFloat((item.values[3]).toFixed(2));
+            let duration = parseFloat((item.values[4]).toFixed(2));
+
+            let name = item.rider.replace('rider', 'C')
+            name = name.replace('pedalada', 'ride');
+            name = name.replaceAll('_', ' - ');
+
+            let colorSelectedRadar = await getColorRadarChart(item.rider);
+
+            data.push({
+                'name': name,
+                'value': [heartrate, elevation, temperature, speed, duration],
+                lineStyle: {
+                    color: colorSelectedRadar
+                },
+                itemStyle: {
+                    color: colorSelectedRadar
+                },
+            });
+        }
+
+        return data;
+
     }
 
-    async function removeRadarChart() {
+    async function mountDataSetsRadarChartSingle(pedaladas) {
 
-        d3.select('#pedaladas_radarChart').remove();
+        let values = await prepareValuesSingle(pedaladas)
+        return await mountValuesSingle(values);
     }
 
-    async function resizeRadarChart() {
+    async function defineMaxMinValuesSingle(dataset) {
+
+        let heartrate = [];
+        let elevation = [];
+        let temperature = [];
+        let speed = [];
+        let duration = [];
+        let values = [];
+        dataset.forEach(element => {
+            heartrate.push(element.value[0]);
+            elevation.push(element.value[1]);
+            temperature.push(element.value[2]);
+            speed.push(element.value[3]);
+            duration.push(element.value[4]);
+        });
+
+        values.push(
+            Math.ceil(Math.max(...heartrate.map(item => item))),
+            Math.max(...elevation.map(item => item)),
+            Math.ceil(Math.max(...temperature.map(item => item))),
+            Math.ceil(Math.max(...speed.map(item => item))),
+            Math.ceil(Math.max(...duration.map(item => item))),
+            Math.ceil(Math.min(...heartrate.map(item => item))),
+            Math.min(...elevation.map(item => item)),
+            Math.ceil(Math.min(...temperature.map(item => item))),
+            Math.ceil(Math.min(...speed.map(item => item))),
+            Math.ceil(Math.min(...duration.map(item => item))),
+        );
+
+        return values;
+    }
+
+    async function removeRadarChartSingle() {
+
+        d3.select('#pedaladas_radarChartSingle').remove();
+    }
+
+    async function resizeRadarChartSingle() {
         let heightRadarChart = parseInt(heightWindow / 2) - adjustHeightCharts;
-        removeRadarChart();
-        d3.select('#radarChart')
+        removeRadarChartSingle();
+        d3.select('#radarChartSingle')
             .append('div')
-            .attr("id", 'pedaladas_radarChart')
+            .attr("id", 'pedaladas_radarChartSingle')
             .style("height", heightRadarChart + 'px');
     }
 
-    async function defineMaxValues(dataset) {
+    async function create_RadarChartSingle() {
 
-        let maxHeartrate = [];
-        let maxElevation = [];
-        let maxTemperature = [];
-        let maxSpeed = [];
-        let maxDuration = [];
-        let maxValues = [];
-        dataset.forEach(element => {
-            maxHeartrate.push(element.value[0]);
-            maxElevation.push(element.value[1]);
-            maxTemperature.push(element.value[2]);
-            maxSpeed.push(element.value[3]);
-            maxDuration.push(element.value[4]);
-        });
-
-        maxValues.push(
-            Math.ceil(Math.max(...maxHeartrate.map(item => item))),
-            Math.max(...maxElevation.map(item => item)),
-            Math.ceil(Math.max(...maxTemperature.map(item => item))),
-            Math.ceil(Math.max(...maxSpeed.map(item => item))),
-            Math.ceil(Math.max(...maxDuration.map(item => item))),
-            Math.min(...maxElevation.map(item => item))
-        );
-
-        return maxValues;
-    }
-
-    async function create_RadarChart() {
-
-        var chartDom = document.getElementById('pedaladas_radarChart');
+        var chartDom = document.getElementById('pedaladas_radarChartSingle');
         var myChart = await echarts.init(chartDom, null, {
             renderer: 'svg'
         });
         var option;
 
-        let dataset = await mountDataSetsRadarChart(pedaladas_barChart);
-        let maxValues = await defineMaxValues(dataset);
+        let dataset = await mountDataSetsRadarChartSingle(pedaladas_barChart);
+        let maxMinValues = await defineMaxMinValuesSingle(dataset);
 
         // Montando legendas
         let legends = [];
@@ -159,6 +187,7 @@
                     dataView: {
                         readOnly: false
                     },
+                    restore: {},
                     saveAsImage: {}
                 }
             },
@@ -173,7 +202,7 @@
             },
             title: {
                 show: true,
-                text: `Average Indicators`,
+                text: `Individual Indicators`,
                 textStyle: {
                     fontSize: 12
                 }
@@ -187,37 +216,33 @@
                 center: ['50%', '52%'],
                 indicator: [{
                         name: 'Avg Heartrate (BPM)',
-                        max: maxValues[0]
+                        max: maxMinValues[0],
+                        min: maxMinValues[5]
                     },
                     {
                         name: 'Avg Elevation (M)',
-                        max: maxValues[1],
-                        min: maxValues[5]
+                        max: maxMinValues[1],
+                        min: maxMinValues[6]
                     },
                     {
                         name: 'Avg Temperature (ºC)',
-                        max: maxValues[2]
+                        max: maxMinValues[2],
+                        min: maxMinValues[7]
                     },
                     {
                         name: 'Avg Speed (KM/H)',
-                        max: maxValues[3]
+                        max: maxMinValues[3],
+                        min: maxMinValues[8]
                     },
                     {
                         name: 'Duration (Min)',
-                        max: maxValues[4]
+                        max: maxMinValues[4],
+                        min: maxMinValues[9]
                     }
                 ]
             },
             series: [{
                 type: 'radar',
-                emphasis: {
-                    lineStyle: {
-                        width: 4
-                    },
-                    areaStyle: {
-                        opacity: 0.5
-                    }
-                },
                 // Heartrate, Elevation, Temperature, Speed, Duration
                 data: dataset
             }]
@@ -226,10 +251,10 @@
         option && myChart.setOption(option);
     }
 
-    async function updateRadarChart() {
+    async function updateRadarChartSingle() {
 
-        console.log("Update RadarChart ...");
-        await resizeRadarChart();
-        await create_RadarChart();
+        console.log("Update RadarChartSingle ...");
+        await resizeRadarChartSingle();
+        await create_RadarChartSingle();
     }
 </script>
