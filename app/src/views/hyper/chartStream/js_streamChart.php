@@ -115,9 +115,10 @@
             dataZoom: [{
                 type: 'slider', // this dataZoom component is dataZoom component of slider
                 startValue: 0,
-                top: 25,
-                height: 25,
+                top: 1,
+                height: 1,
                 minValueSpan: viewStream,
+                show: false,
                 labelFormatter: function(value, valueStr) {
                     return value.toFixed(2) + ` m`;
                 }
@@ -137,10 +138,11 @@
                         show: true
                     }
                 },
-                top: 63,
+                top: 25,
                 bottom: 40,
                 name: 'm',
                 nameLocation: 'start',
+                splitNumber: 12,
                 splitLine: {
                     show: true,
                     lineStyle: {
@@ -169,6 +171,8 @@
         };
 
         option && await myChart.setOption(option);
+
+        return myChart;
     }
 
     async function mountLegendStreamChart(pedaladas) {
@@ -234,6 +238,7 @@
         };
     }
 
+
     async function updateStreamChart() {
 
         console.log("Update StreamChart ...");
@@ -246,7 +251,7 @@
         let speedData = await mountDataStream(pedaladas_barChart, 'speed');
         let elevationData = await mountDataStream(pedaladas_barChart, 'elevation');
 
-        await create_StreamChart(
+        let streamHeartRate = await create_StreamChart(
             'pedaladas_heartrate',
             'Heartrate',
             'bpm',
@@ -257,8 +262,7 @@
             heartData.min
         );
 
-
-        await create_StreamChart(
+        let streamSpeed = await create_StreamChart(
             'pedaladas_speed',
             'Speed',
             'KM/H',
@@ -269,7 +273,7 @@
             speedData.min
         );
 
-        await create_ElevationStream(
+        let streamElevation = await create_ElevationStream(
             'pedaladas_elevation',
             'Elevation',
             'meters',
@@ -279,5 +283,7 @@
             elevationData.max,
             elevationData.min
         );
+
+        return [streamHeartRate, streamSpeed, streamElevation];
     }
 </script>

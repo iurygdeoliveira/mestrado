@@ -223,7 +223,7 @@
             }]
         };
 
-        option && myChart.setOption(option);
+        option && await myChart.setOption(option);
 
         return myChart;
     }

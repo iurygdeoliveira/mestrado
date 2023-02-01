@@ -118,6 +118,8 @@
                  splitArea: {
                      show: false,
                  },
+                 name: 'm',
+                 nameLocation: 'start'
              },
              yAxis: {
                  type: "category",
@@ -134,7 +136,7 @@
                  },
                  splitArea: {
                      show: true,
-                 },
+                 }
              },
              toolbox: {
                  show: true,
@@ -151,17 +153,18 @@
                  startValue: 0,
                  top: 25,
                  height: 25,
-                 minValueSpan: viewStream,
-                 labelFormatter: function(value, valueStr) {
-                     return value.toFixed(2) + ` m`;
-                 }
+                 minValueSpan: viewStream
              }],
              visualMap: {
                  type: 'continuous',
-                 pieces: colorPieces,
-                 min: 0.0,
-                 max: 1.0,
+                 range: [0, 1],
+                 inRange: {
+                     color: colorHeatmap
+                 },
+                 min: 0,
+                 max: 1,
                  calculable: true,
+                 realtime: false,
                  orient: 'vertical',
                  precision: 1,
                  top: 'middle',
@@ -189,14 +192,16 @@
              }, ],
          };
 
-         option && myChart.setOption(option);
+         option && await myChart.setOption(option);
+
+         return myChart
      }
 
      async function updateHeatmapChart() {
 
          console.log("Update HeatMapChart ...");
          await resizeHeatMapChart();
-         await create_HeatMapChart();
+         return await create_HeatMapChart();
 
      }
  </script>

@@ -265,6 +265,28 @@
         });
     }
 
+    async function activeTriggerDataZoom(stream, heatmap) {
+
+        heatmap.on('datazoom', function(params) {
+            stream[0].dispatchAction({
+                type: 'dataZoom',
+                start: params.start,
+                end: params.end
+            });
+            stream[1].dispatchAction({
+                type: 'dataZoom',
+                start: params.start,
+                end: params.end
+            });
+            stream[2].dispatchAction({
+                type: 'dataZoom',
+                start: params.start,
+                end: params.end
+            });
+        });
+    }
+
+
     async function generateMultiVis() {
 
         console.group("Generate MultiVis");
@@ -272,12 +294,13 @@
             await updateButtonMultivis(pedaladas_barChart, false, true, false);
             pedaladas_barchart = await updatePedalada(pedaladas_barChart);
             await updateBarChart();
-            await updateStreamChart();
-            await updateHeatmapChart();
+            let stream = await updateStreamChart();
+            let heatmap = await updateHeatmapChart();
             await updateMapChart();
             let radarChartAVG = await updateRadarChartAVG();
             let radarChartSingle = await updateRadarChartSingle();
             await activeTriggerRadarCharts(radarChartAVG, radarChartSingle);
+            await activeTriggerDataZoom(stream, heatmap);
             await updateButtonMultivis(pedaladas_barChart, true, false, false);
         }
         console.groupEnd();

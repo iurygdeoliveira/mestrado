@@ -59,23 +59,6 @@
 
         return series;
 
-        // [{
-        //         name: 'Line 1',
-        //         type: 'line',
-        //         stack: 'Total',
-        //         smooth: true,
-        //         lineStyle: {
-        //             width: 0
-        //         },
-        //         showSymbol: false,
-        //         areaStyle: {},
-        //         emphasis: {
-        //             focus: 'series'
-        //         },
-        //         data: [0, 2, 11, -26, -9, 3, 2]
-        //     },
-
-        // }]
     }
 
     async function create_ElevationStream(stream, title, scale, legends, color, data, max, min) {
@@ -171,14 +154,16 @@
             dataZoom: [{
                 type: 'slider', // this dataZoom component is dataZoom component of slider
                 startValue: 0,
-                top: 25,
-                height: 25,
+                top: 1,
+                height: 1,
+                show: false,
                 labelFormatter: function(value, valueStr) {
                     return valueStr + ` m`;
                 }
             }],
             grid: {
                 left: '2%',
+                top: '10%',
                 right: '5%',
                 bottom: '9%',
                 containLabel: true
@@ -200,7 +185,7 @@
                     }
                 },
                 data: maxStream,
-                splitNumber: 6,
+                splitNumber: 5,
                 axisPointer: {
                     snap: true,
                     label: {
@@ -225,11 +210,14 @@
                     show: true,
                     onZero: false
                 },
-                nameLocation: 'start'
+                nameLocation: 'start',
+                splitNumber: 6
             }],
             series: series
         };
 
         option && await myChart.setOption(option);
+
+        return myChart;
     }
 </script>

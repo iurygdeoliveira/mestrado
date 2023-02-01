@@ -61,7 +61,8 @@
 
             let name = item.rider.replace('rider', 'C')
             name = name.replace('pedalada', 'ride');
-            name = name.replaceAll('_', ' - ');
+            name = name.replace('_', ' - ');
+            name = name.replace('_', ' ');
 
             let colorSelectedRadar = await getColorRadarChart(item.rider);
 
@@ -244,7 +245,7 @@
             }]
         };
 
-        option && myChart.setOption(option);
+        option && await myChart.setOption(option);
 
         myChart.getZr().on('click', async function(event) {
             if (event.target.__title === 'Restore') {
