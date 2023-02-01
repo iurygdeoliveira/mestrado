@@ -97,8 +97,8 @@
 
         var stateChangingButton = L.easyButton({
             states: [{
-                stateName: 'see-hotline', // name the state
-                icon: 'mdi mdi-18px mdi-alpha-h-box', // and define its properties
+                stateName: 'see-Intensity', // name the state
+                icon: 'mdi mdi-18px mdi-alpha-i-box', // and define its properties
                 title: 'See hotline', // like its title
                 onClick: function(btn, map) { // and its callback
                     hotline.addTo(map);

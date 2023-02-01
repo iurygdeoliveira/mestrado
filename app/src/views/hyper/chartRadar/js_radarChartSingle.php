@@ -40,39 +40,10 @@
 
     }
 
-    async function checkColorClickedRadar(ride) {
-
-
-        if (colorizeData.length > 0) {
-
-            let found = false;
-
-            for (const string of colorizeData) {
-                console.log(ride, string, ride.startsWith(string));
-                if (ride.includes(string)) {
-                    found = true;
-                    break;
-                }
-            }
-
-            // console.log(pedaladas_barChart);
-            console.log(found);
-
-            if (found) {
-                return 'rgb(0,0,0)';
-            } else {
-                return unselectedColorRadar;
-            }
-        } else {
-
-            return unselectedColorRadar;
-        }
-    }
     async function getColorRadarChart(ride) {
 
         let find = pedaladas_barChart.find(x => x.id === ride);
         return find.color_selected;
-
 
     }
 
@@ -110,9 +81,26 @@
 
     }
 
+    async function separateRidesEmphasis() {
+
+        // Extraindo as pedaladas de um ciclista específico
+        let pedaladasEmphasis = pedaladas_barChart.filter(x =>
+            x.id.includes(colorizeData)
+        );
+
+        return pedaladasEmphasis;
+
+    }
+
     async function mountDataSetsRadarChartSingle(pedaladas) {
 
-        let values = await prepareValuesSingle(pedaladas)
+        let values;
+        if (colorizeData) {
+            let pedaladasRadarEmphasis = await separateRidesEmphasis(pedaladas)
+            values = await prepareValuesSingle(pedaladasRadarEmphasis)
+        } else {
+            values = await prepareValuesSingle(pedaladas)
+        }
         return await mountValuesSingle(values);
     }
 
@@ -243,18 +231,35 @@
             },
             series: [{
                 type: 'radar',
+                emphasis: {
+                    lineStyle: {
+                        width: 4
+                    },
+                    areaStyle: {
+                        opacity: 0.5
+                    }
+                },
                 // Heartrate, Elevation, Temperature, Speed, Duration
                 data: dataset
             }]
         };
 
         option && myChart.setOption(option);
+
+        myChart.getZr().on('click', async function(event) {
+            if (event.target.__title === 'Restore') {
+                colorizeData = false;
+                await updateRadarChartSingle();
+            };
+        });
+
+        return myChart;
     }
 
     async function updateRadarChartSingle() {
 
         console.log("Update RadarChartSingle ...");
         await resizeRadarChartSingle();
-        await create_RadarChartSingle();
+        return await create_RadarChartSingle();
     }
 </script>

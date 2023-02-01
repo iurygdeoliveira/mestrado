@@ -201,7 +201,6 @@
         return intensity;
     }
 
-
     async function updatePedalada(pedaladas) {
 
         for (const element of pedaladas) {
@@ -258,14 +257,14 @@
         return pedaladas;
     }
 
-    async function activeTriggerRadarCharts(avg) {
+    async function activeTriggerRadarCharts(avg, single) {
 
-        // avg.on('click', async function(params) {
-        //     colorizeData.push(params.name.replace("Cyclist ", 'rider'));
-        //     await updateRadarChartSingle();
-        // });
-
+        avg.on('mouseover', async function(params) {
+            colorizeData = params.name.replace("Cyclist ", 'rider');
+            return await updateRadarChartSingle();
+        });
     }
+
     async function generateMultiVis() {
 
         console.group("Generate MultiVis");
@@ -273,12 +272,12 @@
             await updateButtonMultivis(pedaladas_barChart, false, true, false);
             pedaladas_barchart = await updatePedalada(pedaladas_barChart);
             await updateBarChart();
-            await updateMapChart();
             await updateStreamChart();
             await updateHeatmapChart();
+            await updateMapChart();
             let radarChartAVG = await updateRadarChartAVG();
-            await updateRadarChartSingle();
-            await activeTriggerRadarCharts(radarChartAVG);
+            let radarChartSingle = await updateRadarChartSingle();
+            await activeTriggerRadarCharts(radarChartAVG, radarChartSingle);
             await updateButtonMultivis(pedaladas_barChart, true, false, false);
         }
         console.groupEnd();

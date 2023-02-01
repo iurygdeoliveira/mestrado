@@ -1,10 +1,28 @@
  <script>
+     async function maxIntensity(pedaladas) {
+
+         let value = 0;
+         let maxIntensity;
+         for (let index = 0; index < pedaladas.length; index++) {
+
+             if (pedaladas[index].intensity.length > value) {
+                 value = pedaladas[index].intensity.length;
+                 maxIntensity = index;
+             }
+         }
+
+         return maxIntensity
+
+     }
+
      async function mountMatrixData(pedaladas) {
 
+
+         let max = await maxIntensity(pedaladas);
          let data = []; // Inicializa array vazio
 
          for (let i = 0; i < pedaladas.length; i++) { // Itera o numero total de pedaladas
-             for (let j = 0; j < pedaladas[0].intensity.length; j++) { // Itera o número de vezes da maior itensidade
+             for (let j = 0; j < pedaladas[max].intensity.length; j++) { // Itera o número de vezes da maior itensidade
 
                  let valor = (
                      Number.isFinite(pedaladas[i].intensity[j]) ? pedaladas[i].intensity[j] : ''
@@ -72,7 +90,8 @@
          var option;
 
          // prettier-ignore
-         const labelXAxis = await mountLabelxAxis(pedaladas_barChart[0].intensity);
+         let max = await maxIntensity(pedaladas_barChart);
+         const labelXAxis = await mountLabelxAxis(pedaladas_barChart[max].intensity);
          const labelYAxis = await mountLabelyAxis(pedaladas_barChart);
 
          // prettier-ignore
@@ -138,7 +157,7 @@
                  }
              }],
              visualMap: {
-                 type: 'piecewise',
+                 type: 'continuous',
                  pieces: colorPieces,
                  min: 0.0,
                  max: 1.0,
