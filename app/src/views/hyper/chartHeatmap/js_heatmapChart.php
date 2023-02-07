@@ -5,8 +5,8 @@
          let maxIntensity;
          for (let index = 0; index < pedaladas.length; index++) {
 
-             if (pedaladas[index].intensity.length > value) {
-                 value = pedaladas[index].intensity.length;
+             if (pedaladas[index].intensity_normalized.length > value) {
+                 value = pedaladas[index].intensity_normalized.length;
                  maxIntensity = index;
              }
          }
@@ -22,10 +22,10 @@
          let data = []; // Inicializa array vazio
 
          for (let i = 0; i < pedaladas.length; i++) { // Itera o numero total de pedaladas
-             for (let j = 0; j < pedaladas[max].intensity.length; j++) { // Itera o número de vezes da maior itensidade
+             for (let j = 0; j < pedaladas[max].intensity_normalized.length; j++) { // Itera o número de vezes da maior itensidade
 
                  let valor = (
-                     Number.isFinite(pedaladas[i].intensity[j]) ? pedaladas[i].intensity[j] : ''
+                     Number.isFinite(pedaladas[i].intensity_normalized[j]) ? pedaladas[i].intensity_normalized[j] : ''
                  );
                  // insere o valor de intensidade
                  data.push([i, j, valor]); // Adiciona sub-array com i, j e valor ao array data
@@ -91,7 +91,7 @@
 
          // prettier-ignore
          let max = await maxIntensity(pedaladas_barChart);
-         const labelXAxis = await mountLabelxAxis(pedaladas_barChart[max].intensity);
+         const labelXAxis = await mountLabelxAxis(pedaladas_barChart[max].intensity_normalized);
          const labelYAxis = await mountLabelyAxis(pedaladas_barChart);
 
          // prettier-ignore
@@ -100,7 +100,7 @@
          option = {
              title: {
                  show: true,
-                 text: "Intensity",
+                 text: "Global Intensity",
                  textStyle: {
                      fontSize: 12
                  }
@@ -166,13 +166,13 @@
                  calculable: true,
                  realtime: false,
                  orient: 'vertical',
-                 precision: 1,
+                 precision: 2,
                  top: 'middle',
                  align: 'left',
                  right: '1'
              },
              series: [{
-                 name: "Intensity",
+                 name: "Global Intensity",
                  type: "heatmap",
                  data: data,
                  label: {

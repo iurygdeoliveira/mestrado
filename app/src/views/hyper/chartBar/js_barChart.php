@@ -32,6 +32,7 @@
             'heartrate_stream_max': null,
             'heartrate_stream_min': null,
             'intensity': null,
+            'intensity_normalized': null,
             'id': d3.select(pedalada).attr('id'),
             'line_clicked': d3.select(pedalada).attr('line_clicked'),
             'locality': null,
@@ -85,6 +86,7 @@
         push_barChart.speed_history = res[0].speed_history;
         push_barChart.speed_intensity = res[0].speed_intensity;
         push_barChart.intensity = res[0].intensity;
+        push_barChart.intensity_normalized = res[0].intensity_normalized;
         push_barChart.time_history = res[0].time_history;
 
         return push_barChart;

@@ -15,7 +15,7 @@
         return result[0];
     }
 
-    async function putMarkerHotline(point, icon, color_selected, title, layer) {
+    async function putMarkerHotline(point, icon, shape, color_selected, title, layer) {
 
         L.marker(point, {
             icon: L.BeautifyIcon.icon({
@@ -32,8 +32,8 @@
             color: color_selected,
             fillColor: color_selected,
             fillOpacity: 0.2,
-            shape: "circle",
-            radius: 12
+            shape: shape,
+            radius: 14
         }).addTo(layer);
 
     }
@@ -56,7 +56,6 @@
 
         for (const iterator of params) {
 
-
             if (scale == 'bpm') {
 
                 let pedalada = await extractPedalada(pedaladas_barChart, iterator.name);
@@ -66,6 +65,7 @@
                     await putMarkerHotline(
                         pedalada.points[mapPoint.index],
                         'fa-solid fa-h',
+                        'circle',
                         pedalada.color_selected,
                         "Heartrate",
                         markerHotlineHeartrate
@@ -83,6 +83,7 @@
                     await putMarkerHotline(
                         pedalada.points[mapPoint.index],
                         'fa-solid fa-s',
+                        'square',
                         pedalada.color_selected,
                         "Speed",
                         markerHotlineSpeed
@@ -100,6 +101,7 @@
                     await putMarkerHotline(
                         pedalada.points[mapPoint.index],
                         'fa-solid fa-e',
+                        'triangle',
                         pedalada.color_selected,
                         "Elevation",
                         markerHotlineElevation
@@ -125,12 +127,35 @@
     async function mountHotlineData(pedalada) {
 
         let points = pedalada.points;
-        let heartrate = pedalada.heartrate_history;
+        let intensity = pedalada.intensity_normalized;
+        let map_point = pedalada.map_point;
+        let index_map_point = 0;
 
         let hotlineData = [];
         const promises = points.map(async (point_current, idx) => {
-            point_current.push(heartrate[idx]);
-            hotlineData.push(point_current);
+
+            if (idx == 0) {
+                point_current.push(Math.min(...intensity));
+                hotlineData.push(point_current);
+                index_map_point++;
+            } else {
+
+                if (map_point[index_map_point + 1] != undefined) {
+
+                    if ((idx < map_point[index_map_point + 1].index)) {
+                        point_current.push(intensity[index_map_point]);
+                        hotlineData.push(point_current);
+                    } else {
+                        index_map_point++;
+                    }
+
+                } else {
+                    point_current.push(intensity[index_map_point]);
+                    hotlineData.push(point_current);
+                }
+            }
+
+
         });
 
         await Promise.all(promises);
@@ -146,12 +171,20 @@
             let hotlineData = await mountHotlineData(pedalada_current);
 
             await L.hotline(hotlineData, {
-                min: Math.min(...pedalada_current.heartrate_history),
-                max: Math.max(...pedalada_current.heartrate_history),
+                min: Math.min(...pedalada_current.intensity_normalized),
+                max: Math.max(...pedalada_current.intensity_normalized),
                 palette: {
-                    0.0: hotlinePalette[0],
-                    0.5: hotlinePalette[1],
-                    1.0: hotlinePalette[2]
+                    0.0: colorHeatmap[0],
+                    0.1: colorHeatmap[0],
+                    0.2: colorHeatmap[0],
+                    0.3: colorHeatmap[1],
+                    0.4: colorHeatmap[1],
+                    0.5: colorHeatmap[2],
+                    0.6: colorHeatmap[2],
+                    0.7: colorHeatmap[3],
+                    0.8: colorHeatmap[3],
+                    0.9: colorHeatmap[4],
+                    1.0: colorHeatmap[4],
                 },
                 weight: 5,
                 outlineColor: '#000',

@@ -115,71 +115,34 @@
         };
     }
 
-    async function calculateSpeedIntensity(speeds, max) {
+    async function calculateAttributeIntensity(attribute, max, min) {
+
+        // attribute é o mesmo vetor utilizar no streamGraph
+        // utilizar o valor que esta posição 1
 
         let intensity = [];
 
-        for (const item of speeds) {
+        for (const item of attribute) {
 
-            let number = parseFloat(
-                math.format(
-                    math.divide(item[1], max), {
-                        notation: 'fixed',
-                        precision: 1
-                    }
-                )
+            let value = parseFloat(math.divide(item[1] - min, max - min));
+            value = value * (1 - 0) + 0;
+            value = math.format(
+                value, {
+                    notation: 'fixed',
+                    precision: 2
+                }
             );
 
-            intensity.push((number < 0 ? number * (-1) : number));
+            intensity.push(parseFloat(value));
         }
+
+        intensity[0] = (intensity[0] < 0 ? intensity[0] * -1 : intensity[0]); // ajust
 
         return intensity;
     }
 
-    async function calculateElevationIntensity(elevations, max, min) {
 
-        let intensity = [];
-
-        for (const item of elevations) {
-
-            let number = parseFloat(
-                math.format(
-                    math.divide(item[1] - min, max - min), {
-                        notation: 'fixed',
-                        precision: 1
-                    }
-                )
-            );
-
-            intensity.push((number < 0 ? number * (-1) : number));
-        }
-
-        return intensity;
-    }
-
-    async function calculateHeartrateIntensity(heartrate, max, min) {
-
-        let intensity = [];
-
-        for (const item of heartrate) {
-
-            let number = parseFloat(
-                math.format(
-                    math.divide(item[1] - min, max - min), {
-                        notation: 'fixed',
-                        precision: 1
-                    }
-                )
-            );
-
-            intensity.push((number < 0 ? number * (-1) : number));
-
-        }
-
-        return intensity;
-    }
-
-    async function calculateIntensity(speed, elevation, heartrate) {
+    async function calculateIntensityGlobal(speed, elevation, heartrate) {
 
         let intensity = [];
 
@@ -190,7 +153,7 @@
                     math.format(
                         math.divide(speed[index] + elevation[index] + heartrate[index], 3), {
                             notation: 'fixed',
-                            precision: 1
+                            precision: 2
                         }
                     )
                 )
@@ -199,6 +162,25 @@
         }
 
         return intensity;
+    }
+
+    async function calculateIntensityNormalized(intensity, max, min) {
+
+        let intensityNormalized = [];
+
+        for (const item of intensity) {
+            let value = parseFloat(math.divide(item - min, max - min));
+            value = value * (1 - 0) + 0;
+            value = math.format(
+                value, {
+                    notation: 'fixed',
+                    precision: 2
+                }
+            );
+            intensityNormalized.push(parseFloat(value));
+        }
+
+        return intensityNormalized;
     }
 
     async function updatePedalada(pedaladas) {
@@ -232,24 +214,32 @@
                 element.heartrate_stream = heartStream.stream;
                 element.heartrate_stream_max = heartStream.max;
                 element.heartrate_stream_min = heartStream.min;
-                element.heartrate_intensity = await calculateHeartrateIntensity(
+                element.heartrate_intensity = await calculateAttributeIntensity(
                     heartStream.stream, heartStream.max, heartStream.min
                 );
 
                 element.elevation_stream = elevationStream.stream;
                 element.elevation_stream_max = elevationStream.max;
                 element.elevation_stream_min = elevationStream.min;
-                element.elevation_intensity = await calculateElevationIntensity(
+                element.elevation_intensity = await calculateAttributeIntensity(
                     elevationStream.stream, elevationStream.max, elevationStream.min
                 );
 
                 element.speed_stream = speedStream.stream;
                 element.speed_stream_max = speedStream.max;
                 element.speed_stream_min = speedStream.min;
-                element.speed_intensity = await calculateSpeedIntensity(speedStream.stream, speedStream.max);
-                element.intensity = await calculateIntensity(
+                element.speed_intensity = await calculateAttributeIntensity(
+                    speedStream.stream, speedStream.max, speedStream.min
+                );
+
+                element.intensity = await calculateIntensityGlobal(
                     element.speed_intensity, element.elevation_intensity, element.heartrate_intensity
                 );
+
+                element.intensity_normalized = await calculateIntensityNormalized(
+                    element.intensity, Math.max(...element.intensity), Math.min(...element.intensity)
+                );
+
                 await modifyPedalada(element);
             }
         }

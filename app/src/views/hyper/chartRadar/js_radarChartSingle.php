@@ -122,16 +122,12 @@
         });
 
         values.push(
-            Math.ceil(Math.max(...heartrate.map(item => item))),
-            Math.max(...elevation.map(item => item)),
-            Math.ceil(Math.max(...temperature.map(item => item))),
-            Math.ceil(Math.max(...speed.map(item => item))),
-            Math.ceil(Math.max(...duration.map(item => item))),
-            Math.ceil(Math.min(...heartrate.map(item => item))),
-            Math.min(...elevation.map(item => item)),
-            Math.ceil(Math.min(...temperature.map(item => item))),
-            Math.ceil(Math.min(...speed.map(item => item))),
-            Math.ceil(Math.min(...duration.map(item => item))),
+            Math.ceil(Math.max(...heartrate.map(item => item))), // heartrate max
+            Math.max(...elevation.map(item => item)), // elevation max
+            Math.ceil(Math.max(...temperature.map(item => item))), // temperature max
+            Math.ceil(Math.max(...speed.map(item => item))), /// speed max
+            Math.ceil(Math.max(...duration.map(item => item))), // duration max
+            Math.min(...elevation.map(item => item))
         );
 
         return values;
@@ -191,7 +187,7 @@
             },
             title: {
                 show: true,
-                text: `Individual Indicators`,
+                text: `Average indicators for each ride`,
                 textStyle: {
                     fontSize: 12
                 }
@@ -206,27 +202,27 @@
                 indicator: [{
                         name: 'Avg Heartrate (BPM)',
                         max: maxMinValues[0],
-                        min: maxMinValues[5]
+                        min: 30
                     },
                     {
                         name: 'Avg Elevation (M)',
                         max: maxMinValues[1],
-                        min: maxMinValues[6]
+                        min: maxMinValues[5]
                     },
                     {
                         name: 'Avg Temperature (ºC)',
                         max: maxMinValues[2],
-                        min: maxMinValues[7]
+                        min: 0
                     },
                     {
                         name: 'Avg Speed (KM/H)',
                         max: maxMinValues[3],
-                        min: maxMinValues[8]
+                        min: 0
                     },
                     {
                         name: 'Duration (Min)',
                         max: maxMinValues[4],
-                        min: maxMinValues[9]
+                        min: 0
                     }
                 ]
             },

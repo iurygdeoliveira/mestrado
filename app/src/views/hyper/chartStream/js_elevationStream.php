@@ -206,12 +206,12 @@
                 max: 'dataMax',
                 position: 'bottom',
                 offset: 0,
+                show: false,
                 axisLine: {
-                    show: true,
+                    show: false,
                     onZero: false
                 },
-                nameLocation: 'start',
-                splitNumber: 6
+                nameLocation: 'start'
             }],
             series: series
         };

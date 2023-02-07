@@ -100,6 +100,7 @@
                     result.speed_stream_max = pedalada.speed_stream_max;
                     result.speed_stream_min = pedalada.speed_stream_min;
                     result.intensity = pedalada.intensity;
+                    result.intensity_normalized = pedalada.intensity_normalized;
                     result.map_point = pedalada.map_point;
                 });
             });
@@ -188,6 +189,7 @@
                                 speed_stream_min: null,
                                 speed_stream: null,
                                 intensity: null,
+                                intensity_normalized: null,
                                 time_history: res[4].time_history.split('|')
                             });
                         });

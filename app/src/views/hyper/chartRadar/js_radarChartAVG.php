@@ -173,7 +173,7 @@
             },
             title: {
                 show: true,
-                text: `Average Indicators`,
+                text: `Average indicators for the cyclist`,
                 textStyle: {
                     fontSize: 12
                 }

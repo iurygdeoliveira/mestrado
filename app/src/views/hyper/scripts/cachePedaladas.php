@@ -44,6 +44,7 @@
                         'speed_stream_max,' +
                         'speed_stream_min,' +
                         'intensity,' +
+                        'intensity_normalized,' +
                         'time_history'
                 });
                 db.open();
