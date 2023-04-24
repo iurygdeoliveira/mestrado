@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-center mt-2">
+<div class="d-flex justify-content-center mt-2 ms-2 me-0">
     <button type="button" class="btn btn-light btn-sm col-12" id="search_rides" data-bs-target="#modalTableLens" data-bs-toggle="modal" disabled title="See Table Lens">
         <i class="uil uil-align-left"></i>
     </button>

@@ -74,6 +74,7 @@
         var option;
 
         option = {
+            backgroundColor: 'rgb(255, 255, 255)',
             animation: true,
             color: color,
             title: {
@@ -152,20 +153,14 @@
                 }
             },
             dataZoom: [{
-                type: 'slider', // this dataZoom component is dataZoom component of slider
-                startValue: 0,
-                top: 1,
-                height: 1,
-                show: false,
-                labelFormatter: function(value, valueStr) {
-                    return valueStr + ` m`;
-                }
+                type: 'inside',
+                zoomOnMouseWheel: true
             }],
             grid: {
                 left: '2%',
                 top: '10%',
                 right: '5%',
-                bottom: '9%',
+                bottom: '10%',
                 containLabel: true
             },
             xAxis: [{

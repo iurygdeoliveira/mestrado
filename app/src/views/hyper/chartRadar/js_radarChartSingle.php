@@ -165,6 +165,7 @@
         });
 
         option = {
+            backgroundColor: 'rgb(255, 255, 255)',
             animation: true,
             toolbox: {
                 show: true,

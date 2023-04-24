@@ -1,6 +1,6 @@
 <div class="row">
     <span class="text-center mb-1 text-light">
-        Choose Cyclist:
+        Escolher Ciclista:
     </span>
 </div>
 <div class="row text-light m-0">

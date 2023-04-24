@@ -6,16 +6,19 @@
         d3.select('#streamHeartrate')
             .append('div')
             .attr("id", 'pedaladas_heartrate')
+            .attr("class", 'mb-1')
             .style("height", heightStreamChart + 'px');
 
         d3.select('#streamSpeed')
             .append('div')
             .attr("id", 'pedaladas_speed')
+            .attr("class", 'mb-1')
             .style("height", heightStreamChart + 'px');
 
         d3.select('#streamElevation')
             .append('div')
             .attr("id", 'pedaladas_elevation')
+            .attr("class", 'mb-1')
             .style("height", heightStreamChart + 'px');
     }
 
@@ -36,6 +39,7 @@
         var option;
 
         option = {
+            backgroundColor: 'rgb(255, 255, 255)',
             animation: true,
             color: color,
             title: {
@@ -92,6 +96,10 @@
                     fontWeight: 'bold'
                 }
             },
+            dataZoom: [{
+                type: 'inside',
+                zoomOnMouseWheel: true
+            }],
             toolbox: {
                 show: true,
                 feature: {
@@ -112,17 +120,6 @@
                     return '';
                 }
             },
-            dataZoom: [{
-                type: 'slider', // this dataZoom component is dataZoom component of slider
-                startValue: 0,
-                top: 1,
-                height: 1,
-                minValueSpan: viewStream,
-                show: false,
-                labelFormatter: function(value, valueStr) {
-                    return value.toFixed(2) + ` m`;
-                }
-            }],
             singleAxis: {
                 type: 'value',
                 max: 'dataMax',
@@ -139,7 +136,7 @@
                     }
                 },
                 top: 25,
-                bottom: 40,
+                bottom: 50,
                 name: 'm',
                 nameLocation: 'start',
                 splitNumber: 12,
@@ -253,7 +250,7 @@
 
         let streamHeartRate = await create_StreamChart(
             'pedaladas_heartrate',
-            'Heartrate',
+            'Frequência Cardíaca',
             'bpm',
             legends,
             colorStream,
@@ -264,7 +261,7 @@
 
         let streamSpeed = await create_StreamChart(
             'pedaladas_speed',
-            'Speed',
+            'Velocidade',
             'KM/H',
             legends,
             colorStream,
@@ -275,7 +272,7 @@
 
         let streamElevation = await create_ElevationStream(
             'pedaladas_elevation',
-            'Elevation',
+            'Elevação',
             'meters',
             legends,
             colorStream,
