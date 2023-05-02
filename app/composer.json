@@ -21,12 +21,12 @@
         ]
     },
     "require": {
-        "php": "8.1.*",
-        "ext-PDO": "8.1.*",
-        "ext-json": "8.1.*",
+        "php": "^8.1",
+        "ext-PDO": "^8.1",
+        "ext-json": "^8.1",
         "ext-decimal": "1.4.*",
-        "ext-mbstring": "8.1.*",
-        "ext-gd": "8.1.*",
+        "ext-mbstring": "^8.1",
+        "ext-gd": "^8.1",
         "ext-memcached": "*",
         "php-decimal/php-decimal": "v1.1.*",
         "illuminate/support": "^v9.7.0",
@@ -69,5 +69,10 @@
         "analyze": "php ./vendor/bin/phpmetrics --report-html=../docs/metrics .",
         "unused": "php ./vendor/bin/composer-unused",
         "updater": "composer update && composer dump-autoload --optimize"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     }
 }

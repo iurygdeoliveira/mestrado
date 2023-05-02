@@ -83,6 +83,11 @@ async function resizeHeatMapChart() {
         .attr("id", 'pedaladas_heatmapChart')
         .attr("class", 'p-0 mb-1')
         .style("height", heightHeatMapChart + 'px');
+
+    let widthGlobalIntensity = $('#pedaladas_heatmapChart').width();
+    d3.select('#globalIntensity')
+        .style("width", widthGlobalIntensity + "px")
+        .style("display", "block");
 }
 
 async function create_HeatMapChart() {
@@ -105,7 +110,6 @@ async function create_HeatMapChart() {
         backgroundColor: 'rgb(255, 255, 255)',
         title: {
             show: true,
-            text: "Global Intensity",
             textStyle: {
                 fontSize: 12
             }
@@ -116,6 +120,7 @@ async function create_HeatMapChart() {
         grid: {
             height: "75%",
             top: "15%",
+            right: "15%"
         },
         xAxis: {
             type: "category",

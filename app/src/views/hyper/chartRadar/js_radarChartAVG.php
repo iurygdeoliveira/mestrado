@@ -98,13 +98,18 @@ async function removeRadarChartAVG() {
 }
 
 async function resizeRadarChartAVG() {
-    let heightRadarChart = parseInt(heightWindow / 2) - adjustHeightCharts;
+    let heightRadarChart = parseInt(heightWindow / 2) - adjustHeightCharts - 10;
     removeRadarChartAVG();
     d3.select('#radarChartAVG')
         .append('div')
         .attr("id", 'pedaladas_radarChartAVG')
         .attr("class", 'mb-1')
         .style("height", heightRadarChart + 'px');
+
+    let widthStatsChart = $('#pedaladas_radarChartAVG').width();
+    d3.select('#statsChart')
+        .style("width", widthStatsChart + "px")
+        .style("display", "block");
 }
 
 async function defineMaxValuesAVG(dataset) {
@@ -169,13 +174,14 @@ async function create_RadarChartAVG() {
             itemHeight: 12,
             itemWidth: 12,
             itemGap: 5,
+            top: '5%',
             formatter: function(name) {
                 return '';
             }
         },
         title: {
             show: true,
-            text: `Average indicators for the cyclist`,
+            text: `Indicadores Médios do Ciclista`,
             textStyle: {
                 fontSize: 12
             }
@@ -185,28 +191,36 @@ async function create_RadarChartAVG() {
             position: 'left'
         },
         radar: {
+            axisName: {
+                overflow: 'break'
+            },
             nameGap: 7,
             center: ['50%', '52%'],
             indicator: [{
                     name: 'Avg Heartrate (BPM)',
-                    max: maxValues[0]
+                    max: maxValues[0],
+                    color: 'rgb(50,50,50)'
                 },
                 {
                     name: 'Avg Elevation (M)',
                     max: maxValues[1],
-                    min: maxValues[5]
+                    min: maxValues[5],
+                    color: 'rgb(50,50,50)'
                 },
                 {
                     name: 'Avg Temperature (ºC)',
-                    max: maxValues[2]
+                    max: maxValues[2],
+                    color: 'rgb(50,50,50)'
                 },
                 {
                     name: 'Avg Speed (KM/H)',
-                    max: maxValues[3]
+                    max: maxValues[3],
+                    color: 'rgb(50,50,50)'
                 },
                 {
                     name: 'Duration (Min)',
-                    max: maxValues[4]
+                    max: maxValues[4],
+                    color: 'rgb(50,50,50)'
                 }
             ]
         },
