@@ -203,31 +203,31 @@ async function create_RadarChartSingle() {
             nameGap: 7,
             center: ['50%', '52%'],
             indicator: [{
-                    name: 'Avg Heartrate (BPM)',
+                    name: 'Freq. Cardíaca Média (BPM)',
                     max: maxMinValues[0],
                     min: 30,
                     color: 'rgb(50,50,50)'
                 },
                 {
-                    name: 'Avg Elevation (M)',
+                    name: 'Elevação Média (M)',
                     max: maxMinValues[1],
                     min: maxMinValues[5],
                     color: 'rgb(50,50,50)'
                 },
                 {
-                    name: 'Avg Temperature (ºC)',
+                    name: 'Temperatura Média (ºC)',
                     max: maxMinValues[2],
                     min: 0,
                     color: 'rgb(50,50,50)'
                 },
                 {
-                    name: 'Avg Speed (KM/H)',
+                    name: 'Velocidade Média (KM/H)',
                     max: maxMinValues[3],
                     min: 0,
                     color: 'rgb(50,50,50)'
                 },
                 {
-                    name: 'Duration (Min)',
+                    name: 'Duração (Min)',
                     max: maxMinValues[4],
                     min: 0,
                     color: 'rgb(50,50,50)'
