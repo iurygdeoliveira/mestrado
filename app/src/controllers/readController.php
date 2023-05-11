@@ -830,6 +830,149 @@ class readController extends Controller
         ]);
     }
 
+    public function findElevation()
+    {
+
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
+        // Obtendo dados da requisição
+
+        $geral = [];
+        for ($i = 1; $i <= 1; $i++) {
+
+            $request = new stdClass();
+            $request->cyclist = "Cyclist_$i";
+            $pedal = $this->getFileNames(CONF_JSON_CYCLIST . $request->cyclist);
+            $outliers = [];
+            $result = [];
+            foreach ($pedal as $key => $file) {
+
+                if ($file != 'all_distances.json') {
+
+                    //throw $th;
+
+                    $attribute = $this->readAttribute($request->cyclist, $file, 'distance_history');
+
+                    $trackpointOutlier = [];
+                    $count = 0;
+                    for ($idx = 0; $idx < count($attribute); $idx++) {
+                        $trackpoints = new Decimal($attribute[$idx]);
+
+                        //$object = $this->negativeTrackpoints($trackpoints, $idx, $file, $attribute, $count);
+                        $object = $this->above(
+                            $trackpoints,
+                            $idx,
+                            $file,
+                            $attribute,
+                            $count,
+                            1
+                        );
+                        // $object = $this->timeOutlier(
+                        //     $idx,
+                        //     $file,
+                        //     $attribute,
+                        //     $count
+                        // );
+
+                        if ($object) {
+                            array_push($trackpointOutlier, $object);
+                        }
+
+                        // negative outliers speed
+                        // if ($idx > 0) {
+
+                        //     $object = $this->negativeDistances($speed_current, $idx, $file, $timeHistory, $distanceHistory, $speedHistory);
+                        //     $count++;
+                        //     array_push($outliers, $object);
+                        //     array_push($geral, $object);
+                        // }
+                    }
+
+                    // Obtendo overview
+                    $path =
+                        $request->cyclist .
+                        DIRECTORY_SEPARATOR .
+                        $file .
+                        DIRECTORY_SEPARATOR .
+                        'overview.json';
+
+                    $overview = json_decode($this->readJsonFile(CONF_JSON_CYCLIST, $path));
+
+                    //$percentage = Math::porcentagem($count, $overview->trackpoints);
+                    if ($count > 0) {
+
+                        $object = new stdClass();
+                        $object->trackpoints = $overview->trackpoints;
+                        $object->percentage_trackpoints = Math::porcentagem($count, $overview->trackpoints);
+                        $object->total_outliers = $count;
+                        $object->distance = $overview->distance;
+                        $object->trackpointOutlier = $trackpointOutlier;
+
+                        $path =
+                            $request->cyclist .
+                            DIRECTORY_SEPARATOR .
+                            $file .
+                            DIRECTORY_SEPARATOR .
+                            'distance_outliers';
+
+                        $this->createJsonFile(CONF_JSON_CYCLIST . $path, [$object]);
+                        array_push($outliers, $file);
+                    } else {
+
+                        // $object = new stdClass();
+                        // $object->trackpoints = $overview->trackpoints;
+                        // $object->cyclist = $request->cyclist;
+                        // $object->pedal = $file;
+                        // $object->result = "0 resultados em $request->cyclist/$file";
+                        // //$object->outliers = $outliers;
+
+                        // array_unshift($geral, $object);
+
+                        $path =
+                            $request->cyclist .
+                            DIRECTORY_SEPARATOR .
+                            $file .
+                            DIRECTORY_SEPARATOR .
+                            'distance_outliers';
+
+                        $this->createJsonFile(CONF_JSON_CYCLIST . $path, ["0 resultados em $request->cyclist/$file"]);
+                    }
+                }
+            }
+
+            array_unshift($result, [
+                "Cyclist" => "$request->cyclist",
+                "total de pedaladas" => count($pedal),
+                "total de outliers" => count($outliers),
+                "porcentagem de outliers" => Math::porcentagem(count($outliers), count($pedal)),
+                "pedal" => $outliers
+            ]);
+
+            $path =
+                $request->cyclist .
+                'result';
+
+            $this->createJsonFile(CONF_JSON_CYCLIST . $path, $result);
+            array_push($geral, $result);
+        }
+
+        $total_pedaladas = 0;
+        $total_outliers = 0;
+        foreach ($geral as $key => $value) {
+            $total_pedaladas += $value[0]['total de pedaladas'];
+            $total_outliers += $value[0]['total de outliers'];
+        }
+
+        set_time_limit(30);
+        return $this->responseJson(true, "outliers", [
+            [
+                "total geral pedaladas" => $total_pedaladas,
+                "total geral outliers" => $total_outliers,
+            ],
+            $geral
+        ]);
+    }
+
     public function findNotEquals()
     {
         set_time_limit(0);
