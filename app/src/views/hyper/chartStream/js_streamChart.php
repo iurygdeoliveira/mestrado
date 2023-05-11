@@ -45,10 +45,6 @@ async function create_StreamChart(stream, title, scale, legends, color, data, ma
 
     option = {
         backgroundColor: 'rgb(255, 255, 255)',
-        textStyle: {
-            textBorderWidth: 1,
-            textBorderColor: 'rgb(250, 250, 250)',
-        },
         animation: true,
         color: color,
         title: {
