@@ -1,29 +1,23 @@
-<div id="modalTableLens" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    role="dialog" aria-labelledby="fullWidthModalLabel" aria-hidden="true">
+<div id="modalTableLens" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="fullWidthModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-full-width">
         <div class="modal-content h-100">
             <div class="modal-header">
                 <div class="container-fluid">
                     <div class="row">
                         <h4 class="modal-title text-dark text-center col-11">Escolher Ciclista</h4>
-                        <button type="button" class="btn-close col-1" data-bs-dismiss="modal"
-                            aria-hidden="true"></button>
+                        <button type="button" class="btn-close col-1" data-bs-dismiss="modal" aria-hidden="true"></button>
                     </div>
                     <div class="row">
                         <div class="col-1 d-flex">
                             <h5 class="modal-title text-dark pe-0" id="fullWidthModalLabel">Filtros:</h5>
-                            <div class="ms-2 me-2 text-dark">Visão Geral:</div>
+                            <div class="ms-2 me-2 text-dark">Agrupar:</div>
                             <div class="d-inline form-check form-switch">
-                                <input class="form-check-input" type="checkbox"
-                                    style="background-color: rgb(90,90,90); background-image: url(<?= img('switch_toogle.svg') ?>);"
-                                    role="switch" id="switchToggle">
+                                <input class="form-check-input" type="checkbox" style="background-color: rgb(90,90,90); background-image: url(<?= img('switch_toogle.svg') ?>);" role="switch" id="switchToggle">
                             </div>
-                            <div class="ms-1 me-2 text-dark">Item</div>
+                            <div class="ms-1 me-2 text-dark">Desagrupar</div>
                             <div class="ms-2 me-2 text-dark">Decrescente</div>
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox"
-                                    style="background-color: rgb(90,90,90); background-image: url(<?= img('switch_toogle.svg') ?>);"
-                                    role="switch" id="switchOrder">
+                                <input class="form-check-input" type="checkbox" style="background-color: rgb(90,90,90); background-image: url(<?= img('switch_toogle.svg') ?>);" role="switch" id="switchOrder">
                             </div>
                             <div class="ms-1 me-2 text-dark">Crescente</div>
                         </div>
