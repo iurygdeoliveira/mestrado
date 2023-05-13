@@ -31,8 +31,8 @@ class readController extends Controller
 
     public function __construct()
     {
-        //$this->view = new View(__DIR__, get_class($this));
-        //$this->riders = $this->totalRiders();
+        $this->view = new View(__DIR__, get_class($this));
+        $this->riders = $this->totalRiders();
     }
 
     public function totalRiders()
@@ -41,12 +41,13 @@ class readController extends Controller
 
         for ($i = 1; $i <= 19; $i++) {
 
-            $this->ride = (new rideBD())->bootstrap("$i");
+            $pedal = $this->getFileNames(CONF_JSON_CYCLIST . "Cyclist_$i");
+            unset($pedal[0]);
 
             $rider = new stdClass();
             $rider->name = "$i";
             $rider->table = "rider$i";
-            $rider->atividade = $this->ride->getRowsNumber();
+            $rider->atividade = count($pedal);
             array_push($riders, $rider);
         }
         return ['riders' => $riders];
