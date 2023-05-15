@@ -111,14 +111,6 @@
             'stream': stream,
             'max': Math.max(...maxMin),
             'min': Math.min(...maxMin),
-            'avg': parseFloat(
-                math.format(
-                    math.mean(maxMin), {
-                        notation: 'fixed',
-                        precision: 6
-                    }
-                )
-            ),
             'map_point': pos
         };
     }
