@@ -1,63 +1,65 @@
 <script>
-    async function storeDistance(rider) {
+async function storeDistance(rider) {
 
-        if (!(await hasDistanceCyclist(rider))) {
+    let data;
+    if (!(await hasDistanceCyclist(rider))) {
 
-            let index = parseInt(rider.replace(/[^0-9]/g, ''));
-            let data = await getDistances(rider);
+        let index = parseInt(rider.replace(/[^0-9]/g, ''));
+        data = await getDistances(rider);
 
-            distances.push({
-                cyclist: index,
-                rides: data,
-                max: await getMaxDistance(data)
-            });
-        }
-
-        console.log("Distances Actives:");
-        console.table(distances);
+        distances.push({
+            cyclist: index,
+            rides: data,
+            max: await getMaxDistance(data)
+        });
     }
 
-    async function hasDistanceCyclist(cyclist) {
+    console.log("Distances Actives:");
+    console.table(distances);
+    return distances.rides;
+}
 
-        if (distances.length == 0) {
-            return false;
-        }
+async function hasDistanceCyclist(cyclist) {
 
-        const found = await filterDistance(cyclist);
-
-        if (found == undefined) {
-            return false;
-        }
-
-        if ((typeof found === 'object') && (found !== null)) {
-            return true;
-        }
+    if (distances.length == 0) {
+        return false;
     }
 
-    async function getMaxDistance(distances) {
-        return await Math.max(...distances.map(obj => obj.distance));
+    const found = await filterDistance(cyclist);
+
+    if (found == undefined) {
+        return false;
     }
 
-    async function getDistances(cyclist) {
-
-        console.log("Cyclist " + cyclist.replace(/[^0-9]/g, '') + " without distances");
-        let distances_current = await getDistancesGithub(cyclist);
-        return distances_current;
+    if ((typeof found === 'object') && (found !== null)) {
+        return true;
     }
+}
 
-    async function filterMaxDistance(cyclist) {
-        let result = await filterDistance(cyclist);
-        return result.max;
-    }
+async function getMaxDistance(distances) {
+    return await Math.max(...distances.map(obj => obj.distance));
+}
 
-    async function filterDistance(cyclist) {
-        let index = parseInt(cyclist.replace(/[^0-9]/g, ''));
-        return distances.find(element => element.cyclist === index);
-    }
+async function getDistances(cyclist) {
 
-    async function filterRides(cyclist) {
+    console.log("Cyclist " + cyclist.replace(/[^0-9]/g, '') + " without distances");
+    let distances_current = await getDistancesGithub(cyclist);
+    return distances_current;
+}
 
-        let result = await filterDistance(cyclist);
-        return result.rides;
-    }
+async function filterMaxDistance(cyclist) {
+    let result = await filterDistance(cyclist);
+    return result.max;
+}
+
+async function filterDistance(cyclist) {
+    let index = parseInt(cyclist.replace(/[^0-9]/g, ''));
+    return distances.find(element => element.cyclist === index);
+}
+
+async function filterRides(cyclist) {
+
+    let result = await filterDistance(cyclist);
+    return result.rides;
+}
 </script>

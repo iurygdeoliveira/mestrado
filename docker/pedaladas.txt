@@ -1,0 +1,211 @@
+
+ELEVAÇÃO
+
+Padrão de elevação detectado: rider1_pedalada_174
+read:5231 Pedalada: rider1_pedalada_174
+read:5232 Distancia: 21.54
+read:5233 Posição: 133
+read:5234 Elevation: 13300,73.46594,rider1_pedalada_174
+read:5235 Speed: 13300,13.60934,rider1_pedalada_174
+read:5236 Elevation + 1: 13400,50.45673,rider1_pedalada_174
+read:5237 Speed + 1: 13400,23.513792,rider1_pedalada_174
+
+Padrão detectado na pedalada: rider4_pedalada_269
+Distancia: 51.31
+read:5229 Padrão detectado na posição: 398
+read:5230 Elevation: 39800,74.03073,rider4_pedalada_269
+read:5231 Speed: 39800,12.377217,rider4_pedalada_269
+read:5232 Elevation + 1: 39900,2.05652,rider4_pedalada_269
+read:5233 Speed + 1: 39900,128.47554,rider4_pedalada_269
+
+Padrão detectado na pedalada: rider4_pedalada_167
+Distancia: 45.4
+read:5229 Padrão detectado na posição: 315
+read:5230 Elevation: 31500,40.17029,rider4_pedalada_167
+read:5231 Speed: 31500,5.957296,rider4_pedalada_167
+read:5232 Elevation + 1: 31600,1.623856,rider4_pedalada_167
+read:5233 Speed + 1: 31600,337.75561,rider4_pedalada_167
+
+
+Padrão de elevação detectado: rider6_pedalada_130
+read:5231 Pedalada: rider6_pedalada_130
+read:5232 Distancia: 7.14
+read:5233 Posição: 5
+read:5234 Elevation: 500,26.10028,rider6_pedalada_130
+read:5235 Speed: 500,7.336502,rider6_pedalada_130
+read:5236 Elevation + 1: 600,0.355709,rider6_pedalada_130
+read:5237 Speed + 1: 600,223.28817,rider6_pedalada_130
+
+Padrão de elevação detectado: rider6_pedalada_233
+read:5231 Pedalada: rider6_pedalada_233
+read:5232 Distancia: 12.97
+read:5233 Posição: 50
+read:5234 Elevation: 5000,32.0716,rider6_pedalada_233
+read:5235 Speed: 5000,40.20034,rider6_pedalada_233
+read:5236 Elevation + 1: 5100,-0.34906,rider6_pedalada_233
+read:5237 Speed + 1: 5100,110.72638,rider6_pedalada_233
+
+Padrão de elevação detectado: rider6_pedalada_355
+read:5231 Pedalada: rider6_pedalada_355
+read:5232 Distancia: 18.63
+read:5233 Posição: 102
+read:5234 Elevation: 10200,37.28687,rider6_pedalada_355
+read:5235 Speed: 10200,7.469666,rider6_pedalada_355
+read:5236 Elevation + 1: 10300,11.2276,rider6_pedalada_355
+read:5237 Speed + 1: 10300,13.95586,rider6_pedalada_355
+
+Padrão de elevação detectado: rider10_pedalada_15
+read:5231 Pedalada: rider10_pedalada_15
+Distancia: 36.19
+read:5232 Posição: 162
+read:5233 Elevation: 16200,24.14478,rider10_pedalada_15
+read:5234 Speed: 16200,26.057495,rider10_pedalada_15
+read:5235 Elevation + 1: 16300,-2.856232,rider10_pedalada_15
+read:5236 Speed + 1: 16300,26.662023,rider10_pedalada_15
+
+Padrão de elevação detectado: rider10_pedalada_33
+read:5231 Pedalada: rider10_pedalada_33
+Distancia: 62.12
+read:5232 Posição: 111
+read:5233 Elevation: 11100,36.60541,rider10_pedalada_33
+read:5234 Speed: 11100,20.486602,rider10_pedalada_33
+read:5235 Elevation + 1: 11200,-8.17224,rider10_pedalada_33
+read:5236 Speed + 1: 11200,176.24881,rider10_pedalada_33
+read:1388 
+
+Padrão de elevação detectado: rider17_pedalada_92
+read:5231 Pedalada: rider17_pedalada_92
+read:5232 Distancia: 62.12
+read:5233 Posição: 111
+read:5234 Elevation: 11100,36.60541,rider17_pedalada_92
+read:5235 Speed: 11100,20.486602,rider17_pedalada_92
+read:5236 Elevation + 1: 11200,-8.17224,rider17_pedalada_92
+read:5237 Speed + 1: 11200,176.24881,rider17_pedalada_92
+
+Padrão de elevação detectado: rider17_pedalada_397
+read:5231 Pedalada: rider17_pedalada_397
+read:5232 Distancia: 36.19
+read:5233 Posição: 162
+read:5234 Elevation: 16200,24.14478,rider17_pedalada_397
+read:5235 Speed: 16200,26.057495,rider17_pedalada_397
+read:5236 Elevation + 1: 16300,-2.856232,rider17_pedalada_397
+read:5237 Speed + 1: 16300,26.662023,rider17_pedalada_397
+
+Padrão de elevação detectado: rider18_pedalada_54
+read:5231 Pedalada: rider18_pedalada_54
+read:5232 Distancia: 18.63
+read:5233 Posição: 102
+read:5234 Elevation: 10200,37.28687,rider18_pedalada_54
+read:5235 Speed: 10200,7.469666,rider18_pedalada_54
+read:5236 Elevation + 1: 10300,11.2276,rider18_pedalada_54
+read:5237 Speed + 1: 10300,13.95586,rider18_pedalada_54
+
+Padrão de elevação detectado: rider18_pedalada_123
+read:5231 Pedalada: rider18_pedalada_123
+read:5232 Distancia: 7.14
+read:5233 Posição: 5
+read:5234 Elevation: 500,26.10028,rider18_pedalada_123
+read:5235 Speed: 500,7.336502,rider18_pedalada_123
+read:5236 Elevation + 1: 600,0.355709,rider18_pedalada_123
+read:5237 Speed + 1: 600,223.28817,rider18_pedalada_123
+
+Padrão de elevação detectado: rider18_pedalada_622
+read:5231 Pedalada: rider18_pedalada_622
+read:5232 Distancia: 12.97
+read:5233 Posição: 50
+read:5234 Elevation: 5000,32.0716,rider18_pedalada_622
+read:5235 Speed: 5000,40.20034,rider18_pedalada_622
+read:5236 Elevation + 1: 5100,-0.34906,rider18_pedalada_622
+read:5237 Speed + 1: 5100,110.72638,rider18_pedalada_622
+
+DECLIVE
+
+Padrão de declive detectado: rider1_pedalada_106
+read:5245 Pedalada: rider1_pedalada_106
+read:5246 Distância: 130.11
+read:5247 Posição: 789
+read:5248 Elevation: 78900,-21.35181,rider1_pedalada_106
+read:5249 Speed: 78900,67.971364,rider1_pedalada_106
+read:5250 Elevation + 1: 79000,3.26568,rider1_pedalada_106
+read:5251 Speed + 1: 79000,49.283455,rider1_pedalada_106
+
+Padrão de declive detectado: rider10_pedalada_194
+read:5245 Pedalada: rider10_pedalada_194
+read:5246 Distância: 41.98
+read:5247 Posição: 318
+read:5248 Elevation: 31800,-131.98199,rider10_pedalada_194
+read:5249 Speed: 31800,58.68885,rider10_pedalada_194
+read:5250 Elevation + 1: 31900,-2.854425,rider10_pedalada_194
+read:5251 Speed + 1: 31900,24.8263,rider10_pedalada_194
+
+Padrão de declive detectado: rider10_pedalada_117
+read:5244 Pedalada: rider10_pedalada_117
+distancia 55.94
+read:5245 Posição: 262
+read:5246 Elevation: 26200,-22.5097,rider10_pedalada_117
+read:5247 Speed: 26200,86.989858,rider10_pedalada_117
+read:5248 Elevation + 1: 26300,5.51578,rider10_pedalada_117
+read:5249 Speed + 1: 26300,27.419359,rider10_pedalada_117
+
+Padrão de declive detectado: rider10_pedalada_210
+read:5244 Pedalada: rider10_pedalada_210
+Distância: 68.24
+read:5245 Posição: 96
+read:5246 Elevation: 9600,-33.54905,rider10_pedalada_210
+read:5247 Speed: 9600,37.437364,rider10_pedalada_210
+read:5248 Elevation + 1: 9700,-0.19162,rider10_pedalada_210
+read:5249 Speed + 1: 9700,34.691835,rider10_pedalada_210
+
+Padrão de declive detectado: rider12_pedalada_410
+read:5245 Pedalada: rider12_pedalada_410
+read:5246 Distância: 50.98
+read:5247 Posição: 12
+read:5248 Elevation: 1200,-24.006027,rider12_pedalada_410
+read:5249 Speed: 1200,26.708448,rider12_pedalada_410
+read:5250 Elevation + 1: 1300,-1.208911,rider12_pedalada_410
+read:5251 Speed + 1: 1300,25.115762,rider12_pedalada_410
+
+Padrão de declive detectado: rider17_pedalada_7
+read:5245 Pedalada: rider17_pedalada_7
+read:5246 Distância: 90.56
+read:5247 Posição: 269
+read:5248 Elevation: 26900,-23.69776,rider17_pedalada_7
+read:5249 Speed: 26900,30.711858,rider17_pedalada_7
+read:5250 Elevation + 1: 27000,-4.946857,rider17_pedalada_7
+read:5251 Speed + 1: 27000,30.106458,rider17_pedalada_7
+
+Padrão de declive detectado: rider17_pedalada_68
+read:5245 Pedalada: rider17_pedalada_68
+read:5246 Distância: 41.98
+read:5247 Posição: 318
+read:5248 Elevation: 31800,-131.98199,rider17_pedalada_68
+read:5249 Speed: 31800,58.68885,rider17_pedalada_68
+read:5250 Elevation + 1: 31900,-2.854425,rider17_pedalada_68
+read:5251 Speed + 1: 31900,24.8263,rider17_pedalada_68
+
+Padrão de declive detectado: rider17_pedalada_191
+read:5245 Pedalada: rider17_pedalada_191
+read:5246 Distância: 55.94
+read:5247 Posição: 262
+read:5248 Elevation: 26200,-22.5097,rider17_pedalada_191
+read:5249 Speed: 26200,86.989858,rider17_pedalada_191
+read:5250 Elevation + 1: 26300,5.51578,rider17_pedalada_191
+read:5251 Speed + 1: 26300,27.419359,rider17_pedalada_191
+
+Padrão de declive detectado: rider17_pedalada_241
+read:5245 Pedalada: rider17_pedalada_241
+read:5246 Distância: 68.24
+read:5247 Posição: 96
+read:5248 Elevation: 9600,-33.54905,rider17_pedalada_241
+read:5249 Speed: 9600,37.437364,rider17_pedalada_241
+read:5250 Elevation + 1: 9700,-0.19162,rider17_pedalada_241
+read:5251 Speed + 1: 9700,34.691835,rider17_pedalada_241
+
+
+
+
+
+
+
+
+

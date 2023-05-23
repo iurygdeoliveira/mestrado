@@ -102,6 +102,7 @@
         await lineStateChange(pedalada, colors_current.pop());
 
         // Armazenando as pedaladas para o bar chart
+        // console.log(pedalada);
         push_pedaladas_barChart(pedalada);
     }
 

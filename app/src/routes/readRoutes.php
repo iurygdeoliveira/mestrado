@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+$router->get('/readData', 'src\controllers\readController::readData');
 $router->get('/read', 'src\controllers\readController::read');
 $router->post('/readData', 'src\controllers\readController::readData');
 $router->get('/maxElevation', 'src\controllers\readController::maxElevation');
@@ -13,6 +14,7 @@ $router->get('/fixSpeeds', 'src\controllers\readController::fixSpeeds');
 $router->get('/fixDistances', 'src\controllers\readController::fixDistances');
 $router->get('/fixDistanceTotal', 'src\controllers\readController::fixDistanceTotal');
 $router->get('/findOutliers', 'src\controllers\readController::findOutliers');
+$router->get('/findElevation', 'src\controllers\readController::findElevation');
 $router->get('/findNotEquals', 'src\controllers\readController::findNotEquals');
 $router->get('/createSegment', 'src\controllers\readController::createSegment');
 $router->get('/countData', 'src\controllers\readController::countData');

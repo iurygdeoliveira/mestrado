@@ -275,6 +275,7 @@
             speedData.min
         );
 
+
         let streamElevation = await create_ElevationStream(
             'pedaladas_elevation',
             'Elevação',
@@ -285,6 +286,7 @@
             elevationData.max,
             elevationData.min
         );
+
 
         return [streamHeartRate, streamSpeed, streamElevation];
     }
