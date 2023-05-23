@@ -997,6 +997,25 @@ class readController extends Controller
         return $this->responseJson(false, $result, null);
     }
 
+    public function maxElevation(): Response
+    {
+
+        // Obtendo dados da requisição
+        $request = (object)getRequest()->getParsedBody();
+
+        // Obtendo dados do dataset
+        $this->ride = new LoadRide($request->rider, $request->atividade);
+        $result = $this->ride->extractData();
+
+        // Se result for true, então o dataset/atividade já foram extraídos
+        // Se result for diferentes de true, retorna a mensagem de erros
+        if ($result === true) {
+            return $this->responseJson(true, "Valores da atividade $request->atividade extraídos", "sem retorno de dados");
+        }
+
+        return $this->responseJson(false, $result, null);
+    }
+
     public function bbox(): Response
     {
 
