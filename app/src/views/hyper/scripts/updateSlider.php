@@ -81,10 +81,10 @@ async function restartMultiVis() {
     pedaladas_yellow_clicadas = 0;
     pedaladas_green_clicadas = 0;
     pedaladas_purple_clicadas = 0;
-    colors_red_current = [normalRed, darkRed, lightRed];
-    colors_blue_current = [normalBlue, darkBlue, lightBlue];
-    colors_yellow_current = [normalYellow, darkYellow, lightYellow];
-    colors_green_current = [normalGreen, darkGreen, lightGreen];
-    colors_purple_current = [normalPurple, darkPurple, lightPurple];
+    colors_red_current = [lightRed, normalRed, darkRed];
+    colors_blue_current = [lightBlue, normalBlue, darkBlue];
+    colors_yellow_current = [lightYellow, normalYellow, darkYellow];
+    colors_green_current = [lightGreen, normalGreen, darkGreen];
+    colors_purple_current = [lightPurple, normalPurple, darkPurple];
 }
 </script>
