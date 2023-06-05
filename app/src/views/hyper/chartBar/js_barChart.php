@@ -93,7 +93,6 @@
     }
 
     async function push_pedaladas_barChart(pedalada) {
-        console.log(pedalada);
 
         let push_barChart = await prepare_pedalada_barChart(pedalada);
         updateButtonSearchRiders(selected, false, true, false);

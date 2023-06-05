@@ -49,7 +49,7 @@
             color: color,
             title: {
                 show: true,
-                text: `${title}: ${min} to ${max} (${scale})`,
+                text: `${title}: ${min.toFixed(2)} até ${max.toFixed(2)} (${scale})`,
                 textStyle: {
                     fontSize: 12
                 }
@@ -108,9 +108,6 @@
             toolbox: {
                 show: true,
                 feature: {
-                    dataView: {
-                        readOnly: false
-                    },
                     restore: {},
                     saveAsImage: {}
                 }

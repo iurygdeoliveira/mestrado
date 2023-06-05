@@ -23,7 +23,6 @@ $router = new Router(); // Inicia o roteador
 // Carregar rotas
 $routes = [
     '/../src/routes/dashboardRoutes.php',
-    '/../src/routes/testRoutes.php',
     '/../src/routes/readRoutes.php',
 ];
 

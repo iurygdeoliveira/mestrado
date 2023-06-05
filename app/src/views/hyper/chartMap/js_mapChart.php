@@ -64,14 +64,14 @@
 
         var stateChangingButton = L.easyButton({
             states: [{
-                stateName: 'see-distances', // name the state
+                stateName: 'ver-distancias', // name the state
                 icon: 'mdi mdi-18px mdi-alpha-d-box', // and define its properties
-                title: 'See distances', // like its title
+                title: 'Ver distâncias', // like its title
                 onClick: function(btn, map) { // and its callback
                     distance.addTo(map);
                     route.removeFrom(map);
                     hotline.removeFrom(map);
-                    btn.state('see-distances'); // change state on click!
+                    btn.state('ver-distancias'); // change state on click!
                 }
             }]
         });
@@ -84,14 +84,14 @@
 
         var stateChangingButton = L.easyButton({
             states: [{
-                stateName: 'see-routes', // name the state
+                stateName: 'ver-rotas', // name the state
                 icon: 'mdi mdi-18px mdi-alpha-r-box', // and define its properties
-                title: 'See Routes', // like its title
+                title: 'Ver Rotas', // like its title
                 onClick: function(btn, map) { // and its callback
                     route.addTo(map);
                     distance.removeFrom(map);
                     hotline.removeFrom(map);
-                    btn.state('see-routes'); // change state on click!
+                    btn.state('ver-rotas'); // change state on click!
                 }
             }]
         });
@@ -103,14 +103,14 @@
 
         var stateChangingButton = L.easyButton({
             states: [{
-                stateName: 'see-Intensity', // name the state
+                stateName: 'ver-intensidade', // name the state
                 icon: 'mdi mdi-18px mdi-alpha-i-box', // and define its properties
-                title: 'See hotline', // like its title
+                title: 'Ver intensidade', // like its title
                 onClick: function(btn, map) { // and its callback
                     hotline.addTo(map);
                     distance.removeFrom(map);
                     route.removeFrom(map);
-                    btn.state('see-hotline'); // change state on click!
+                    btn.state('ver-intensidade'); // change state on click!
                 }
             }]
         });

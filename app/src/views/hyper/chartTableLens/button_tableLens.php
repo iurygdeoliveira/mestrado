@@ -1,5 +1,6 @@
 <div class="d-flex justify-content-center mt-2 ms-2 me-0">
-    <button type="button" class="btn btn-light btn-sm col-12" id="search_rides" data-bs-target="#modalTableLens" data-bs-toggle="modal" disabled title="See Table Lens">
+    <button type="button" class="btn btn-light btn-sm col-12" id="search_rides" data-bs-target="#modalTableLens"
+        data-bs-toggle="modal" disabled title="Ver Table Lens">
         <i class="uil uil-align-left"></i>
     </button>
     <button type="button" class="btn btn-light btn-sm col-12" id="search_rides_loading" style="display: none;">
