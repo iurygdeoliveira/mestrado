@@ -1,30 +1,7 @@
 version: "3"
 
 services:
-    # memcached:
-    #     image: 'memcached:alpine'
-    #     container_name: memcached
-    #     ports:
-    #         - 11211:11211
-    #     tty: true
-    #     restart: always
-    #     networks:
-    #         - mestrado
-    #     command:
-    #         ["memcached", "-m 2048"]
-
-    # json-server:
-    #     build: ./docker/json-server
-    #     container_name: json-server
-    #     restart: always
-    #     tty: true
-    #     volumes:
-    #         - ./docker/json-server/db/db.json:/tmp/db.json
-    #     ports:
-    #         - 3000:8080
-    #     networks:
-    #         - mestrado
-
+    
     # mysql:
     #     image: mysql:latest
     #     container_name: mysql
@@ -52,7 +29,6 @@ services:
     #     networks:
     #         - mestrado
         
-        # Estudar sobre esses comandos
     # command:
     #   - --collation-server=utf8_unicode_ci
     #   - --character-set-server=utf8

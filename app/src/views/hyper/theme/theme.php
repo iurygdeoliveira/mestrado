@@ -1,3 +1,15 @@
+<!-- AVISO LEGAL:
+
+Este software é protegido pela Lei Nº 9.609, de 19 de fevereiro de 1998, que dispõe sobre a 
+proteção da propriedade intelectual de programa de computador no Brasil. A utilização indevida 
+deste software, incluindo, mas não se limitando a, reprodução, distribuição, venda, modificação 
+ou qualquer forma de exploração comercial sem a autorização expressa do autor ou de quem o 
+represente, é estritamente proibida e pode resultar em penalidades legais, incluindo detenção de 
+seis meses a dois anos e/ou multa.
+
+Ao utilizar este software, você reconhece que leu e entendeu este aviso e concorda em cumprir com todos os seus termos. -->
+
+
 <!DOCTYPE html>
 <html lang="<?= CONF_SITE_LANG ?>">
 
@@ -34,3 +46,8 @@
 </body>
 
 </html>
+<!-- AVISO LEGAL:
+
+Este software é protegido pela Lei Nº 9.609, de 19 de fevereiro de 1998, que dispõe sobre a proteção da propriedade intelectual de programa de computador no Brasil. A utilização indevida deste software, incluindo, mas não se limitando a, reprodução, distribuição, venda, modificação ou qualquer forma de exploração comercial sem a autorização expressa do autor ou de quem o represente, é estritamente proibida e pode resultar em penalidades legais, incluindo detenção de seis meses a dois anos e/ou multa.
+
+Ao utilizar este software, você reconhece que leu e entendeu este aviso e concorda em cumprir com todos os seus termos. -->
